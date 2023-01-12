@@ -2,7 +2,7 @@
 // includes
 
 #include "AEEngine.h"
-
+#include "RenderSystem.h"
 
 
 // ---------------------------------------------------------------------------
@@ -30,7 +30,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// reset the system modules
 	AESysReset();
 
+	RenderSystem::Renderer RS{};
 
+	RenderSystem::Vec4F tint{ 0.5f,1.0f,1.0f,1.0f };
 
 	// Game Loop
 	while (gGameRunning)
@@ -40,12 +42,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		// Handling Input
 		AEInputUpdate();
+		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
 		// Your own update logic goes here
 
 
 		// Your own rendering logic goes here
-
+		RS.Draw(RenderSystem::TRIANGLE, 0, 0, tint);
+		RS.Draw(RenderSystem::QUAD, 0, 100, tint);
+		RS.Draw(RenderSystem::TILE, 100, -100);
 
 		// Informing the system about the loop's end
 		AESysFrameEnd();
