@@ -3,7 +3,6 @@
 \author Ang Jiawei Jarrett
 \par DP email: a.jiaweijarrett@digipen.edu
 \par Course: CSD1171B
-\par Programming Lab #1
 \date 12/01/2023
 \brief
 This source file implements a generic event system that allows functions with
@@ -55,104 +54,83 @@ void launchFireworks() {
 }
 **************************************************************************/
 
-#include <list>
+#include "EventSystem.hpp"
 
 namespace EventSystem {
-    template<class T> 
-    struct EventData {
-        void (*fun_ptr)(T);
-        int priority;
-    };
+    /*
+    EVENT CLASS IMPLEMENTATION
+    */
+    template <class T>
+    void Event<T>::Invoke(T var) {
+        for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
+            (i->fun_ptr)(var);
+        }
+    }
 
-    template<>
-    struct EventData<void> {
-        void (*fun_ptr)();
-        int priority;
-    };
-    
-    template<class T> 
-    class Event {
-        private: std::list<EventData<T>> subscribers;
+    template <class T>
+    void Event<T>::Subscribe(void (*fun_ptr)(T), int priority) {
+        EventData<T> new_sub = { fun_ptr, priority };
 
-        public: void Invoke(T var) {
+        if (subscribers.size() >= 1) {
             for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
-                (i->fun_ptr)(var);
-            }
-        }
-
-        public: void Subscribe(void (*fun_ptr)(T), int priority) {
-            EventData<T> new_sub = { fun_ptr, priority };
-
-            if (subscribers.size() >= 1) {
-                for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
-                    if (i->priority <= priority) {
-                        subscribers.insert(i, new_sub);
-                        return;
-                    }
-                }
-            }
-
-            subscribers.push_back(new_sub);
-        }
-
-        public: void Subscribe(void (*fun_ptr)(T)) {
-            Subscribe(fun_ptr, 0);
-        }
-
-        public: void Unsubscribe(void (*fun_ptr)(T)) {
-            for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
-                if (i->fun_ptr == fun_ptr) {
-                    subscribers.erase(i);
-                    break;
+                if (i->priority <= priority) {
+                    subscribers.insert(i, new_sub);
+                    return;
                 }
             }
         }
+        subscribers.push_back(new_sub);
+    }
 
-        public: void UnsubscribeAll() {
-            subscribers.clear();
-        }
-    };
-
-    template<>
-    class Event<void> {
-        private: std::list<EventData<void>> subscribers;
-
-        public: void Invoke() {
-            for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
-                (i->fun_ptr)();
+    template <class T>
+    void Event<T>::Unsubscribe(void (*fun_ptr)(T)) {
+        for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
+            if (i->fun_ptr == fun_ptr) {
+                subscribers.erase(i);
+                break;
             }
         }
+    }
 
-        public: void Subscribe(void (*fun_ptr)(), int priority) {
-            EventData<void> new_sub = { fun_ptr, priority };
+    template <class T>
+    void Event<T>::UnsubscribeAll() {
+        subscribers.clear();
+    }
 
-            if (subscribers.size() >= 1) {
-                for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
-                    if (i->priority <= priority) {
-                        subscribers.insert(i, new_sub);
-                        return;
-                    }
-                }
-            }
-
-            subscribers.push_back(new_sub);
+    /*
+        VOID SPECIALIZATION
+    */
+    void Event<void>::Invoke() {
+        for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
+            (i->fun_ptr)();
         }
+    }
 
-        public: void Subscribe(void (*fun_ptr)()) {
-            Subscribe(fun_ptr, 0);
-        }
+    void Event<void>::Subscribe(void (*fun_ptr)(), int priority) {
+        EventData<void> new_sub = { fun_ptr, priority };
 
-        public: void Unsubscribe(void (*fun_ptr)()) {
+        if (subscribers.size() >= 1) {
             for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
-                if (i->fun_ptr == fun_ptr) {
-                    subscribers.erase(i);
-                    break;
+                if (i->priority <= priority) {
+                    subscribers.insert(i, new_sub);
+                    return;
                 }
             }
         }
 
-        public: void UnsubscribeAll() {
-            subscribers.clear();
+        subscribers.push_back(new_sub);
+    }
+
+    void Event<void>::Unsubscribe(void (*fun_ptr)()) {
+        for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
+            if (i->fun_ptr == fun_ptr) {
+                subscribers.erase(i);
+                break;
+            }
         }
-    };
+    }
+
+    void Event<void>::UnsubscribeAll() {
+        subscribers.clear();
+    }
 }
