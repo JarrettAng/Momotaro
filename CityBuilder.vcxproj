@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EventSystem.cpp" />
+    <ClCompile Include="src\IsometricGrid.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\RenderSystem.cpp" />
   </ItemGroup>
