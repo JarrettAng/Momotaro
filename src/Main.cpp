@@ -46,8 +46,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 
 		// Your own rendering logic goes here
-		RS.Draw(RenderSystem::TILE, RenderSystem::TILE_TEX, 0, 0, 1.0f, 0);
-		RS.Draw(RenderSystem::TILE, RenderSystem::BUILDING_TEX, 0, 0, .5f, 0);
+		RS.Draw(RenderSystem::TILE, RenderSystem::TILE_TEX, 0, 0);
+		//RS.Draw(RenderSystem::TILE, RenderSystem::BUILDING_TEX, 0, 0);
 
 		// Informing the system about the loop's end
 		AESysFrameEnd();

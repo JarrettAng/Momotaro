@@ -1,13 +1,17 @@
 #include<AEEngine.h>
 #include<RenderSystem.h>
 #include <iostream>
-namespace RenderSystem{
+namespace RenderSystem {
+
+	// TODO: Merge mesh type and texture type together using sprite struct
+	// DrawSprite() DrawMesh() calls Draw()
+	// Allow specifing orign of sprite when drawing.
 
 	/*!***********************************************************************
 	\brief
 		Draw sprite on screen.
 	*************************************************************************/
-	void Renderer::Draw(const MESH_TYPE mesh, const TEXTURE_TYPE tex, const float x, const float y, const float scale, const float rot){
+	void Renderer::Draw(const MESH_TYPE mesh, const TEXTURE_TYPE tex, const float x, const float y, const float scale, const float rot) {
 		// Drawing object with texture.
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		UpdateRenderSetting();
@@ -26,7 +30,7 @@ namespace RenderSystem{
 	\brief
 		Draw sprite on screen. Allow more customization on how to render the sprite using RenderSetting.
 	*************************************************************************/
-	void Renderer::Draw(const MESH_TYPE mesh, const TEXTURE_TYPE tex, RenderSetting settings, const float x, const float y, const float scale, const float rot){
+	void Renderer::Draw(const MESH_TYPE mesh, const TEXTURE_TYPE tex, RenderSetting settings, const float x, const float y, const float scale, const float rot) {
 		// Drawing object with texture.
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		UpdateRenderSetting(settings);
@@ -45,7 +49,7 @@ namespace RenderSystem{
 	\brief
 		Draw mesh on screen.
 	*************************************************************************/
-	void Renderer::DrawMesh(const MESH_TYPE type, const float x, const float y){
+	void Renderer::DrawMesh(const MESH_TYPE type, const float x, const float y) {
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		// Position to render mesh.
 		AEGfxSetPosition(x, y);
@@ -58,7 +62,7 @@ namespace RenderSystem{
 	\brief
 		Draw mesh on screen. Allow scaling and rotation.
 	*************************************************************************/
-	void Renderer::DrawMesh(const MESH_TYPE type, const float x, const float y, const float scale, const float rot){
+	void Renderer::DrawMesh(const MESH_TYPE type, const float x, const float y, const float scale, const float rot) {
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 
 		// Rotate mesh.
@@ -72,7 +76,7 @@ namespace RenderSystem{
 	\brief
 		Get mesh from given type.
 	*************************************************************************/
-	AEGfxVertexList* Renderer::GetMesh(MESH_TYPE type){
+	AEGfxVertexList* Renderer::GetMesh(MESH_TYPE type) {
 		switch (type)
 		{
 		case RenderSystem::TRIANGLE:
@@ -97,7 +101,7 @@ namespace RenderSystem{
 	\brief
 		Get texture from given type.
 	*************************************************************************/
-	AEGfxTexture* Renderer::GetTex(TEXTURE_TYPE type){
+	AEGfxTexture* Renderer::GetTex(TEXTURE_TYPE type) {
 		switch (type)
 		{
 		case RenderSystem::NONE:
@@ -119,7 +123,7 @@ namespace RenderSystem{
 	\brief
 		Update engine render settings.
 	*************************************************************************/
-	void Renderer::UpdateRenderSetting(RenderSetting setting){
+	void Renderer::UpdateRenderSetting(RenderSetting setting) {
 		// AE_GFX_BM_BLEND to allow transperency.
 		AEGfxSetBlendMode(setting.blendMode);
 		// Apply tint.
@@ -132,7 +136,7 @@ namespace RenderSystem{
 	\brief
 		Update global transform mtx for subsequent sprites to be drawn.
 	*************************************************************************/
-	void Renderer::UpdateRenderTransformMtx(const float x, const float y, const float scale, const float rot){
+	void Renderer::UpdateRenderTransformMtx(const float x, const float y, const float scale, const float rot) {
 		// Apply rotation.
 		AEMtx33RotDeg(&transform, rot);
 		// Apply scaling
@@ -143,11 +147,23 @@ namespace RenderSystem{
 		AEGfxSetTransform(transform.m);
 	}
 
-	Renderer::Renderer(){
+	Renderer::Renderer() {
 		InitMesh();
 	}
 
-	void Renderer::InitMesh(){
+	void Renderer::InitMesh() {
+		tileSprite.tex = tileTex;
+		// Width and height read from file.
+		tileSprite.mesh.width = 200;
+		tileSprite.mesh.height = 100;
+
+		// Use width and height to create mesh.
+		// TILE
+		AEGfxMeshStart();
+		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, 0.0f, -tileSprite.mesh.height, 0xFFFFFFFF, 0.0f, 1.0f, tileSprite.mesh.width, -tileSprite.mesh.height, 0xFFFFFFFF, 1.0f, 1.0f);
+		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, tileSprite.mesh.width, 0.0f, 0xFFFFFFFF, 1.0f, 0.0f, tileSprite.mesh.width, -tileSprite.mesh.height, 0xFFFFFFFF, 1.0f, 1.0f);
+		tileMesh = AEGfxMeshEnd();
+
 		// TRIANGLE
 		AEGfxMeshStart();
 		AEGfxTriAdd(0.0f, 100.0f, 0xFFFFFFFF, 0.0f, 0.0f, 0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 1.0f, 100.0f, 0.0f, 0xFFFFFFFF, 1.0f, 1.0f);
@@ -159,11 +175,7 @@ namespace RenderSystem{
 		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, 100.0f, 0.0f, 0xFFFFFFFF, 1.0f, 0.0f, 100.0f, 100.0f, 0xFFFFFFFF, 1.0f, 1.0f);
 		quadMesh = AEGfxMeshEnd();
 
-		// TILE
-		AEGfxMeshStart();
-		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, 0.0f, 100.0f, 0xFFFFFFFF, 0.0f, 1.0f, 200.0f, 100.0f, 0xFFFFFFFF, 1.0f, 1.0f);
-		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, 200.0f, 0.0f, 0xFFFFFFFF, 1.0f, 0.0f, 200.0f, 100.0f, 0xFFFFFFFF, 1.0f, 1.0f);
-		tileMesh = AEGfxMeshEnd();
+
 	}
 }
 
