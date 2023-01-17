@@ -31,6 +31,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AESysReset();
 
 	RenderSystem::Renderer RS{};
+	RenderSystem::RenderSetting redTint;
+	redTint.tint = { 1,0,0,1 };
 
 	// Game Loop
 	while (gGameRunning)
@@ -46,8 +48,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 
 		// Your own rendering logic goes here
-		RS.Draw(RenderSystem::TILE, RenderSystem::TILE_TEX, 0, 0);
-		//RS.Draw(RenderSystem::TILE, RenderSystem::BUILDING_TEX, 0, 0);
+		RS.AddBatch(RenderSystem::TILE, 0, 0, 1);
+		RS.AddBatch(RenderSystem::BUILDING, 0, 0);
+		RS.Render();
 
 		// Informing the system about the loop's end
 		AESysFrameEnd();

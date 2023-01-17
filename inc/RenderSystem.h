@@ -1,6 +1,8 @@
 #pragma once
+#include <list>
 namespace RenderSystem {
-	// TEMP VEC 4
+	// VEC 4
+	// TODO: MOVE THIS SOMEWHERE ELSE
 	template<class T>
 	struct Vec4
 	{
@@ -10,30 +12,38 @@ namespace RenderSystem {
 		T z;
 	};
 
+	// Overload == operator to compare two Vec4.
+	// TODO: MOVE THIS SOMEWHERE ELSE
+	template<class T>
+	bool operator==(const Vec4<T>& lhs, const Vec4<T>& rhs)
+	{
+		if (lhs.w == rhs.w && lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z) {
+			return true;
+		}
+		return false;
+	}
+
 	struct RenderSetting {
 		// Default: Opaque + Allow transperancy. (PNG images)
-		AEGfxBlendMode blendMode{ AE_GFX_BM_BLEND };
-		float transperancy{ 1.0f };
-		Vec4<float> tint{ 1.0f,1.0f,1.0f,1.0f };
+		static const AEGfxBlendMode BLEND_MODE{ AE_GFX_BM_BLEND };
+		static constexpr float TRANSPERANCY = 1.0f;
+		static constexpr Vec4<float> TINT{ 1.0f,1.0f,1.0f,1.0f };
+
+		AEGfxBlendMode blendMode = BLEND_MODE;
+		float transperancy = TRANSPERANCY;
+		Vec4<float> tint = TINT;
+		bool isDefault() { return blendMode == BLEND_MODE && transperancy == TRANSPERANCY && tint == TINT; }
 	};
 
 	enum MESH_TYPE {
 		TRIANGLE,
 		QUAD,
+	};
+
+	enum SPRITE_TYPE {
 		TILE,
 		BUILDING
 	};
-
-	enum TEXTURE_TYPE {
-		NONE,
-		TILE_TEX,
-		BUILDING_TEX
-	};
-
-	//enum SPRITE_TYPE {
-	//	TILE,
-	//	BUILDING
-	//};
 
 	enum DRAW_PIVOT {
 		TOP_LEFT,
@@ -48,65 +58,57 @@ namespace RenderSystem {
 	};
 
 	struct Mesh {
-		double height, width, midHeight, midWidth;
-		AEGfxVertexList* vertices;	// Drawn from top left.
+		double height, midHeight;
+		double width, midWidth;
 	};
 
 	struct Sprite {
+		SPRITE_TYPE type;
 		Mesh mesh;
-		AEGfxTexture* tex;
 	};
 
-	//list<Sprite> tileBatch;
-
-	// RS.addBatch(SPRITE_TYPE, X, Y, DRAW_PIVOT);
-	// RS.addBatch(SPRITE_TYPE, X, Y, DRAW_PIVOT, RenderSetting);
-	// RS.render();
-
-
-	// Loop through all batches.
-	// Draw(tileSprite, X, Y, DRAW_PIVOT)
-
-	// void Draw(Sprite, X, Y, DRAW_PIVOT) {
-	//		mesh are created with their pivot at top left.
-	//		translate global mtx to draw sprite based on pivot using sprite.mesh.width and height to calculate position of pivot.
-	//		
-	//		Top mid: AEMtx33TransApply(&transform, &transform, x - Sprite.mesh.midWidth, y);
-	//		Top right: AEMtx33TransApply(&transform, &transform, x + Sprite.mesh.midWidth, y);
-	//		Mid: AEMtx33TransApply(&transform, &transform, x - Sprite.mesh.midWidth, y + Sprite.mesh.midHeight )
-	//}
+	struct Batch {
+		int x, y;
+		Mesh meshInfo;
+		RenderSetting setting;
+		int layer = 0;
+	};
 
 	class Renderer {
 
 	private:
+		std::list<Batch> batchList;
+		Batch batch;
+		AEGfxTexture* loadedTex = nullptr;
+
 		Sprite tileSprite;
-
-
-		AEGfxVertexList* triMesh{ 0 };
-		AEGfxVertexList* quadMesh{ 0 };
-		AEGfxVertexList* tileMesh{ 0 };
-		AEGfxVertexList* buildingMesh{ 0 };
-
+		AEGfxVertexList* tileVertices = { 0 };
 		AEGfxTexture* tileTex = AEGfxTextureLoad("Assets/Tile.png");
+
+		Sprite buildingSprite;
+		AEGfxVertexList* buildingVertices = { 0 };
 		AEGfxTexture* buildingTex = AEGfxTextureLoad("Assets/PlanetTexture.png");
 
-		// Identidy transform matrix of rendered mesh.
-		AEMtx33 transform{ 1,0,0, 0,1,0, 0,0,1 };
+		// Identity transform matrix of rendered mesh.
+		AEMtx33 transform{
+			1,0,0,
+			0,1,0,
+			0,0,1
+		};
 
 	public:
 		Renderer();
-		void Draw(const MESH_TYPE mesh, const TEXTURE_TYPE tex, const float x, const float y, const float scale = 1, const float rot = 0);
-		void Draw(const MESH_TYPE mesh, const TEXTURE_TYPE tex, RenderSetting settings, const float x, const float y, const float scale = 1, const float rot = 0);
-
-		void DrawMesh(const MESH_TYPE type, const float x, const float y);
-		void DrawMesh(const MESH_TYPE type, const float x, const float y, const float scale, const float rot);
+		void AddBatch(SPRITE_TYPE type, const int& x, const int& y, const int& priority = 0, const DRAW_PIVOT& pivot = MID);
+		void Render();
 
 	private:
 		void InitMesh();
-		AEGfxVertexList* GetMesh(MESH_TYPE type);
-		AEGfxTexture* GetTex(TEXTURE_TYPE type);
-		void UpdateRenderTransformMtx(const float x, const float y, const float scale = 1, const float rot = 0);
+		Mesh GetMesh(SPRITE_TYPE type);
+		AEGfxTexture* GetTex(SPRITE_TYPE type);
+		void SortBatchList();
+		void UpdateRenderTransformMtx(const int& x, const int& y, const float& scale = 1, const float& rot = 0);
 		void UpdateRenderSetting(RenderSetting setting = {});
+		void AlignToPivot(int& x, int& y, const Mesh&, const DRAW_PIVOT& pivot);
 	};
 }
 
