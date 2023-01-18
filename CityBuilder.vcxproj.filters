@@ -30,6 +30,15 @@
     <ClCompile Include="src\SceneGameLevel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\SceneManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\RenderSystem.h">
@@ -51,6 +60,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\SceneGameLevel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\SceneManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

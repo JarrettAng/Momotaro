@@ -12,10 +12,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EventSystem.cpp" />
+    <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\IsometricGrid.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\RenderSystem.cpp" />
+    <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\SceneGameLevel.cpp" />
+    <ClCompile Include="src\SceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\EventSystem.h" />
@@ -25,6 +28,7 @@
     <ClInclude Include="inc\RenderSystem.h" />
     <ClInclude Include="inc\Scene.h" />
     <ClInclude Include="inc\SceneGameLevel.h" />
+    <ClInclude Include="inc\SceneManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

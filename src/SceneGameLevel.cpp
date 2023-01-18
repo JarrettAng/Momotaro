@@ -1,61 +1,59 @@
 
-#include <Scene.h>
+#include <SceneGameLevel.h>
 
-class SceneGameLevel : public Scene {
-	void Load() {
+void SceneGameLevel::Load() {
 
+}
+
+void SceneGameLevel::Initialize() {
+
+}
+
+void SceneGameLevel::Update() {
+	for (auto object : objects) {
+		object->Update();
+	}
+}
+
+void SceneGameLevel::FixedUpdate() {
+	for (auto object : objects) {
+		object->FixedUpdate();
+	}
+}
+
+void SceneGameLevel::Draw() {
+	for (auto object : objects) {
+		// renderer.AddBatch(object->Render());
 	}
 
-	void Initialize() {
+	// renderer.Render();
+}
 
+void SceneGameLevel::Free() {
+	for (auto object : objects) {
+		object->Destroy();
 	}
 
-	void Update() {
-		for (auto object : objects) {
-			object->Update();
+	objects.clear();
+}
+
+void SceneGameLevel::Unload() {
+
+}
+
+void SceneGameLevel::AddObject(GameObject* newObject) {
+	objects.push_back(newObject);
+
+	newObject->Start();
+}
+
+void SceneGameLevel::RemoveObject(GameObject* newObject) {
+	for (auto i = objects.begin(); i != objects.end(); ++i) {
+		if ((*i) == newObject) {
+			objects.erase(i);
+			break;
 		}
 	}
 
-	void FixedUpdate() {
-		for (auto object : objects) {
-			object->FixedUpdate();
-		}
-	}
-
-	void Draw() {
-		for (auto object : objects) {
-			// renderer.AddBatch(object->Render());
-		}
-
-		// renderer.Render();
-	}
-
-	void Free() {
-		for (auto object : objects) {
-			object->Destroy();
-		}
-
-		objects.clear();
-	}
-
-	void Unload() {
-
-	}
-
-	void AddObject(GameObject *newObject) {
-		objects.push_back(newObject);
-
-		newObject->Start();
-	}
-
-	void RemoveObject(GameObject *newObject) {
-		for (auto i = objects.begin(); i != objects.end(); ++i) {
-			if ((*i) == newObject) {
-				objects.erase(i);
-				break;
-			}
-		}
-
-		newObject->Destroy();
-	}
-};
+	newObject->Destroy();
+}
