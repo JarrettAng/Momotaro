@@ -15,11 +15,16 @@
     <ClCompile Include="src\IsometricGrid.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\RenderSystem.cpp" />
+    <ClCompile Include="src\SceneGameLevel.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\EventSystem.hpp" />
+    <ClInclude Include="inc\EventSystem.h" />
+    <ClInclude Include="inc\GameObject.h" />
+    <ClInclude Include="inc\IsometricGrid.h" />
     <ClInclude Include="inc\MomoMaths.h" />
     <ClInclude Include="inc\RenderSystem.h" />
+    <ClInclude Include="inc\Scene.h" />
+    <ClInclude Include="inc\SceneGameLevel.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -27,15 +27,30 @@
     <ClCompile Include="src\IsometricGrid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\SceneGameLevel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\RenderSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\EventSystem.hpp">
+    <ClInclude Include="inc\MomoMaths.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\EventSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\MomoMaths.h">
+    <ClInclude Include="inc\IsometricGrid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\SceneGameLevel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
