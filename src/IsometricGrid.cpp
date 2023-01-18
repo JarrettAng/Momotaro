@@ -8,7 +8,12 @@
 \brief
 This source file is a test file for an isometric grid
 */
-namespace isometric
+#include "AEEngine.h"
+#include <IsometricGrid.h>
+#include <iostream>
+
+/// @brief 
+namespace IsometricGrid
 {
     //MATHS 
     /*
@@ -17,7 +22,7 @@ namespace isometric
     If you want to center the mouse,
     OffsetX = MouseX % CellWidth
     OffsetY = MouseY % CellHeight
-    
+
     Cell.X/ScreenWidth
     Cell.Y/ScreenHeight
 
@@ -30,6 +35,76 @@ namespace isometric
     ScreenY = (x+y)*(CellHeight/2)      this is because as you move isometrically down y, your y moves .5 cells left, and .5 cells down
     note that you have to offset the origin also!
 
-    
     */
+   const int tileWidth{100};
+   const int tileHeight{50};
+ /*  
+   GridManager::GridManager(int x, int y){
+    
+   }*/
+
+
+   float area(int x1, int y1, int x2, int y2, int x3, int y3){
+    return static_cast<float>(abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0f));
+   }
+
+   bool isInside(int _mouseX, int _mouseY, int x1, int y1, int x2, int y2, int x3, int y3){
+    float A = area(x1, y1, x2, y2, x3, y3);
+    float B = area(_mouseX, _mouseY, x2, y2, x3, y3);
+    float C = area(x1, y1, _mouseX, _mouseY, x3, y3);
+    float D = area(x1, y1, x2, y2, _mouseX, _mouseY);
+    return (A == (B + C + D));
+   }
+
+
+   vec2i WorldIndexToScreenPos(int x, int y){
+    return vec2i{   //we need to keep the tile height and width a float here!
+        static_cast<int>((x-y)*(50.f)),
+        static_cast<int>((x+y)*(-25.f))-(tileHeight/2)
+    };
+   }
+   vec2i ScreenPosToIso(int x, int y){
+    return vec2i{
+        static_cast<int>((x/(tileWidth/2))+(y/(tileHeight/2))),
+        static_cast<int>((y/(tileHeight/2))-(x/(tileWidth/2)))
+    };
+   }
+   vec2i MouseToCell(int mouseX, int mouseY){
+    return vec2i{
+        mouseX/tileWidth,
+        mouseY/tileHeight
+    };
+   }
+   vec2i MouseCellOffset(int mouseX, int mouseY){
+    return vec2i{
+        mouseX%tileWidth,
+        mouseY%tileHeight
+    };
+   }
+
+   #pragma region  old lambda code
+   #if 0
+   auto area = [&](int x1, int y1, int x2, int y2, int x3, int y3) {
+        return float{ static_cast<float>(abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0f)) };
+    };
+
+    auto isInside = [&](int _mouseX, int _mouseY, int x1, int y1, int x2, int y2, int x3, int y3) {
+        float A = area(x1, y1, x2, y2, x3, y3);
+        float B = area(_mouseX, _mouseY, x2, y2, x3, y3);
+        float C = area(x1, y1, _mouseX, _mouseY, x3, y3);
+        float D = area(x1, y1, x2, y2, _mouseX, _mouseY);
+        return (A == (B + C + D));
+    };
+    
+    auto WorldIndexToScreenPos = [&](int x, int y){
+        return vec2i{
+            static_cast<int>((x-y)*(50.f)),
+            static_cast<int>((x+y)*(-25.f))-25
+        };
+    };
+    auto ScreenPosToIso = [&](int x, int y){
+			
+		};
+    #endif
+    #pragma endregion
 } // namespace isometric
