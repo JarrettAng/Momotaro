@@ -31,6 +31,8 @@ namespace RenderSystem {
 				// Reset back to default render setting if changed, for next sprite.
 				if (!sprite.setting.isDefault()) UpdateRenderSetting();
 			}
+			// Clear sprites in batch.
+			batch.clear();
 		}
 	}
 
@@ -148,11 +150,11 @@ namespace RenderSystem {
 	void Renderer::UpdateRenderSetting(RenderSetting setting) {
 		// Spcify blend mode. AE_GFX_BM_BLEND to allow transperency.
 		AEGfxSetBlendMode(setting.blendMode);
-		// RGBA value to blend original material.
-		//AEGfxSetBlendColor(setting.blendColor.w, setting.blendColor.x, setting.blendColor.y, setting.blendColor.z);
-		// Apply tint.
+		// Add a color overlay on top of texture/mesh.
+		AEGfxSetBlendColor(setting.blendColor.w, setting.blendColor.x, setting.blendColor.y, setting.blendColor.z);
+		// Add tint color on top of texture/mesh.
 		AEGfxSetTintColor(setting.tint.w, setting.tint.x, setting.tint.y, setting.tint.z);
-		// Apply transparency.
+		// Affects global transparency for drawn mesh.
 		AEGfxSetTransparency(setting.transperancy);
 	}
 
@@ -205,8 +207,8 @@ namespace RenderSystem {
 
 		// BUILDING
 		AEGfxMeshStart();
-		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, 0.0f, -buildingMesh.height, 0xFFFFFFFF, 0.0f, 1.0f, buildingMesh.width, -buildingMesh.height, 0xFFFFFFFF, 1.0f, 1.0f);
-		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, buildingMesh.width, 0.0f, 0xFFFFFFFF, 1.0f, 0.0f, buildingMesh.width, -buildingMesh.height, 0xFFFFFFFF, 1.0f, 1.0f);
+		AEGfxTriAdd(0.0f, 0.0f, 0x00FFFFFF, 0.0f, 0.0f, 0.0f, -buildingMesh.height, 0x00FFFFFF, 0.0f, 1.0f, buildingMesh.width, -buildingMesh.height, 0xFFFFFFFF, 1.0f, 1.0f);
+		AEGfxTriAdd(0.0f, 0.0f, 0x00FFFFFF, 0.0f, 0.0f, buildingMesh.width, 0.0f, 0x00FFFFFF, 1.0f, 0.0f, buildingMesh.width, -buildingMesh.height, 0xFFFFFFFF, 1.0f, 1.0f);
 		buildingMesh.vertices = AEGfxMeshEnd();
 	}
 
