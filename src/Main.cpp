@@ -33,23 +33,20 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AESysReset();
 
 	RenderSystem::Renderer RS{};
-	RenderSystem::RenderSetting redTint;
-	redTint.tint = { 1,1,1,1 };
-	redTint.blendColor = { 1,1,1,1 };
-	redTint.transperancy = 1;
-	redTint.blendMode = AE_GFX_BM_BLEND;
 
 	//GRID SET UP
-	const int gridX{5}, gridY{6};
+	const int gridX{8}, gridY{12};
 	//Init a grid with 0 tiles
 	iso::cell *grid = {new iso::cell[gridX*gridY]{}};
 	s32 mouseX{0},mouseY{0};
 	for (int y{ 0 }; y < gridY; ++y) {
 		for (int x{ 0 }; x < gridX; ++x) {
+			iso::vec2i testPos{(x*100)-400,(y*-50)+300};
 			int index = x + gridX*y;
-			iso::vec2i ScreenPos = iso::WorldIndexToScreenPos(x,y);
-			//*! SET THE POSITION OF THE MESH HERE!!!!
-			grid[index].pos = ScreenPos;
+			grid[index].pos = testPos;
+			// iso::vec2i ScreenPos = iso::WorldIndexToScreenPos(x,y);
+			// //*! SET THE POSITION OF THE MESH HERE!!!!
+			// grid[index].pos = ScreenPos;
 		}
 	}
 
@@ -70,10 +67,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		// Handling Input
 		AEInputUpdate();
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
+		AEInputGetCursorPosition(&mouseX,&mouseY);
 
 		//MOUSE INPUTS (Tile width = 100, tile height = 50)
 		int cellX =  mouseX/100;		
 		int cellY =  mouseY/50;		
+
+
 		int xOffset = mouseX%100;
 		int yOffset = mouseY%50;
 		//Origin -> screen/tile. For now I use numbers
@@ -82,19 +82,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		int selectX = (cellX - originX) + (cellY - originY);
 		int selectY = (cellY - originY) - (cellX - originX);
-		if(iso::isInside(xOffset,yOffset,0,0,0,25,50,0))selectX--;
+		if(iso::isInside(xOffset,yOffset,0,-50,0,-25,50,-50))selectX--;
 		//BOTTOM LEFT
-		if(iso::isInside(xOffset,yOffset,0,25,0,50,50,50))selectY++;
+		if(iso::isInside(xOffset,yOffset,0,-25,0,0,50,0))selectY++;
 		//TOP RIGHT
-		if(iso::isInside(xOffset,yOffset,50,0,100,0,100,25))selectY--;
+		if(iso::isInside(xOffset,yOffset,50,-50,100,-50,100,-25))selectY--;
 		//BOTTOM RIGHT
-		if(iso::isInside(xOffset,yOffset,50,50,100,50,100,25))selectX++;
+		if(iso::isInside(xOffset,yOffset,50,0,100,0,100,-25))selectX++;
+
 		
-		std::cout << "Selected : " << selectX << ", "<< selectY <<'\n';
-		
-		iso::vec2i MouseToIndex = iso::ScreenPosToIso(mouseX,mouseY);
+		std::cout << "Mouse : " << cellX << ", "<< cellY <<'\n';
+		// std::cout << "Offset : " << xOffset << ", "<< yOffset <<'\n';
+		// std::cout << "Selected : " << selectX << ", "<< selectY <<'\n';
+		// iso::vec2i MouseToIndex = iso::ScreenPosToIso(mouseX,mouseY);
 		// Your own update logic goes here
 
+					// RS.AddBatch(RenderSystem::TILE_BATCH,RenderSystem::TILE,0,0);
 
 		// Your own rendering logic goes here
 		//Render grid test
@@ -104,18 +107,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 				switch(grid[index].ID){
 					default:
 					RS.AddBatch(RenderSystem::TILE_BATCH,RenderSystem::TILE,grid[index].pos.x,grid[index].pos.y);
+					// RS.AddBatch(RenderSystem::TILE_BATCH,RenderSystem::TILE,grid[0].pos.x,grid[0].pos.y);
 					break;
 				}
 			}
 		}
-
-		#if 0
-		//TILE THING
-		RS.AddBatch(RenderSystem::TILE_BATCH, RenderSystem::TILE, 0, 0);
-
-		//EARTH THING
-		RS.AddBatch(RenderSystem::BUILDING_BATCH, RenderSystem::RESIDENTIAL_S, 50, 0, 99, RenderSystem::MID, redTint);
-		#endif
 		RS.Render();
 
 		// Informing the system about the loop's end

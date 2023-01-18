@@ -60,7 +60,7 @@ namespace IsometricGrid
    vec2i WorldIndexToScreenPos(int x, int y){
     return vec2i{   //we need to keep the tile height and width a float here!
         static_cast<int>((x-y)*(50.f)),
-        static_cast<int>((x+y)*(-25.f))-(tileHeight/2)
+        static_cast<int>((x+y)*(-25.f))
     };
    }
    vec2i ScreenPosToIso(int x, int y){
