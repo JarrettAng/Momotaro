@@ -18,6 +18,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\EventSystem.hpp" />
+    <ClInclude Include="inc\MomoMaths.h" />
     <ClInclude Include="inc\RenderSystem.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

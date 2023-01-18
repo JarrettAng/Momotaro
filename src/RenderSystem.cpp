@@ -1,37 +1,55 @@
+/*!************************************************************************
+\file RenderSystem.cpp
+\author Tan Jun Rong
+\par DP email: t.junrong@digipen.edu
+\par Course: CSD1171B
+\date 18/01/2023
+\brief
+This source file declares
+
+**************************************************************************/
+
 #include<AEEngine.h>
 #include<RenderSystem.h>
 #include <iostream>
 #include <algorithm>
 namespace RenderSystem {
 
-	void Renderer::AddBatch(SPRITE_TYPE type, const int& x, const int& y, const int& layer, const DRAW_PIVOT& pivot) {
-
-		batch.x = x;
-		batch.y = y;
-		batch.layer = layer;
-
-		AlignToPivot(batch.x, batch.y, GetMesh(type), pivot);
-
-		batchList.push_back(batch);
-		SortBatchList();
-
-	}
-
-	void Renderer::SortBatchList() {
-		batchList.sort([](const Batch& a, const Batch& b) { return a.layer < b.layer; });
-	}
-
 	void Renderer::Render() {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		AEGfxTextureSet(tileTex, 0, 0);
 		UpdateRenderSetting();
-		// -> Update rot and scale.
 
-		for (auto& sprite : batchList) {
-			// Use specified render setting if needed.
-			UpdateRenderTransformMtx(sprite.x, sprite.y);
-			AEGfxMeshDraw(tileVertices, AE_GFX_MDM_TRIANGLES);
+		for (auto& batch : renderBatches) {
+			for (auto& sprite : batch) {
+				AEGfxTextureSet(sprite.tex, 0, 0);
+				// Change render setting if needed.
+				if (!sprite.setting.isDefault()) UpdateRenderSetting(sprite.setting);
+
+				UpdateRenderTransformMtx(sprite.x, sprite.y, sprite.scale, sprite.rot);
+				AEGfxMeshDraw(GetMesh(sprite.type).vertices, AE_GFX_MDM_TRIANGLES);
+
+				// Reset back to default render setting if changed, for next sprite.
+				if (!sprite.setting.isDefault()) UpdateRenderSetting();
+			}
 		}
+	}
+
+	void Renderer::AddBatch(const BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer, const DRAW_PIVOT& pivot, RenderSetting setting) {
+
+		Sprite sprite = GetSprite(type);
+		sprite.type = type;
+		sprite.x = x;
+		sprite.y = y;
+		sprite.layer = layer;
+		sprite.setting = setting;
+
+		// Adjust sprite X and Y position based on given pivot point.
+		AlignToPivot(sprite.x, sprite.y, GetMesh(type), pivot);
+
+		// Add to batch.
+		renderBatches[GetBatch(id)].push_back(sprite);
+		// Sort batch based on sprite's layer.
+		SortBatchList(id);
 	}
 
 	void Renderer::AlignToPivot(int& x, int& y, const Mesh& mesh, const DRAW_PIVOT& pivot) {
@@ -78,135 +96,60 @@ namespace RenderSystem {
 		switch (type)
 		{
 		case RenderSystem::TILE:
-			return tileSprite.mesh;
+			return tileMesh;
 			break;
-		case RenderSystem::BUILDING:
-			return buildingSprite.mesh;
+		case RenderSystem::RESIDENTIAL_S:
+		case RenderSystem::RESIDENTIAL_M:
+			return buildingMesh;
 			break;
 		default:
 			break;
 		}
 	}
 
-	/*!***********************************************************************
-	\brief
-		Draw sprite on screen.
-	*************************************************************************/
-	//void Renderer::Draw(const MESH_TYPE mesh, const TEXTURE_TYPE tex, const float x, const float y, const float scale, const float rot) {
-	//	// Drawing object with texture.
-	//	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	//	UpdateRenderSetting();
+	Sprite& Renderer::GetSprite(const SPRITE_TYPE& type) {
+		switch (type)
+		{
+		case TILE:
+			return tileSprite;
+			break;
+		case RESIDENTIAL_S:
+			return residential_S_Sprite;
+		case RESIDENTIAL_M:
+			return residential_M_Sprite;
+			break;
+		default:
+			break;
+		}
+	}
 
-	//	// Select texture to use.
-	//	AEGfxTextureSet(GetTex(tex), 0, 0);
+	int Renderer::GetBatch(const BATCH_TYPE& id) {
+		switch (id)
+		{
+		case TILE_BATCH:
+			return TILE_BATCH;
+			break;
+		case BUILDING_BATCH:
+			return BUILDING_BATCH;
+			break;
+		default:
+			break;
+		}
+	}
 
-	//	// Apply translation, scaling and rotation to global transform mtx.
-	//	UpdateRenderTransformMtx(x, y, scale, rot);
-
-	//	// Draw sprite (Mesh w/ texuture).
-	//	AEGfxMeshDraw(GetMesh(mesh), AE_GFX_MDM_TRIANGLES);
-	//}
-
-	/*!***********************************************************************
-	\brief
-		Draw sprite on screen. Allow more customization on how to render the sprite using RenderSetting.
-	*************************************************************************/
-	//void Renderer::Draw(const MESH_TYPE mesh, const TEXTURE_TYPE tex, RenderSetting settings, const float x, const float y, const float scale, const float rot) {
-	//	// Drawing object with texture.
-	//	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	//	UpdateRenderSetting(settings);
-
-	//	// Select texture to use.
-	//	AEGfxTextureSet(GetTex(tex), 0, 0);
-
-	//	// Apply translation, scaling and rotation to global transform mtx.
-	//	UpdateRenderTransformMtx(x, y, scale, rot);
-
-	//	// Draw mesh.
-	//	AEGfxMeshDraw(GetMesh(mesh), AE_GFX_MDM_TRIANGLES);
-	//}
-
-	/*!***********************************************************************
-	\brief
-		Draw mesh on screen.
-	*************************************************************************/
-	//void Renderer::DrawMesh(const MESH_TYPE type, const float x, const float y) {
-	//	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	//	// Position to render mesh.
-	//	AEGfxSetPosition(x, y);
-
-	//	// Draw mesh.
-	//	AEGfxMeshDraw(GetMesh(type), AE_GFX_MDM_TRIANGLES);
-	//}
-
-	/*!***********************************************************************
-	\brief
-		Draw mesh on screen. Allow scaling and rotation.
-	*************************************************************************/
-	//void Renderer::DrawMesh(const MESH_TYPE type, const float x, const float y, const float scale, const float rot) {
-	//	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-
-	//	// Rotate mesh.
-	//	UpdateRenderTransformMtx(x, y, scale, rot);
-
-	//	// Draw mesh.
-	//	AEGfxMeshDraw(GetMesh(type), AE_GFX_MDM_TRIANGLES);
-	//}
-
-	/*!***********************************************************************
-	\brief
-		Get mesh from given type.
-	*************************************************************************/
-	//AEGfxVertexList* Renderer::GetMesh(MESH_TYPE type) {
-	//	switch (type)
-	//	{
-	//	case RenderSystem::TRIANGLE:
-	//		return triMesh;
-	//		break;
-	//	case RenderSystem::QUAD:
-	//		return quadMesh;
-	//		break;
-	//	case RenderSystem::TILE:
-	//		return tileMesh;
-	//		break;
-	//	case RenderSystem::BUILDING:
-	//		return buildingMesh;
-	//		break;
-	//	default:
-	//		std::cerr << "Mesh type undefined.";
-	//		break;
-	//	}
-	//}
-
-	/*!***********************************************************************
-	\brief
-		Get texture from given type.
-	*************************************************************************/
-	//AEGfxTexture* Renderer::GetTex(TEXTURE_TYPE type) {
-	//	switch (type)
-	//	{
-	//	case RenderSystem::NONE:
-	//		return nullptr;
-	//		break;
-	//	case RenderSystem::TILE_TEX:
-	//		return tileTex;
-	//		break;
-	//	case RenderSystem::BUILDING_TEX:
-	//		return buildingTex;
-	//		break;
-	//	default:
-	//		std::cerr << "Textue type undefined.";
-	//		break;
-	//	}
-	//}
+	void Renderer::SortBatchList(const BATCH_TYPE& id) {
+		renderBatches[GetBatch(id)].sort([](const Sprite& a, const Sprite& b) { return a.layer < b.layer; });
+	}
 
 	/*!***********************************************************************
 	\brief
 		Update engine render settings.
 	*************************************************************************/
 	void Renderer::UpdateRenderSetting(RenderSetting setting) {
-		// AE_GFX_BM_BLEND to allow transperency.
+		// Spcify blend mode. AE_GFX_BM_BLEND to allow transperency.
 		AEGfxSetBlendMode(setting.blendMode);
+		// RGBA value to blend original material.
+		//AEGfxSetBlendColor(setting.blendColor.w, setting.blendColor.x, setting.blendColor.y, setting.blendColor.z);
 		// Apply tint.
 		AEGfxSetTintColor(setting.tint.w, setting.tint.x, setting.tint.y, setting.tint.z);
 		// Apply transparency.
@@ -230,6 +173,7 @@ namespace RenderSystem {
 
 	Renderer::Renderer() {
 		InitMesh();
+		LoadTextures();
 	}
 
 	void Renderer::InitMesh() {
@@ -239,15 +183,15 @@ namespace RenderSystem {
 			Initialize mesh width and height.
 		*************************************************************************/
 		// TILE
-		tileSprite.mesh.width = 100;
-		tileSprite.mesh.height = 50;
-		tileSprite.mesh.midWidth = tileSprite.mesh.width / 2;
-		tileSprite.mesh.midHeight = tileSprite.mesh.height / 2;
+		tileMesh.width = 100;
+		tileMesh.height = 50;
+		tileMesh.midWidth = tileMesh.width / 2;
+		tileMesh.midHeight = tileMesh.height / 2;
 		// BUILDING
-		buildingSprite.mesh.width = 200;
-		buildingSprite.mesh.height = 100;
-		buildingSprite.mesh.midWidth = buildingSprite.mesh.width / 2;
-		buildingSprite.mesh.midHeight = buildingSprite.mesh.height / 2;
+		buildingMesh.width = 100;
+		buildingMesh.height = 100;
+		buildingMesh.midWidth = buildingMesh.width / 2;
+		buildingMesh.midHeight = buildingMesh.height / 2;
 
 		/*!***********************************************************************
 		\brief
@@ -255,18 +199,19 @@ namespace RenderSystem {
 		*************************************************************************/
 		// TILE
 		AEGfxMeshStart();
-		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, 0.0f, -tileSprite.mesh.height, 0xFFFFFFFF, 0.0f, 1.0f, tileSprite.mesh.width, -tileSprite.mesh.height, 0xFFFFFFFF, 1.0f, 1.0f);
-		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, tileSprite.mesh.width, 0.0f, 0xFFFFFFFF, 1.0f, 0.0f, tileSprite.mesh.width, -tileSprite.mesh.height, 0xFFFFFFFF, 1.0f, 1.0f);
-		tileVertices = AEGfxMeshEnd();
+		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, 0.0f, -tileMesh.height, 0xFFFFFFFF, 0.0f, 1.0f, tileMesh.width, -tileMesh.height, 0xFFFFFFFF, 1.0f, 1.0f);
+		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, tileMesh.width, 0.0f, 0xFFFFFFFF, 1.0f, 0.0f, tileMesh.width, -tileMesh.height, 0xFFFFFFFF, 1.0f, 1.0f);
+		tileMesh.vertices = AEGfxMeshEnd();
 
 		// BUILDING
 		AEGfxMeshStart();
-		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, 0.0f, -buildingSprite.mesh.height, 0xFFFFFFFF, 0.0f, 1.0f, buildingSprite.mesh.width, -buildingSprite.mesh.height, 0xFFFFFFFF, 1.0f, 1.0f);
-		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, buildingSprite.mesh.width, 0.0f, 0xFFFFFFFF, 1.0f, 0.0f, buildingSprite.mesh.width, -buildingSprite.mesh.height, 0xFFFFFFFF, 1.0f, 1.0f);
-		buildingVertices = AEGfxMeshEnd();
+		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, 0.0f, -buildingMesh.height, 0xFFFFFFFF, 0.0f, 1.0f, buildingMesh.width, -buildingMesh.height, 0xFFFFFFFF, 1.0f, 1.0f);
+		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, buildingMesh.width, 0.0f, 0xFFFFFFFF, 1.0f, 0.0f, buildingMesh.width, -buildingMesh.height, 0xFFFFFFFF, 1.0f, 1.0f);
+		buildingMesh.vertices = AEGfxMeshEnd();
+	}
+
+	void Renderer::LoadTextures() {
+		tileSprite.tex = AEGfxTextureLoad("Assets/Tile.png");
+		residential_S_Sprite.tex = AEGfxTextureLoad("Assets/PlanetTexture.png");
 	}
 }
-
-
-
-

@@ -1,48 +1,47 @@
+/*!************************************************************************
+\file RenderSystem.h
+\author Tan Jun Rong
+\par DP email: t.junrong@digipen.edu
+\par Course: CSD1171B
+\date 18/01/2023
+\brief
+This header file declares
+
+**************************************************************************/
+
 #pragma once
 #include <list>
-namespace RenderSystem {
-	// VEC 4
-	// TODO: MOVE THIS SOMEWHERE ELSE
-	template<class T>
-	struct Vec4
-	{
-		T w;
-		T x;
-		T y;
-		T z;
-	};
+#include <vector>
+#include <MomoMaths.h>
 
-	// Overload == operator to compare two Vec4.
-	// TODO: MOVE THIS SOMEWHERE ELSE
-	template<class T>
-	bool operator==(const Vec4<T>& lhs, const Vec4<T>& rhs)
-	{
-		if (lhs.w == rhs.w && lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z) {
-			return true;
-		}
-		return false;
-	}
+namespace RenderSystem {
 
 	struct RenderSetting {
 		// Default: Opaque + Allow transperancy. (PNG images)
 		static const AEGfxBlendMode BLEND_MODE{ AE_GFX_BM_BLEND };
-		static constexpr float TRANSPERANCY = 1.0f;
+		static constexpr Vec4<float> BLEND_COLOR{ 0,0,0,0 };	// 0.0f Alpha == NO BLEND
 		static constexpr Vec4<float> TINT{ 1.0f,1.0f,1.0f,1.0f };
+		static constexpr float TRANSPERANCY = 1.0f;
+
 
 		AEGfxBlendMode blendMode = BLEND_MODE;
-		float transperancy = TRANSPERANCY;
+		Vec4<float> blendColor = BLEND_COLOR;
 		Vec4<float> tint = TINT;
-		bool isDefault() { return blendMode == BLEND_MODE && transperancy == TRANSPERANCY && tint == TINT; }
-	};
-
-	enum MESH_TYPE {
-		TRIANGLE,
-		QUAD,
+		float transperancy = TRANSPERANCY;
+		bool isDefault() { return blendMode == BLEND_MODE && blendColor == BLEND_COLOR && transperancy == TRANSPERANCY && tint == TINT; }
 	};
 
 	enum SPRITE_TYPE {
 		TILE,
-		BUILDING
+		NATURE,
+		RESIDENTIAL_S,
+		RESIDENTIAL_M,
+		RESIDENTIAL_L,
+	};
+
+	enum BATCH_TYPE {
+		TILE_BATCH = 0,
+		BUILDING_BATCH
 	};
 
 	enum DRAW_PIVOT {
@@ -60,34 +59,31 @@ namespace RenderSystem {
 	struct Mesh {
 		double height, midHeight;
 		double width, midWidth;
+		AEGfxVertexList* vertices = { 0 };
 	};
 
 	struct Sprite {
 		SPRITE_TYPE type;
-		Mesh mesh;
-	};
-
-	struct Batch {
 		int x, y;
-		Mesh meshInfo;
-		RenderSetting setting;
+		double rot = 0, scale = 1;
 		int layer = 0;
+		AEGfxTexture* tex;
+		RenderSetting setting;
 	};
 
 	class Renderer {
-
 	private:
-		std::list<Batch> batchList;
-		Batch batch;
-		AEGfxTexture* loadedTex = nullptr;
-
-		Sprite tileSprite;
-		AEGfxVertexList* tileVertices = { 0 };
-		AEGfxTexture* tileTex = AEGfxTextureLoad("Assets/Tile.png");
-
-		Sprite buildingSprite;
-		AEGfxVertexList* buildingVertices = { 0 };
-		AEGfxTexture* buildingTex = AEGfxTextureLoad("Assets/PlanetTexture.png");
+		/*!***********************************************************************
+		BATCH ID:
+		0 = TILE
+		1 = BUILDING
+		2 = HAND
+		3 = BUILDING_DRAGGED
+		4 = UI
+		*************************************************************************/
+		std::list<Sprite> tileBatch;
+		std::list<Sprite> buildingBatch;
+		std::vector<std::list<Sprite>> renderBatches = { tileBatch,buildingBatch };
 
 		// Identity transform matrix of rendered mesh.
 		AEMtx33 transform{
@@ -98,17 +94,55 @@ namespace RenderSystem {
 
 	public:
 		Renderer();
-		void AddBatch(SPRITE_TYPE type, const int& x, const int& y, const int& priority = 0, const DRAW_PIVOT& pivot = MID);
 		void Render();
+		void AddBatch(const BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer = 0, const DRAW_PIVOT& pivot = MID, RenderSetting setting = {});
 
 	private:
 		void InitMesh();
+		void LoadTextures();
+
 		Mesh GetMesh(SPRITE_TYPE type);
 		AEGfxTexture* GetTex(SPRITE_TYPE type);
-		void SortBatchList();
-		void UpdateRenderTransformMtx(const int& x, const int& y, const float& scale = 1, const float& rot = 0);
+		Sprite& GetSprite(const  SPRITE_TYPE& type);
+
+		int GetBatch(const BATCH_TYPE& id);
+		void SortBatchList(const BATCH_TYPE& id);
+
 		void UpdateRenderSetting(RenderSetting setting = {});
+		void UpdateRenderTransformMtx(const int& x, const int& y, const float& scale = 1, const float& rot = 0);
+
 		void AlignToPivot(int& x, int& y, const Mesh&, const DRAW_PIVOT& pivot);
+
+	private:
+		// MESH IS LIKE A SKELETON
+		Mesh tileMesh;
+		Mesh buildingMesh;
+		Mesh natureMesh;
+		Mesh cardMesh;
+
+		// SPRITE IS THE MEAT ON THE SKELETON.
+		// LoadTexture() put skin on the meat.
+		Sprite tileSprite;
+
+		/*!***********************************************************************
+		* NATURE SPRITE
+		*************************************************************************/
+		Sprite nature_Sprite;
+
+		/*!***********************************************************************
+		* BUILDING SPRITE
+		*************************************************************************/
+		Sprite residential_S_Sprite;
+		Sprite residential_M_Sprite;
+		Sprite residential_L_Sprite;
+
+		Sprite Commercial_S_Sprite;
+		Sprite Commercial_M_Sprite;
+		Sprite Commercial_L_Sprite;
+
+		Sprite industrial_S_Sprite;
+		Sprite industrial_M_Sprite;
+		Sprite industrial_L_Sprite;
 	};
 }
 
