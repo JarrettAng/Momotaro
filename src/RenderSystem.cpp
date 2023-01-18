@@ -70,8 +70,8 @@ namespace RenderSystem {
 			y += mesh.midHeight;
 			break;
 		case RenderSystem::MID:
-			x -= mesh.midWidth;
-			y -= mesh.midHeight;
+			// x -= mesh.midWidth;
+			// y += mesh.midHeight;
 			break;
 		case RenderSystem::MID_RIGHT:
 			x -= mesh.width;
@@ -213,8 +213,8 @@ namespace RenderSystem {
 	}
 
 	void Renderer::LoadTextures() {
-		// tileSprite.tex = AEGfxTextureLoad("Assets/Tile.png");
-		tileSprite.tex = AEGfxTextureLoad("Assets/BlueRect.png");
+		tileSprite.tex = AEGfxTextureLoad("Assets/Tile.png");
+		// tileSprite.tex = AEGfxTextureLoad("Assets/BlueRect.png");
 		residential_S_Sprite.tex = AEGfxTextureLoad("Assets/PlanetTexture.png");
 	}
 }
