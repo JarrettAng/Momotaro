@@ -3,11 +3,10 @@
 
 #include <AEEngine.h>
 #include <RenderSystem.h>
-#include <IsometricGrid.h>
-#include <SceneManager.h>
-#include <iostream>
 
-namespace iso= IsometricGrid;
+#include <SceneManager.h>
+#include <GridManager.h>
+
 // ---------------------------------------------------------------------------
 // main
 
@@ -26,12 +25,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AEFrameRateControllerInit(60);
 
 	// Manager Initialization
+	GridManager::Initialize();
+	RenderSystem::Initialize();
 	SceneManager::Initialize(SceneManager::GAME_LEVEL);				// Game Loop happens in SceneManager
 
 	// Engine Exit
 	AESysExit();
 
-	//int gGameRunning = 1;
+	return 0;
+
+	int gGameRunning = 1;
 
 	//RenderSystem::Renderer RS{};
 

@@ -26,6 +26,12 @@ struct Vec3 {
 	T z;
 };
 
+template<class T>
+struct Vec2 {
+	T x;
+	T y;
+};
+
 /*!***********************************************************************
 \brief
 	Compare the equality of both Vector 4

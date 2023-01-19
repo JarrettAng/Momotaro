@@ -1,6 +1,8 @@
 
+#include <AEEngine.h>
 #include <SceneManager.h>
 #include <SceneGameLevel.h>
+#include <InputManager.h>
 
 namespace SceneManager {
 
@@ -45,9 +47,11 @@ namespace SceneManager {
 
             //Game loop
             while (current == next) {
-                AEFrameRateControllerStart();
+                AESysFrameStart();
 
-                // Input_Handle();
+                AEInputUpdate();
+                InputManager::HandleInput();
+
                 currentScene->Update();
 
                 elapsedfixedDT += AEFrameRateControllerGetFrameTime();
@@ -58,7 +62,7 @@ namespace SceneManager {
 
                 currentScene->Draw();
 
-                AEFrameRateControllerEnd();
+                AESysFrameEnd();
             }
 
             currentScene->Free();

@@ -1,8 +1,12 @@
 
-#include <SceneManager.h>
-#include <SceneGameLevel.h>
+#include <AEEngine.h>
+#include <RenderSystem.h>
 
-int counter = 0;
+#include <InputManager.h>
+#include <SceneManager.h>
+#include <GridManager.h>
+
+#include <SceneGameLevel.h>
 
 void SceneGameLevel::Load() {
 
@@ -13,6 +17,8 @@ void SceneGameLevel::Initialize() {
 }
 
 void SceneGameLevel::Update() {
+	GridManager::ScreenToTilePos();
+
 	for (auto object : objects) {
 		object->Update();
 	}
@@ -25,11 +31,15 @@ void SceneGameLevel::FixedUpdate() {
 }
 
 void SceneGameLevel::Draw() {
+	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
+
+	GridManager::PrepareTileRenderBatch();
+
 	for (auto object : objects) {
 		// renderer.AddBatch(object->Render());
 	}
 
-	// renderer.Render();
+	RenderSystem::Render();
 }
 
 void SceneGameLevel::Free() {

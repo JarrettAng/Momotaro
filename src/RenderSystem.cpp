@@ -15,7 +15,67 @@ This source file declares
 #include <algorithm>
 namespace RenderSystem {
 
-	void Renderer::Render() {
+	#pragma region Foward Declaration & Variables
+	void InitMesh();
+	void LoadTextures();
+
+	Mesh GetMesh(SPRITE_TYPE type);
+	Sprite& GetSprite(const  SPRITE_TYPE& type);
+
+	int GetBatch(const BATCH_TYPE& id);
+	void SortBatchList(const BATCH_TYPE& id);
+
+	void UpdateRenderSetting(RenderSetting setting = {});
+	void UpdateRenderTransformMtx(const int& x, const int& y, const float& scale = 1, const float& rot = 0);
+
+	void AlignToPivot(int& x, int& y, const Mesh&, const DRAW_PIVOT& pivot);
+
+	std::list<Sprite> tileBatch;
+	std::list<Sprite> buildingBatch;
+	std::vector<std::list<Sprite>> renderBatches = { tileBatch,buildingBatch };
+
+	AEMtx33 transform{
+	1,0,0,
+	0,1,0,
+	0,0,1
+	};
+
+	Mesh tileMesh;
+	Mesh buildingMesh;
+	Mesh natureMesh;
+	Mesh cardMesh;
+
+	// SPRITE IS THE MEAT ON THE SKELETON.
+	// LoadTexture() put skin on the meat.
+	Sprite tileSprite;
+
+	/*!***********************************************************************
+	* NATURE SPRITE
+	*************************************************************************/
+	Sprite nature_Sprite;
+
+	/*!***********************************************************************
+	* BUILDING SPRITE
+	*************************************************************************/
+	Sprite residential_S_Sprite;
+	Sprite residential_M_Sprite;
+	Sprite residential_L_Sprite;
+
+	Sprite Commercial_S_Sprite;
+	Sprite Commercial_M_Sprite;
+	Sprite Commercial_L_Sprite;
+
+	Sprite industrial_S_Sprite;
+	Sprite industrial_M_Sprite;
+	Sprite industrial_L_Sprite;
+	#pragma endregion
+
+	void Initialize() {
+		InitMesh();
+		LoadTextures();
+	}
+
+	void Render() {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		UpdateRenderSetting();
 
@@ -36,7 +96,7 @@ namespace RenderSystem {
 		}
 	}
 
-	void Renderer::AddBatch(const BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer, const DRAW_PIVOT& pivot, RenderSetting setting) {
+	void AddBatch(const BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer, const DRAW_PIVOT& pivot, RenderSetting setting) {
 
 		Sprite sprite = GetSprite(type);
 		sprite.type = type;
@@ -54,7 +114,7 @@ namespace RenderSystem {
 		SortBatchList(id);
 	}
 
-	void Renderer::AlignToPivot(int& x, int& y, const Mesh& mesh, const DRAW_PIVOT& pivot) {
+	void AlignToPivot(int& x, int& y, const Mesh& mesh, const DRAW_PIVOT& pivot) {
 		switch (pivot)
 		{
 		case RenderSystem::TOP_LEFT:
@@ -94,7 +154,7 @@ namespace RenderSystem {
 		}
 	}
 
-	Mesh Renderer::GetMesh(SPRITE_TYPE type) {
+	Mesh GetMesh(SPRITE_TYPE type) {
 		switch (type)
 		{
 		case RenderSystem::TILE:
@@ -109,7 +169,7 @@ namespace RenderSystem {
 		}
 	}
 
-	Sprite& Renderer::GetSprite(const SPRITE_TYPE& type) {
+	Sprite& GetSprite(const SPRITE_TYPE& type) {
 		switch (type)
 		{
 		case TILE:
@@ -125,7 +185,7 @@ namespace RenderSystem {
 		}
 	}
 
-	int Renderer::GetBatch(const BATCH_TYPE& id) {
+	int GetBatch(const BATCH_TYPE& id) {
 		switch (id)
 		{
 		case TILE_BATCH:
@@ -139,7 +199,7 @@ namespace RenderSystem {
 		}
 	}
 
-	void Renderer::SortBatchList(const BATCH_TYPE& id) {
+	void SortBatchList(const BATCH_TYPE& id) {
 		renderBatches[GetBatch(id)].sort([](const Sprite& a, const Sprite& b) { return a.layer < b.layer; });
 	}
 
@@ -147,7 +207,7 @@ namespace RenderSystem {
 	\brief
 		Update engine render settings.
 	*************************************************************************/
-	void Renderer::UpdateRenderSetting(RenderSetting setting) {
+	void UpdateRenderSetting(RenderSetting setting) {
 		// Spcify blend mode. AE_GFX_BM_BLEND to allow transperency.
 		AEGfxSetBlendMode(setting.blendMode);
 		// Add a color overlay on top of texture/mesh.
@@ -162,7 +222,7 @@ namespace RenderSystem {
 	\brief
 		Update global transform mtx for subsequent sprites to be drawn.
 	*************************************************************************/
-	void Renderer::UpdateRenderTransformMtx(const int& x, const int& y, const float& scale, const float& rot) {
+	void UpdateRenderTransformMtx(const int& x, const int& y, const float& scale, const float& rot) {
 		// Apply rotation.
 		AEMtx33RotDeg(&transform, rot);
 		// Apply scaling
@@ -173,12 +233,12 @@ namespace RenderSystem {
 		AEGfxSetTransform(transform.m);
 	}
 
-	Renderer::Renderer() {
-		InitMesh();
-		LoadTextures();
-	}
+	//Renderer::Renderer() {
+	//	InitMesh();
+	//	LoadTextures();
+	//}
 
-	void Renderer::InitMesh() {
+	void InitMesh() {
 		/*!***********************************************************************
 		\brief
 			// TODO: GET INFO USING FILE I/O
@@ -212,7 +272,7 @@ namespace RenderSystem {
 		buildingMesh.vertices = AEGfxMeshEnd();
 	}
 
-	void Renderer::LoadTextures() {
+	void LoadTextures() {
 		tileSprite.tex = AEGfxTextureLoad("Assets/Tile.png");
 		// tileSprite.tex = AEGfxTextureLoad("Assets/BlueRect.png");
 		residential_S_Sprite.tex = AEGfxTextureLoad("Assets/PlanetTexture.png");

@@ -5,8 +5,6 @@
 #include <EventSystem.h>
 #include <GameObject.h>
 
-#include <RenderSystem.h>
-
 class Scene {
 	public:
 		virtual void Load();

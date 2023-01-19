@@ -72,8 +72,8 @@ namespace RenderSystem {
 		RenderSetting setting;
 	};
 
-	class Renderer {
-	private:
+	//class Renderer {
+	// private:
 		/*!***********************************************************************
 		BATCH ID:
 		0 = TILE
@@ -82,68 +82,69 @@ namespace RenderSystem {
 		3 = BUILDING_DRAGGED
 		4 = UI
 		*************************************************************************/
-		std::list<Sprite> tileBatch;
-		std::list<Sprite> buildingBatch;
-		std::vector<std::list<Sprite>> renderBatches = { tileBatch,buildingBatch };
+		//std::list<Sprite> tileBatch;
+		//std::list<Sprite> buildingBatch;
+		//std::vector<std::list<Sprite>> renderBatches = { tileBatch,buildingBatch };
 
 		// Identity transform matrix of rendered mesh.
-		AEMtx33 transform{
-			1,0,0,
-			0,1,0,
-			0,0,1
-		};
+		//AEMtx33 transform{
+		//	1,0,0,
+		//	0,1,0,
+		//	0,0,1
+		//};
 
-	public:
-		Renderer();
+	// public:
+		// Renderer();
+		void Initialize();
 		void Render();
 		void AddBatch(const BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer = 0, const DRAW_PIVOT& pivot = MID, RenderSetting setting = {});
 
-	private:
-		void InitMesh();
-		void LoadTextures();
+	// private:
+		//void InitMesh();
+		//void LoadTextures();
 
-		Mesh GetMesh(SPRITE_TYPE type);
-		AEGfxTexture* GetTex(SPRITE_TYPE type);
-		Sprite& GetSprite(const  SPRITE_TYPE& type);
+		//Mesh GetMesh(SPRITE_TYPE type);
+		//// AEGfxTexture* GetTex(SPRITE_TYPE type);
+		//Sprite& GetSprite(const  SPRITE_TYPE& type);
 
-		int GetBatch(const BATCH_TYPE& id);
-		void SortBatchList(const BATCH_TYPE& id);
+		//int GetBatch(const BATCH_TYPE& id);
+		//void SortBatchList(const BATCH_TYPE& id);
 
-		void UpdateRenderSetting(RenderSetting setting = {});
-		void UpdateRenderTransformMtx(const int& x, const int& y, const float& scale = 1, const float& rot = 0);
+		//void UpdateRenderSetting(RenderSetting setting = {});
+		//void UpdateRenderTransformMtx(const int& x, const int& y, const float& scale = 1, const float& rot = 0);
 
-		void AlignToPivot(int& x, int& y, const Mesh&, const DRAW_PIVOT& pivot);
+		//void AlignToPivot(int& x, int& y, const Mesh&, const DRAW_PIVOT& pivot);
 
-	private:
+	// private:
 		// MESH IS LIKE A SKELETON
-		Mesh tileMesh;
-		Mesh buildingMesh;
-		Mesh natureMesh;
-		Mesh cardMesh;
+		//Mesh tileMesh;
+		//Mesh buildingMesh;
+		//Mesh natureMesh;
+		//Mesh cardMesh;
 
-		// SPRITE IS THE MEAT ON THE SKELETON.
-		// LoadTexture() put skin on the meat.
-		Sprite tileSprite;
+		//// SPRITE IS THE MEAT ON THE SKELETON.
+		//// LoadTexture() put skin on the meat.
+		//Sprite tileSprite;
 
-		/*!***********************************************************************
-		* NATURE SPRITE
-		*************************************************************************/
-		Sprite nature_Sprite;
+		///*!***********************************************************************
+		//* NATURE SPRITE
+		//*************************************************************************/
+		//Sprite nature_Sprite;
 
-		/*!***********************************************************************
-		* BUILDING SPRITE
-		*************************************************************************/
-		Sprite residential_S_Sprite;
-		Sprite residential_M_Sprite;
-		Sprite residential_L_Sprite;
+		///*!***********************************************************************
+		//* BUILDING SPRITE
+		//*************************************************************************/
+		//Sprite residential_S_Sprite;
+		//Sprite residential_M_Sprite;
+		//Sprite residential_L_Sprite;
 
-		Sprite Commercial_S_Sprite;
-		Sprite Commercial_M_Sprite;
-		Sprite Commercial_L_Sprite;
+		//Sprite Commercial_S_Sprite;
+		//Sprite Commercial_M_Sprite;
+		//Sprite Commercial_L_Sprite;
 
-		Sprite industrial_S_Sprite;
-		Sprite industrial_M_Sprite;
-		Sprite industrial_L_Sprite;
-	};
+		//Sprite industrial_S_Sprite;
+		//Sprite industrial_M_Sprite;
+		//Sprite industrial_L_Sprite;
+	// };
 }
 

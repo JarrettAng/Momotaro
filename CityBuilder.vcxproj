@@ -11,11 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Building.cpp" />
-    <ClCompile Include="CardManager.cpp" />
-    <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="src\Building.cpp" />
+    <ClCompile Include="src\CardManager.cpp" />
     <ClCompile Include="src\EventSystem.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
+    <ClCompile Include="src\GridManager.cpp" />
+    <ClCompile Include="src\InputManager.cpp" />
     <ClCompile Include="src\IsometricGrid.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\RenderSystem.cpp" />
@@ -26,6 +27,8 @@
   <ItemGroup>
     <ClInclude Include="inc\EventSystem.h" />
     <ClInclude Include="inc\GameObject.h" />
+    <ClInclude Include="inc\GridManager.h" />
+    <ClInclude Include="inc\InputManager.h" />
     <ClInclude Include="inc\IsometricGrid.h" />
     <ClInclude Include="inc\MomoMaths.h" />
     <ClInclude Include="inc\RenderSystem.h" />
