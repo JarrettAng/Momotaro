@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Building.cpp" />
+    <ClCompile Include="src\BuildingManager.cpp" />
     <ClCompile Include="src\CardManager.cpp" />
     <ClCompile Include="src\EventSystem.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
@@ -25,6 +26,8 @@
     <ClCompile Include="src\SceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\Building.h" />
+    <ClInclude Include="inc\BuildingManager.h" />
     <ClInclude Include="inc\EventSystem.h" />
     <ClInclude Include="inc\GameObject.h" />
     <ClInclude Include="inc\GridManager.h" />

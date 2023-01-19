@@ -72,6 +72,15 @@ namespace RenderSystem {
 		RenderSetting setting;
 	};
 
+	struct SpriteInfo {
+		BATCH_TYPE id;
+		SPRITE_TYPE type;
+		int x, y;
+		int layer = 0;
+		DRAW_PIVOT pivot = MID;
+		RenderSetting setting = { };
+	};
+
 	//class Renderer {
 	// private:
 		/*!***********************************************************************

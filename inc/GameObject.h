@@ -1,6 +1,7 @@
 #pragma once
 
 #include <MomoMaths.h>
+#include <RenderSystem.h>
 
 class GameObject {
 	public:
@@ -14,4 +15,5 @@ class GameObject {
 		virtual void Destroy();
 
 		Vec3<int> position;
+		RenderSystem::SpriteInfo spriteInfo;
 };

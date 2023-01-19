@@ -114,6 +114,10 @@ namespace RenderSystem {
 		SortBatchList(id);
 	}
 
+	void AddBatch(const SpriteInfo& batch) {
+		AddBatch(batch.id, batch.type, batch.x, batch.y, batch.layer, batch.pivot, batch.setting);
+	}
+
 	void AlignToPivot(int& x, int& y, const Mesh& mesh, const DRAW_PIVOT& pivot) {
 		switch (pivot)
 		{
@@ -130,8 +134,8 @@ namespace RenderSystem {
 			y += mesh.midHeight;
 			break;
 		case RenderSystem::MID:
-			// x -= mesh.midWidth;
-			// y += mesh.midHeight;
+			x -= mesh.midWidth;
+			y += mesh.midHeight;
 			break;
 		case RenderSystem::MID_RIGHT:
 			x -= mesh.width;
