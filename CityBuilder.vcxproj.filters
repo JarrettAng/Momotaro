@@ -13,6 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Scenes">
+      <UniqueIdentifier>{aad764dd-60b5-4c4e-be5e-948f3e5b63fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Managers">
+      <UniqueIdentifier>{14f7d547-dbf1-4ab3-a7b1-8b4602dc9263}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameObjects">
+      <UniqueIdentifier>{50b50f66-da11-486e-89bd-09c7fe710652}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObjects">
+      <UniqueIdentifier>{70c37705-7987-4117-a88a-9e07414909fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scenes">
+      <UniqueIdentifier>{80dacf2e-f5ae-417d-937a-fd3882a6cd91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Managers">
+      <UniqueIdentifier>{b5c7c44f-f0fc-4ea1-ace4-de3c14f4027e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EventSystem.cpp">
@@ -27,25 +45,31 @@
     <ClCompile Include="src\IsometricGrid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\SceneGameLevel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SceneManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\GameObject.cpp">
+      <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="src\Scene.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameObject.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\SceneGameLevel.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="CardManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Building.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Source Files\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\RenderSystem.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\MomoMaths.h">
-      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\EventSystem.h">
       <Filter>Header Files</Filter>
@@ -53,16 +77,19 @@
     <ClInclude Include="inc\IsometricGrid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\Scene.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="inc\SceneManager.h">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="inc\GameObject.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="inc\Scene.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="inc\SceneGameLevel.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="inc\SceneManager.h">
+    <ClInclude Include="inc\GameObject.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\MomoMaths.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

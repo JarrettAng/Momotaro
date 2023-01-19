@@ -1,5 +1,7 @@
 #pragma once
 
+#include <MomoMaths.h>
+
 class GameObject {
 	public:
 		virtual void Start();
@@ -10,4 +12,6 @@ class GameObject {
 		virtual void Render();
 
 		virtual void Destroy();
+
+		Vec3<int> position;
 };

@@ -12,6 +12,7 @@ This header file declares
 #pragma once
 #include <list>
 #include <vector>
+#include <AEEngine.h>
 #include <MomoMaths.h>
 
 namespace RenderSystem {

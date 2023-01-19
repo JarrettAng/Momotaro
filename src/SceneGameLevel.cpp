@@ -1,5 +1,8 @@
 
+#include <SceneManager.h>
 #include <SceneGameLevel.h>
+
+int counter = 0;
 
 void SceneGameLevel::Load() {
 

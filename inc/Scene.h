@@ -3,8 +3,9 @@
 #include <list>
 
 #include <EventSystem.h>
-// #include <RenderSystem.h>
 #include <GameObject.h>
+
+#include <RenderSystem.h>
 
 class Scene {
 	public:
@@ -22,6 +23,5 @@ class Scene {
 		virtual void RemoveObject(GameObject *newObject);
 
 	protected:
-		// RenderSystem::Renderer renderer;
 		std::list<GameObject*> objects;
 };
