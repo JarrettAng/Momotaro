@@ -12,12 +12,12 @@ namespace InputManager {
 		AEInputGetCursorPosition(&mousePos.x, &mousePos.y);
 
 		// Check mouse-click
-		if (AEInputCheckTriggered(VK_LBUTTON)) {
+		if (AEInputCheckTriggered(AEVK_LBUTTON)) {
 			onMouseClick.Invoke(mousePos);
 		}
 
 		// Check escape pressed
-		if (AEInputCheckTriggered(VK_ESCAPE)) {
+		if (AEInputCheckTriggered(AEVK_ESCAPE)) {
 			onEscPressed.Invoke();
 		}
 	}

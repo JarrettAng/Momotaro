@@ -7,21 +7,21 @@ namespace BuildingManager {
 		COMMERCIAL,
 		INDUSTRIAL,
 		NATURE,
-		TYPE_LAST
+		TYPE_LENGTH
 	};
 
 	enum SIZE {
 		_1X1,
 		_2X1,
 		_2X2,
-		SIZE_LAST
+		SIZE_LENGTH
 	};
 
 	enum LEVEL {
 		L1,
 		L2,
 		L3,
-		LEVEL_LAST
+		LEVEL_LENGTH
 	};
 
 	void Initialize();

@@ -71,36 +71,6 @@ namespace EventSystem {
 		int priority;
 	};
 
-	/*template<class T>
-	class Event {
-		private:
-			std::list<EventData<T>> subscribers;
-
-		public:
-			void Invoke(T var);
-
-			void Subscribe(void (*fun_ptr)(T), int priority = 0);
-
-			void Unsubscribe(void (*fun_ptr)(T));
-
-			void UnsubscribeAll();
-		};
-
-		template<>
-		class Event<void> {
-		private:
-			std::list<EventData<void>> subscribers;
-
-		public:
-			void Invoke();
-
-			void Subscribe(void (*fun_ptr)(), int priority = 0);
-
-			void Unsubscribe(void (*fun_ptr)());
-
-			void UnsubscribeAll();
-		};*/
-
 	template<class T>
 	class Event {
 		private:

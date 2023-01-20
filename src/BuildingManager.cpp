@@ -14,35 +14,42 @@ namespace BuildingManager {
 		FileIOManager::ReadBuildingsData(buildingsData);
 	}
 
-	void CreateBuilding(BuildingManager::TYPE type, BuildingManager::SIZE size, BuildingManager::LEVEL level) {
-		buildingsData.emplace_back(buildingsData[type + size + level]);
+	Building* CreateBuilding(BuildingManager::TYPE type, BuildingManager::SIZE size, BuildingManager::LEVEL level) {
+		for (auto building : buildings) {
+			if (building.type == type && building.size == size && building.level == level) {
+				buildings.emplace_back(building);
+				return &building;
+			}
+		}
+
+		return nullptr;
 	}
 
 	void CreateRandomBuilding() {
-		BuildingManager::TYPE randType = (BuildingManager::TYPE)(rand() % BuildingManager::TYPE_LAST);
-		BuildingManager::SIZE randSize = (BuildingManager::SIZE)(rand() % BuildingManager::SIZE_LAST);
-		BuildingManager::LEVEL randLevel = (BuildingManager::LEVEL)(rand() % BuildingManager::LEVEL_LAST);
+		BuildingManager::TYPE randType = (BuildingManager::TYPE)(rand() % BuildingManager::TYPE_LENGTH);
+		BuildingManager::SIZE randSize = (BuildingManager::SIZE)(rand() % BuildingManager::SIZE_LENGTH);
+		BuildingManager::LEVEL randLevel = (BuildingManager::LEVEL)(rand() % BuildingManager::LEVEL_LENGTH);
 
 		CreateBuilding(randType, randSize, randLevel);
 	}
 
 	void CreateRandomBuilding(BuildingManager::TYPE type) {
-		BuildingManager::SIZE randSize = (BuildingManager::SIZE)(rand() % BuildingManager::SIZE_LAST);
-		BuildingManager::LEVEL randLevel = (BuildingManager::LEVEL)(rand() % BuildingManager::LEVEL_LAST);
+		BuildingManager::SIZE randSize = (BuildingManager::SIZE)(rand() % BuildingManager::SIZE_LENGTH);
+		BuildingManager::LEVEL randLevel = (BuildingManager::LEVEL)(rand() % BuildingManager::LEVEL_LENGTH);
 
 		CreateBuilding(type, randSize, randLevel);
 	}
 
 	void CreateRandomBuilding(BuildingManager::SIZE size) {
-		BuildingManager::TYPE randType = (BuildingManager::TYPE)(rand() % BuildingManager::TYPE_LAST);
-		BuildingManager::LEVEL randLevel = (BuildingManager::LEVEL)(rand() % BuildingManager::LEVEL_LAST);
+		BuildingManager::TYPE randType = (BuildingManager::TYPE)(rand() % BuildingManager::TYPE_LENGTH);
+		BuildingManager::LEVEL randLevel = (BuildingManager::LEVEL)(rand() % BuildingManager::LEVEL_LENGTH);
 
 		CreateBuilding(randType, size, randLevel);
 	}
 
 	void CreateRandomBuilding(BuildingManager::LEVEL level) {
-		BuildingManager::TYPE randType = (BuildingManager::TYPE)(rand() % BuildingManager::TYPE_LAST);
-		BuildingManager::SIZE randSize = (BuildingManager::SIZE)(rand() % BuildingManager::SIZE_LAST);
+		BuildingManager::TYPE randType = (BuildingManager::TYPE)(rand() % BuildingManager::TYPE_LENGTH);
+		BuildingManager::SIZE randSize = (BuildingManager::SIZE)(rand() % BuildingManager::SIZE_LENGTH);
 
 		CreateBuilding(randType, randSize, level);
 	}
