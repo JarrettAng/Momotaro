@@ -15,6 +15,7 @@
     <ClCompile Include="src\BuildingManager.cpp" />
     <ClCompile Include="src\CardManager.cpp" />
     <ClCompile Include="src\EventSystem.cpp" />
+    <ClCompile Include="src\FileIOManager.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\GridManager.cpp" />
     <ClCompile Include="src\InputManager.cpp" />
@@ -29,6 +30,7 @@
     <ClInclude Include="inc\Building.h" />
     <ClInclude Include="inc\BuildingManager.h" />
     <ClInclude Include="inc\EventSystem.h" />
+    <ClInclude Include="inc\FileIOManager.h" />
     <ClInclude Include="inc\GameObject.h" />
     <ClInclude Include="inc\GridManager.h" />
     <ClInclude Include="inc\InputManager.h" />

@@ -6,18 +6,24 @@ namespace BuildingManager {
 		RESIDENTIAL,
 		COMMERCIAL,
 		INDUSTRIAL,
-		NATURE
+		NATURE,
+		TYPE_LAST
 	};
 
 	enum SIZE {
 		_1X1,
 		_2X1,
-		_2X2
+		_2X2,
+		SIZE_LAST
 	};
 
 	enum LEVEL {
 		L1,
 		L2,
 		L3,
+		LEVEL_LAST
 	};
+
+	void Initialize();
+	void Clear();
 }

@@ -71,33 +71,114 @@ namespace EventSystem {
 		int priority;
 	};
 
+	/*template<class T>
+	class Event {
+		private:
+			std::list<EventData<T>> subscribers;
+
+		public:
+			void Invoke(T var);
+
+			void Subscribe(void (*fun_ptr)(T), int priority = 0);
+
+			void Unsubscribe(void (*fun_ptr)(T));
+
+			void UnsubscribeAll();
+		};
+
+		template<>
+		class Event<void> {
+		private:
+			std::list<EventData<void>> subscribers;
+
+		public:
+			void Invoke();
+
+			void Subscribe(void (*fun_ptr)(), int priority = 0);
+
+			void Unsubscribe(void (*fun_ptr)());
+
+			void UnsubscribeAll();
+		};*/
+
 	template<class T>
 	class Event {
-	private:
-		std::list<EventData<T>> subscribers;
+		private:
+			std::list<EventData<T>> subscribers;
 
-	public:
-		void Invoke(T var);
+		public:
+			void Invoke(T var) {
+				for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
+					(i->fun_ptr)(var);
+				}
+			}
 
-		void Subscribe(void (*fun_ptr)(T), int priority = 0);
+			void Subscribe(void (*fun_ptr)(T), int priority = 0) {
+				EventData<T> new_sub = { fun_ptr, priority };
 
-		void Unsubscribe(void (*fun_ptr)(T));
+				if (subscribers.size() >= 1) {
+					for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
+						if (i->priority <= priority) {
+							subscribers.insert(i, new_sub);
+							return;
+						}
+					}
+				}
+				subscribers.push_back(new_sub);
+			}
 
-		void UnsubscribeAll();
+			void Unsubscribe(void (*fun_ptr)(T)) {
+				for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
+					if (i->fun_ptr == fun_ptr) {
+						subscribers.erase(i);
+						break;
+					}
+				}
+			}
+
+			void UnsubscribeAll() {
+				subscribers.clear();
+			}
 	};
 
 	template<>
 	class Event<void> {
-	private:
-		std::list<EventData<void>> subscribers;
+		private:
+			std::list<EventData<void>> subscribers;
 
-	public:
-		void Invoke();
+		public:
+			void Invoke() {
+				for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
+					(i->fun_ptr)();
+				}
+			}
 
-		void Subscribe(void (*fun_ptr)(), int priority = 0);
+			void Subscribe(void (*fun_ptr)(), int priority = 0) {
+				EventData<void> new_sub = { fun_ptr, priority };
 
-		void Unsubscribe(void (*fun_ptr)());
+				if (subscribers.size() >= 1) {
+					for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
+						if (i->priority <= priority) {
+							subscribers.insert(i, new_sub);
+							return;
+						}
+					}
+				}
 
-		void UnsubscribeAll();
+				subscribers.push_back(new_sub);
+			}
+
+			void Unsubscribe(void (*fun_ptr)()) {
+				for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
+					if (i->fun_ptr == fun_ptr) {
+						subscribers.erase(i);
+						break;
+					}
+				}
+			}
+
+			void UnsubscribeAll() {
+				subscribers.clear();
+			}
 	};
 }

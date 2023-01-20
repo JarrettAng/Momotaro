@@ -16,7 +16,7 @@ namespace SceneManager {
     // SceneMainMenu mainMenu;
     // SceneSettings settings;
 
-    float fixedDT = 0.02, elapsedfixedDT = 0;
+    double fixedDT = 0.02, elapsedfixedDT = 0;
 
     void LoadScene(SCENES_ENUM nextScene) {
         next = nextScene;
@@ -30,10 +30,7 @@ namespace SceneManager {
         }
     }
 
-    void Initialize(SCENES_ENUM startingScene) {
-        current = previous = next = startingScene;
-        SwitchScene();
-
+    void SceneManagerLoop() {
         while (current != QUIT) {
             if (current == RESTART) {
                 next = current = previous;
@@ -74,5 +71,12 @@ namespace SceneManager {
             previous = current;
             current = next;
         }
+    }
+
+    void Initialize(SCENES_ENUM startingScene) {
+        current = previous = next = startingScene;
+        SwitchScene();
+
+        SceneManagerLoop();
     }
 }

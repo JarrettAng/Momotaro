@@ -1,9 +1,10 @@
 // ---------------------------------------------------------------------------
 // includes
 
+#include <cstdlib>
 #include <AEEngine.h>
-#include <RenderSystem.h>
 
+#include <RenderSystem.h>
 #include <SceneManager.h>
 #include <GridManager.h>
 
@@ -17,6 +18,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 {
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
+
+	// Random Seed Initialization
+	srand(11);
 
 	// Engine Initialization
 	AESysInit(hInstance, nCmdShow, 800, 600, 1, 60, true, NULL);	// Using custom window procedure

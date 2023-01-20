@@ -1,0 +1,170 @@
+{
+  "Residential buildings": [
+    {
+      "type": "Residential",
+      "size": "_1x1",
+      "level": "L1",
+      "SynergyResidential": "1",
+      "SynergyCommercial": "3",
+      "SynergyIndustrial": "-3",
+      "SynergyNature": "2"
+    },
+    {
+      "type": "Residential",
+      "size": "_1x1",
+      "level": "L2",
+      "SynergyResidential": "1",
+      "SynergyCommercial": "3",
+      "SynergyIndustrial": "-3",
+      "SynergyNature": "2"
+    },
+    {
+      "type": "Residential",
+      "size": "_1x1",
+      "level": "L3",
+      "SynergyResidential": "1",
+      "SynergyCommercial": "3",
+      "SynergyIndustrial": "-3",
+      "SynergyNature": "2"
+    },
+    {
+      "type": "Residential",
+      "size": "_2x1",
+      "level": "L1",
+      "SynergyResidential": "-1",
+      "SynergyCommercial": "5",
+      "SynergyIndustrial": "-8",
+      "SynergyNature": "1"
+    },
+    {
+      "type": "Residential",
+      "size": "_2x1",
+      "level": "L2",
+      "SynergyResidential": "-1",
+      "SynergyCommercial": "5",
+      "SynergyIndustrial": "-8",
+      "SynergyNature": "1"
+    },
+    {
+      "type": "Residential",
+      "size": "_2x1",
+      "level": "L3",
+      "SynergyResidential": "-1",
+      "SynergyCommercial": "5",
+      "SynergyIndustrial": "-8",
+      "SynergyNature": "1"
+    }
+  ],
+  "Commercial buildings": [
+    {
+      "type": "Commercial",
+      "size": "_1x1",
+      "level": "L1",
+      "SynergyResidential": "3",
+      "SynergyCommercial": "-1",
+      "SynergyIndustrial": "-1",
+      "SynergyNature": "1"
+    },
+    {
+      "type": "Commercial",
+      "size": "_1x1",
+      "level": "L2",
+      "SynergyResidential": "3",
+      "SynergyCommercial": "-1",
+      "SynergyIndustrial": "-1",
+      "SynergyNature": "1"
+    },
+    {
+      "type": "Commercial",
+      "size": "_1x1",
+      "level": "L3",
+      "SynergyResidential": "3",
+      "SynergyCommercial": "-1",
+      "SynergyIndustrial": "-1",
+      "SynergyNature": "1"
+    },
+    {
+      "type": "Commercial",
+      "size": "_2x1",
+      "level": "L1",
+      "SynergyResidential": "5",
+      "SynergyCommercial": "0",
+      "SynergyIndustrial": "-5",
+      "SynergyNature": "1"
+    },
+    {
+      "type": "Commercial",
+      "size": "_2x1",
+      "level": "L2",
+      "SynergyResidential": "5",
+      "SynergyCommercial": "0",
+      "SynergyIndustrial": "-5",
+      "SynergyNature": "1"
+    },
+    {
+      "type": "Commercial",
+      "size": "_2x1",
+      "level": "L3",
+      "SynergyResidential": "5",
+      "SynergyCommercial": "0",
+      "SynergyIndustrial": "-5",
+      "SynergyNature": "1"
+    }
+  ],
+  "Industrial buildings": [
+    {
+      "type": "Industrial",
+      "size": "_2x1",
+      "level": "L1",
+      "SynergyResidential": "-3",
+      "SynergyCommercial": "-1",
+      "SynergyIndustrial": "3",
+      "SynergyNature": "1"
+    },
+    {
+      "type": "Industrial",
+      "size": "_2x1",
+      "level": "L2",
+      "SynergyResidential": "-3",
+      "SynergyCommercial": "-1",
+      "SynergyIndustrial": "3",
+      "SynergyNature": "1"
+    },
+    {
+      "type": "Industrial",
+      "size": "_2x1",
+      "level": "L3",
+      "SynergyResidential": "-3",
+      "SynergyCommercial": "-1",
+      "SynergyIndustrial": "3",
+      "SynergyNature": "1"
+    },
+    {
+      "type": "Industrial",
+      "size": "_2x2",
+      "level": "L1",
+      "SynergyResidential": "-8",
+      "SynergyCommercial": "-5",
+      "SynergyIndustrial": "8",
+      "SynergyNature": "1"
+    },
+    {
+      "type": "Industrial",
+      "size": "_2x2",
+      "level": "L2",
+      "SynergyResidential": "-8",
+      "SynergyCommercial": "-5",
+      "SynergyIndustrial": "8",
+      "SynergyNature": "1"
+    },
+    {
+      "type": "Industrial",
+      "size": "_2x2",
+      "level": "L3",
+      "SynergyResidential": "-8",
+      "SynergyCommercial": "-5",
+      "SynergyIndustrial": "8",
+      "SynergyNature": "1"
+    }
+  ]
+}
