@@ -15,38 +15,50 @@ This source file declares
 #include <algorithm>
 namespace RenderSystem {
 
-	#pragma region Foward Declaration & Variables
+#pragma region Foward Declaration & Variables
 	void InitMesh();
 	void LoadTextures();
 
-	Mesh GetMesh(SPRITE_TYPE type);
 	Sprite& GetSprite(const  SPRITE_TYPE& type);
 
 	int GetBatch(const BATCH_TYPE& id);
 	void SortBatchList(const BATCH_TYPE& id);
 
 	void UpdateRenderSetting(RenderSetting setting = {});
-	void UpdateRenderTransformMtx(const int& x, const int& y, const float& scale = 1, const float& rot = 0);
+	void UpdateRenderTransformMtx(const int& x, const int& y, const AEVec2& scale, const float& rot = 0);
 
-	void AlignToPivot(int& x, int& y, const Mesh&, const DRAW_PIVOT& pivot);
+	//void AlignToPivot(int& x, int& y, const Mesh&, const DRAW_PIVOT& pivot);
 
 	std::list<Sprite> tileBatch;
 	std::list<Sprite> buildingBatch;
 	std::vector<std::list<Sprite>> renderBatches = { tileBatch,buildingBatch };
 
-	AEMtx33 transform{
+	AEMtx33 transformMtx{
+	1,0,0,
+	0,1,0,
+	0,0,1
+	};
+	AEMtx33 translateMtx{
+	1,0,0,
+	0,1,0,
+	0,0,1
+	};
+	AEMtx33 scaleMtx{
+	1,0,0,
+	0,1,0,
+	0,0,1
+	};
+	AEMtx33 rotMtx{
 	1,0,0,
 	0,1,0,
 	0,0,1
 	};
 
-	Mesh tileMesh;
-	Mesh buildingMesh;
-	Mesh natureMesh;
-	Mesh cardMesh;
+	AEGfxVertexList* spriteMesh;
 
-	// SPRITE IS THE MEAT ON THE SKELETON.
-	// LoadTexture() put skin on the meat.
+	/*!***********************************************************************
+	* TILE SPRITE
+	*************************************************************************/
 	Sprite tileSprite;
 
 	/*!***********************************************************************
@@ -68,7 +80,7 @@ namespace RenderSystem {
 	Sprite industrial_S_Sprite;
 	Sprite industrial_M_Sprite;
 	Sprite industrial_L_Sprite;
-	#pragma endregion
+#pragma endregion
 
 	void Initialize() {
 		InitMesh();
@@ -86,7 +98,7 @@ namespace RenderSystem {
 				if (!sprite.setting.isDefault()) UpdateRenderSetting(sprite.setting);
 
 				UpdateRenderTransformMtx(sprite.x, sprite.y, sprite.scale, sprite.rot);
-				AEGfxMeshDraw(GetMesh(sprite.type).vertices, AE_GFX_MDM_TRIANGLES);
+				AEGfxMeshDraw(spriteMesh, AE_GFX_MDM_TRIANGLES);
 
 				// Reset back to default render setting if changed, for next sprite.
 				if (!sprite.setting.isDefault()) UpdateRenderSetting();
@@ -105,9 +117,6 @@ namespace RenderSystem {
 		sprite.layer = layer;
 		sprite.setting = setting;
 
-		// Adjust sprite X and Y position based on given pivot point.
-		AlignToPivot(sprite.x, sprite.y, GetMesh(type), pivot);
-
 		// Add to batch.
 		renderBatches[GetBatch(id)].push_back(sprite);
 		// Sort batch based on sprite's layer.
@@ -118,60 +127,45 @@ namespace RenderSystem {
 		AddBatch(batch.id, batch.type, batch.x, batch.y, batch.layer, batch.pivot, batch.setting);
 	}
 
-	void AlignToPivot(int& x, int& y, const Mesh& mesh, const DRAW_PIVOT& pivot) {
-		switch (pivot)
-		{
-		case RenderSystem::TOP_LEFT:
-			// Drawn from TOP_LEFT
-			break;
-		case RenderSystem::TOP_MID:
-			x -= mesh.midWidth;
-			break;
-		case RenderSystem::TOP_RIGHT:
-			x -= mesh.width;
-			break;
-		case RenderSystem::MID_LEFT:
-			y += mesh.midHeight;
-			break;
-		case RenderSystem::MID:
-			x -= mesh.midWidth;
-			y += mesh.midHeight;
-			break;
-		case RenderSystem::MID_RIGHT:
-			x -= mesh.width;
-			y += mesh.midHeight;
-			break;
-		case RenderSystem::BOT_LEFT:
-			y += mesh.height;
-			break;
-		case RenderSystem::BOT_MID:
-			x -= mesh.midWidth;
-			y += mesh.height;
-			break;
-		case RenderSystem::BOT_RIGHT:
-			x -= mesh.width;
-			y += mesh.height;
-			break;
-		default:
-			std::cout << "Invalid Pivot.";
-			break;
-		}
-	}
-
-	Mesh GetMesh(SPRITE_TYPE type) {
-		switch (type)
-		{
-		case RenderSystem::TILE:
-			return tileMesh;
-			break;
-		case RenderSystem::RESIDENTIAL_S:
-		case RenderSystem::RESIDENTIAL_M:
-			return buildingMesh;
-			break;
-		default:
-			break;
-		}
-	}
+	//void AlignToPivot(int& x, int& y, const Mesh& mesh, const DRAW_PIVOT& pivot) {
+	//	switch (pivot)
+	//	{
+	//	case RenderSystem::TOP_LEFT:
+	//		// Drawn from TOP_LEFT
+	//		break;
+	//	case RenderSystem::TOP_MID:
+	//		x -= mesh.midWidth;
+	//		break;
+	//	case RenderSystem::TOP_RIGHT:
+	//		x -= mesh.width;
+	//		break;
+	//	case RenderSystem::MID_LEFT:
+	//		y += mesh.midHeight;
+	//		break;
+	//	case RenderSystem::MID:
+	//		x -= mesh.midWidth;
+	//		y += mesh.midHeight;
+	//		break;
+	//	case RenderSystem::MID_RIGHT:
+	//		x -= mesh.width;
+	//		y += mesh.midHeight;
+	//		break;
+	//	case RenderSystem::BOT_LEFT:
+	//		y += mesh.height;
+	//		break;
+	//	case RenderSystem::BOT_MID:
+	//		x -= mesh.midWidth;
+	//		y += mesh.height;
+	//		break;
+	//	case RenderSystem::BOT_RIGHT:
+	//		x -= mesh.width;
+	//		y += mesh.height;
+	//		break;
+	//	default:
+	//		std::cout << "Invalid Pivot.";
+	//		break;
+	//	}
+	//}
 
 	Sprite& GetSprite(const SPRITE_TYPE& type) {
 		switch (type)
@@ -226,21 +220,21 @@ namespace RenderSystem {
 	\brief
 		Update global transform mtx for subsequent sprites to be drawn.
 	*************************************************************************/
-	void UpdateRenderTransformMtx(const int& x, const int& y, const float& scale, const float& rot) {
-		// Apply rotation.
-		AEMtx33RotDeg(&transform, rot);
-		// Apply scaling
-		AEMtx33ScaleApply(&transform, &transform, scale, scale);
-		// Apply translation.
-		AEMtx33TransApply(&transform, &transform, x, y);
-		// Apply transform matrix to mesh to be drawn.
-		AEGfxSetTransform(transform.m);
-	}
+	void UpdateRenderTransformMtx(const int& x, const int& y, const AEVec2& scale, const float& rot) {
+		// Set scaling
+		AEMtx33Scale(&scaleMtx, scale.x, scale.y);
+		// Set rotation.
+		AEMtx33RotDeg(&rotMtx, rot);
+		// Set translation.
+		AEMtx33Trans(&translateMtx, x, y);
 
-	//Renderer::Renderer() {
-	//	InitMesh();
-	//	LoadTextures();
-	//}
+		// Apply scaling -> rotatation -> translation to transform matrix.
+		AEMtx33Concat(&transformMtx, &scaleMtx, &rotMtx);
+		AEMtx33Concat(&transformMtx, &translateMtx, &transformMtx);
+
+		// Apply transform matrix to mesh to be drawn.
+		AEGfxSetTransform(transformMtx.m);
+	}
 
 	void InitMesh() {
 		/*!***********************************************************************
@@ -249,31 +243,20 @@ namespace RenderSystem {
 			Initialize mesh width and height.
 		*************************************************************************/
 		// TILE
-		tileMesh.width = 100;
-		tileMesh.height = 50;
-		tileMesh.midWidth = tileMesh.width / 2;
-		tileMesh.midHeight = tileMesh.height / 2;
-		// BUILDING
-		buildingMesh.width = 100;
-		buildingMesh.height = 100;
-		buildingMesh.midWidth = buildingMesh.width / 2;
-		buildingMesh.midHeight = buildingMesh.height / 2;
+		tileSprite.width = 100;
+		tileSprite.height = 50;
+		tileSprite.scale = { tileSprite.width,tileSprite.height };
+		tileSprite.midWidth = tileSprite.width / 2;
+		tileSprite.midHeight = tileSprite.height / 2;
 
 		/*!***********************************************************************
 		\brief
 			Initialize mesh vertices.
 		*************************************************************************/
-		// TILE
 		AEGfxMeshStart();
-		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, 0.0f, -tileMesh.height, 0xFFFFFFFF, 0.0f, 1.0f, tileMesh.width, -tileMesh.height, 0xFFFFFFFF, 1.0f, 1.0f);
-		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, tileMesh.width, 0.0f, 0xFFFFFFFF, 1.0f, 0.0f, tileMesh.width, -tileMesh.height, 0xFFFFFFFF, 1.0f, 1.0f);
-		tileMesh.vertices = AEGfxMeshEnd();
-
-		// BUILDING
-		AEGfxMeshStart();
-		AEGfxTriAdd(0.0f, 0.0f, 0x00FFFFFF, 0.0f, 0.0f, 0.0f, -buildingMesh.height, 0x00FFFFFF, 0.0f, 1.0f, buildingMesh.width, -buildingMesh.height, 0xFFFFFFFF, 1.0f, 1.0f);
-		AEGfxTriAdd(0.0f, 0.0f, 0x00FFFFFF, 0.0f, 0.0f, buildingMesh.width, 0.0f, 0x00FFFFFF, 1.0f, 0.0f, buildingMesh.width, -buildingMesh.height, 0xFFFFFFFF, 1.0f, 1.0f);
-		buildingMesh.vertices = AEGfxMeshEnd();
+		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, 0.0f, -1.0f, 0xFFFFFFFF, 0.0f, 1.0f, 1.0f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);
+		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, 1.0f, 0.0f, 0xFFFFFFFF, 1.0f, 0.0f, 1.0f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);
+		spriteMesh = AEGfxMeshEnd();
 	}
 
 	void LoadTextures() {

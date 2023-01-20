@@ -57,19 +57,17 @@ namespace RenderSystem {
 		BOT_RIGHT
 	};
 
-	struct Mesh {
-		double height, midHeight;
-		double width, midWidth;
-		AEGfxVertexList* vertices = { 0 };
-	};
-
 	struct Sprite {
 		SPRITE_TYPE type;
 		int x, y;
-		double rot = 0, scale = 1;
+		float rot = 0;
+		AEVec2 scale = { 1,1 };
 		int layer = 0;
 		AEGfxTexture* tex;
 		RenderSetting setting;
+
+		float height, midHeight;
+		float width, midWidth;
 	};
 
 	struct SpriteInfo {
@@ -78,82 +76,11 @@ namespace RenderSystem {
 		int x, y;
 		int layer = 0;
 		DRAW_PIVOT pivot = MID;
-		RenderSetting setting = { };
+		RenderSetting setting = {};
 	};
 
-	//class Renderer {
-	// private:
-		/*!***********************************************************************
-		BATCH ID:
-		0 = TILE
-		1 = BUILDING
-		2 = HAND
-		3 = BUILDING_DRAGGED
-		4 = UI
-		*************************************************************************/
-		//std::list<Sprite> tileBatch;
-		//std::list<Sprite> buildingBatch;
-		//std::vector<std::list<Sprite>> renderBatches = { tileBatch,buildingBatch };
-
-		// Identity transform matrix of rendered mesh.
-		//AEMtx33 transform{
-		//	1,0,0,
-		//	0,1,0,
-		//	0,0,1
-		//};
-
-	// public:
-		// Renderer();
-		void Initialize();
-		void Render();
-		void AddBatch(const BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer = 0, const DRAW_PIVOT& pivot = MID, RenderSetting setting = {});
-
-	// private:
-		//void InitMesh();
-		//void LoadTextures();
-
-		//Mesh GetMesh(SPRITE_TYPE type);
-		//// AEGfxTexture* GetTex(SPRITE_TYPE type);
-		//Sprite& GetSprite(const  SPRITE_TYPE& type);
-
-		//int GetBatch(const BATCH_TYPE& id);
-		//void SortBatchList(const BATCH_TYPE& id);
-
-		//void UpdateRenderSetting(RenderSetting setting = {});
-		//void UpdateRenderTransformMtx(const int& x, const int& y, const float& scale = 1, const float& rot = 0);
-
-		//void AlignToPivot(int& x, int& y, const Mesh&, const DRAW_PIVOT& pivot);
-
-	// private:
-		// MESH IS LIKE A SKELETON
-		//Mesh tileMesh;
-		//Mesh buildingMesh;
-		//Mesh natureMesh;
-		//Mesh cardMesh;
-
-		//// SPRITE IS THE MEAT ON THE SKELETON.
-		//// LoadTexture() put skin on the meat.
-		//Sprite tileSprite;
-
-		///*!***********************************************************************
-		//* NATURE SPRITE
-		//*************************************************************************/
-		//Sprite nature_Sprite;
-
-		///*!***********************************************************************
-		//* BUILDING SPRITE
-		//*************************************************************************/
-		//Sprite residential_S_Sprite;
-		//Sprite residential_M_Sprite;
-		//Sprite residential_L_Sprite;
-
-		//Sprite Commercial_S_Sprite;
-		//Sprite Commercial_M_Sprite;
-		//Sprite Commercial_L_Sprite;
-
-		//Sprite industrial_S_Sprite;
-		//Sprite industrial_M_Sprite;
-		//Sprite industrial_L_Sprite;
-	// };
+	void Initialize();
+	void Render();
+	void AddBatch(const BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer = 0, const DRAW_PIVOT& pivot = MID, RenderSetting setting = {});
 }
 
