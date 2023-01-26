@@ -34,7 +34,7 @@ void SceneGameLevel::FixedUpdate() {
 }
 
 void SceneGameLevel::Draw() {
-	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
+	AEGfxSetBackgroundColor(0.52f, 0.89f, 1.0f);
 
 	GridManager::PrepareTileRenderBatch();
 

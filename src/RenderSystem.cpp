@@ -244,7 +244,7 @@ namespace RenderSystem {
 		*************************************************************************/
 		// TILE
 		tileSprite.width = 100;
-		tileSprite.height = 50;
+		tileSprite.height = 100;
 		tileSprite.scale = { tileSprite.width,tileSprite.height };
 		tileSprite.midWidth = tileSprite.width / 2;
 		tileSprite.midHeight = tileSprite.height / 2;
