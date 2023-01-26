@@ -8,6 +8,7 @@
 #include <InputManager.h>
 
 #include <SceneGameLevel.h>
+#include <ColorTable.h>
 
 void Test();
 
@@ -34,7 +35,7 @@ void SceneGameLevel::FixedUpdate() {
 }
 
 void SceneGameLevel::Draw() {
-	AEGfxSetBackgroundColor(0.52f, 0.89f, 1.0f);
+	AEGfxSetBackgroundColor(WATER);
 
 	GridManager::PrepareTileRenderBatch();
 

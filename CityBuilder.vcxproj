@@ -29,6 +29,7 @@
   <ItemGroup>
     <ClInclude Include="inc\Building.h" />
     <ClInclude Include="inc\BuildingManager.h" />
+    <ClInclude Include="inc\ColorTable.h" />
     <ClInclude Include="inc\EventSystem.h" />
     <ClInclude Include="inc\FileIOManager.h" />
     <ClInclude Include="inc\GameObject.h" />
