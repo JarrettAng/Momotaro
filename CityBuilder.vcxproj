@@ -21,14 +21,18 @@
     <ClCompile Include="src\InputManager.cpp" />
     <ClCompile Include="src\IsometricGrid.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\PauseManager.cpp" />
     <ClCompile Include="src\RenderSystem.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\SceneGameLevel.cpp" />
     <ClCompile Include="src\SceneManager.cpp" />
+    <ClCompile Include="src\SceneSplashscreen.cpp" />
+    <ClCompile Include="src\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Building.h" />
     <ClInclude Include="inc\BuildingManager.h" />
+    <ClInclude Include="inc\CardManager.h" />
     <ClInclude Include="inc\EventSystem.h" />
     <ClInclude Include="inc\FileIOManager.h" />
     <ClInclude Include="inc\GameObject.h" />
@@ -36,10 +40,13 @@
     <ClInclude Include="inc\InputManager.h" />
     <ClInclude Include="inc\IsometricGrid.h" />
     <ClInclude Include="inc\MomoMaths.h" />
+    <ClInclude Include="inc\PauseManager.h" />
     <ClInclude Include="inc\RenderSystem.h" />
     <ClInclude Include="inc\Scene.h" />
     <ClInclude Include="inc\SceneGameLevel.h" />
     <ClInclude Include="inc\SceneManager.h" />
+    <ClInclude Include="inc\SceneSplashscreen.h" />
+    <ClInclude Include="src\UIManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
