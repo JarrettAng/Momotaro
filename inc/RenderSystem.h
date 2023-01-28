@@ -50,7 +50,7 @@ namespace RenderSystem {
 		UI_BATCH,
 	};
 
-	enum DRAW_PIVOT {
+	enum RENDER_PIVOT {
 		TOP_LEFT,
 		TOP_MID,
 		TOP_RIGHT,
@@ -80,15 +80,16 @@ namespace RenderSystem {
 		SPRITE_TYPE type;
 		int x, y;
 		int layer = 0;
-		DRAW_PIVOT pivot = MID;
+		RENDER_PIVOT pivot = MID;
 		RenderSetting setting = {};
 	};
 
-
-
 	void Initialize();
 	void Render();
-	void AddBatch(const BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer = 0, const DRAW_PIVOT& pivot = MID, RenderSetting setting = {});
+	AEGfxVertexList* GetRenderMesh();
+	void SetRenderMesh(RENDER_PIVOT pivot);
+
+	void AddBatch(const BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer = 0, const RENDER_PIVOT& pivot = MID, RenderSetting setting = {});
 	void AddUIBatch(UIManager::UIData data);
 
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec4<float> color = { 1.0f,1.0f,1.0f,1.0f });

@@ -30,7 +30,7 @@ namespace RenderSystem {
 	void UpdateRenderSetting(RenderSetting setting = {});
 	void UpdateRenderTransformMtx(const int& x, const int& y, const AEVec2& scale, const float& rot = 0);
 
-	//void AlignToPivot(int& x, int& y, const Mesh&, const DRAW_PIVOT& pivot);
+	AEGfxVertexList* renderMesh;
 
 	/*!***********************************************************************
 	* SPRITE BATCHES
@@ -53,7 +53,18 @@ namespace RenderSystem {
 	};
 	AEMtx33 transformMtx, translateMtx, scaleMtx, rotMtx = identityMtx;
 
-	AEGfxVertexList* spriteMesh;
+	/*!***********************************************************************
+	* MESH FOR PIVOT POINTS.
+	*************************************************************************/
+	AEGfxVertexList* TOP_LEFT_MESH;
+	AEGfxVertexList* TOP_MID_MESH;
+	AEGfxVertexList* TOP_RIGHT_MESH;
+	AEGfxVertexList* MID_LEFT_MESH;
+	AEGfxVertexList* MID_MESH;
+	AEGfxVertexList* MID_RIGHT_MESH;
+	AEGfxVertexList* BOT_LEFT_MESH;
+	AEGfxVertexList* BOT_MID_MESH;
+	AEGfxVertexList* BOT_RIGHT_MESH;
 
 	/*!***********************************************************************
 	* TILE SPRITE
@@ -89,6 +100,7 @@ namespace RenderSystem {
 
 	void Initialize() {
 		InitMesh();
+		SetRenderMesh(TOP_LEFT);
 		LoadTextures();
 	}
 
@@ -110,7 +122,7 @@ namespace RenderSystem {
 				// Set position, rotation and scale of sprite.
 				UpdateRenderTransformMtx(sprite.x, sprite.y, sprite.scale, sprite.rot);
 				// Render sprites on screen.
-				AEGfxMeshDraw(spriteMesh, AE_GFX_MDM_TRIANGLES);
+				AEGfxMeshDraw(TOP_LEFT_MESH, AE_GFX_MDM_TRIANGLES);
 
 				// Reset back to default render setting if changed, for next sprite.
 				if (!sprite.setting.isDefault()) UpdateRenderSetting();
@@ -147,7 +159,7 @@ namespace RenderSystem {
 		UIBatch.clear();
 	}
 
-	void AddBatch(const BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer, const DRAW_PIVOT& pivot, RenderSetting setting) {
+	void AddBatch(const BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer, const RENDER_PIVOT& pivot, RenderSetting setting) {
 
 		Sprite sprite = GetSprite(type);
 		sprite.type = type;
@@ -176,58 +188,17 @@ namespace RenderSystem {
 
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, AEGfxTexture* tex) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		UpdateRenderSetting();
 		AEGfxTextureSet(tex, 0, 0);
 		UpdateRenderTransformMtx(x, y, AEVec2{ width,height });
-		AEGfxMeshDraw(spriteMesh, AE_GFX_MDM_TRIANGLES);
+		AEGfxMeshDraw(GetRenderMesh(), AE_GFX_MDM_TRIANGLES);
 	}
 
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec4<float> color) {
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxSetTintColor(color.w, color.x, color.y, color.z);
 		UpdateRenderTransformMtx(x, y, AEVec2{ width,height });
-		AEGfxMeshDraw(spriteMesh, AE_GFX_MDM_TRIANGLES);
+		AEGfxMeshDraw(GetRenderMesh(), AE_GFX_MDM_TRIANGLES);
 	}
-
-	//void AlignToPivot(int& x, int& y, const Mesh& mesh, const DRAW_PIVOT& pivot) {
-	//	switch (pivot)
-	//	{
-	//	case RenderSystem::TOP_LEFT:
-	//		// Drawn from TOP_LEFT
-	//		break;
-	//	case RenderSystem::TOP_MID:
-	//		x -= mesh.midWidth;
-	//		break;
-	//	case RenderSystem::TOP_RIGHT:
-	//		x -= mesh.width;
-	//		break;
-	//	case RenderSystem::MID_LEFT:
-	//		y += mesh.midHeight;
-	//		break;
-	//	case RenderSystem::MID:
-	//		x -= mesh.midWidth;
-	//		y += mesh.midHeight;
-	//		break;
-	//	case RenderSystem::MID_RIGHT:
-	//		x -= mesh.width;
-	//		y += mesh.midHeight;
-	//		break;
-	//	case RenderSystem::BOT_LEFT:
-	//		y += mesh.height;
-	//		break;
-	//	case RenderSystem::BOT_MID:
-	//		x -= mesh.midWidth;
-	//		y += mesh.height;
-	//		break;
-	//	case RenderSystem::BOT_RIGHT:
-	//		x -= mesh.width;
-	//		y += mesh.height;
-	//		break;
-	//	default:
-	//		std::cout << "Invalid Pivot.";
-	//		break;
-	//	}
-	//}
 
 	Sprite& GetSprite(const SPRITE_TYPE& type) {
 		switch (type)
@@ -317,6 +288,45 @@ namespace RenderSystem {
 		AEGfxSetTransform(transformMtx.m);
 	}
 
+	void SetRenderMesh(RENDER_PIVOT pivot) {
+		switch (pivot)
+		{
+		case RenderSystem::TOP_LEFT:
+			renderMesh = TOP_LEFT_MESH;
+			break;
+		case RenderSystem::TOP_MID:
+			renderMesh = TOP_MID_MESH;
+			break;
+		case RenderSystem::TOP_RIGHT:
+			renderMesh = TOP_RIGHT_MESH;
+			break;
+		case RenderSystem::MID_LEFT:
+			renderMesh = MID_LEFT_MESH;
+			break;
+		case RenderSystem::MID:
+			renderMesh = MID_MESH;
+			break;
+		case RenderSystem::MID_RIGHT:
+			renderMesh = MID_RIGHT_MESH;
+			break;
+		case RenderSystem::BOT_LEFT:
+			renderMesh = BOT_LEFT_MESH;
+			break;
+		case RenderSystem::BOT_MID:
+			renderMesh = BOT_MID_MESH;
+			break;
+		case RenderSystem::BOT_RIGHT:
+			renderMesh = BOT_RIGHT_MESH;
+			break;
+		default:
+			std::cout << "Unable to set render mesh.";
+			break;
+		}
+	}
+	AEGfxVertexList* GetRenderMesh() {
+		return renderMesh;
+	}
+
 	void InitMesh() {
 		/*!***********************************************************************
 		\brief
@@ -353,23 +363,89 @@ namespace RenderSystem {
 
 		/*!***********************************************************************
 		\brief
-			Initialize mesh vertices.
+			Initialize meshes.
 		*************************************************************************/
-		AEGfxMeshStart();
-		//AEGfxTriAdd(-.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
-		//	-0.5f, -.5f, 0xFFFFFFFF, 0.0f, 1.0f,
-		//	.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f);
-		//AEGfxTriAdd(-.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
-		//	0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
-		//	.5f, -.5f, 0xFFFFFFFF, 1.0f, 1.0f);
 
+		AEGfxMeshStart();
 		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
 			0.0f, -1.0f, 0xFFFFFFFF, 0.0f, 1.0f,
 			1.0f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);
 		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
 			1.0f, 0.0f, 0xFFFFFFFF, 1.0f, 0.0f,
 			1.0f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);
-		spriteMesh = AEGfxMeshEnd();
+		TOP_LEFT_MESH = AEGfxMeshEnd();
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(-0.5f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
+			-0.5f, -1.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+			0.5f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);
+		AEGfxTriAdd(-0.5f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
+			0.5f, 0.0f, 0xFFFFFFFF, 1.0f, 0.0f,
+			0.5f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);
+		TOP_MID_MESH = AEGfxMeshEnd();
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(-1.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
+			-1.0f, -1.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+			0.0f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);
+		AEGfxTriAdd(-1.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
+			0.0f, 0.0f, 0xFFFFFFFF, 1.0f, 0.0f,
+			0.0f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);
+		TOP_RIGHT_MESH = AEGfxMeshEnd();
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(0.0f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
+			0.0f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+			1.0f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f);
+		AEGfxTriAdd(1.0f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+			1.0f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+			0.0f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+		MID_LEFT_MESH = AEGfxMeshEnd();
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
+			-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f);
+		AEGfxTriAdd(0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+		MID_MESH = AEGfxMeshEnd();
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(-1.0f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
+			-1.0f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+			0.0f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f);
+		AEGfxTriAdd(0.0f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+			0.0f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+			-1.0f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+		MID_RIGHT_MESH = AEGfxMeshEnd();
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(0.0f, 1.0f, 0xFFFFFFFF, 0.0f, 0.0f,
+			0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+			1.0f, 0.0f, 0xFFFFFFFF, 1.0f, 1.0f);
+		AEGfxTriAdd(1.0f, 0.0f, 0xFFFFFFFF, 1.0f, 1.0f,
+			1.0f, 1.0f, 0xFFFFFFFF, 1.0f, 0.0f,
+			0.0f, 1.0f, 0xFFFFFFFF, 0.0f, 0.0f);
+		BOT_LEFT_MESH = AEGfxMeshEnd();
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(-0.5f, 1.0f, 0xFFFFFFFF, 0.0f, 0.0f,
+			-0.5f, 0.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+			0.5f, 0.0f, 0xFFFFFFFF, 1.0f, 1.0f);
+		AEGfxTriAdd(0.5f, 0.0f, 0xFFFFFFFF, 1.0f, 1.0f,
+			0.5f, 1.0f, 0xFFFFFFFF, 1.0f, 0.0f,
+			-0.5f, 1.0f, 0xFFFFFFFF, 0.0f, 0.0f);
+		BOT_MID_MESH = AEGfxMeshEnd();
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(-1.0f, 1.0f, 0xFFFFFFFF, 0.0f, 0.0f,
+			-1.0f, 0.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+			0.0f, 0.0f, 0xFFFFFFFF, 1.0f, 1.0f);
+		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 1.0f, 1.0f,
+			0.0f, 1.0f, 0xFFFFFFFF, 1.0f, 0.0f,
+			-1.0f, 1.0f, 0xFFFFFFFF, 0.0f, 0.0f);
+		BOT_RIGHT_MESH = AEGfxMeshEnd();
 	}
 
 	void LoadTextures() {
