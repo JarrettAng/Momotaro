@@ -47,7 +47,7 @@
     <ClInclude Include="inc\SceneGameLevel.h" />
     <ClInclude Include="inc\SceneManager.h" />
     <ClInclude Include="inc\SceneSplashscreen.h" />
-    <ClInclude Include="src\UIManager.h" />
+    <ClInclude Include="inc\UIManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

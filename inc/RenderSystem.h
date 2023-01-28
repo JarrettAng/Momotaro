@@ -14,6 +14,7 @@ This header file declares
 #include <vector>
 #include <AEEngine.h>
 #include <MomoMaths.h>
+#include <string>
 
 namespace RenderSystem {
 
@@ -42,7 +43,7 @@ namespace RenderSystem {
 
 	enum BATCH_TYPE {
 		TILE_BATCH = 0,
-		BUILDING_BATCH
+		BUILDING_BATCH,
 	};
 
 	enum DRAW_PIVOT {
@@ -79,8 +80,18 @@ namespace RenderSystem {
 		RenderSetting setting = {};
 	};
 
+	struct TextData {
+		s8 fontID;
+		float x;
+		float y;
+		std::string text;
+		float scale;
+		Vec3<float> color;
+	};
+
 	void Initialize();
 	void Render();
 	void AddBatch(const BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer = 0, const DRAW_PIVOT& pivot = MID, RenderSetting setting = {});
+	void AddTextBatch(TextData data);
 }
 

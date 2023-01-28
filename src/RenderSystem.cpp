@@ -29,30 +29,24 @@ namespace RenderSystem {
 
 	//void AlignToPivot(int& x, int& y, const Mesh&, const DRAW_PIVOT& pivot);
 
+	/*!***********************************************************************
+	* SPRITE BATCHES
+	*************************************************************************/
 	std::list<Sprite> tileBatch;
 	std::list<Sprite> buildingBatch;
 	std::vector<std::list<Sprite>> renderBatches = { tileBatch,buildingBatch };
 
-	AEMtx33 transformMtx{
-	1,0,0,
-	0,1,0,
-	0,0,1
+	/*!***********************************************************************
+	* TEXT BATCHES
+	*************************************************************************/
+	std::list<TextData> textBatch;
+
+	AEMtx33 identityMtx{
+		1,0,0,
+		0,1,0,
+		0,0,1
 	};
-	AEMtx33 translateMtx{
-	1,0,0,
-	0,1,0,
-	0,0,1
-	};
-	AEMtx33 scaleMtx{
-	1,0,0,
-	0,1,0,
-	0,0,1
-	};
-	AEMtx33 rotMtx{
-	1,0,0,
-	0,1,0,
-	0,0,1
-	};
+	AEMtx33 transformMtx, translateMtx, scaleMtx, rotMtx = identityMtx;
 
 	AEGfxVertexList* spriteMesh;
 
@@ -80,6 +74,7 @@ namespace RenderSystem {
 	Sprite industrial_S_Sprite;
 	Sprite industrial_M_Sprite;
 	Sprite industrial_L_Sprite;
+
 #pragma endregion
 
 	void Initialize() {
@@ -88,6 +83,9 @@ namespace RenderSystem {
 	}
 
 	void Render() {
+		/*!***********************************************************************
+		* SPRITE + UI RENDERING
+		*************************************************************************/
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		UpdateRenderSetting();
 
@@ -97,7 +95,9 @@ namespace RenderSystem {
 				// Change render setting if needed.
 				if (!sprite.setting.isDefault()) UpdateRenderSetting(sprite.setting);
 
+				// Set position, rotation and scale of sprite.
 				UpdateRenderTransformMtx(sprite.x, sprite.y, sprite.scale, sprite.rot);
+				// Render sprites on screen.
 				AEGfxMeshDraw(spriteMesh, AE_GFX_MDM_TRIANGLES);
 
 				// Reset back to default render setting if changed, for next sprite.
@@ -105,6 +105,18 @@ namespace RenderSystem {
 			}
 			// Clear sprites in batch.
 			batch.clear();
+		}
+
+
+		/*!***********************************************************************
+		* TEXT RENDERING
+		*************************************************************************/
+		// Set blend mode blend for drawing text.
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+
+		// Draw all text on screen.
+		for (auto& data : textBatch) {
+			AEGfxPrint(data.fontID, const_cast<char*>(data.text.c_str()), data.x, data.y, data.scale, data.color.x, data.color.y, data.color.z);
 		}
 	}
 
@@ -125,6 +137,10 @@ namespace RenderSystem {
 
 	void AddBatch(const SpriteInfo& batch) {
 		AddBatch(batch.id, batch.type, batch.x, batch.y, batch.layer, batch.pivot, batch.setting);
+	}
+
+	void AddTextBatch(TextData data) {
+		textBatch.push_back(data);
 	}
 
 	//void AlignToPivot(int& x, int& y, const Mesh& mesh, const DRAW_PIVOT& pivot) {
@@ -254,8 +270,12 @@ namespace RenderSystem {
 			Initialize mesh vertices.
 		*************************************************************************/
 		AEGfxMeshStart();
-		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, 0.0f, -1.0f, 0xFFFFFFFF, 0.0f, 1.0f, 1.0f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);
-		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f, 1.0f, 0.0f, 0xFFFFFFFF, 1.0f, 0.0f, 1.0f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);
+		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
+			0.0f, -1.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+			1.0f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);
+		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
+			1.0f, 0.0f, 0xFFFFFFFF, 1.0f, 0.0f,
+			1.0f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);
 		spriteMesh = AEGfxMeshEnd();
 	}
 
