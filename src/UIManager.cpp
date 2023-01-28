@@ -12,13 +12,11 @@ namespace UIManager {
 
 	//Individual Card Variables
 	struct card {
-		float x;
-		float y;
+		float x, y;
 		bool clicked = false;
 	}; card c1, c2, c3, c4, c5;
 
 	float init_x = -500, init_y = -300;
-
 
 	//Shared Card variables
 	float hand_x, hand_y, c_height, c_width;
@@ -199,6 +197,13 @@ namespace UIManager {
 		data.text.text = text;
 		data.text.color = color;
 		data.text.scale = scale;
+	}
+
+	void UIManager::MakeWindow() {
+		//HARDCODED x and y, Window scales unevenly shifts the local axis
+		RenderSystem::AddBatch(RenderSystem::UI_BATCH, RenderSystem::UI_WINDOW, -750 , 750 , 0 , RenderSystem::TOP_LEFT);
+		UIManager::RenderText(UIManager::ROBOTO, -0.1f, 0.0f, "PAUSED", { (0.0f), (0.0f), (0.0f) });
+
 	}
 
 
