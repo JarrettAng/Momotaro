@@ -202,15 +202,14 @@ namespace UIManager {
 	void MakeWindow() {
 		//HARDCODED x and y, Window scales unevenly shifts the local axis
 		RenderSystem::AddBatch(RenderSystem::UI_BATCH, RenderSystem::UI_WINDOW, -750 , 750 , 0 , RenderSystem::TOP_LEFT);
-		//UIManager::RenderText(UIManager::ROBOTO, -0.1f, 0.0f, "PAUSED", { (0.0f), (0.0f), (0.0f) });
-		UIManager::RenderText(roboto.M, -0.9f, 0.9f, "EXPERIENCE", { (0.0f), (0.0f), (0.0f) });
+		UIManager::RenderText(roboto.M, -0.1f, 0.0f, "PAUSED", { (0.0f), (0.0f), (0.0f) });
 
 	}
 
 	void MakeText() {
 		//TEMP location
-		//UIManager::RenderText(UIManager::ROBOTO, -0.9f, 0.9f, "EXPERIENCE", { (0.0f), (0.0f), (0.0f) });
-		//UIManager::RenderText(UIManager::ROBOTO, -0.6f, 0.9f, "0/100", { (0.0f), (0.0f), (0.0f) });
+		UIManager::RenderText(roboto.M, -0.9f, 0.9f, "EXPERIENCE", { (0.0f), (0.0f), (0.0f) });
+		UIManager::RenderText(roboto.M, -0.6f, 0.9f, "0/100", { (0.0f), (0.0f), (0.0f) });
 	}
 
 
