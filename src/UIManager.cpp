@@ -199,10 +199,20 @@ namespace UIManager {
 		data.text.scale = scale;
 	}
 
+
+	/*!***********************************************************************
+	* Shows a pause UI when calling the pause function
+	*************************************************************************/
+
+	//TEMP---------------------------------------------
+	//change to only rendering the screen when pause is done
 	void MakeWindow() {
 		//HARDCODED x and y, Window scales unevenly shifts the local axis
-		RenderSystem::AddBatch(RenderSystem::UI_BATCH, RenderSystem::UI_WINDOW, -750 , 750 , 0 , RenderSystem::TOP_LEFT);
-		UIManager::RenderText(roboto.M, -0.1f, 0.0f, "PAUSED", { (0.0f), (0.0f), (0.0f) });
+		if (AEInputCheckPrev(AEVK_SPACE)) {
+			RenderSystem::AddBatch(RenderSystem::UI_BATCH, RenderSystem::UI_WINDOW, -750, 750, 0, RenderSystem::TOP_LEFT);
+			UIManager::RenderText(roboto.M, -0.1f, 0.0f, "PAUSED", { (0.0f), (0.0f), (0.0f) });
+		}
+		
 
 	}
 
