@@ -41,6 +41,7 @@ namespace RenderSystem {
 		RESIDENTIAL_M,
 		RESIDENTIAL_L,
 		UI,
+		UI_PAUSE,
 	};
 
 	enum BATCH_TYPE {

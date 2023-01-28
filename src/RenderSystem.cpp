@@ -95,6 +95,7 @@ namespace RenderSystem {
 	* UI SPRITE
 	*************************************************************************/
 	Sprite ui_Sprite;
+	Sprite pause_Sprite;
 
 #pragma endregion
 
@@ -216,6 +217,9 @@ namespace RenderSystem {
 			break;
 		case UI:
 			return ui_Sprite;
+			break;
+		case UI_PAUSE:
+			return pause_Sprite;
 			break;
 		default:
 			break;
@@ -361,6 +365,13 @@ namespace RenderSystem {
 		ui_Sprite.midWidth = tileSprite.width / 2;
 		ui_Sprite.midHeight = tileSprite.height / 2;
 
+		//PAUSE
+		ui_Sprite.width = 100;
+		ui_Sprite.height = 100;
+		ui_Sprite.scale = { ui_Sprite.width,ui_Sprite.height };
+		ui_Sprite.midWidth = tileSprite.width / 2;
+		ui_Sprite.midHeight = tileSprite.height / 2;
+
 		/*!***********************************************************************
 		\brief
 			Initialize meshes.
@@ -451,6 +462,7 @@ namespace RenderSystem {
 	void LoadTextures() {
 		tileSprite.tex = AEGfxTextureLoad("Assets/Tile.png");
 		ui_Sprite.tex = AEGfxTextureLoad("Assets/Card.png");
+		pause_Sprite.tex = AEGfxTextureLoad("Assets/GameWindow.png");
 		// tileSprite.tex = AEGfxTextureLoad("Assets/BlueRect.png");
 		residential_S_Sprite.tex = AEGfxTextureLoad("Assets/residential_s_test.png");
 		nature_Sprite.tex = AEGfxTextureLoad("Assets/tree_test.png");

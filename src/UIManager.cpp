@@ -6,6 +6,10 @@
 
 namespace UIManager {
 
+	/*!***********************************************************************
+	* DECLARATIONS.
+	*************************************************************************/
+
 	//Individual Card Variables
 	struct card {
 		float x;
@@ -13,24 +17,14 @@ namespace UIManager {
 		bool clicked = false;
 	}; card c1, c2, c3, c4, c5;
 
-	float init_x = -500;
-	float init_y = -300;
+	float init_x = -500, init_y = -300;
 
 
 	//Shared Card variables
-	float hand_x;
-	float hand_y;
-	float c_height;
-	float c_width;
+	float hand_x, hand_y, c_height, c_width;
 
-	//Cursor Var
-	int cursor_x;
-	int cursor_y;
-
-	//char fontid;
-	//AEGfxVertexList* pMesh = 0;
-
-	char hello[] = { 'H','E','L','L','O', '\0' };
+	//Cursor Var (s32 is an int)
+	int cursor_x, cursor_y;
 
 	s8 robotoFont;
 	f32 textWidth, textHeight;
@@ -52,11 +46,12 @@ namespace UIManager {
 	AEVec2 GetButtonSize(const float& xPadding, const float& yPadding);
 	AEVec2 GetCenteredTextPos(const float& x, const float& y, const float& width, const float& height, const float& textWidth, const float& textHeight);
 
+
 	void Initialize() {
 		robotoFont = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 20);
 
 		//Default location of card deck
-			//hand_x = (AEGfxGetWinMaxX() - AEGfxGetWinMinX()) * (2.5f / 8.0f);
+		//hand_x = (AEGfxGetWinMaxX() - AEGfxGetWinMinX()) * (2.5f / 8.0f);
 		hand_x = AEGfxGetWinMinX() + 100.0f;
 		hand_y = (AEGfxGetWinMaxY() - AEGfxGetWinMinY()) * (3.0f / 8.0f);
 
@@ -64,22 +59,11 @@ namespace UIManager {
 		c_height = 40.0f;
 		c_width = 40.0f;
 
-		/*c1.x = hand_x * (1.0f / 5.0f);
-		c2.x = hand_x * (2.0f / 5.0f);
-		c3.x = hand_x * (3.0f / 5.0f);
-		c4.x = hand_x * (4.0f / 5.0f);
-		c5.x = hand_x;*/
 
-		/*c1.y = -hand_y;
-		c2.y = -hand_y;
-		c3.y = -hand_y;
-		c4.y = -hand_y;
-		c5.y = -hand_y;*/
-
-		//World x and y is different from cursor x and y
-		// world (signed (+-) windowsize/2), cursor (window size) 
-		// -300 to +300								0 to 600
 		//TEMP--------------------------------------------------------
+		// World x and y is different from cursor x and y
+		// world (signed (+-) windowsize/2), cursor (window size) 
+		// ex. -300 to +300 in engine is 0 to 600 on window
 		c1.x = init_x;
 		c1.y = init_y;
 
@@ -210,8 +194,13 @@ namespace UIManager {
 		data.text.scale = scale;
 	}
 
+
+	/*!***********************************************************************
+	* Render the cards on the screen & allow the player to move them
+	*************************************************************************/
 	void UIManager::PrepareUIRenderBatch() {
 
+		//Return s32 == int
 		AEInputGetCursorPosition(&cursor_x, &cursor_y);
 		//Change cursor to float
 		static_cast<double>(cursor_x);

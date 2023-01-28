@@ -1,42 +1,132 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\Building.cpp" />
-    <ClCompile Include="src\BuildingManager.cpp" />
-    <ClCompile Include="src\CardManager.cpp" />
-    <ClCompile Include="src\EventSystem.cpp" />
-    <ClCompile Include="src\FileIOManager.cpp" />
-    <ClCompile Include="src\GameObject.cpp" />
-    <ClCompile Include="src\GridManager.cpp" />
-    <ClCompile Include="src\InputManager.cpp" />
-    <ClCompile Include="src\IsometricGrid.cpp" />
-    <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\PauseManager.cpp" />
-    <ClCompile Include="src\RenderSystem.cpp" />
-    <ClCompile Include="src\Scene.cpp" />
-    <ClCompile Include="src\SceneGameLevel.cpp" />
-    <ClCompile Include="src\SceneManager.cpp" />
-    <ClCompile Include="src\SceneSplashscreen.cpp" />
-    <ClCompile Include="src\UIManager.cpp" />
+    <ClCompile Include="src\Building.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EventSystem.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObject.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IsometricGrid.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderSystem.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BuildingManager.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CardManager.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FileIOManager.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GridManager.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\InputManager.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PauseManager.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneManager.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UIManager.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneSplashscreen.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneGameLevel.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\Building.h" />
-    <ClInclude Include="inc\BuildingManager.h" />
-    <ClInclude Include="inc\ColorTable.h" />
-    <ClInclude Include="inc\CardManager.h" />
-    <ClInclude Include="inc\EventSystem.h" />
-    <ClInclude Include="inc\FileIOManager.h" />
-    <ClInclude Include="inc\GameObject.h" />
-    <ClInclude Include="inc\GridManager.h" />
-    <ClInclude Include="inc\InputManager.h" />
-    <ClInclude Include="inc\IsometricGrid.h" />
-    <ClInclude Include="inc\MomoMaths.h" />
-    <ClInclude Include="inc\PauseManager.h" />
-    <ClInclude Include="inc\RenderSystem.h" />
-    <ClInclude Include="inc\Scene.h" />
-    <ClInclude Include="inc\SceneGameLevel.h" />
-    <ClInclude Include="inc\SceneManager.h" />
-    <ClInclude Include="inc\SceneSplashscreen.h" />
-    <ClInclude Include="inc\UIManager.h" />
+    <ClInclude Include="inc\Building.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\ColorTable.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\EventSystem.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\GameObject.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\IsometricGrid.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\MomoMaths.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\RenderSystem.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\BuildingManager.h">
+      <Filter>inc\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\FileIOManager.h">
+      <Filter>inc\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\GridManager.h">
+      <Filter>inc\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\InputManager.h">
+      <Filter>inc\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\CardManager.h">
+      <Filter>inc\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\PauseManager.h">
+      <Filter>inc\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\SceneManager.h">
+      <Filter>inc\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\UIManager.h">
+      <Filter>inc\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Scene.h">
+      <Filter>inc\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\SceneGameLevel.h">
+      <Filter>inc\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\SceneSplashscreen.h">
+      <Filter>inc\Scene</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{9ee00c49-ebb8-4510-85c6-6ee1dc97709c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc">
+      <UniqueIdentifier>{2eb5ea4a-8a16-4e40-89a7-d7c4bc2db158}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc\Managers">
+      <UniqueIdentifier>{99f579a2-bd5a-439f-8f6d-554fc02b558e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Managers">
+      <UniqueIdentifier>{7e2d19ac-05eb-493f-a697-4f81cb765fa1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Scene">
+      <UniqueIdentifier>{11d59593-2fb6-4a7e-9a1e-f218a80b3aad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc\Scene">
+      <UniqueIdentifier>{191f3e6c-4c1b-4d9e-b2a0-8c158399cb49}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

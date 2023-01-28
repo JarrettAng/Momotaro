@@ -24,7 +24,8 @@ void SceneGameLevel::Initialize() {
 
 void SceneGameLevel::Update() {
 	GridManager::UpdateMouseToGrid();
-	UIManager::PrepareUIRenderBatch();
+
+	//UIManager::UIPause();
 
 	for (auto object : objects) {
 		object->Update();
@@ -41,6 +42,12 @@ void SceneGameLevel::Draw() {
 	AEGfxSetBackgroundColor(WATER);
 
 	GridManager::PrepareTileRenderBatch();
+	UIManager::PrepareUIRenderBatch();
+
+	//TEMP, change when Scoring system has been made
+	//Change to UI element that changes accordingly
+	UIManager::RenderText(UIManager::ROBOTO, -0.9f, 0.9f, "EXPERIENCE", { (0.0f), (0.0f), (0.0f) }, 2);
+	UIManager::RenderText(UIManager::ROBOTO, -0.6f, 0.9f, "0/100", { (0.0f), (0.0f), (0.0f) }, 2);
 
 	for (auto object : objects) {
 		// renderer.AddBatch(object->Render());
