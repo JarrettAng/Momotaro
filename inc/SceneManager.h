@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Scene.h>
+
 namespace SceneManager {
 	enum SCENES_ENUM {
 		MAIN_MENU,
@@ -8,6 +10,8 @@ namespace SceneManager {
 		RESTART,
 		QUIT
 	};
+
+	extern Scene* currentScene;
 
 	extern SCENES_ENUM previous, current, next;
 

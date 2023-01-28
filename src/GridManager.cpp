@@ -9,7 +9,8 @@ namespace GridManager {
 	namespace iso = IsometricGrid;
 
 	iso::cell* grid;
-	const int gridX{ 5 }, gridY{ 6 };
+	const int gridX{ 25 }, gridY{ 25 };
+
 
 	void Initialize() {
 		grid = { new iso::cell[gridX * gridY]{} };
@@ -17,11 +18,10 @@ namespace GridManager {
 		//Init a grid with 0 tiles
 		for (int y{ 0 }; y < gridY; ++y) {
 			for (int x{ 0 }; x < gridX; ++x) {
-				// iso::vec2i testPos{(x*100)-400,(y*-50)+300};
 				int index = x + gridX * y;
-				// grid[index].pos = testPos;
 				iso::vec2i ScreenPos = iso::WorldIndexToScreenPos(x, y);
 				// //*! SET THE POSITION OF THE MESH HERE!!!!
+				ScreenPos.y+=600;
 				grid[index].pos = ScreenPos;
 			}
 		}

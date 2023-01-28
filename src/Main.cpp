@@ -23,10 +23,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	srand(11);
 
 	// Engine Initialization
-	AESysInit(hInstance, nCmdShow, 800, 600, 1, 60, true, NULL);	// Using custom window procedure
+	AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, true, NULL);	// Using custom window procedure
 	AESysSetWindowTitle("Momo Town");								// Changing the window title
 	AESysReset();													// Reset the system modules
 	AEFrameRateControllerInit(60);
+	AEToogleFullScreen(true);
 
 	// Manager Initialization
 	GridManager::Initialize();

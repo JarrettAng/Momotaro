@@ -10,14 +10,12 @@
 #include <SceneGameLevel.h>
 #include <ColorTable.h>
 
-void Test();
-
 void SceneGameLevel::Load() {
 	BuildingManager::Initialize();
 }
 
 void SceneGameLevel::Initialize() {
-	InputManager::onEscPressed.Subscribe(Test);
+
 }
 
 void SceneGameLevel::Update() {
@@ -47,8 +45,6 @@ void SceneGameLevel::Draw() {
 }
 
 void SceneGameLevel::Free() {
-	InputManager::onEscPressed.Unsubscribe(Test);
-
 	for (auto object : objects) {
 		object->Destroy();
 	}
@@ -75,8 +71,4 @@ void SceneGameLevel::RemoveObject(GameObject* newObject) {
 	}
 
 	newObject->Destroy();
-}
-
-void Test() {
-	SceneManager::LoadScene(SceneManager::QUIT);
 }
