@@ -122,5 +122,6 @@ namespace GridManager {
 				if (grid[index].isRenderable) RenderSystem::AddBatch(RenderSystem::TILE_BATCH, RenderSystem::TILE, grid[index].pos.x, grid[index].pos.y);
 			}
 		}
+
 	}
 }
