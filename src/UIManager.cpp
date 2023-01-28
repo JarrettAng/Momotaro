@@ -43,7 +43,7 @@ namespace UIManager {
 	* HELPER FUNCTIONS FOR CREATING UI DATA.
 	*************************************************************************/
 	void TransformDataToUIData(UIData& data, const float& x, const float& y, const float& width, const float& height);
-	void GraphicsDataToUIData(UIData& data, AEGfxTexture* tex, const Vec3<float>& color);
+	void GraphicsDataToUIData(UIData& data, AEGfxTexture* tex, const Vec4<float>& color);
 	void TextDataToUIData(UIData& data, const FONT_TYPE& font, const float& x, const float& y, std::string text, const Vec3<float>& color, const float& scale);
 
 	/*!***********************************************************************
@@ -107,7 +107,7 @@ namespace UIManager {
 
 	}
 
-	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const FONT_TYPE& font, const std::string& text, const int& layer, AEGfxTexture* tex, const Vec3<float>& txtColor, const Vec3<float>& btnColor) {
+	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const FONT_TYPE& font, const std::string& text, const int& layer, AEGfxTexture* tex, const Vec3<float>& txtColor, const Vec4<float>& btnColor) {
 
 		UIData data;
 		// Order of rendering UI.
@@ -141,16 +141,20 @@ namespace UIManager {
 	/*!***********************************************************************
 	* OVERLOADED RENDER BUTTON FUNCS
 	*************************************************************************/
+	// Button with TEXTURE + NO text.
 	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, AEGfxTexture* tex = nullptr) {
-		RenderButton(x, y, xPadding, yPadding, NONE, {}, layer, tex, Vec3<float>{}, Vec3<float>{});
+		RenderButton(x, y, xPadding, yPadding, NONE, {}, layer, tex, Vec3<float>{}, Vec4<float>{});
 	}
-	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const Vec3<float>& btnColor) {
+	// Button with COLOR + NO text.
+	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const Vec4<float>& btnColor) {
 		RenderButton(x, y, xPadding, yPadding, NONE, {}, layer, nullptr, Vec3<float>{}, btnColor);
 	}
+	// Button with TEXTURE + text.
 	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const FONT_TYPE& font, const std::string& text, AEGfxTexture* tex, const Vec3<float>& txtColor) {
-		RenderButton(x, y, xPadding, yPadding, font, text, layer, tex, txtColor, Vec3<float>{});
+		RenderButton(x, y, xPadding, yPadding, font, text, layer, tex, txtColor, Vec4<float>{});
 	}
-	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const FONT_TYPE& font, const std::string& text, const Vec3<float>& btnColor, const Vec3<float>& txtColor) {
+	// Button with COLOR + text.
+	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const FONT_TYPE& font, const std::string& text, const Vec4<float>& btnColor, const Vec3<float>& txtColor) {
 		RenderButton(x, y, xPadding, yPadding, font, text, layer, nullptr, txtColor, btnColor);
 	}
 	/*************************************************************************/
@@ -186,7 +190,7 @@ namespace UIManager {
 		data.transform.height = height;
 	}
 
-	void GraphicsDataToUIData(UIData& data, AEGfxTexture* tex, const Vec3<float>& color) {
+	void GraphicsDataToUIData(UIData& data, AEGfxTexture* tex, const Vec4<float>& color) {
 		data.graphics.hasGraphics = true;
 		if (tex) {
 			data.graphics.tex = tex;
@@ -231,7 +235,7 @@ namespace UIManager {
 			//Card 1 check
 			if (!c2.clicked && !c3.clicked && !c4.clicked && !c5.clicked) {
 				if (AEInputCheckCurr(AEVK_LBUTTON) && c1.clicked == true) {
-	 				c1.x = cursor_x - 800.0f - c_width;
+					c1.x = cursor_x - 800.0f - c_width;
 					c1.y = -cursor_y + 450.0f + c_height;
 					//if(AEInputCheckReleased(AEVK_LBUTTON))
 				}
@@ -375,8 +379,6 @@ namespace UIManager {
 		}
 
 	}
-
-
 }
 
 

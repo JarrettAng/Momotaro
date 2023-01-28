@@ -170,6 +170,7 @@ namespace RenderSystem {
 
 	void RenderText(s8 fontID, std::string text, float x, float y, float scale, Vec3<float> color) {
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		// Allow transperant text for fading?
 		AEGfxPrint(fontID, const_cast<char*>(text.c_str()), x, y, scale, color.x, color.y, color.z);
 	}
 
@@ -181,9 +182,9 @@ namespace RenderSystem {
 		AEGfxMeshDraw(spriteMesh, AE_GFX_MDM_TRIANGLES);
 	}
 
-	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec3<float> color) {
+	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec4<float> color) {
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetTintColor(color.x, color.y, color.z, 1.0f);
+		AEGfxSetTintColor(color.w, color.x, color.y, color.z);
 		UpdateRenderTransformMtx(x, y, AEVec2{ width,height });
 		AEGfxMeshDraw(spriteMesh, AE_GFX_MDM_TRIANGLES);
 	}
@@ -355,6 +356,13 @@ namespace RenderSystem {
 			Initialize mesh vertices.
 		*************************************************************************/
 		AEGfxMeshStart();
+		//AEGfxTriAdd(-.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
+		//	-0.5f, -.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+		//	.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f);
+		//AEGfxTriAdd(-.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
+		//	0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+		//	.5f, -.5f, 0xFFFFFFFF, 1.0f, 1.0f);
+
 		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
 			0.0f, -1.0f, 0xFFFFFFFF, 0.0f, 1.0f,
 			1.0f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);

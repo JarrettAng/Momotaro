@@ -91,7 +91,7 @@ namespace RenderSystem {
 	void AddBatch(const BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer = 0, const DRAW_PIVOT& pivot = MID, RenderSetting setting = {});
 	void AddUIBatch(UIManager::UIData data);
 
-	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec3<float> color = { 1.0f,1.0f,1.0f });
+	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec4<float> color = { 1.0f,1.0f,1.0f,1.0f });
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, AEGfxTexture* tex);
 	void RenderText(s8 fontID, std::string text, float x, float y, float scale, Vec3<float> color = { 1.0f,1.0f,1.0f });
 }
