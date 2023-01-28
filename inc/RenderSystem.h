@@ -15,6 +15,7 @@ This header file declares
 #include <AEEngine.h>
 #include <MomoMaths.h>
 #include <string>
+#include <UIManager.h>
 
 namespace RenderSystem {
 
@@ -81,18 +82,14 @@ namespace RenderSystem {
 		RenderSetting setting = {};
 	};
 
-	struct TextData {
-		s8 fontID;
-		float x;
-		float y;
-		std::string text;
-		float scale;
-		Vec3<float> color;
-	};
+
 
 	void Initialize();
 	void Render();
 	void AddBatch(const BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer = 0, const DRAW_PIVOT& pivot = MID, RenderSetting setting = {});
-	void AddTextBatch(TextData data);
+	void AddUIBatch(UIManager::UIData data);
+
+	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec3<float> color = { 1.0f,1.0f,1.0f });
+	void RenderText(s8 fontID, std::string text, float x, float y, float scale, Vec3<float> color = { 1.0f,1.0f,1.0f });
 }
 

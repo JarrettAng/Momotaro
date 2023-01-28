@@ -25,12 +25,12 @@ namespace GridManager {
 				int index = x + gridX * y;
 				iso::vec2i ScreenPos = iso::WorldIndexToScreenPos(x, y);
 				// //*! SET THE POSITION OF THE MESH HERE!!!!
-				ScreenPos.y+= (gridY*50)/2;		//move the grid up by half its size
+				ScreenPos.y += (gridY * 50) / 2;		//move the grid up by half its size
 				grid[index].pos = ScreenPos;
 
 				//TODO Fix this!! it's very wonky calculations for now
-				iso::vec2i test = iso::ScreenPosToIso(ScreenPos.x,ScreenPos.y);
-				if((test.x >= -5 && test.x <= 5)&&(test.y >= -5 && test.y <= 5)){
+				iso::vec2i test = iso::ScreenPosToIso(ScreenPos.x, ScreenPos.y);
+				if ((test.x >= -5 && test.x <= 5) && (test.y >= -5 && test.y <= 5)) {
 					// std::cout << "x is " << x << " and iso is " << test.x<<'\n';
 					// std::cout << "y is " << y << " and iso is " << test.y<<'\n';
 					grid[index].isRenderable = true;
@@ -77,8 +77,8 @@ namespace GridManager {
 		int xOffset = mousePos.x % 100;
 		int yOffset = mousePos.y % 50;
 		//Origin -> screen/tile. For now I use numbers
-		int originX = AEGetWindowWidth()/2 / 100;
-		int originY = AEGetWindowHeight()/2 / 50;
+		int originX = AEGetWindowWidth() / 2 / 100;
+		int originY = AEGetWindowHeight() / 2 / 50;
 
 		int selectX = (cellX - originX) + (cellY - originY);
 		int selectY = (cellY - originY) - (cellX - originX);
@@ -102,22 +102,25 @@ namespace GridManager {
 		for (int y{ 0 }; y < gridY; ++y) {
 			for (int x{ 0 }; x < gridX; ++x) {
 				int index = x + gridX * y;
-				
+
 				switch (grid[index].ID) {
-					case iso::RESIDENTIAL:
+				case iso::RESIDENTIAL:
 					break;
-					case iso::INDUSTRIAL:
+				case iso::INDUSTRIAL:
 					break;
-					case iso::COMMERCIAL:
+				case iso::COMMERCIAL:
 					break;
-					case iso::NATURE:
+				case iso::NATURE:
 					RenderSystem::AddBatch(RenderSystem::NATURE_BATCH, RenderSystem::NATURE, grid[index].pos.x, grid[index].pos.y);
 					break;
 				default:
 					RenderSystem::AddBatch(RenderSystem::BUILDING_BATCH, RenderSystem::RESIDENTIAL_S, grid[index].pos.x, grid[index].pos.y);
 					break;
 				}
-				if(grid[index].isRenderable) RenderSystem::AddBatch(RenderSystem::TILE_BATCH, RenderSystem::TILE, grid[index].pos.x, grid[index].pos.y);
+				if (grid[index].isRenderable) RenderSystem::AddBatch(RenderSystem::TILE_BATCH, RenderSystem::TILE, grid[index].pos.x, grid[index].pos.y);
+
+				UIManager::RenderButton(100, 100, 100, 100, UIManager::ROBOTO, "dawdawdwadwadawdawd", 1, nullptr, Vec3<float>{1.0f, .5f, 1.0f});
+				//UIManager::RenderButton(100, 200, 100, 100, UIManager::ROBOTO, "231", 0, nullptr, Vec3<float>{.5f, .5f, 1.0f}, Vec3<float>{.5f, .5f, .5f});
 			}
 		}
 	}

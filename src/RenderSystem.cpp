@@ -13,19 +13,23 @@ This source file declares
 #include<RenderSystem.h>
 #include <iostream>
 #include <algorithm>
+
 namespace RenderSystem {
 
 #pragma region Foward Declaration & Variables
 	void InitMesh();
 	void LoadTextures();
 
+
 	Sprite& GetSprite(const  SPRITE_TYPE& type);
 
 	int GetBatch(const BATCH_TYPE& id);
 	void SortBatchList(const BATCH_TYPE& id);
+	void SortUIBatch();
 
 	void UpdateRenderSetting(RenderSetting setting = {});
 	void UpdateRenderTransformMtx(const int& x, const int& y, const AEVec2& scale, const float& rot = 0);
+
 
 	//void AlignToPivot(int& x, int& y, const Mesh&, const DRAW_PIVOT& pivot);
 
@@ -38,9 +42,9 @@ namespace RenderSystem {
 	std::vector<std::list<Sprite>> renderBatches = { tileBatch,buildingBatch,natureBatch };
 
 	/*!***********************************************************************
-	* TEXT BATCHES
+	* UI BATCHES
 	*************************************************************************/
-	std::list<TextData> textBatch;
+	std::list<UIManager::UIData> UIBatch;
 
 	AEMtx33 identityMtx{
 		1,0,0,
@@ -85,7 +89,7 @@ namespace RenderSystem {
 
 	void Render() {
 		/*!***********************************************************************
-		* SPRITE + UI RENDERING
+		* SPRITE
 		*************************************************************************/
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		UpdateRenderSetting();
@@ -108,17 +112,28 @@ namespace RenderSystem {
 			batch.clear();
 		}
 
-
 		/*!***********************************************************************
-		* TEXT RENDERING
+		* UI RENDERING
 		*************************************************************************/
-		// Set blend mode blend for drawing text.
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		for (auto& data : UIBatch) {
+			if (data.graphics.hasGraphics) {
+				// If UI has a texture, set it.
+				if (data.graphics.tex) {
+					AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+					UpdateRenderSetting();
+					AEGfxTextureSet(data.graphics.tex, 0, 0);
+				}
 
-		// Draw all text on screen.
-		for (auto& data : textBatch) {
-			AEGfxPrint(data.fontID, const_cast<char*>(data.text.c_str()), data.x, data.y, data.scale, data.color.x, data.color.y, data.color.z);
+				// Render rectange for UI.
+				RenderRect(data.transform.x, data.transform.y, data.transform.width, data.transform.height, data.graphics.color);
+			}
+
+			// Draw text above graphics.
+			if (data.text.hasText) {
+				RenderText(data.text.fontID, const_cast<char*>(data.text.text.c_str()), data.text.x, data.text.y, data.text.scale, data.text.color);
+			}
 		}
+		UIBatch.clear();
 	}
 
 	void AddBatch(const BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer, const DRAW_PIVOT& pivot, RenderSetting setting) {
@@ -140,8 +155,22 @@ namespace RenderSystem {
 		AddBatch(batch.id, batch.type, batch.x, batch.y, batch.layer, batch.pivot, batch.setting);
 	}
 
-	void AddTextBatch(TextData data) {
-		textBatch.push_back(data);
+	void AddUIBatch(UIManager::UIData data) {
+		UIBatch.push_back(data);
+		SortUIBatch();
+	}
+
+	void RenderText(s8 fontID, std::string text, float x, float y, float scale, Vec3<float> color) {
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		AEGfxPrint(fontID, const_cast<char*>(text.c_str()), x, y, scale, color.x, color.y, color.z);
+
+	}
+
+	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec3<float> color) {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTintColor(color.x, color.y, color.z, 1.0f);
+		UpdateRenderTransformMtx(x, y, AEVec2{ width,height });
+		AEGfxMeshDraw(spriteMesh, AE_GFX_MDM_TRIANGLES);
 	}
 
 	//void AlignToPivot(int& x, int& y, const Mesh& mesh, const DRAW_PIVOT& pivot) {
@@ -195,7 +224,7 @@ namespace RenderSystem {
 		case RESIDENTIAL_M:
 			return residential_M_Sprite;
 			break;
-			case NATURE:
+		case NATURE:
 			return nature_Sprite;
 			break;
 		default:
@@ -212,7 +241,7 @@ namespace RenderSystem {
 		case BUILDING_BATCH:
 			return BUILDING_BATCH;
 			break;
-			case NATURE_BATCH:
+		case NATURE_BATCH:
 			return NATURE_BATCH;
 			break;
 		default:
@@ -222,6 +251,10 @@ namespace RenderSystem {
 
 	void SortBatchList(const BATCH_TYPE& id) {
 		renderBatches[GetBatch(id)].sort([](const Sprite& a, const Sprite& b) { return a.layer < b.layer; });
+	}
+
+	void SortUIBatch() {
+		UIBatch.sort([](const UIManager::UIData& a, const UIManager::UIData& b) { return a.layer < b.layer; });
 	}
 
 	/*!***********************************************************************
