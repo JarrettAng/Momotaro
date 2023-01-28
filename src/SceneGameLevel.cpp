@@ -46,8 +46,8 @@ void SceneGameLevel::Draw() {
 
 	//TEMP, change when Scoring system has been made
 	//Change to UI element that changes accordingly
-	UIManager::RenderText(UIManager::ROBOTO_M, -0.9f, 0.9f, "EXPERIENCE", { (0.0f), (0.0f), (0.0f) });
-	UIManager::RenderText(UIManager::ROBOTO_M, -0.6f, 0.9f, "0/100", { (0.0f), (0.0f), (0.0f) });
+	UIManager::RenderText(UIManager::GetFont(UIManager::ROBOTO).M, -0.9f, 0.9f, "EXPERIENCE", { (0.0f), (0.0f), (0.0f) });
+	UIManager::RenderText(UIManager::GetFont(UIManager::ROBOTO).M, -0.6f, 0.9f, "0/100", { (0.0f), (0.0f), (0.0f) });
 
 	for (auto object : objects) {
 		// renderer.AddBatch(object->Render());

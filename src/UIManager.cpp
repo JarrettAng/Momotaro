@@ -26,20 +26,19 @@ namespace UIManager {
 	//Cursor Var (s32 is an int)
 	int cursor_x, cursor_y;
 
-	s8 robotoFont_s;
-	s8 robotoFont_m;
+	FONT roboto;
+
 	f32 textWidth, textHeight;
 
-	s8 GetFontID(const FONT_TYPE& type);
-
-	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const FONT_TYPE& font, const std::string& text, const int& layer, AEGfxTexture* tex, const Vec3<float>& txtColor, const Vec3<float>& btnColor);
+	void InitializeFont();
+	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, const int& layer, AEGfxTexture* tex, const Vec3<float>& txtColor, const Vec3<float>& btnColor);
 
 	/*!***********************************************************************
 	* HELPER FUNCTIONS FOR CREATING UI DATA.
 	*************************************************************************/
 	void TransformDataToUIData(UIData& data, const float& x, const float& y, const float& width, const float& height);
 	void GraphicsDataToUIData(UIData& data, AEGfxTexture* tex, const Vec4<float>& color);
-	void TextDataToUIData(UIData& data, const FONT_TYPE& font, const float& x, const float& y, std::string text, const Vec3<float>& color, const float& scale);
+	void TextDataToUIData(UIData& data, const s8& font, const float& x, const float& y, std::string text, const Vec3<float>& color, const float& scale);
 
 	/*!***********************************************************************
 	* HELPER FUNCTIONS FOR BUTTON.
@@ -49,8 +48,7 @@ namespace UIManager {
 
 
 	void Initialize() {
-		robotoFont_s = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 20);
-		robotoFont_m = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 40);
+		InitializeFont();
 
 		//Default location of card deck
 		//hand_x = (AEGfxGetWinMaxX() - AEGfxGetWinMinX()) * (2.5f / 8.0f);
@@ -82,7 +80,14 @@ namespace UIManager {
 		c5.y = init_y;
 	}
 
-	void RenderText(const FONT_TYPE& font, const float& x, const float& y, std::string text, const Vec3<float>& color)
+	void InitializeFont() {
+		roboto.type = ROBOTO;
+		roboto.S = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 20);
+		roboto.M = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 40);
+		roboto.L = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 60);
+	}
+
+	void RenderText(const s8& font, const float& x, const float& y, std::string text, const Vec3<float>& color)
 	{
 		// Initialize text data.
 		UIData data;
@@ -93,14 +98,14 @@ namespace UIManager {
 
 	}
 
-	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const FONT_TYPE& font, const std::string& text, const int& layer, AEGfxTexture* tex, const Vec3<float>& txtColor, const Vec4<float>& btnColor) {
+	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, const int& layer, AEGfxTexture* tex, const Vec3<float>& txtColor, const Vec4<float>& btnColor) {
 
 		UIData data;
 		// Order of rendering UI.
 		data.layer = layer;
 
 		// Get width and height to position text in middle of rect.
-		AEGfxGetPrintSize(GetFontID(font), const_cast<char*>(text.c_str()), 1, textWidth, textHeight);
+		AEGfxGetPrintSize(font, const_cast<char*>(text.c_str()), 1, textWidth, textHeight);
 
 		/*!***********************************************************************
 		* Initialize rect data.
@@ -136,30 +141,27 @@ namespace UIManager {
 		RenderButton(x, y, xPadding, yPadding, NONE, {}, layer, nullptr, Vec3<float>{}, btnColor);
 	}
 	// Button with TEXTURE + text.
-	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const FONT_TYPE& font, const std::string& text, AEGfxTexture* tex, const Vec3<float>& txtColor) {
+	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, AEGfxTexture* tex, const Vec3<float>& txtColor) {
 		RenderButton(x, y, xPadding, yPadding, font, text, layer, tex, txtColor, Vec4<float>{});
 	}
 	// Button with COLOR + text.
-	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const FONT_TYPE& font, const std::string& text, const Vec4<float>& btnColor, const Vec3<float>& txtColor) {
+	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, const Vec4<float>& btnColor, const Vec3<float>& txtColor) {
 		RenderButton(x, y, xPadding, yPadding, font, text, layer, nullptr, txtColor, btnColor);
 	}
 	/*************************************************************************/
 
-	s8 GetFontID(const FONT_TYPE& type) {
+	FONT GetFont(const FONT_TYPE& type) {
 		switch (type)
 		{
-		case ROBOTO_S:
-			return robotoFont_s;
-			break;
-		case ROBOTO_M:
-			return robotoFont_m;
+		case ROBOTO:
+			return roboto;
 			break;
 		default:
 			break;
 		}
 		// Default font.
 		std::cout << "FONT TYPE INVALID, RETURN DEFAULT FONT.";
-		return robotoFont_s;
+		return roboto;
 	}
 
 	AEVec2 GetButtonSize(const float& xPadding, const float& yPadding) {
@@ -189,9 +191,9 @@ namespace UIManager {
 		}
 	}
 
-	void TextDataToUIData(UIData& data, const FONT_TYPE& font, const float& x, const float& y, std::string text, const Vec3<float>& color, const float& scale) {
+	void TextDataToUIData(UIData& data, const s8& font, const float& x, const float& y, std::string text, const Vec3<float>& color, const float& scale) {
 		data.text.hasText = true;
-		data.text.fontID = GetFontID(font);
+		data.text.fontID = font;
 		data.text.x = x;
 		data.text.y = y;
 		data.text.text = text;

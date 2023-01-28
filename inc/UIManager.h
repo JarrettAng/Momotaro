@@ -32,15 +32,46 @@ namespace UIManager {
 		int layer;
 	};
 
+	enum FONT_SIZE {
+		SMALL,
+		MIDIUM,
+		LARGE
+	};
+
 	enum FONT_TYPE {
 		NONE,
-		ROBOTO_S,
-		ROBOTO_M,
+		ROBOTO
 	};
+
+	struct FONT {
+		FONT_TYPE type;
+		s8 S;
+		s8 M;
+		s8 L;
+
+		s8 size(FONT_SIZE size) {
+			switch (size)
+			{
+			case SMALL:
+				return S;
+				break;
+			case MIDIUM:
+				return M;
+				break;
+			case LARGE:
+				return L;
+				break;
+			default:
+				break;
+			}
+		}
+	};
+
 	void Initialize();
 	void PrepareUIRenderBatch();
 	void UIPause();
-	void RenderText(const FONT_TYPE& font, const float& x, const float& y, std::string text, const Vec3<float>& color = { 1.0f,1.0f,1.0f });
+	void RenderText(const s8& font, const float& x, const float& y, std::string text, const Vec3<float>& color = { 1.0f,1.0f,1.0f });
+	FONT GetFont(const FONT_TYPE& type);
 
 	/*!***********************************************************************
 	* BUTTON
@@ -51,9 +82,9 @@ namespace UIManager {
 	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const Vec4<float>& btnColor = { 1.0f,1.0f,1.0f,1.0f });
 
 	// Button with TEXTURE + text.
-	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const FONT_TYPE& font, const std::string& text, AEGfxTexture* tex, const Vec3<float>& txtColor = { 1.0f,1.0f,1.0f });
+	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, AEGfxTexture* tex, const Vec3<float>& txtColor = { 1.0f,1.0f,1.0f });
 	// Button with COLOR + text.
-	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const FONT_TYPE& font, const std::string& text, const Vec4<float>& btnColor = { 1.0f,1.0f,1.0f,1.0f }, const Vec3<float>& txtColor = { 1.0f,1.0f,1.0f });
+	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, const Vec4<float>& btnColor = { 1.0f,1.0f,1.0f,1.0f }, const Vec3<float>& txtColor = { 1.0f,1.0f,1.0f });
 
 }
 
