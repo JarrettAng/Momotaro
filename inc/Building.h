@@ -4,25 +4,53 @@
 #include <string>
 
 #include <GameObject.h>
-#include <BuildingManager.h>
+
+namespace BuildingEnum {
+	enum TYPE {
+		RESIDENTIAL,
+		COMMERCIAL,
+		INDUSTRIAL,
+		NATURE,
+		TYPE_LENGTH
+	};
+
+	enum SIZE {
+		_1X1,
+		_2X1,
+		_2X2,
+		SIZE_LENGTH
+	};
+
+	enum LEVEL {
+		L1,
+		L2,
+		L3,
+		LEVEL_LENGTH
+	};
+}
+
+struct BuildingData {
+	BuildingEnum::TYPE type;
+	BuildingEnum::SIZE size;
+	BuildingEnum::LEVEL level;
+
+	int SynergyResidential;
+	int SynergyCommercial;
+	int SynergyIndustrial;
+	int SynergyNature;
+
+	std::string name;
+	std::string desc;
+
+	int TextureID;
+	int MeshID;
+};
 
 class Building : public virtual GameObject {
 	public:
-		BuildingManager::TYPE type;
-		BuildingManager::SIZE size;
-		BuildingManager::LEVEL level;
+		BuildingData data;
 
-		int SynergyResidential;
-		int SynergyCommercial;
-		int SynergyIndustrial;
-		int SynergyNature;
-
-		std::string name;
-		std::string desc;
-
-		int TextureID;
-		int MeshID;
-
-		Building(BuildingManager::TYPE type, BuildingManager::SIZE size, BuildingManager::LEVEL level,
+		Building(BuildingData data);
+		Building(BuildingEnum::TYPE type, BuildingEnum::SIZE size, BuildingEnum::LEVEL level,
 			int SynergyResidential, int SynergyCommercial, int SynergyIndustrial, int SynergyNature, std::string name, std::string desc, int TextureID, int MeshID);
 };

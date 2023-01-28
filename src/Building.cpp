@@ -1,19 +1,23 @@
 
 #include <Building.h>
 
-Building::Building(BuildingManager::TYPE _type, BuildingManager::SIZE _size, BuildingManager::LEVEL _level,
+Building::Building(BuildingData _data) {
+	data = _data;
+}
+
+Building::Building(BuildingEnum::TYPE _type, BuildingEnum::SIZE _size, BuildingEnum::LEVEL _level,
 				   int _SynergyResidential, int _SynergyCommercial, int _SynergyIndustrial, int _SynergyNature, std::string _name, std::string _desc, int _TextureID, int _MeshID) {
-	type = _type;
-	size = _size;
-	level = _level;
+	data.type = _type;
+	data.size = _size;
+	data.level = _level;
 
-	SynergyResidential = _SynergyResidential;
-	SynergyCommercial = _SynergyCommercial;
-	SynergyIndustrial = _SynergyIndustrial;
-	SynergyNature = _SynergyNature;
+	data.SynergyResidential = _SynergyResidential;
+	data.SynergyCommercial = _SynergyCommercial;
+	data.SynergyIndustrial = _SynergyIndustrial;
+	data.SynergyNature = _SynergyNature;
 
-	name = _name;
-	desc = _desc;
-	TextureID = _TextureID;
-	MeshID = _MeshID;
+	data.name = _name;
+	data.desc = _desc;
+	data.TextureID = _TextureID;
+	data.MeshID = _MeshID;
 }

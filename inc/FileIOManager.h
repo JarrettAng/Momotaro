@@ -5,7 +5,7 @@
 #include <Building.h>
 
 namespace FileIOManager {
-	void ReadBuildingsData(std::vector<Building>& buildingsData);
+	void ReadBuildingsData(std::vector<BuildingData>& buildingsData);
 
 }
 
