@@ -37,6 +37,7 @@ namespace UIManager {
 		ROBOTO,
 	};
 	void Initialize();
+	void PrepareUIRenderBatch();
 	void RenderText(const FONT_TYPE& font, const float& x, const float& y, std::string text, const Vec3<float>& color = { 1.0f,1.0f,1.0f }, const float& scale = 1);
 
 	/*!***********************************************************************

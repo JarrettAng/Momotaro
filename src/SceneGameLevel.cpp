@@ -10,6 +10,7 @@
 #include <SceneGameLevel.h>
 #include <ColorTable.h>
 #include <PauseManager.h>
+#include <UIManager.h>
 
 
 void SceneGameLevel::Load() {
@@ -18,10 +19,12 @@ void SceneGameLevel::Load() {
 
 void SceneGameLevel::Initialize() {
 	PauseManager::Initialize();
+	UIManager::Initialize();
 }
 
 void SceneGameLevel::Update() {
 	GridManager::UpdateMouseToGrid();
+	UIManager::PrepareUIRenderBatch();
 
 	for (auto object : objects) {
 		object->Update();
