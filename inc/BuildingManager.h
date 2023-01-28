@@ -8,8 +8,10 @@ namespace BuildingManager {
 	void Clear();
 
 	BuildingData GetBuildingData(BuildingEnum::TYPE type, BuildingEnum::SIZE size, BuildingEnum::LEVEL level);
-	void CreateBuilding(BuildingEnum::TYPE type, BuildingEnum::SIZE size, BuildingEnum::LEVEL level);
+	BuildingData GetRandomBuildingData(BuildingEnum::TYPE type);
+	BuildingData GetRandomBuildingData(BuildingEnum::LEVEL level);
 
+	void CreateBuilding(BuildingEnum::TYPE type, BuildingEnum::SIZE size, BuildingEnum::LEVEL level);
 	void CreateRandomBuilding();
 	/*void CreateRandomBuilding(BuildingEnum::TYPE type);
 	void CreateRandomBuilding(BuildingEnum::SIZE size);

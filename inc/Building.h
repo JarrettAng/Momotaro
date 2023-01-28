@@ -34,13 +34,13 @@ struct BuildingData {
 	BuildingEnum::SIZE size;
 	BuildingEnum::LEVEL level;
 
-	int SynergyResidential;
-	int SynergyCommercial;
-	int SynergyIndustrial;
-	int SynergyNature;
+	int SynergyResidential = 0;
+	int SynergyCommercial = 0;
+	int SynergyIndustrial = 0;
+	int SynergyNature = 0;
 
-	std::string name;
-	std::string desc;
+	std::string name = "Building";
+	std::string desc = "You're not suppose to see this!";
 
 	int TextureID;
 	int MeshID;

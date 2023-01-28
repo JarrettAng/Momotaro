@@ -24,6 +24,32 @@ namespace BuildingManager {
 		return buildingsData[0];
 	}
 
+	BuildingData GetRandomBuildingData(BuildingEnum::TYPE type) {
+		BuildingEnum::SIZE randSize = (BuildingEnum::SIZE)(rand() % BuildingEnum::SIZE_LENGTH);
+		BuildingEnum::LEVEL randLevel = (BuildingEnum::LEVEL)(rand() % BuildingEnum::LEVEL_LENGTH);
+
+		for (BuildingData building : buildingsData) {
+			if (building.type == type && building.size == randSize && building.level == randLevel) {
+				return building;
+			}
+		}
+		// TODO: Error check
+		return buildingsData[0];
+	}
+
+	BuildingData GetRandomBuildingData(BuildingEnum::LEVEL level) {
+		BuildingEnum::TYPE randType = (BuildingEnum::TYPE)(rand() % BuildingEnum::TYPE_LENGTH);
+		BuildingEnum::SIZE randSize = (BuildingEnum::SIZE)(rand() % BuildingEnum::SIZE_LENGTH);
+
+		for (BuildingData building : buildingsData) {
+			if (building.type == randType && building.size == randSize && building.level == level) {
+				return building;
+			}
+		}
+		// TODO: Error check
+		return buildingsData[0];
+	}
+
 	void CreateBuilding(BuildingEnum::TYPE type, BuildingEnum::SIZE size, BuildingEnum::LEVEL level) {
 		buildings.emplace_back(GetBuildingData(type, size, level));
 	}
