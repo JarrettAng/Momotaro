@@ -34,12 +34,13 @@ namespace UIManager {
 
 	enum FONT_TYPE {
 		NONE,
-		ROBOTO,
+		ROBOTO_S,
+		ROBOTO_M,
 	};
 	void Initialize();
 	void PrepareUIRenderBatch();
 	void UIPause();
-	void RenderText(const FONT_TYPE& font, const float& x, const float& y, std::string text, const Vec3<float>& color = { 1.0f,1.0f,1.0f }, const float& scale = 10);
+	void RenderText(const FONT_TYPE& font, const float& x, const float& y, std::string text, const Vec3<float>& color = { 1.0f,1.0f,1.0f });
 
 	/*!***********************************************************************
 	* BUTTON

@@ -26,7 +26,8 @@ namespace UIManager {
 	//Cursor Var (s32 is an int)
 	int cursor_x, cursor_y;
 
-	s8 robotoFont;
+	s8 robotoFont_s;
+	s8 robotoFont_m;
 	f32 textWidth, textHeight;
 
 	s8 GetFontID(const FONT_TYPE& type);
@@ -48,7 +49,8 @@ namespace UIManager {
 
 
 	void Initialize() {
-		robotoFont = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 20);
+		robotoFont_s = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 20);
+		robotoFont_m = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 40);
 
 		//Default location of card deck
 		//hand_x = (AEGfxGetWinMaxX() - AEGfxGetWinMinX()) * (2.5f / 8.0f);
@@ -80,11 +82,11 @@ namespace UIManager {
 		c5.y = init_y;
 	}
 
-	void RenderText(const FONT_TYPE& font, const float& x, const float& y, std::string text, const Vec3<float>& color, const float& scale)
+	void RenderText(const FONT_TYPE& font, const float& x, const float& y, std::string text, const Vec3<float>& color)
 	{
 		// Initialize text data.
 		UIData data;
-		TextDataToUIData(data, font, x, y, text, color, scale);
+		TextDataToUIData(data, font, x, y, text, color, 1);
 
 		// Add text data to text batch queue in render system.
 		RenderSystem::AddUIBatch(data);
@@ -146,15 +148,18 @@ namespace UIManager {
 	s8 GetFontID(const FONT_TYPE& type) {
 		switch (type)
 		{
-		case ROBOTO:
-			return robotoFont;
+		case ROBOTO_S:
+			return robotoFont_s;
+			break;
+		case ROBOTO_M:
+			return robotoFont_m;
 			break;
 		default:
 			break;
 		}
 		// Default font.
 		std::cout << "FONT TYPE INVALID, RETURN DEFAULT FONT.";
-		return robotoFont;
+		return robotoFont_s;
 	}
 
 	AEVec2 GetButtonSize(const float& xPadding, const float& yPadding) {
