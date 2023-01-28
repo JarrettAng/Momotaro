@@ -40,12 +40,14 @@ namespace RenderSystem {
 		RESIDENTIAL_S,
 		RESIDENTIAL_M,
 		RESIDENTIAL_L,
+		UI,
 	};
 
 	enum BATCH_TYPE {
 		TILE_BATCH = 0,
 		BUILDING_BATCH,
 		NATURE_BATCH,
+		UI_BATCH,
 	};
 
 	enum DRAW_PIVOT {

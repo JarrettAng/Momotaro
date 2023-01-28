@@ -38,7 +38,8 @@ namespace RenderSystem {
 	std::list<Sprite> tileBatch;
 	std::list<Sprite> buildingBatch;
 	std::list<Sprite> natureBatch;
-	std::vector<std::list<Sprite>> renderBatches = { tileBatch,buildingBatch,natureBatch };
+	std::list<Sprite> UsIBatch;
+	std::vector<std::list<Sprite>> renderBatches = { tileBatch,buildingBatch,natureBatch, UsIBatch };
 
 	/*!***********************************************************************
 	* UI BATCHES
@@ -78,6 +79,11 @@ namespace RenderSystem {
 	Sprite industrial_S_Sprite;
 	Sprite industrial_M_Sprite;
 	Sprite industrial_L_Sprite;
+
+	/*!***********************************************************************
+	* UI SPRITE
+	*************************************************************************/
+	Sprite ui_Sprite;
 
 #pragma endregion
 
@@ -236,6 +242,9 @@ namespace RenderSystem {
 		case NATURE:
 			return nature_Sprite;
 			break;
+		case UI:
+			return ui_Sprite;
+			break;
 		default:
 			break;
 		}
@@ -252,6 +261,9 @@ namespace RenderSystem {
 			break;
 		case NATURE_BATCH:
 			return NATURE_BATCH;
+			break;
+		case UI_BATCH:
+			return UI_BATCH;
 			break;
 		default:
 			break;
@@ -331,6 +343,13 @@ namespace RenderSystem {
 		nature_Sprite.midWidth = nature_Sprite.width / 2;
 		nature_Sprite.midHeight = nature_Sprite.height / 2;
 
+		//UI
+		ui_Sprite.width = 100;
+		ui_Sprite.height = 100;
+		ui_Sprite.scale = { ui_Sprite.width,ui_Sprite.height };
+		ui_Sprite.midWidth = tileSprite.width / 2;
+		ui_Sprite.midHeight = tileSprite.height / 2;
+
 		/*!***********************************************************************
 		\brief
 			Initialize mesh vertices.
@@ -347,6 +366,7 @@ namespace RenderSystem {
 
 	void LoadTextures() {
 		tileSprite.tex = AEGfxTextureLoad("Assets/Tile.png");
+		ui_Sprite.tex = AEGfxTextureLoad("Assets/Card.png");
 		// tileSprite.tex = AEGfxTextureLoad("Assets/BlueRect.png");
 		residential_S_Sprite.tex = AEGfxTextureLoad("Assets/residential_s_test.png");
 		nature_Sprite.tex = AEGfxTextureLoad("Assets/tree_test.png");

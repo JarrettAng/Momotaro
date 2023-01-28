@@ -36,6 +36,7 @@ namespace UIManager {
 		ROBOTO,
 	};
 	void Initialize();
+	void PrepareUIRenderBatch();
 	void RenderText(const FONT_TYPE& font, const float& x, const float& y, std::string text, const Vec3<float>& color = { 1.0f,1.0f,1.0f }, const float& scale = 1);
 	void RenderButton(const float& x, const float& y, const float& width, const float& height, FONT_TYPE font, std::string text, const int& layer, AEGfxTexture* tex = nullptr, const Vec3<float>& txtColor = { 1.0f,1.0f,1.0f }, const Vec3<float>& btnColor = { 1.0f,1.0f,1.0f });
 }
