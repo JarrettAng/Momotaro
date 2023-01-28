@@ -34,7 +34,8 @@ namespace RenderSystem {
 	*************************************************************************/
 	std::list<Sprite> tileBatch;
 	std::list<Sprite> buildingBatch;
-	std::vector<std::list<Sprite>> renderBatches = { tileBatch,buildingBatch };
+	std::list<Sprite> natureBatch;
+	std::vector<std::list<Sprite>> renderBatches = { tileBatch,buildingBatch,natureBatch };
 
 	/*!***********************************************************************
 	* TEXT BATCHES
@@ -194,6 +195,9 @@ namespace RenderSystem {
 		case RESIDENTIAL_M:
 			return residential_M_Sprite;
 			break;
+			case NATURE:
+			return nature_Sprite;
+			break;
 		default:
 			break;
 		}
@@ -207,6 +211,9 @@ namespace RenderSystem {
 			break;
 		case BUILDING_BATCH:
 			return BUILDING_BATCH;
+			break;
+			case NATURE_BATCH:
+			return NATURE_BATCH;
 			break;
 		default:
 			break;
@@ -265,6 +272,20 @@ namespace RenderSystem {
 		tileSprite.midWidth = tileSprite.width / 2;
 		tileSprite.midHeight = tileSprite.height / 2;
 
+		//RESIDENTIAL_S
+		residential_S_Sprite.width = 50;
+		residential_S_Sprite.height = 100;
+		residential_S_Sprite.scale = { residential_S_Sprite.width,residential_S_Sprite.height };
+		residential_S_Sprite.midWidth = residential_S_Sprite.width / 2;
+		residential_S_Sprite.midHeight = residential_S_Sprite.height / 2;
+
+		//NATURE
+		nature_Sprite.width = 25;
+		nature_Sprite.height = 50;
+		nature_Sprite.scale = { nature_Sprite.width,nature_Sprite.height };
+		nature_Sprite.midWidth = nature_Sprite.width / 2;
+		nature_Sprite.midHeight = nature_Sprite.height / 2;
+
 		/*!***********************************************************************
 		\brief
 			Initialize mesh vertices.
@@ -282,6 +303,7 @@ namespace RenderSystem {
 	void LoadTextures() {
 		tileSprite.tex = AEGfxTextureLoad("Assets/Tile.png");
 		// tileSprite.tex = AEGfxTextureLoad("Assets/BlueRect.png");
-		residential_S_Sprite.tex = AEGfxTextureLoad("Assets/PlanetTexture.png");
+		residential_S_Sprite.tex = AEGfxTextureLoad("Assets/residential_s_test.png");
+		nature_Sprite.tex = AEGfxTextureLoad("Assets/tree_test.png");
 	}
 }

@@ -44,6 +44,7 @@ namespace RenderSystem {
 	enum BATCH_TYPE {
 		TILE_BATCH = 0,
 		BUILDING_BATCH,
+		NATURE_BATCH,
 	};
 
 	enum DRAW_PIVOT {
