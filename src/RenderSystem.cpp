@@ -20,16 +20,15 @@ namespace RenderSystem {
 	void InitMesh();
 	void LoadTextures();
 
-
 	Sprite& GetSprite(const  SPRITE_TYPE& type);
 
 	int GetBatch(const BATCH_TYPE& id);
-	void SortBatchList(const BATCH_TYPE& id);
+
 	void SortUIBatch();
+	void SortSpriteBatch(std::list<Sprite> batch);
 
 	void UpdateRenderSetting(RenderSetting setting = {});
 	void UpdateRenderTransformMtx(const int& x, const int& y, const AEVec2& scale, const float& rot = 0);
-
 
 	//void AlignToPivot(int& x, int& y, const Mesh&, const DRAW_PIVOT& pivot);
 
@@ -95,6 +94,8 @@ namespace RenderSystem {
 		UpdateRenderSetting();
 
 		for (auto& batch : renderBatches) {
+			// Sort batch based on sprite's layer before drawing.
+			SortSpriteBatch(batch);
 			for (auto& sprite : batch) {
 				AEGfxTextureSet(sprite.tex, 0, 0);
 				// Change render setting if needed.
@@ -115,17 +116,20 @@ namespace RenderSystem {
 		/*!***********************************************************************
 		* UI RENDERING
 		*************************************************************************/
+		SortUIBatch();
 		for (auto& data : UIBatch) {
+			// Sort batch before drawing.
 			if (data.graphics.hasGraphics) {
-				// If UI has a texture, set it.
+				// Mesh CANNOT contain both texture and color.
 				if (data.graphics.tex) {
-					AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-					UpdateRenderSetting();
-					AEGfxTextureSet(data.graphics.tex, 0, 0);
+					// Render rect with texture.
+					RenderRect(data.transform.x, data.transform.y, data.transform.width, data.transform.height, data.graphics.tex);
+				}
+				else {
+					// Render rect with color.
+					RenderRect(data.transform.x, data.transform.y, data.transform.width, data.transform.height, data.graphics.color);
 				}
 
-				// Render rectange for UI.
-				RenderRect(data.transform.x, data.transform.y, data.transform.width, data.transform.height, data.graphics.color);
 			}
 
 			// Draw text above graphics.
@@ -133,6 +137,7 @@ namespace RenderSystem {
 				RenderText(data.text.fontID, const_cast<char*>(data.text.text.c_str()), data.text.x, data.text.y, data.text.scale, data.text.color);
 			}
 		}
+		// Clear UI in batch.
 		UIBatch.clear();
 	}
 
@@ -147,8 +152,6 @@ namespace RenderSystem {
 
 		// Add to batch.
 		renderBatches[GetBatch(id)].push_back(sprite);
-		// Sort batch based on sprite's layer.
-		SortBatchList(id);
 	}
 
 	void AddBatch(const SpriteInfo& batch) {
@@ -157,13 +160,19 @@ namespace RenderSystem {
 
 	void AddUIBatch(UIManager::UIData data) {
 		UIBatch.push_back(data);
-		SortUIBatch();
 	}
 
 	void RenderText(s8 fontID, std::string text, float x, float y, float scale, Vec3<float> color) {
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		AEGfxPrint(fontID, const_cast<char*>(text.c_str()), x, y, scale, color.x, color.y, color.z);
+	}
 
+	void RenderRect(const float& x, const float& y, const float& width, const float& height, AEGfxTexture* tex) {
+		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+		UpdateRenderSetting();
+		AEGfxTextureSet(tex, 0, 0);
+		UpdateRenderTransformMtx(x, y, AEVec2{ width,height });
+		AEGfxMeshDraw(spriteMesh, AE_GFX_MDM_TRIANGLES);
 	}
 
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec3<float> color) {
@@ -249,12 +258,15 @@ namespace RenderSystem {
 		}
 	}
 
-	void SortBatchList(const BATCH_TYPE& id) {
-		renderBatches[GetBatch(id)].sort([](const Sprite& a, const Sprite& b) { return a.layer < b.layer; });
+	/*!***********************************************************************
+	\brief
+		Sort batch list based on layer value.
+	*************************************************************************/
+	void SortSpriteBatch(std::list<Sprite> batch) {
+		batch.sort([](const Sprite& a, const Sprite& b) { return a.layer < b.layer; });
 	}
-
 	void SortUIBatch() {
-		UIBatch.sort([](const UIManager::UIData& a, const UIManager::UIData& b) { return a.layer < b.layer; });
+		UIBatch.sort([](const UIManager::UIData& a, const  UIManager::UIData& b) { return a.layer < b.layer; });
 	}
 
 	/*!***********************************************************************

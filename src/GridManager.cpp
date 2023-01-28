@@ -13,6 +13,7 @@ namespace GridManager {
 
 	iso::cell* grid;
 	const int gridX{ 20 }, gridY{ 20 };
+	AEGfxTexture* tex;;
 
 	void storeClickData(Vec2<int> mousePos);
 
@@ -39,6 +40,7 @@ namespace GridManager {
 		}
 
 		InputManager::onMouseClick.Subscribe(storeClickData);
+		tex = AEGfxTextureLoad("Assets/tree_test.png");
 	}
 
 	void UpdateMouseToGrid() {
@@ -118,9 +120,6 @@ namespace GridManager {
 					break;
 				}
 				if (grid[index].isRenderable) RenderSystem::AddBatch(RenderSystem::TILE_BATCH, RenderSystem::TILE, grid[index].pos.x, grid[index].pos.y);
-
-				UIManager::RenderButton(100, 100, 100, 100, UIManager::ROBOTO, "dawdawdwadwadawdawd", 1, nullptr, Vec3<float>{1.0f, .5f, 1.0f});
-				//UIManager::RenderButton(100, 200, 100, 100, UIManager::ROBOTO, "231", 0, nullptr, Vec3<float>{.5f, .5f, 1.0f}, Vec3<float>{.5f, .5f, .5f});
 			}
 		}
 	}
