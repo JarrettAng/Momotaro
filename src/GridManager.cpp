@@ -5,12 +5,13 @@
 #include <IsometricGrid.h>
 #include <iostream>
 
+#include <UIManager.h>
+
 namespace GridManager {
 	namespace iso = IsometricGrid;
 
 	iso::cell* grid;
 	const int gridX{ 25 }, gridY{ 25 };
-
 
 	void Initialize() {
 		grid = { new iso::cell[gridX * gridY]{} };
@@ -21,7 +22,7 @@ namespace GridManager {
 				int index = x + gridX * y;
 				iso::vec2i ScreenPos = iso::WorldIndexToScreenPos(x, y);
 				// //*! SET THE POSITION OF THE MESH HERE!!!!
-				ScreenPos.y+=600;
+				ScreenPos.y += 600;
 				grid[index].pos = ScreenPos;
 			}
 		}
