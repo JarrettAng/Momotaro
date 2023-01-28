@@ -6,4 +6,5 @@ namespace PauseManager {
 	extern EventSystem::Event<bool> onTogglePause;
 
 	void Initialize();
+	void Free();
 }

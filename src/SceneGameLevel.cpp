@@ -9,13 +9,15 @@
 
 #include <SceneGameLevel.h>
 #include <ColorTable.h>
+#include <PauseManager.h>
+
 
 void SceneGameLevel::Load() {
 	BuildingManager::Initialize();
 }
 
 void SceneGameLevel::Initialize() {
-
+	PauseManager::Initialize();
 }
 
 void SceneGameLevel::Update() {
@@ -45,6 +47,8 @@ void SceneGameLevel::Draw() {
 }
 
 void SceneGameLevel::Free() {
+	PauseManager::Free();
+
 	for (auto object : objects) {
 		object->Destroy();
 	}
