@@ -1,8 +1,11 @@
 
 #include <AEEngine.h>
 #include <SceneManager.h>
-#include <SceneGameLevel.h>
 #include <InputManager.h>
+#include <PauseManager.h>
+
+#include <SceneGameLevel.h>
+#include <SceneSplashscreen.h>
 
 namespace SceneManager {
 
@@ -15,8 +18,14 @@ namespace SceneManager {
     SceneGameLevel gameLevel;
     // SceneMainMenu mainMenu;
     // SceneSettings settings;
+    
+    #pragma region Forward Declarations
+    void UpdatePausedState(bool newPausedState);
+    #pragma endregion
 
     double fixedDT = 0.02, elapsedfixedDT = 0;
+
+    bool isPaused;
 
     void LoadScene(SCENES_ENUM nextScene) {
         next = nextScene;
@@ -51,7 +60,9 @@ namespace SceneManager {
 
                 currentScene->Update();
 
-                elapsedfixedDT += AEFrameRateControllerGetFrameTime();
+                if (!isPaused) {
+                    elapsedfixedDT += AEFrameRateControllerGetFrameTime();
+                }
                 if (elapsedfixedDT > fixedDT) {
                     elapsedfixedDT = 0;
                     currentScene->FixedUpdate();
@@ -71,12 +82,24 @@ namespace SceneManager {
             previous = current;
             current = next;
         }
+
+        Free();
     }
 
     void Initialize(SCENES_ENUM startingScene) {
         current = previous = next = startingScene;
-        SwitchScene();
 
+        PauseManager::onTogglePause.Subscribe(UpdatePausedState);
+
+        SwitchScene();
         SceneManagerLoop();
+    }
+
+    void Free() {
+        PauseManager::onTogglePause.UnsubscribeAll();
+    }
+
+    void UpdatePausedState(bool newPausedState) {
+        isPaused = newPausedState;
     }
 }
