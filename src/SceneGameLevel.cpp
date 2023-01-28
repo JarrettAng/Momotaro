@@ -21,7 +21,7 @@ void SceneGameLevel::Initialize() {
 }
 
 void SceneGameLevel::Update() {
-	GridManager::ScreenToTilePos();
+	GridManager::UpdateMouseToGrid();
 
 	for (auto object : objects) {
 		object->Update();

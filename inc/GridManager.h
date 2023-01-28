@@ -1,8 +1,10 @@
 
 #pragma once
-
+#include <IsometricGrid.h>
 namespace GridManager {
+	namespace iso = IsometricGrid;
+
 	void Initialize();
-	void ScreenToTilePos();
+	void UpdateMouseToGrid();
 	void PrepareTileRenderBatch();
 }

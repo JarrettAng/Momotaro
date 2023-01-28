@@ -64,6 +64,16 @@ namespace IsometricGrid
 		};
 	}
 	vec2i ScreenPosToIso(int x, int y) {
+		// //MOUSE INPUTS (Tile width = 100, tile height = 50)
+		// int cellX = x / 100;
+		// int cellY = y / 50;
+
+		// //Origin -> screen/tile. For now I use numbers
+		// int originX = AEGetWindowWidth()/2 / 100;
+		// int originY = AEGetWindowHeight()/2 / 50;
+
+		// int selectX = (cellX - originX) + (cellY - originY);
+		// int selectY = (cellY - originY) - (cellX - originX);
 		return vec2i{
 			static_cast<int>((x / (tileWidth / 2)) + (y / (tileHeight / 2))),
 			static_cast<int>((y / (tileHeight / 2)) - (x / (tileWidth / 2)))

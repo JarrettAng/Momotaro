@@ -5,29 +5,22 @@ namespace IsometricGrid
         int x{0};
         int y{0};
     };
+    enum TileType{
+        NONE = 0,
+        RESIDENTIAL = 1,
+        INDUSTRIAL = 2,
+        COMMERCIAL = 3,
+        NATURE = 99,
+    };
     struct cell{
 		vec2i pos;
+        bool isRenderable;
         int ID{ 0 };
-		enum TileType{
-            NONE = 0,
-			RESIDENTIAL = 1,
-			INDUSTRIAL = 2,
-			COMMERCIAL = 3,
-			NATURE = 99,
-		};
+        TileType _tileType;
 	};
 
-    class GridManager{
-    private:
-	vec2i gridSize;
 
-    public:
-	GridManager(int width,int height){gridSize.x = width; gridSize.y = height;}
-    vec2i GetGridSize();
-    void Update(int mouseX,int mouseY);
-    
 
-   };
     /// @brief Return 
     /// @param x1 
     /// @param y1 
