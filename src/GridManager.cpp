@@ -169,13 +169,13 @@ namespace GridManager {
     void GridManager::CheckCellNeighbor(iso::cell* &grid,iso::vec2i cellIndex)
     {
 		//The order to check is CLOCKWISE, so we go NORTH, EAST, SOUTH, WEST
-		//Note that Alpha engine Y minus GOES UP!!!
+		// //Note that Alpha engine Y minus GOES UP!!!
 		int NorthIndex = GetIndex(cellIndex.x,cellIndex.y--);
 		int EastIndex = GetIndex(cellIndex.x++,cellIndex.y);
 		int SouthIndex = GetIndex(cellIndex.x,cellIndex.y++);
-		int NorthIndex = GetIndex(cellIndex.x--,cellIndex.y);
-		//NORTH
-		
+		int WestIndex = GetIndex(cellIndex.x--,cellIndex.y);
+		// //NORTH
+
 
     }
     int GetIndex(int x, int y)

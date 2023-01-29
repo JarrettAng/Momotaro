@@ -8,7 +8,7 @@ namespace IsometricGrid
         COMMERCIAL = 3,
         NATURE = 99,
     };
-    	struct vec2i{
+    struct vec2i{
         int x;
         int y;
     };
