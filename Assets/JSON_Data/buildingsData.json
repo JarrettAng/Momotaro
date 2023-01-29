@@ -195,7 +195,7 @@
       "SynergyIndustrial": "3",
       "SynergyNature": "1",
       "name": "Big Warehouse",
-      "desc": "Big enough to store 2 IKEAs inside",
+      "desc": "Big enough to fit 2 IKEAs inside",
       "TextureID": "202",
       "MeshID": "000"
     },

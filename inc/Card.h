@@ -18,7 +18,7 @@ class Card {
 		bool operator == (const Card& card) const { return deckCardData == card.deckCardData; }
 		bool operator != (const Card& card) const { return !operator==(card); }
 
-		Card(UIManager::Transform _position, CardManager::DeckData * _deckCardData) {
+		Card(UIManager::Transform _position, CardManager::DeckData *_deckCardData) {
 			position = _position;
 			deckCardData = _deckCardData;
 

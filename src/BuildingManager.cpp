@@ -5,6 +5,8 @@
 #include <FileIOManager.h>
 #include <BuildingManager.h>
 
+#include <iostream>
+
 namespace BuildingManager {
 	std::vector<BuildingData> buildingsData; // Template for all buildings
 	std::vector<Building> buildings;		 // Array of the actual buildings
@@ -21,6 +23,8 @@ namespace BuildingManager {
 			}
 		}
 		// TODO: Error check
+		std::cerr << "BuildingManager: TRIED TO GET INVALID BUILDING DATA OF TYPE " << type << ", SIZE " << size << ", LEVEL " << level << "\n";
+
 		return buildingsData[0];
 	}
 
@@ -28,12 +32,17 @@ namespace BuildingManager {
 		BuildingEnum::SIZE randSize = (BuildingEnum::SIZE)(rand() % BuildingEnum::SIZE_LENGTH);
 		BuildingEnum::LEVEL randLevel = (BuildingEnum::LEVEL)(rand() % BuildingEnum::LEVEL_LENGTH);
 
+		// TODO: Remove after prototype
+		randSize = BuildingEnum::_1X1;
+
 		for (BuildingData building : buildingsData) {
 			if (building.type == type && building.size == randSize && building.level == randLevel) {
 				return building;
 			}
 		}
 		// TODO: Error check
+		std::cerr << "BuildingManager: TRIED TO GET (RANDOM) INVALID BUILDING DATA OF TYPE " << type << ", SIZE " << randSize << ", LEVEL " << randLevel << "\n";
+
 		return buildingsData[0];
 	}
 
@@ -41,12 +50,17 @@ namespace BuildingManager {
 		BuildingEnum::TYPE randType = (BuildingEnum::TYPE)(rand() % BuildingEnum::TYPE_LENGTH);
 		BuildingEnum::SIZE randSize = (BuildingEnum::SIZE)(rand() % BuildingEnum::SIZE_LENGTH);
 
+		// TODO: Remove after prototype
+		randSize = BuildingEnum::_1X1;
+
 		for (BuildingData building : buildingsData) {
 			if (building.type == randType && building.size == randSize && building.level == level) {
 				return building;
 			}
 		}
 		// TODO: Error check
+		std::cerr << "BuildingManager: TRIED TO GET (RANDOM) INVALID BUILDING DATA OF TYPE " << randType << ", SIZE " << randSize << ", LEVEL " << level << "\n";
+
 		return buildingsData[0];
 	}
 
