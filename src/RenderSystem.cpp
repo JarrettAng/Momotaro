@@ -279,7 +279,7 @@ namespace RenderSystem {
 		return renderMesh;
 	}
 
-	void SetRenderMesh(RENDER_PIVOT pivot) {
+	void SetRenderMesh(const RENDER_PIVOT& pivot) {
 		switch (pivot)
 		{
 		case RenderSystem::TOP_LEFT:
