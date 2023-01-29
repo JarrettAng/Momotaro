@@ -17,6 +17,7 @@ namespace TextureManager {
 		NATURE_TREE,
 		CARD_BLUE,
 		PAUSE_WINDOW,
+		PAUSE_BUTTON,
 	};
 	void Initialize();
 	AEGfxTexture* GetTexture(const TEX_TYPE& type);

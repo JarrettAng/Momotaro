@@ -25,6 +25,7 @@ namespace TextureManager {
 	AEGfxTexture* industrial_L_Tex;
 	AEGfxTexture* card_Tex;
 	AEGfxTexture* pause_Tex;
+	AEGfxTexture* pauseButton_Tex;
 
 	void Initialize() {
 		LoadTextures();
@@ -44,6 +45,7 @@ namespace TextureManager {
 		industrial_L_Tex = AEGfxTextureLoad("Assets/industrial_l_test.png");
 		nature_Tex = AEGfxTextureLoad("Assets/tree_test.png");
 		pause_Tex = AEGfxTextureLoad("Assets/GameWindow.png");
+		pauseButton_Tex = AEGfxTextureLoad("Assets/PauseButton.png");
 	}
 
 	AEGfxTexture* GetTexture(const TEX_TYPE& type) {
@@ -75,6 +77,8 @@ namespace TextureManager {
 			return card_Tex;
 		case PAUSE_WINDOW:
 			return pause_Tex;
+		case PAUSE_BUTTON:
+			return pauseButton_Tex;
 		default:
 			break;
 		}

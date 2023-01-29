@@ -72,8 +72,8 @@ namespace UIManager {
 		hand_y = (AEGfxGetWinMaxY() - AEGfxGetWinMinY()) * (3.0f / 8.0f);
 
 		//Mesh is a square
-		c_height = 40.0f;
-		c_width = 40.0f;
+		c_height = 60.0f;
+		c_width = 60.0f;
 
 
 		//TEMP--------------------------------------------------------
@@ -103,6 +103,7 @@ namespace UIManager {
 		roboto.M = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 40);
 		roboto.L = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 60);
 	}
+
 
 	void AddTextToBatch(const s8& font, const float& x, const float& y, const int& layer, std::string text, const Vec3<float>& color)
 	{
@@ -256,10 +257,18 @@ namespace UIManager {
 	//change to only rendering the screen when pause function is done
 
 	void MakeText() {
-		//TEMP location
+		//PLACEHOLDER values
 		AddTextToBatch(roboto.M, -0.9f, 0.9f, 0, "SYNERGY", { (0.0f), (0.0f), (0.0f) });
-		AddTextToBatch(roboto.M, -0.6f, 0.9f, 0, "0/100", { (0.0f), (0.0f), (0.0f) });
+		AddTextToBatch(roboto.M, -0.6f, 0.9f, 0, "0/100",   { (0.0f), (0.0f), (0.0f) });
 	}
+
+	/*!***********************************************************************
+	* UI that appers throughout ALL levels here
+	*************************************************************************/
+
+	void LevelUI() {
+		UIManager::AddRectToBatch(800.0f, -400.0f, 10.0f, 10.0f, 6, TextureManager::GetTexture(TextureManager::PAUSE_BUTTON));
+	}																	
 
 
 	/*!***********************************************************************

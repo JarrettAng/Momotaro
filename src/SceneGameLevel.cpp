@@ -49,6 +49,10 @@ void SceneGameLevel::Draw() {
 	CardManager::PrepareUIRenderBatch();
 	PauseManager::Update();
 
+	//Add the pause button
+	//UIManager::AddRectToBatch(800.0f, -400.0f, 10.0f, 10.0f, 6 , AEGfxTexture * tex);
+
+
 	//TEMP--------------------------------------------------------------------------
 	//Change when Scoring system has been made
 	//Change to UI element that changes accordingly
