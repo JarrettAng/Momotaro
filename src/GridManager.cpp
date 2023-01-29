@@ -45,6 +45,35 @@ namespace GridManager {
 			}
 		}
 
+		// Hardcoded island parts
+		// Top left
+		grid[GetIndex(7, 9)].isRenderable = true;
+		grid[GetIndex(7, 10)].isRenderable = true;
+		grid[GetIndex(7, 11)].isRenderable = true;
+		grid[GetIndex(7, 12)].isRenderable = true;
+		grid[GetIndex(6, 11)].isRenderable = true;
+		grid[GetIndex(6, 12)].isRenderable = true;
+		// Bottom left
+		grid[GetIndex(9, 14)].isRenderable = true;
+		grid[GetIndex(10, 14)].isRenderable = true;
+		grid[GetIndex(11, 14)].isRenderable = true;
+		grid[GetIndex(12, 14)].isRenderable = true;
+		grid[GetIndex(10, 15)].isRenderable = true;
+		grid[GetIndex(11, 15)].isRenderable = true;
+		// Bottom right
+		grid[GetIndex(14, 9)].isRenderable = true;
+		grid[GetIndex(14, 10)].isRenderable = true;
+		grid[GetIndex(14, 11)].isRenderable = true;
+		grid[GetIndex(14, 12)].isRenderable = true;
+		grid[GetIndex(15, 11)].isRenderable = true;
+		grid[GetIndex(15, 12)].isRenderable = true;
+		// Top right
+		grid[GetIndex(10, 7)].isRenderable = true;
+		grid[GetIndex(11, 7)].isRenderable = true;
+		grid[GetIndex(12, 7)].isRenderable = true;
+		grid[GetIndex(11, 6)].isRenderable = true;
+		grid[GetIndex(12, 6)].isRenderable = true;
+
 		InputManager::onMouseClick.Subscribe(storeClickData);
 	}
 
