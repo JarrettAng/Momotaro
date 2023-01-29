@@ -267,7 +267,9 @@ namespace UIManager {
 	*************************************************************************/
 
 	void LevelUI() {
-		UIManager::AddRectToBatch(800.0f, -400.0f, 10.0f, 10.0f, 6, TextureManager::GetTexture(TextureManager::PAUSE_BUTTON));
+		UIManager::AddRectToBatch(700.0f, 425.0f, 70.0f, 70.0f, 0, TextureManager::GetTexture(TextureManager::PAUSE_BUTTON));
+		//RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, TextureManager::CARD_BLUE, c1.x, c1.y);
+
 	}																	
 
 

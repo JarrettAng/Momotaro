@@ -47,7 +47,7 @@ namespace TextureManager {
 		nature_Tex = AEGfxTextureLoad("Assets/tree_test.png");
 		rock_Tex = AEGfxTextureLoad("Assets/rock_test.png");
 		pause_Tex = AEGfxTextureLoad("Assets/GameWindow.png");
-		pauseButton_Tex = AEGfxTextureLoad("Assets/PauseButton.png");
+		pauseButton_Tex = AEGfxTextureLoad("Assets/Pause_Button.png");
 	}
 
 	AEGfxTexture* GetTexture(const TEX_TYPE& type) {

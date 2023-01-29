@@ -51,6 +51,7 @@ namespace UIManager {
 	};
 
 	void Initialize();
+	void LevelUI();
 	void PrepareUIRenderBatch();
 	void MakeText();
 

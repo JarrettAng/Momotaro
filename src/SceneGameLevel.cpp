@@ -48,6 +48,7 @@ void SceneGameLevel::Draw() {
 	//UIManager::PrepareUIRenderBatch();
 	CardManager::PrepareUIRenderBatch();
 	PauseManager::Update();
+	UIManager::LevelUI();
 
 	//Add the pause button
 	//UIManager::AddRectToBatch(800.0f, -400.0f, 10.0f, 10.0f, 6 , AEGfxTexture * tex);
