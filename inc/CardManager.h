@@ -13,8 +13,6 @@ namespace CardManager {
 
 	void PrepareUIRenderBatch();
 
-	void UpdateCardPositions();
-
 	void DrawCard(BuildingEnum::TYPE type, BuildingEnum::LEVEL level);
 
 	void DrawRandomCard(BuildingEnum::LEVEL level);

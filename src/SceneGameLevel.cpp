@@ -6,6 +6,7 @@
 #include <GridManager.h>
 #include <BuildingManager.h>
 #include <InputManager.h>
+#include <CardManager.h>
 
 #include <SceneGameLevel.h>
 #include <ColorTable.h>
@@ -20,13 +21,13 @@ void SceneGameLevel::Load() {
 void SceneGameLevel::Initialize() {
 	PauseManager::Initialize();
 	UIManager::Initialize();
+	CardManager::Initialize();
 }
 
 void SceneGameLevel::Update() {
 	GridManager::UpdateMouseToGrid();
 
 	//UIManager::UIPause();
-	PauseManager::Update();
 
 	for (auto object : objects) {
 		object->Update();
@@ -43,9 +44,9 @@ void SceneGameLevel::Draw() {
 	AEGfxSetBackgroundColor(WATER);
 
 	GridManager::PrepareTileRenderBatch();
-	UIManager::PrepareUIRenderBatch();
-
-
+	//UIManager::PrepareUIRenderBatch();
+	CardManager::PrepareUIRenderBatch();
+	PauseManager::Update();
 
 	//TEMP--------------------------------------------------------------------------
 	//Change when Scoring system has been made
