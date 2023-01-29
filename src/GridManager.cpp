@@ -23,7 +23,7 @@ namespace GridManager {
 		//Init a grid with 0 tiles
 		for (int y{ 0 }; y < gridY; ++y) {
 			for (int x{ 0 }; x < gridX; ++x) {
-				int index = GetIndex(x,y);
+				int index = GetIndex(x, y);
 				iso::vec2i ScreenPos = iso::WorldIndexToScreenPos(x, y);
 				// //*! SET THE POSITION OF THE MESH HERE!!!!
 				//This is 10 units up so we need to move x index and y index up by 10 units
@@ -35,9 +35,9 @@ namespace GridManager {
 				if ((test.x >= -5 && test.x <= 5) && (test.y >= -5 && test.y <= 5)) {
 					grid[index].isRenderable = true;
 				}
-				if(x > 1 && x < 3){
+				if (x > 1 && x < 3) {
 					// grid[index].ID = iso::RESIDENTIAL;
-					std::cout << "x is " << x << " and iso is " << test.x<<'\n';
+					std::cout << "x is " << x << " and iso is " << test.x << '\n';
 					// std::cout << "y is " << y << " and iso is " << test.x<<'\n';
 				}
 			}
@@ -78,7 +78,7 @@ namespace GridManager {
 		//MOUSE INPUTS (Tile width = 100, tile height = 50)
 		int cellX = mousePos.x / 100;
 		int cellY = mousePos.y / 50;
-		int index = cellX+gridX*cellY;
+		int index = cellX + gridX * cellY;
 
 		int xOffset = mousePos.x % 100;
 		int yOffset = mousePos.y % 50;
@@ -103,35 +103,35 @@ namespace GridManager {
 		if (iso::isInside(xOffset, yOffset, 50, 50, 100, 50, 100, 25))SelectedCell.x++;
 
 		//We offset by 10 units x and y because of how iso works. We moved the grid up by 10 units
-		if((((SelectedCell.x+10) < 0) || ((SelectedCell.x+10) > gridX)) || ((SelectedCell.y+10) < 0 || (SelectedCell.y + 10) > gridY)) return; 
-		index = (SelectedCell.x+10)+gridX*(SelectedCell.y+10);
-		index = GetIndex(SelectedCell.x+10, SelectedCell.y+10);
+		if ((((SelectedCell.x + 10) < 0) || ((SelectedCell.x + 10) > gridX)) || ((SelectedCell.y + 10) < 0 || (SelectedCell.y + 10) > gridY)) return;
+		index = (SelectedCell.x + 10) + gridX * (SelectedCell.y + 10);
+		index = GetIndex(SelectedCell.x + 10, SelectedCell.y + 10);
 
 		//if the cell is water (means it doesn't need to be rendered) we don't allow placement
-		if(!grid[index].isRenderable) return;
+		if (!grid[index].isRenderable) return;
 		//ROTATES BETWEEN BUILDINGS
 		switch (grid[index].ID)
 		{
-			case iso::NONE:
+		case iso::NONE:
 			grid[index].ID = iso::RESIDENTIAL;
 			break;
-			case iso::RESIDENTIAL:
+		case iso::RESIDENTIAL:
 			grid[index].ID = iso::INDUSTRIAL;
 			break;
-			case iso::INDUSTRIAL:
+		case iso::INDUSTRIAL:
 			grid[index].ID = iso::COMMERCIAL;
 			break;
-			case iso::COMMERCIAL:
+		case iso::COMMERCIAL:
 			grid[index].ID = iso::NATURE;
 			break;
-			case iso::NATURE:
+		case iso::NATURE:
 			grid[index].ID = iso::NONE;
 			break;
 		}
 
 		//This is where it gets messy sorry
 		//MERGE LOGIC
-		CheckCellNeighbor(grid,SelectedCell);
+		CheckCellNeighbor(grid, SelectedCell);
 
 	}
 
@@ -140,11 +140,11 @@ namespace GridManager {
 		//Render grid test
 		for (int y{ 0 }; y < gridY; ++y) {
 			for (int x{ 0 }; x < gridX; ++x) {
-				int index = GetIndex(x,y);
+				int index = GetIndex(x, y);
 
 				switch (grid[index].ID) {
 				case iso::RESIDENTIAL:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::RESIDENTIAL_S, grid[index].pos.x, grid[index].pos.y);
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, RenderSystem::RESIDENTIAL_S, grid[index].pos.x, grid[index].pos.y);
 					break;
 				case iso::INDUSTRIAL:
 					break;
@@ -163,20 +163,20 @@ namespace GridManager {
 		// UIManager::RenderButton(0, 0, 100, 100, 0, UIManager::GetFont(UIManager::ROBOTO).S, "dawdawdwadwadawdawd", Vec4<float>{1, 1, 0, 1}, Vec3<float>{1, 0, 1});
 	}
 
-    void GridManager::CheckCellNeighbor(iso::cell* &grid,iso::vec2i cellIndex)
-    {
+	void GridManager::CheckCellNeighbor(iso::cell*& grid, iso::vec2i cellIndex)
+	{
 		//The order to check is CLOCKWISE, so we go NORTH, EAST, SOUTH, WEST
 		// //Note that Alpha engine Y minus GOES UP!!!
-		int NorthIndex = GetIndex(cellIndex.x,cellIndex.y--);
-		int EastIndex = GetIndex(cellIndex.x++,cellIndex.y);
-		int SouthIndex = GetIndex(cellIndex.x,cellIndex.y++);
-		int WestIndex = GetIndex(cellIndex.x--,cellIndex.y);
+		int NorthIndex = GetIndex(cellIndex.x, cellIndex.y--);
+		int EastIndex = GetIndex(cellIndex.x++, cellIndex.y);
+		int SouthIndex = GetIndex(cellIndex.x, cellIndex.y++);
+		int WestIndex = GetIndex(cellIndex.x--, cellIndex.y);
 		// //NORTH
 
 
-    }
-    int GetIndex(int x, int y)
-    {
-        return x+gridX * y;
-    }
+	}
+	int GetIndex(int x, int y)
+	{
+		return x + gridX * y;
+	}
 }
