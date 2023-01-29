@@ -44,6 +44,8 @@ namespace IsometricGrid
 	  }*/
 
 
+
+
 	float area(int x1, int y1, int x2, int y2, int x3, int y3) {
 		return static_cast<float>(abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0f));
 	}
@@ -55,7 +57,14 @@ namespace IsometricGrid
 		float D = area(x1, y1, x2, y2, _mouseX, _mouseY);
 		return (A == (B + C + D));
 	}
-
+	vec2i ToScreen(int x, int y){
+		int originX = AEGetWindowWidth() / 2 / 100;
+		int originY = AEGetWindowHeight() / 2 / 50;
+		return vec2i{
+			(originX*tileWidth) + (x-y)*(tileWidth/2),
+			(originY*tileHeight)+(x+y)*(tileHeight/2)
+		};
+	}
 
 	vec2i WorldIndexToScreenPos(int x, int y) {
 		return vec2i{   //we need to keep the tile height and width a float here!
@@ -85,12 +94,14 @@ namespace IsometricGrid
 			mouseY / tileHeight
 		};
 	}
-	vec2i MouseCellOffset(int mouseX, int mouseY) {
-		return vec2i{
+   
+    vec2i MouseCellOffset(int mouseX, int mouseY)
+    {
+        return vec2i{
 			mouseX % tileWidth,
 			mouseY % tileHeight
 		};
-	}
+    }
 
 #pragma region  old lambda code
 #if 0
