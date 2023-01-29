@@ -216,6 +216,39 @@ namespace GridManager {
 				matchCount++;
 			}
 		}
+		if(matchCount == 1){
+			//Now we check using the selected neighbor
+			int selectedNeighbor = matchedCells[0];
+			int NorthIndex = selectedNeighbor-gridX;
+			int EastIndex = selectedNeighbor +1;
+			int SouthIndex = selectedNeighbor+gridX;
+			int WestIndex = selectedNeighbor-1;
+
+			if(grid[NorthIndex].ID == grid[selectedNeighbor].ID && (NorthIndex != gridIndex)){
+				if(matchCount <2){
+					matchedCells[matchCount] = NorthIndex;
+					matchCount++;
+				}
+			}
+			if(grid[EastIndex].ID == grid[selectedNeighbor].ID && (EastIndex != gridIndex)){
+				if(matchCount <2){
+					matchedCells[matchCount] = EastIndex;
+					matchCount++;
+				}
+			}
+			if(grid[SouthIndex].ID == grid[selectedNeighbor].ID && (SouthIndex != gridIndex)){
+				if(matchCount <2){
+					matchedCells[matchCount] = SouthIndex;
+					matchCount++;
+				}
+			}
+			if(grid[WestIndex].ID == grid[selectedNeighbor].ID && (WestIndex != gridIndex)){
+				if(matchCount <2){
+					matchedCells[matchCount] = WestIndex;
+					matchCount++;
+				}
+			}
+		}
 		std::cout << matchCount <<'\n';
 		if (matchCount == 2){
 			for(int c : matchedCells){
@@ -223,8 +256,6 @@ namespace GridManager {
 			}
 			grid[gridIndex].ID += 100;
 		}
-		
-
     }
 
 	iso::cell& GetNeighbor(iso::cell*&grid,iso::vec2i indexToCheck, iso::vec2i selectedCell){
