@@ -65,25 +65,29 @@ namespace CardManager {
 	void PrepareUIRenderBatch() {
 		UIManager::AddRectToBatch(handBackground.x, handBackground.y, handBackground.width, handBackground.height, 0, COLOR_CARD_BACKGROUND);
 
-		// std::cout << "CardManager Render Start\n";
-
 		// Render each card
 		for (int index = 0; index < hand.size(); ++index) {
 			Card *card = &hand[index];
 
+			// If data is invalid, check the pointer again
+			if (card->deckCardData->card.type < 0 || card->deckCardData->card.type > BuildingEnum::TYPE_LENGTH) {
+				for (DeckData _deck : deck) {
+					if (_deck.card.type == card->deckCardData->card.type && _deck.card.size == card->deckCardData->card.size && _deck.card.level == card->deckCardData->card.level) {
+						card->deckCardData = &_deck;
+						break;
+					}
+				}
+			}
+
 			UIManager::AddRectToBatch(card->position.x, card->position.y, card->position.width, card->position.height, 1, card->borderColor);
 
 			UIManager::AddRectToBatch(card->position.x + card->position.width * 0.05f, card->position.y - card->position.height * 0.035f, card->position.width * 0.9f, card->position.height * 0.925f, 2, card->color);
-
-			// std::cout << "Render: " << card->deckCardData->card.type << " " << card->deckCardData->card.size << " " << card->deckCardData->card.level << "\n";
 
 			UIManager::AddRectToBatch(card->icon.x, card->icon.y, card->icon.width, card->icon.height, 3, TextureManager::GetTexture((TextureManager::TEX_TYPE)(card->deckCardData->card.type * BuildingEnum::LEVEL_LENGTH + card->deckCardData->card.level)));
 
 			//UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).S, card.name.x / AEGetWindowWidth(), card.name.y / AEGetWindowHeight(), 3, card.deckCardData->card.name, COLOR_BLACK);
 			//UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).S, card.desc.x / AEGetWindowWidth(), card.desc.y / AEGetWindowHeight(), 1, card.deckCardData->card.desc, COLOR_BLACK);
 		}
-
-		// std::cout << "CardManager Render End\n";
 	}
 
 	void DrawCard(BuildingEnum::TYPE type, BuildingEnum::LEVEL level) {
@@ -153,7 +157,7 @@ namespace CardManager {
 		}
 	}
 
-	void AddToHand(DeckData *deckCardData) {
+	void AddToHand(DeckData* deckCardData) {
 		hand.emplace_back(cardPositionTemplate, deckCardData);
 
 		UpdateHandPositions();
