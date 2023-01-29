@@ -1,6 +1,5 @@
 
 #include <vector>
-#include <list>
 
 #include <UIManager.h>
 #include <CardManager.h>
@@ -13,7 +12,7 @@
 namespace CardManager {
 	u16 startingHandSize;
 	std::vector<DeckData> deck;					// Data on all cards in play 
-	std::list<Card> hand;						// Data on rendering for current cards held
+	std::vector<Card> hand;						// Data on rendering for current cards held
 
 	UIManager::Transform cardPositionTemplate;	// Rendering data for a generic card
 	UIManager::Transform handBackground;		// Rendering data for the hand background
@@ -86,16 +85,25 @@ namespace CardManager {
 
 	void DrawCard(BuildingEnum::TYPE type, BuildingEnum::LEVEL level) {
 		BuildingData buildingData = BuildingManager::GetBuildingData(type, BuildingEnum::_1X1, level);
+
+		std::cout << "DEBUG: CardManager Get Data of TYPE " << buildingData.type << " ,SIZE " << buildingData.size << " ,LEVEL " << buildingData.level << "\n";
+
 		AddToDeck(buildingData);
 	}
 
 	void DrawRandomCard(BuildingEnum::LEVEL level) {
 		BuildingData buildingData = BuildingManager::GetRandomBuildingData(level);
+
+		std::cout << "DEBUG: CardManager Get Data of TYPE " << buildingData.type << " ,SIZE " << buildingData.size << " ,LEVEL " << buildingData.level << "\n";
+
 		AddToDeck(buildingData);
 	}
 
 	void DrawRandomCard(BuildingEnum::TYPE type) {
 		BuildingData buildingData = BuildingManager::GetRandomBuildingData(type);
+
+		std::cout << "DEBUG: CardManager Get Data of TYPE " << buildingData.type << " ,SIZE " << buildingData.size << " ,LEVEL " << buildingData.level << "\n";
+
 		AddToDeck(buildingData);
 	}
 
@@ -145,7 +153,7 @@ namespace CardManager {
 	}
 
 	void RemoveFromHand(Card* cardToRemove) {
-		hand.remove(*cardToRemove);
+		// hand.remove(*cardToRemove);
 
 		UpdateHandPositions();
 	}
