@@ -61,7 +61,7 @@ namespace RenderSystem {
 	/*!***********************************************************************
 	* MESH FOR RENDERING + PIVOT MESHES.
 	*************************************************************************/
-	AEGfxVertexList* renderMesh;
+	RENDER_PIVOT renderPivot;
 
 	// renderMesh is assigned to one of the pivot meshes below to tell the renderer how to render subsequent obj.
 	AEGfxVertexList* TOP_LEFT_MESH;
@@ -87,7 +87,7 @@ namespace RenderSystem {
 
 	void Initialize() {
 		InitMesh();
-		SetRenderMesh(TOP_LEFT);
+		SetRenderPivot(TOP_LEFT);
 		InitializeSprite();
 	}
 
@@ -109,7 +109,7 @@ namespace RenderSystem {
 				// Set position, rotation and scale of sprite.
 				UpdateRenderTransformMtx(sprite.x, sprite.y, sprite.size, sprite.rot);
 				// Render sprites on screen.
-				AEGfxMeshDraw(TOP_LEFT_MESH, AE_GFX_MDM_TRIANGLES);
+				AEGfxMeshDraw(GetRenderMesh(), AE_GFX_MDM_TRIANGLES);
 
 				// Reset back to default render setting if changed, for next sprite.
 				if (!sprite.setting.isDefault()) UpdateRenderSetting();
@@ -163,6 +163,34 @@ namespace RenderSystem {
 
 	void AddUIBatch(UIManager::UIData data) {
 		UIBatch.push_back(data);
+	}
+
+	AEVec2 GetPivotPos(const AEVec2& pos, const float& width, const float& height) {
+		switch (renderPivot)
+		{
+		case RenderSystem::TOP_LEFT:
+			return pos;
+		case RenderSystem::TOP_MID:
+			return AEVec2{ pos.x - width / 2, pos.y };
+		case RenderSystem::TOP_RIGHT:
+			return AEVec2{ pos.x - width, pos.y };
+		case RenderSystem::MID_LEFT:
+			return AEVec2{ pos.x, pos.y + height / 2 };
+		case RenderSystem::MID:
+			return AEVec2{ pos.x - width / 2, pos.y + height / 2 };
+		case RenderSystem::MID_RIGHT:
+			return AEVec2{ pos.x - width, pos.y + height / 2 };
+		case RenderSystem::BOT_LEFT:
+			return AEVec2{ pos.x, pos.y + height };
+		case RenderSystem::BOT_MID:
+			return AEVec2{ pos.x - width / 2, pos.y + height };
+		case RenderSystem::BOT_RIGHT:
+			return AEVec2{ pos.x - width , pos.y + height };
+		default:
+			break;
+		}
+		std::cout << "UNABLE TO GET PIVOT POS";
+		return pos;
 	}
 
 	/*!***********************************************************************
@@ -273,47 +301,44 @@ namespace RenderSystem {
 
 	/*!***********************************************************************
 	\brief
-		Get / set the render mesh to determine how graphics are drawn.
+		Set current render pivot to determine how meshes are drawn.
 	*************************************************************************/
-	AEGfxVertexList* GetRenderMesh() {
-		return renderMesh;
+	void SetRenderPivot(const RENDER_PIVOT& pivot) {
+		renderPivot = pivot;
 	}
 
-	void SetRenderMesh(const RENDER_PIVOT& pivot) {
-		switch (pivot)
+	/*!***********************************************************************
+	\brief
+		Get render mesh based on current render pivot.
+	*************************************************************************/
+	AEGfxVertexList* GetRenderMesh() {
+		switch (renderPivot)
 		{
-		case RenderSystem::TOP_LEFT:
-			renderMesh = TOP_LEFT_MESH;
-			break;
-		case RenderSystem::TOP_MID:
-			renderMesh = TOP_MID_MESH;
-			break;
-		case RenderSystem::TOP_RIGHT:
-			renderMesh = TOP_RIGHT_MESH;
-			break;
-		case RenderSystem::MID_LEFT:
-			renderMesh = MID_LEFT_MESH;
-			break;
-		case RenderSystem::MID:
-			renderMesh = MID_MESH;
-			break;
-		case RenderSystem::MID_RIGHT:
-			renderMesh = MID_RIGHT_MESH;
-			break;
-		case RenderSystem::BOT_LEFT:
-			renderMesh = BOT_LEFT_MESH;
-			break;
-		case RenderSystem::BOT_MID:
-			renderMesh = BOT_MID_MESH;
-			break;
-		case RenderSystem::BOT_RIGHT:
-			renderMesh = BOT_RIGHT_MESH;
-			break;
+		case TOP_LEFT:
+			return TOP_LEFT_MESH;
+		case TOP_MID:
+			return TOP_MID_MESH;
+		case TOP_RIGHT:
+			return TOP_RIGHT_MESH;
+		case MID_LEFT:
+			return MID_LEFT_MESH;
+		case MID:
+			return MID_MESH;
+		case MID_RIGHT:
+			return MID_RIGHT_MESH;
+		case BOT_LEFT:
+			return BOT_LEFT_MESH;
+		case BOT_MID:
+			return BOT_MID_MESH;
+		case BOT_RIGHT:
+			return BOT_RIGHT_MESH;
 		default:
-			std::cout << "Unable to set render mesh.";
 			break;
 		}
+		return TOP_LEFT_MESH;
 	}
+
+
 	/*************************************************************************/
 
 	/*!***********************************************************************

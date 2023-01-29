@@ -161,7 +161,7 @@ namespace UIManager {
 		* Initialize text data.
 		*************************************************************************/
 		// Position text to middle of rect.
-		AEVec2 textPos = GetCenteredTextPos(x, y, buttonSize.x, buttonSize.y, textWidth, textHeight);
+		AEVec2 textPos = RenderSystem::GetPivotPos(GetCenteredTextPos(x, y, buttonSize.x, buttonSize.y, textWidth, textHeight), buttonSize.x / AEGetWindowWidth() * 2, buttonSize.y / AEGetWindowHeight() * 2);
 		TextDataToUIData(data, font, textPos.x, textPos.y, text, txtColor, 1);
 
 		// Add button data to UI batch queue in render system.
