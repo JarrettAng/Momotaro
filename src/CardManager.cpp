@@ -154,9 +154,7 @@ namespace CardManager {
 	}
 
 	void AddToHand(DeckData *deckCardData) {
-		Card newCard = Card(cardPositionTemplate, deckCardData);
-
-		hand.push_back(newCard);
+		hand.emplace_back(cardPositionTemplate, deckCardData);
 
 		UpdateHandPositions();
 	}
