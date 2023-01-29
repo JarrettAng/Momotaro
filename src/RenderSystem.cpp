@@ -32,7 +32,6 @@ namespace RenderSystem {
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, AEGfxTexture* tex);
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec4<float> color = { 1.0f,1.0f,1.0f,1.0f });
 
-
 	/*!***********************************************************************
 	* SPRITE BATCHES
 	*************************************************************************/
@@ -113,7 +112,7 @@ namespace RenderSystem {
 
 	void Render() {
 		/*!***********************************************************************
-		* SPRITE
+		* SPRITE RENDERING
 		*************************************************************************/
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		UpdateRenderSetting();
@@ -164,6 +163,10 @@ namespace RenderSystem {
 		UIBatch.clear();
 	}
 
+	void AddSpriteBatch(const SpriteInfo& batch) {
+		AddSpriteBatch(batch.id, batch.type, batch.x, batch.y, batch.layer, batch.pivot, batch.setting);
+	}
+
 	void AddSpriteBatch(const SPRITE_BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer, const RENDER_PIVOT& pivot, RenderSetting setting) {
 		Sprite sprite = GetSprite(type);
 		sprite.type = type;
@@ -174,10 +177,6 @@ namespace RenderSystem {
 
 		// Add to batch.
 		spriteBatches[id].push_back(sprite);
-	}
-
-	void AddSpriteBatch(const SpriteInfo& batch) {
-		AddSpriteBatch(batch.id, batch.type, batch.x, batch.y, batch.layer, batch.pivot, batch.setting);
 	}
 
 	void AddUIBatch(UIManager::UIData data) {
@@ -225,7 +224,6 @@ namespace RenderSystem {
 			break;
 		}
 	}
-
 
 	/*!***********************************************************************
 	\brief

@@ -42,10 +42,10 @@ namespace UIManager {
 	/*************************************************************************/
 
 	/*!***********************************************************************
-	* FUNCTION DECLARATIONS
+	* FUNCTION FORWARD DECLARATIONS
 	*************************************************************************/
 	void InitializeFont();
-	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, AEGfxTexture* tex, const Vec3<float>& txtColor, const Vec4<float>& btnColor);
+	void AddButtonToBatch(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, AEGfxTexture* tex, const Vec3<float>& txtColor, const Vec4<float>& btnColor);
 	/*************************************************************************/
 
 	/*!***********************************************************************
@@ -114,7 +114,7 @@ namespace UIManager {
 		// Initialize text data.
 		TextDataToUIData(data, font, x, y, text, color, 1);
 
-		// Add text data to text batch queue in render system.
+		// Add text data to UI batch queue in render system.
 		RenderSystem::AddUIBatch(data);
 	}
 
@@ -133,7 +133,7 @@ namespace UIManager {
 		*************************************************************************/
 		GraphicsDataToUIData(data, tex, color);
 
-		// Add text data to text batch queue in render system.
+		// Add rect data to UI batch queue in render system.
 		RenderSystem::AddUIBatch(data);
 	}
 
@@ -165,6 +165,7 @@ namespace UIManager {
 		AEVec2 textPos = GetCenteredTextPos(x, y, buttonSize.x, buttonSize.y, textWidth, textHeight);
 		TextDataToUIData(data, font, textPos.x, textPos.y, text, txtColor, 1);
 
+		// Add button data to UI batch queue in render system.
 		RenderSystem::AddUIBatch(data);
 	}
 

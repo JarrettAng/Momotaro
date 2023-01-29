@@ -13,7 +13,6 @@ namespace GridManager {
 
 	iso::cell* grid;
 	const int gridX{ 20 }, gridY{ 20 };
-	AEGfxTexture* tex;;
 
 	void storeClickData(Vec2<int> mousePos);
 
@@ -40,7 +39,6 @@ namespace GridManager {
 		}
 
 		InputManager::onMouseClick.Subscribe(storeClickData);
-		tex = AEGfxTextureLoad("Assets/tree_test.png");
 	}
 
 	void UpdateMouseToGrid() {
