@@ -8,6 +8,7 @@
 #include <UIManager.h>
 #include <SceneManager.h>
 #include <GridManager.h>
+#include <TextureManager.h>
 
 // ---------------------------------------------------------------------------
 // main
@@ -32,6 +33,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	// Manager Initialization
 	GridManager::Initialize();
+	TextureManager::Initialize();
 	UIManager::Initialize();
 	RenderSystem::Initialize();
 	SceneManager::Initialize(SceneManager::GAME_LEVEL);				// Game Loop happens in SceneManager

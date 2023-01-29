@@ -52,7 +52,6 @@ namespace UIManager {
 
 	void Initialize();
 	void PrepareUIRenderBatch();
-	void MakeWindow();
 	void MakeText();
 
 	FONT GetFont(const FONT_TYPE& type);

@@ -1,8 +1,7 @@
 #include "UIManager.h"
 #include "RenderSystem.h"
 #include <iostream>
-
-
+#include <TextureManager.h>
 
 namespace UIManager {
 	/*!***********************************************************************
@@ -95,7 +94,6 @@ namespace UIManager {
 		c5.x = init_x - 200;
 		c5.y = init_y;
 
-		pauseTex = AEGfxTextureLoad("Assets/GameWindow.png");
 	}
 
 	void InitializeFont() {
@@ -252,15 +250,6 @@ namespace UIManager {
 
 	//TEMP---------------------------------------------
 	//change to only rendering the screen when pause is done
-	void MakeWindow() {
-		//HARDCODED x and y, Window scales unevenly shifts the local axis
-		if (AEInputCheckPrev(AEVK_SPACE)) {
-			AddRectToBatch(-750, 750, 1500, 1500, 0, pauseTex);
-			AddTextToBatch(roboto.M, -0.1f, 0.0f, 0, "PAUSED", { (0.0f), (0.0f), (0.0f) });
-		}
-
-
-	}
 
 	void MakeText() {
 		//TEMP location
@@ -309,7 +298,7 @@ namespace UIManager {
 				}
 			}
 
-			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, RenderSystem::CARD_BLUE, c1.x, c1.y);
+			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, TextureManager::CARD_BLUE, c1.x, c1.y);
 		}
 
 		//Card2
@@ -341,7 +330,7 @@ namespace UIManager {
 				}
 			}
 
-			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, RenderSystem::CARD_BLUE, c2.x, c2.y);
+			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, TextureManager::CARD_BLUE, c2.x, c2.y);
 		}
 
 		//Card3
@@ -374,7 +363,7 @@ namespace UIManager {
 			}
 
 
-			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, RenderSystem::CARD_BLUE, c3.x, c3.y);
+			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, TextureManager::CARD_BLUE, c3.x, c3.y);
 		}
 
 		//Card4
@@ -406,7 +395,7 @@ namespace UIManager {
 				}
 			}
 
-			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, RenderSystem::CARD_BLUE, c4.x, c4.y);
+			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, TextureManager::CARD_BLUE, c4.x, c4.y);
 		}
 
 		//Card5
@@ -438,7 +427,7 @@ namespace UIManager {
 				}
 			}
 
-			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, RenderSystem::CARD_BLUE, c5.x, c5.y);
+			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, TextureManager::CARD_BLUE, c5.x, c5.y);
 		}
 
 	}

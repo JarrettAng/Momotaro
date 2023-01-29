@@ -13,12 +13,12 @@ This source file declares
 #include<RenderSystem.h>
 #include <iostream>
 #include <algorithm>
+#include <TextureManager.h>
 
 namespace RenderSystem {
 
 #pragma region Foward Declaration & Variables
 	void InitMesh();
-	void LoadTextures();
 	void InitializeSprite();
 
 	void SortUIBatch();
@@ -33,7 +33,6 @@ namespace RenderSystem {
 
 	Sprite& GetSprite(const  SPRITE_TYPE& type);
 	AEVec2 GetSpriteSize(const SPRITE_TYPE& type);
-	AEGfxTexture* GetSpriteTex(const SPRITE_TEX_TYPE& type);
 
 	/*!***********************************************************************
 	* SPRITE BATCHES
@@ -83,24 +82,12 @@ namespace RenderSystem {
 	Sprite building_Sprite;
 	Sprite card_Sprite;
 
-	/*!***********************************************************************
-	* SPRITE TEXTURE
-	*************************************************************************/
-	AEGfxTexture* tile_Tex;
-	AEGfxTexture* nature_Tex;
-	AEGfxTexture* residential_S_Tex;
-	AEGfxTexture* residential_M_Tex;
-	AEGfxTexture* residential_L_Tex;
-	AEGfxTexture* card_Tex;
-
-
 
 #pragma endregion
 
 	void Initialize() {
 		InitMesh();
 		SetRenderMesh(TOP_LEFT);
-		LoadTextures();
 		InitializeSprite();
 	}
 
@@ -115,7 +102,7 @@ namespace RenderSystem {
 			// Sort batch based on sprite's layer before drawing.
 			SortSpriteBatch(batch);
 			for (auto& sprite : batch) {
-				AEGfxTextureSet(GetSpriteTex(sprite.tex), 0, 0);
+				AEGfxTextureSet(TextureManager::GetTexure(sprite.tex), 0, 0);
 				// Change render setting if needed.
 				if (!sprite.setting.isDefault()) UpdateRenderSetting(sprite.setting);
 
@@ -161,7 +148,7 @@ namespace RenderSystem {
 		AddSpriteBatch(batch.id, batch.type, batch.tex, batch.x, batch.y, batch.layer, batch.rot, batch.setting);
 	}
 
-	void AddSpriteBatch(const SPRITE_BATCH_TYPE& id, const SPRITE_TYPE& type, const SPRITE_TEX_TYPE& tex, const int& x, const int& y, const int& layer, const float& rot, RenderSetting setting) {
+	void AddSpriteBatch(const SPRITE_BATCH_TYPE& id, const SPRITE_TYPE& type, const TextureManager::TEX_TYPE& tex, const int& x, const int& y, const int& layer, const float& rot, RenderSetting setting) {
 		Sprite sprite = GetSprite(type);
 		sprite.tex = tex;
 		sprite.x = x;
@@ -219,38 +206,16 @@ namespace RenderSystem {
 		std::cout << "INVALID SPRITE TYPE WHEN CALLING GetSprite().";
 	}
 
-	AEGfxTexture* GetSpriteTex(const SPRITE_TEX_TYPE& type) {
-		switch (type)
-		{
-		case TILE_TEX:
-			return tile_Tex;
-		case NATURE:
-			return nature_Tex;
-		case RESIDENTIAL_S:
-			return residential_S_Tex;
-		case RESIDENTIAL_M:
-			return residential_M_Tex;
-		case RESIDENTIAL_L:
-			return residential_L_Tex;
-		case CARD_BLUE:
-			return card_Tex;
-		default:
-			break;
-		}
-		std::cout << "INVALID SPRITE TYPE WHEN CALLING GetSpriteTex().";
-		return nullptr;
-	}
-
 	AEVec2 GetSpriteSize(const SPRITE_TYPE& type) {
 		switch (type)
 		{
-		case TILE_TEX:
+		case TILE:
 			return tile_Sprite.size;
 		case NATURE:
 			return nature_Sprite.size;
 		case BUILDING:
 			return building_Sprite.size;
-		case CARD_BLUE:
+		case CARD:
 			return card_Sprite.size;
 		default:
 			break;
@@ -454,12 +419,5 @@ namespace RenderSystem {
 			0.0f, 1.0f, 0xFFFFFFFF, 1.0f, 0.0f,
 			-1.0f, 1.0f, 0xFFFFFFFF, 0.0f, 0.0f);
 		BOT_RIGHT_MESH = AEGfxMeshEnd();
-	}
-
-	void LoadTextures() {
-		tile_Tex = AEGfxTextureLoad("Assets/Tile.png");
-		card_Tex = AEGfxTextureLoad("Assets/Card.png");
-		residential_S_Tex = AEGfxTextureLoad("Assets/residential_s_test.png");
-		nature_Tex = AEGfxTextureLoad("Assets/tree_test.png");
 	}
 }

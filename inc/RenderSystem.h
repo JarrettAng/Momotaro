@@ -16,6 +16,7 @@ This header file declares
 #include <MomoMaths.h>
 #include <string>
 #include <UIManager.h>
+#include <TextureManager.h>
 
 namespace RenderSystem {
 
@@ -41,14 +42,7 @@ namespace RenderSystem {
 		CARD,
 	};
 
-	enum SPRITE_TEX_TYPE {
-		TILE_TEX,
-		NATURE_TREE,
-		RESIDENTIAL_S,
-		RESIDENTIAL_M,
-		RESIDENTIAL_L,
-		CARD_BLUE,
-	};
+
 
 	enum SPRITE_BATCH_TYPE {
 		TILE_BATCH = 0,
@@ -71,7 +65,7 @@ namespace RenderSystem {
 
 	struct Sprite {
 		SPRITE_TYPE type;
-		SPRITE_TEX_TYPE tex;
+		TextureManager::TEX_TYPE tex;
 		float x, y;
 		int layer = 0;
 		float rot = 0;
@@ -82,7 +76,7 @@ namespace RenderSystem {
 	struct SpriteInfo {
 		SPRITE_BATCH_TYPE id;
 		SPRITE_TYPE type;
-		SPRITE_TEX_TYPE tex;
+		TextureManager::TEX_TYPE tex;
 		int x, y;
 		float rot = 0;
 		int layer = 0;
@@ -95,7 +89,7 @@ namespace RenderSystem {
 	AEGfxVertexList* GetRenderMesh();
 	void SetRenderMesh(RENDER_PIVOT pivot);
 
-	void AddSpriteBatch(const SPRITE_BATCH_TYPE& id, const SPRITE_TYPE& type, const SPRITE_TEX_TYPE& tex, const int& x, const int& y, const int& layer = 0, const float& rot = 0, RenderSetting setting = {});
+	void AddSpriteBatch(const SPRITE_BATCH_TYPE& id, const SPRITE_TYPE& type, const TextureManager::TEX_TYPE& tex, const int& x, const int& y, const int& layer = 0, const float& rot = 0, RenderSetting setting = {});
 	void AddUIBatch(UIManager::UIData data);
 
 

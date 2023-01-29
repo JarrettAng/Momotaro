@@ -26,6 +26,7 @@ void SceneGameLevel::Update() {
 	GridManager::UpdateMouseToGrid();
 
 	//UIManager::UIPause();
+	PauseManager::Update();
 
 	for (auto object : objects) {
 		object->Update();
@@ -43,10 +44,9 @@ void SceneGameLevel::Draw() {
 
 	GridManager::PrepareTileRenderBatch();
 	UIManager::PrepareUIRenderBatch();
-	UIManager::MakeWindow();
 
 
-	
+
 	//TEMP--------------------------------------------------------------------------
 	//Change when Scoring system has been made
 	//Change to UI element that changes accordingly
