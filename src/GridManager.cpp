@@ -17,6 +17,8 @@ namespace GridManager {
 
 	void storeClickData(Vec2<int> mousePos);
 
+	int randomNature{0};
+
 	void Initialize() {
 		grid = { new iso::cell[gridX * gridY]{} };
 		//GRID SET UP
@@ -122,9 +124,16 @@ namespace GridManager {
 			grid[index].ID = iso::COMMERCIAL;
 			break;
 		case iso::COMMERCIAL:
-			grid[index].ID = iso::NATURE;
+			randomNature= rand()%2;
+			if(randomNature%2==0)
+			grid[index].ID = iso::TREE;
+			else
+			grid[index].ID = iso::ROCK;
 			break;
-		case iso::NATURE:
+		case iso::ROCK:
+			grid[index].ID = iso::NONE;
+			break;
+		case iso::TREE:
 			grid[index].ID = iso::NONE;
 			break;
 		}
@@ -177,8 +186,11 @@ namespace GridManager {
 					break;
 
 					//NATURE
-				case iso::NATURE:
-					RenderSystem::AddSpriteBatch(RenderSystem::NATURE_BATCH, RenderSystem::NATURE, TextureManager::NATURE_TREE, grid[index].pos.x, grid[index].pos.y);
+				case iso::TREE:
+						RenderSystem::AddSpriteBatch(RenderSystem::NATURE_BATCH, RenderSystem::NATURE, TextureManager::NATURE_TREE, grid[index].pos.x, grid[index].pos.y);
+					break;
+				case iso::ROCK:
+						RenderSystem::AddSpriteBatch(RenderSystem::NATURE_BATCH, RenderSystem::NATURE, TextureManager::NATURE_ROCK, grid[index].pos.x, grid[index].pos.y);
 					break;
 
 				default:

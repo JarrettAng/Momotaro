@@ -6,7 +6,8 @@ namespace IsometricGrid
         RESIDENTIAL = 1,
         INDUSTRIAL = 2,
         COMMERCIAL = 3,
-        NATURE = 99,
+        TREE = 999,
+        ROCK = 1999,
     };
     struct vec2i{
         int x{0};

@@ -15,6 +15,7 @@ namespace TextureManager {
 		INDUSTRIAL_1X1_L3,
 		TILE_TEX,
 		NATURE_TREE,
+		NATURE_ROCK,
 		CARD_BLUE,
 		PAUSE_WINDOW,
 	};

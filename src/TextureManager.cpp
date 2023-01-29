@@ -14,6 +14,7 @@ namespace TextureManager {
 	*************************************************************************/
 	AEGfxTexture* tile_Tex;
 	AEGfxTexture* nature_Tex;
+	AEGfxTexture* rock_Tex;
 	AEGfxTexture* residential_S_Tex;
 	AEGfxTexture* residential_M_Tex;
 	AEGfxTexture* residential_L_Tex;
@@ -43,6 +44,7 @@ namespace TextureManager {
 		industrial_M_Tex = AEGfxTextureLoad("Assets/industrial_m_test.png");
 		industrial_L_Tex = AEGfxTextureLoad("Assets/industrial_l_test.png");
 		nature_Tex = AEGfxTextureLoad("Assets/tree_test.png");
+		rock_Tex = AEGfxTextureLoad("Assets/rock_test.png");
 		pause_Tex = AEGfxTextureLoad("Assets/GameWindow.png");
 	}
 
@@ -53,6 +55,8 @@ namespace TextureManager {
 			return tile_Tex;
 		case NATURE_TREE:
 			return nature_Tex;
+		case NATURE_ROCK:
+			return rock_Tex;
 		case COMMERCIAL_1X1_L1:
 			return commercial_S_Tex;
 		case COMMERCIAL_1X1_L2:
