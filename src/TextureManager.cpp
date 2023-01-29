@@ -28,6 +28,7 @@ namespace TextureManager {
 		tile_Tex = AEGfxTextureLoad("Assets/Tile.png");
 		card_Tex = AEGfxTextureLoad("Assets/Card.png");
 		residential_S_Tex = AEGfxTextureLoad("Assets/residential_s_test.png");
+		residential_M_Tex = AEGfxTextureLoad("Assets/residential_m_test.png");
 		nature_Tex = AEGfxTextureLoad("Assets/tree_test.png");
 		pause_Tex = AEGfxTextureLoad("Assets/GameWindow.png");
 	}

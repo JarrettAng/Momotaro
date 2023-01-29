@@ -9,14 +9,14 @@ namespace IsometricGrid
         NATURE = 99,
     };
     struct vec2i{
-        int x;
-        int y;
+        int x{0};
+        int y{0};
     };
    
     struct cell{
 		vec2i pos;
         bool isRenderable;
-        int ID;
+        int ID{0};
         TileType _tileType;
 	};
 
