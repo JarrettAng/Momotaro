@@ -90,8 +90,8 @@ namespace GridManager {
 		// int selectY = (cellY - originY) - (cellX - originX);
 
 		iso::vec2i SelectedCell{
-			(cellX - originX) + (cellY - originY),		//x
-			(cellY - originY) - (cellX - originX)		//y
+			(cellX - originX) + (cellY - originY)+10,		//x
+			(cellY - originY) - (cellX - originX)+10		//y
 		};
 		//TOP LEFT
 		if (iso::isInside(xOffset, yOffset, 0, 0, 0, 25, 50, 0))SelectedCell.x--;
@@ -103,9 +103,9 @@ namespace GridManager {
 		if (iso::isInside(xOffset, yOffset, 50, 50, 100, 50, 100, 25))SelectedCell.x++;
 
 		//We offset by 10 units x and y because of how iso works. We moved the grid up by 10 units
-		if ((((SelectedCell.x + 10) < 0) || ((SelectedCell.x + 10) > gridX)) || ((SelectedCell.y + 10) < 0 || (SelectedCell.y + 10) > gridY)) return;
-		index = (SelectedCell.x + 10) + gridX * (SelectedCell.y + 10);
-		index = GetIndex(SelectedCell.x + 10, SelectedCell.y + 10);
+		if((((SelectedCell.x) < 0) || ((SelectedCell.x) > gridX)) || ((SelectedCell.y) < 0 || (SelectedCell.y) > gridY)) return; 
+		index = (SelectedCell.x)+gridX*(SelectedCell.y);
+		index = GetIndex(SelectedCell.x, SelectedCell.y);
 
 		//if the cell is water (means it doesn't need to be rendered) we don't allow placement
 		if (!grid[index].isRenderable) return;
@@ -153,8 +153,12 @@ namespace GridManager {
 				case iso::NATURE:
 					RenderSystem::AddSpriteBatch(RenderSystem::NATURE_BATCH, RenderSystem::NATURE, TextureManager::NATURE_TREE, grid[index].pos.x, grid[index].pos.y);
 					break;
+					case iso::RESIDENTIAL+100:
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::RESIDENTIAL_M, grid[index].pos.x, grid[index].pos.y);
+					break;
+
 				default:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::RESIDENTIAL_S, grid[index].pos.x, grid[index].pos.y);
+					// RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::RESIDENTIAL_S, grid[index].pos.x, grid[index].pos.y);
 					break;
 				}
 				if (grid[index].isRenderable) RenderSystem::AddSpriteBatch(RenderSystem::TILE_BATCH, RenderSystem::TILE, TextureManager::TILE_TEX, grid[index].pos.x, grid[index].pos.y);
@@ -163,20 +167,96 @@ namespace GridManager {
 		// UIManager::RenderButton(0, 0, 100, 100, 0, UIManager::GetFont(UIManager::ROBOTO).S, "dawdawdwadwadawdawd", Vec4<float>{1, 1, 0, 1}, Vec3<float>{1, 0, 1});
 	}
 
-	void GridManager::CheckCellNeighbor(iso::cell*& grid, iso::vec2i cellIndex)
-	{
+    void GridManager::CheckCellNeighbor(iso::cell* grid,iso::vec2i cellIndex)
+    {
 		//The order to check is CLOCKWISE, so we go NORTH, EAST, SOUTH, WEST
-		// //Note that Alpha engine Y minus GOES UP!!!
-		int NorthIndex = GetIndex(cellIndex.x, cellIndex.y--);
-		int EastIndex = GetIndex(cellIndex.x++, cellIndex.y);
-		int SouthIndex = GetIndex(cellIndex.x, cellIndex.y++);
-		int WestIndex = GetIndex(cellIndex.x--, cellIndex.y);
-		// //NORTH
+		// // //Note that Alpha engine Y minus GOES UP!!!
+		// iso::vec2i NorthCell{cellIndex.x,cellIndex.y--};
+		// iso::vec2i EastCell{cellIndex.x++,cellIndex.y};
+		// iso::vec2i SouthCell{cellIndex.x,cellIndex.y++};
+		// iso::vec2i WestCell{cellIndex.x--,cellIndex.y};
+		// iso::cell test{GetNeighbor(grid,NorthCell,cellIndex)};
+		int matchCount{0};
+		int matchedCells[2];
+		int gridIndex = GetIndex(cellIndex.x,cellIndex.y);
+		int NorthIndex = GetIndex(cellIndex.x,cellIndex.y-1);
+		int EastIndex = GetIndex(cellIndex.x+1,cellIndex.y);
+		int SouthIndex = GetIndex(cellIndex.x,cellIndex.y+1);
+		int WestIndex = GetIndex(cellIndex.x-1,cellIndex.y);
+		//NORTH
+		// std::cout << "Cell index : " << cellIndex.x<< ", " << cellIndex.y << '\n';
+		std::cout << "Selected : "<< grid[gridIndex].ID << '\n';
+		std::cout << "North : " << grid[NorthIndex].ID << '\n';
+		std::cout << "West : " << grid[WestIndex].ID << '\n';
+		std:: cout << "Is true? : " << (grid[NorthIndex].ID == grid[gridIndex].ID) << '\n';
+		std:: cout << "Is true? : " << (grid[SouthIndex].ID == grid[gridIndex].ID) << '\n';
+		std:: cout << "Is true? : " << (grid[EastIndex].ID == grid[gridIndex].ID) << '\n';
+		std:: cout << "Is true? : " << (grid[WestIndex].ID == grid[gridIndex].ID) << '\n';
+		if(grid[NorthIndex].ID == grid[gridIndex].ID && grid[NorthIndex].ID){
+			if(matchCount < 2) {
+				matchedCells[matchCount] = NorthIndex;
+				matchCount++;
+			}	
+		}
+		if(grid[EastIndex].ID == grid[gridIndex].ID && grid[EastIndex].ID){
+			if(matchCount < 2){
+				matchedCells[matchCount] = EastIndex;
+				matchCount++;
+			}
+		}
+		if(grid[SouthIndex].ID == grid[gridIndex].ID && grid[SouthIndex].ID){
+			if(matchCount < 2){
+				matchedCells[matchCount] = SouthIndex;
+				matchCount++;
+			}
+		}
+		if(grid[WestIndex].ID == grid[gridIndex].ID && grid[WestIndex].ID){
+			if(matchCount< 2){
+				matchedCells[matchCount] = WestIndex;
+				matchCount++;
+			}
+		}
+		std::cout << matchCount <<'\n';
+		if (matchCount == 2){
+			for(int c : matchedCells){
+				grid[c].ID = iso::NONE;
+			}
+			grid[gridIndex].ID += 100;
+		}
+		
 
+    }
 
+	iso::cell& GetNeighbor(iso::cell*&grid,iso::vec2i indexToCheck, iso::vec2i selectedCell){
+		int selectedIndex = GetIndex(selectedCell.x,selectedCell.y);	//The starting index
+		int NorthIndex = GetIndex(indexToCheck.x,indexToCheck.y--);		
+		std::cout << "Selected : " << selectedCell.x << ", " << selectedCell.y << '\n';
+		std::cout << "North : " << indexToCheck.x << ", " << --indexToCheck.y << '\n';
+		// std::cout << " og index : " << selectedIndex << " , north index : " << NorthIndex << '\n';
+		//If the index I'm checking has a north neighbor and it's NOT the cell I came from
+		if((NorthIndex >= 0) && (NorthIndex <= (gridX*gridY)) && (NorthIndex!=selectedIndex)){
+			//if it's the same tile type, we want to keep track of it
+			if(grid[NorthIndex].ID == grid[GetIndex(selectedCell.x,selectedCell.y)]._tileType) return grid[NorthIndex];
+		}
+
+		int EastIndex = GetIndex(indexToCheck.x++,indexToCheck.y);
+		if((EastIndex >=0) && (EastIndex <= gridX*gridY) && (EastIndex!=selectedIndex)){
+			if(grid[EastIndex].ID == grid[GetIndex(selectedCell.x,selectedCell.y)]._tileType) return grid[EastIndex];
+		}
+
+		int SouthIndex = GetIndex(indexToCheck.x,indexToCheck.y++);
+		if((SouthIndex >=0) && (SouthIndex <= gridX*gridY) && (SouthIndex!=selectedIndex)){
+			if(grid[SouthIndex].ID == grid[GetIndex(selectedCell.x,selectedCell.y)]._tileType) return grid[SouthIndex];
+		}
+
+		int WestIndex = GetIndex(indexToCheck.x--,indexToCheck.y);
+		if((WestIndex >=0) && (WestIndex <= gridX*gridY) && (WestIndex!=selectedIndex)){
+			if(grid[WestIndex].ID == grid[GetIndex(selectedCell.x,selectedCell.y)]._tileType) return grid[WestIndex];
+		}
+		return grid[selectedIndex];
 	}
-	int GetIndex(int x, int y)
-	{
-		return x + gridX * y;
-	}
+    int GetIndex(int x, int y)
+    {
+        return x+gridX * y;
+    }
 }
