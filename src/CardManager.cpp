@@ -3,6 +3,7 @@
 
 #include <UIManager.h>
 #include <CardManager.h>
+#include <InputManager.h>
 
 #include <ColorTable.h>
 #include <Card.h>
@@ -24,6 +25,7 @@ namespace CardManager {
 	void AddToDeck(BuildingData buildingData);
 	void AddToHand(DeckData* deckCardData);
 	void RemoveFromHand(Card* cardToRemove);
+	void HandleClick(Vec2<int> mousePos);
 	#pragma endregion
 
 	void Initialize() {
@@ -49,40 +51,39 @@ namespace CardManager {
 		DrawCard(BuildingEnum::RESIDENTIAL, BuildingEnum::L1);
 		DrawCard(BuildingEnum::COMMERCIAL, BuildingEnum::L1);
 		DrawCard(BuildingEnum::INDUSTRIAL, BuildingEnum::L1);
+
+		InputManager::onMouseClick.Subscribe(HandleClick);
 	}
 
 	void Free() {
 		deck.clear();
 		hand.clear();
+
+		InputManager::onMouseClick.Unsubscribe(HandleClick);
 	}
 
 	void PrepareUIRenderBatch() {
 		UIManager::AddRectToBatch(handBackground.x, handBackground.y, handBackground.width, handBackground.height, 0, COLOR_CARD_BACKGROUND);
 
+		// std::cout << "CardManager Render Start\n";
+
 		// Render each card
-		for  (Card& card : hand) {
+		for (int index = 0; index < hand.size(); ++index) {
+			Card *card = &hand[index];
 
-			UIManager::AddRectToBatch(card.position.x, card.position.y, card.position.width, card.position.height, 1, COLOR_CARD_BORDER);
+			UIManager::AddRectToBatch(card->position.x, card->position.y, card->position.width, card->position.height, 1, card->borderColor);
 
-			switch (card.deckCardData->card.type) {
-				case BuildingEnum::RESIDENTIAL:
-					UIManager::AddRectToBatch(card.position.x + card.position.width * 0.05f, card.position.y - card.position.height * 0.035f, card.position.width * 0.9f, card.position.height * 0.925f, 2, COLOR_CARD_R);
-					break;
-				case BuildingEnum::COMMERCIAL:
-					UIManager::AddRectToBatch(card.position.x + card.position.width * 0.05f, card.position.y - card.position.height * 0.035f, card.position.width * 0.9f, card.position.height * 0.925f, 2, COLOR_CARD_C);
-					break;
-				case BuildingEnum::INDUSTRIAL:
-					UIManager::AddRectToBatch(card.position.x + card.position.width * 0.05f, card.position.y - card.position.height * 0.035f, card.position.width * 0.9f, card.position.height * 0.925f, 2, COLOR_CARD_I);
-					break;
-			}
+			UIManager::AddRectToBatch(card->position.x + card->position.width * 0.05f, card->position.y - card->position.height * 0.035f, card->position.width * 0.9f, card->position.height * 0.925f, 2, card->color);
 
-			std::cout << "Render: " << card.deckCardData->card.type << " " << card.deckCardData->card.size << " " << card.deckCardData->card.level << "\n";
+			// std::cout << "Render: " << card->deckCardData->card.type << " " << card->deckCardData->card.size << " " << card->deckCardData->card.level << "\n";
 
-			UIManager::AddRectToBatch(card.icon.x, card.icon.y, card.icon.width, card.icon.height, 3, TextureManager::GetTexture((TextureManager::TEX_TYPE)(card.deckCardData->card.type * BuildingEnum::LEVEL_LENGTH + card.deckCardData->card.level)));
+			UIManager::AddRectToBatch(card->icon.x, card->icon.y, card->icon.width, card->icon.height, 3, TextureManager::GetTexture((TextureManager::TEX_TYPE)(card->deckCardData->card.type * BuildingEnum::LEVEL_LENGTH + card->deckCardData->card.level)));
 
 			//UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).S, card.name.x / AEGetWindowWidth(), card.name.y / AEGetWindowHeight(), 3, card.deckCardData->card.name, COLOR_BLACK);
 			//UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).S, card.desc.x / AEGetWindowWidth(), card.desc.y / AEGetWindowHeight(), 1, card.deckCardData->card.desc, COLOR_BLACK);
 		}
+
+		// std::cout << "CardManager Render End\n";
 	}
 
 	void DrawCard(BuildingEnum::TYPE type, BuildingEnum::LEVEL level) {
@@ -120,8 +121,6 @@ namespace CardManager {
 			}
 		}
 
-		std::cout << "DEBUG: CardManager creating new hand card of TYPE " << buildingData.type << " ,SIZE " << buildingData.size << " ,LEVEL " << buildingData.level << "\n";
-
 		// Otherwise, add the new card to the deck
 		DeckData newDeckCard;
 		newDeckCard.count = 1;
@@ -156,6 +155,7 @@ namespace CardManager {
 
 	void AddToHand(DeckData *deckCardData) {
 		Card newCard = Card(cardPositionTemplate, deckCardData);
+
 		hand.push_back(newCard);
 
 		UpdateHandPositions();
@@ -165,5 +165,10 @@ namespace CardManager {
 		// hand.remove(*cardToRemove);
 
 		UpdateHandPositions();
+	}
+
+	void HandleClick(Vec2<int> mousePos) {
+		// Check if any card clicked
+
 	}
 }
