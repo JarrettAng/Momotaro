@@ -62,6 +62,7 @@ namespace UIManager {
 	void AddTextToBatch(const s8& font, const float& x, const float& y, const int& layer, std::string text, const Vec3<float>& color = { 1.0f,1.0f,1.0f });
 	/*************************************************************************/
 
+
 	/*!***********************************************************************
 	* RECT
 	*************************************************************************/
@@ -70,6 +71,7 @@ namespace UIManager {
 	// Button with COLOR + NO text.
 	void AddRectToBatch(const float& x, const float& y, const float& width, const float& height, const int& layer, const Vec4<float>& btnColor = { 1.0f,1.0f,1.0f,1.0f });
 	/*************************************************************************/
+
 
 	/*!***********************************************************************
 	* BUTTON

@@ -22,6 +22,7 @@ namespace UIManager {
 	int cursor_x, cursor_y;
 	/*************************************************************************/
 
+
 	/*!***********************************************************************
 	* FONTS
 	*************************************************************************/
@@ -170,15 +171,18 @@ namespace UIManager {
 	/*!***********************************************************************
 	* OVERLOADED RENDER BUTTON FUNCS
 	*************************************************************************/
+
 	// Button with TEXTURE + text.
 	void AddButtonToBatch(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, AEGfxTexture* tex, const Vec3<float>& txtColor) {
 		AddButtonToBatch(x, y, xPadding, yPadding, layer, font, text, tex, txtColor, Vec4<float>{});
 	}
+
 	// Button with COLOR + text.
 	void AddButtonToBatch(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, const Vec4<float>& btnColor, const Vec3<float>& txtColor) {
 		AddButtonToBatch(x, y, xPadding, yPadding, layer, font, text, nullptr, txtColor, btnColor);
 	}
 	/*************************************************************************/
+
 
 	/*!***********************************************************************
 	* OVERLOADED RENDER RECT FUNCS
@@ -249,11 +253,11 @@ namespace UIManager {
 	*************************************************************************/
 
 	//TEMP---------------------------------------------
-	//change to only rendering the screen when pause is done
+	//change to only rendering the screen when pause function is done
 
 	void MakeText() {
 		//TEMP location
-		AddTextToBatch(roboto.M, -0.9f, 0.9f, 0, "EXPERIENCE", { (0.0f), (0.0f), (0.0f) });
+		AddTextToBatch(roboto.M, -0.9f, 0.9f, 0, "SYNERGY", { (0.0f), (0.0f), (0.0f) });
 		AddTextToBatch(roboto.M, -0.6f, 0.9f, 0, "0/100", { (0.0f), (0.0f), (0.0f) });
 	}
 
@@ -266,8 +270,8 @@ namespace UIManager {
 		//Return s32 == int
 		AEInputGetCursorPosition(&cursor_x, &cursor_y);
 		//Change cursor to float
-		static_cast<double>(cursor_x);
-		static_cast<double>(cursor_y);
+		//static_cast<double>(cursor_x);
+		//static_cast<double>(cursor_y);
 
 		//RMD: Make into ONE function in future
 		//Card1
