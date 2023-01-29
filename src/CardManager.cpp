@@ -77,9 +77,10 @@ namespace CardManager {
 					break;
 			}
 
-			UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).S, card.name.x / AEGetWindowWidth(), card.name.y / AEGetWindowHeight(), 3, card.deckCardData->card.name, COLOR_BLACK);
+			UIManager::AddRectToBatch(card.icon.x, card.icon.y, card.icon.width, card.icon.height, 3, TextureManager::GetTexture((TextureManager::TEX_TYPE)(card.deckCardData->card.type * BuildingEnum::LEVEL_LENGTH + card.deckCardData->card.level)));
 
-			//UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).S, card.desc.x, card.desc.y, 1, card.deckCardData->card.desc, COLOR_BLACK);
+			//UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).S, card.name.x / AEGetWindowWidth(), card.name.y / AEGetWindowHeight(), 3, card.deckCardData->card.name, COLOR_BLACK);
+			//UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).S, card.desc.x / AEGetWindowWidth(), card.desc.y / AEGetWindowHeight(), 1, card.deckCardData->card.desc, COLOR_BLACK);
 		}
 	}
 

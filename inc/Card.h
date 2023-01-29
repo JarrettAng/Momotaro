@@ -37,6 +37,8 @@ class Card {
 			// Load icon data based on position
 			icon.x = position.x;
 			icon.y = position.y;
+			icon.width = position.width * 0.9f;
+			icon.height = position.height * 0.9f;
 
 			// Load count data based on position
 			count.x = position.x + position.width;

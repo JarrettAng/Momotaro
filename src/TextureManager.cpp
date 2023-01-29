@@ -40,24 +40,30 @@ namespace TextureManager {
 		pause_Tex = AEGfxTextureLoad("Assets/GameWindow.png");
 	}
 
-	AEGfxTexture* GetTexure(const TEX_TYPE& type) {
+	AEGfxTexture* GetTexture(const TEX_TYPE& type) {
 		switch (type)
 		{
 		case TILE_TEX:
 			return tile_Tex;
 		case NATURE_TREE:
 			return nature_Tex;
-		case COMMERCIAL_S:
+		case COMMERCIAL_1X1_L1:
 			return commercial_S_Tex;
-		case COMMERCIAL_M:
+		case COMMERCIAL_1X1_L2:
 			return commercial_M_Tex;
-		case COMMERCIAL_L:
+		case COMMERCIAL_1X1_L3:
 			return commercial_L_Tex;
-		case RESIDENTIAL_S:
+		case INDUSTRIAL_1X1_L1:
+			return commercial_S_Tex;
+		case INDUSTRIAL_1X1_L2:
+			return commercial_M_Tex;
+		case INDUSTRIAL_1X1_L3:
+			return commercial_L_Tex;
+		case RESIDENTIAL_1X1_L1:
 			return residential_S_Tex;
-		case RESIDENTIAL_M:
+		case RESIDENTIAL_1X1_L2:
 			return residential_M_Tex;
-		case RESIDENTIAL_L:
+		case RESIDENTIAL_1X1_L3:
 			return residential_L_Tex;
 		case CARD_BLUE:
 			return card_Tex;

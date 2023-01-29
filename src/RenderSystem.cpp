@@ -102,7 +102,7 @@ namespace RenderSystem {
 			// Sort batch based on sprite's layer before drawing.
 			SortSpriteBatch(batch);
 			for (auto& sprite : batch) {
-				AEGfxTextureSet(TextureManager::GetTexure(sprite.tex), 0, 0);
+				AEGfxTextureSet(TextureManager::GetTexture(sprite.tex), 0, 0);
 				// Change render setting if needed.
 				if (!sprite.setting.isDefault()) UpdateRenderSetting(sprite.setting);
 

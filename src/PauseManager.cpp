@@ -24,7 +24,7 @@ namespace PauseManager {
 
 	void PauseManager::Update() {
 		if (isPaused) {
-			UIManager::AddRectToBatch(-750, 750, 1500, 1500, 0, TextureManager::GetTexure(TextureManager::PAUSE_WINDOW));
+			UIManager::AddRectToBatch(-750, 750, 1500, 1500, 0, TextureManager::GetTexture(TextureManager::PAUSE_WINDOW));
 			UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).L, -0.1f, 0.0f, 0, "PAUSED", { (0.0f), (0.0f), (0.0f) });
 
 			UIManager::AddButtonToBatch(-70.0f, -50.0f, 30.0f, 30.0f, 0, 

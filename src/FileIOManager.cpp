@@ -43,9 +43,9 @@ namespace FileIOManager {
 		
 		BuildingData newBuilding{ BuildingEnum::RESIDENTIAL, BuildingEnum::_1X1, BuildingEnum::L1, 1, 3, -3, 2, "Small house", "Small lovely house", 000, 000 };
 		buildingsData.push_back(newBuilding);
-		BuildingData newBuilding2{ BuildingEnum::RESIDENTIAL, BuildingEnum::_1X1, BuildingEnum::L2, 1, 3, -3, 2, "Small house", "Small lovely house", 001, 000 };
+		BuildingData newBuilding2{ BuildingEnum::RESIDENTIAL, BuildingEnum::_1X1, BuildingEnum::L2, 1, 3, -3, 2, "Terrace house", "Small lovely house", 001, 000 };
 		buildingsData.push_back(newBuilding2);
-		BuildingData newBuilding3{ BuildingEnum::RESIDENTIAL, BuildingEnum::_1X1, BuildingEnum::L3, 1, 3, -3, 2, "Small house", "Small lovely house", 002, 000 };
+		BuildingData newBuilding3{ BuildingEnum::RESIDENTIAL, BuildingEnum::_1X1, BuildingEnum::L3, 1, 3, -3, 2, "Big house", "Small lovely house", 002, 000 };
 		buildingsData.push_back(newBuilding3);
 
 		//BuildingData newBuilding4{ RESIDENTIAL, _2X1, L1, -1, 5, -8, 3, "Small house", "Small lovely house", 010, 000 };
