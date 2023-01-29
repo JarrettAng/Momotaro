@@ -13,19 +13,19 @@ class Card {
 		UIManager::Transform count;
 		UIManager::Transform name;
 		UIManager::Transform desc;
-		CardManager::DeckData *deckCardData;
+		CardManager::DeckData deckCardData;
 
 		Vec4<float> color;
 		Vec4<float> borderColor;
 
-		bool operator == (const Card& card) const { return deckCardData == card.deckCardData; }
-		bool operator != (const Card& card) const { return !operator==(card); }
+		//bool operator == (const Card card) const { return deckCardData == card.deckCardData; }
+		//bool operator != (const Card card) const { return !operator==(card); }
 
-		Card(UIManager::Transform _position, CardManager::DeckData *_deckCardData) {
+		Card(UIManager::Transform _position, CardManager::DeckData _deckCardData) {
 			position = _position;
 			deckCardData = _deckCardData;
 
-			switch (deckCardData->card.type) {
+			switch (deckCardData.card.type) {
 				case BuildingEnum::RESIDENTIAL: 
 					color.w = 0.8f;
 					color.x = 0.9f;

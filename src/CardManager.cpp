@@ -23,7 +23,7 @@ namespace CardManager {
 
 	#pragma region Forward Declarations
 	void AddToDeck(BuildingData buildingData);
-	void AddToHand(DeckData* deckCardData);
+	void AddToHand(DeckData deckCardData);
 	void RemoveFromHand(Card* cardToRemove);
 	void HandleClick(Vec2<int> mousePos);
 	#pragma endregion
@@ -69,21 +69,11 @@ namespace CardManager {
 		for (int index = 0; index < hand.size(); ++index) {
 			Card *card = &hand[index];
 
-			// If data is invalid, check the pointer again
-			if (card->deckCardData->card.type < 0 || card->deckCardData->card.type > BuildingEnum::TYPE_LENGTH) {
-				for (DeckData _deck : deck) {
-					if (_deck.card.type == card->deckCardData->card.type && _deck.card.size == card->deckCardData->card.size && _deck.card.level == card->deckCardData->card.level) {
-						card->deckCardData = &_deck;
-						break;
-					}
-				}
-			}
-
 			UIManager::AddRectToBatch(card->position.x, card->position.y, card->position.width, card->position.height, 1, card->borderColor);
 
 			UIManager::AddRectToBatch(card->position.x + card->position.width * 0.05f, card->position.y - card->position.height * 0.035f, card->position.width * 0.9f, card->position.height * 0.925f, 2, card->color);
 
-			UIManager::AddRectToBatch(card->icon.x, card->icon.y, card->icon.width, card->icon.height, 3, TextureManager::GetTexture((TextureManager::TEX_TYPE)(card->deckCardData->card.type * BuildingEnum::LEVEL_LENGTH + card->deckCardData->card.level)));
+			UIManager::AddRectToBatch(card->icon.x, card->icon.y, card->icon.width, card->icon.height, 3, TextureManager::GetTexture((TextureManager::TEX_TYPE)(card->deckCardData.card.type * BuildingEnum::LEVEL_LENGTH + card->deckCardData.card.level)));
 
 			//UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).S, card.name.x / AEGetWindowWidth(), card.name.y / AEGetWindowHeight(), 3, card.deckCardData->card.name, COLOR_BLACK);
 			//UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).S, card.desc.x / AEGetWindowWidth(), card.desc.y / AEGetWindowHeight(), 1, card.deckCardData->card.desc, COLOR_BLACK);
@@ -93,7 +83,7 @@ namespace CardManager {
 	void DrawCard(BuildingEnum::TYPE type, BuildingEnum::LEVEL level) {
 		BuildingData buildingData = BuildingManager::GetBuildingData(type, BuildingEnum::_1X1, level);
 
-		std::cout << "DEBUG: CardManager Get Data of TYPE " << buildingData.type << " ,SIZE " << buildingData.size << " ,LEVEL " << buildingData.level << "\n";
+		//std::cout << "DEBUG: CardManager Get Data of TYPE " << buildingData.type << " ,SIZE " << buildingData.size << " ,LEVEL " << buildingData.level << "\n";
 
 		AddToDeck(buildingData);
 	}
@@ -101,7 +91,7 @@ namespace CardManager {
 	void DrawRandomCard(BuildingEnum::LEVEL level) {
 		BuildingData buildingData = BuildingManager::GetRandomBuildingData(level);
 
-		std::cout << "DEBUG: CardManager Get Data of TYPE " << buildingData.type << " ,SIZE " << buildingData.size << " ,LEVEL " << buildingData.level << "\n";
+		//std::cout << "DEBUG: CardManager Get Data of TYPE " << buildingData.type << " ,SIZE " << buildingData.size << " ,LEVEL " << buildingData.level << "\n";
 
 		AddToDeck(buildingData);
 	}
@@ -109,7 +99,7 @@ namespace CardManager {
 	void DrawRandomCard(BuildingEnum::TYPE type) {
 		BuildingData buildingData = BuildingManager::GetRandomBuildingData(type);
 
-		std::cout << "DEBUG: CardManager Get Data of TYPE " << buildingData.type << " ,SIZE " << buildingData.size << " ,LEVEL " << buildingData.level << "\n";
+		//std::cout << "DEBUG: CardManager Get Data of TYPE " << buildingData.type << " ,SIZE " << buildingData.size << " ,LEVEL " << buildingData.level << "\n";
 
 		AddToDeck(buildingData);
 	}
@@ -130,7 +120,7 @@ namespace CardManager {
 		newDeckCard.count = 1;
 		newDeckCard.card = buildingData;
 		deck.push_back(newDeckCard);
-		AddToHand(&deck.back());
+		AddToHand(deck.back());
 	}
 
 	void UpdateHandPositions() {
@@ -150,14 +140,14 @@ namespace CardManager {
 	}
 
 	void PlayCard() {
-		--selectedCard->deckCardData->count;
-		if (selectedCard->deckCardData->count <= 0) {
+		--selectedCard->deckCardData.count;
+		if (selectedCard->deckCardData.count <= 0) {
 			RemoveFromHand(selectedCard);
 			selectedCard = nullptr;
 		}
 	}
 
-	void AddToHand(DeckData* deckCardData) {
+	void AddToHand(DeckData deckCardData) {
 		hand.emplace_back(cardPositionTemplate, deckCardData);
 
 		UpdateHandPositions();
