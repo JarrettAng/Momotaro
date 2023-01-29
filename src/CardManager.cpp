@@ -10,7 +10,7 @@
 #include <iostream>
 
 namespace CardManager {
-	u16 startingHandSize;
+	int startingHandSize;
 	std::vector<DeckData> deck;					// Data on all cards in play 
 	std::vector<Card> hand;						// Data on rendering for current cards held
 
@@ -76,6 +76,8 @@ namespace CardManager {
 					break;
 			}
 
+			std::cout << "Render: " << card.deckCardData->card.type << " " << card.deckCardData->card.size << " " << card.deckCardData->card.level << "\n";
+
 			UIManager::AddRectToBatch(card.icon.x, card.icon.y, card.icon.width, card.icon.height, 3, TextureManager::GetTexture((TextureManager::TEX_TYPE)(card.deckCardData->card.type * BuildingEnum::LEVEL_LENGTH + card.deckCardData->card.level)));
 
 			//UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).S, card.name.x / AEGetWindowWidth(), card.name.y / AEGetWindowHeight(), 3, card.deckCardData->card.name, COLOR_BLACK);
@@ -108,16 +110,23 @@ namespace CardManager {
 	}
 
 	void AddToDeck(BuildingData buildingData) {
-		for (DeckData _deck : deck) {
-			// If the data for it already exists, add to the count
-			if (_deck.card.type == buildingData.type && _deck.card.size == buildingData.size && _deck.card.level == buildingData.level) {
-				++_deck.count;
-				return;
+		if (!deck.empty()) {
+			for (DeckData _deck : deck) {
+				// If the data for it already exists, add to the count
+				if (_deck.card.type == buildingData.type && _deck.card.size == buildingData.size && _deck.card.level == buildingData.level) {
+					++_deck.count;
+					return;
+				}
 			}
 		}
+
+		std::cout << "DEBUG: CardManager creating new hand card of TYPE " << buildingData.type << " ,SIZE " << buildingData.size << " ,LEVEL " << buildingData.level << "\n";
+
 		// Otherwise, add the new card to the deck
-		DeckData newDeckCardData = { 1, buildingData };
-		deck.push_back(newDeckCardData);
+		DeckData newDeckCard;
+		newDeckCard.count = 1;
+		newDeckCard.card = buildingData;
+		deck.push_back(newDeckCard);
 		AddToHand(&deck.back());
 	}
 

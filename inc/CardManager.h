@@ -5,7 +5,7 @@
 namespace CardManager {
 
 	struct DeckData {
-		u16 count;
+		int count;
 		BuildingData card;
 	};
 
