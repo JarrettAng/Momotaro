@@ -22,19 +22,16 @@ namespace RenderSystem {
 
 	Sprite& GetSprite(const  SPRITE_TYPE& type);
 
-	int GetBatch(const SPRITE_BATCH_TYPE& id);
-
 	void SortUIBatch();
 	void SortSpriteBatch(std::list<Sprite> batch);
 
 	void UpdateRenderSetting(RenderSetting setting = {});
 	void UpdateRenderTransformMtx(const int& x, const int& y, const AEVec2& scale, const float& rot = 0);
 
-	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec4<float> color = { 1.0f,1.0f,1.0f,1.0f });
-	void RenderRect(const float& x, const float& y, const float& width, const float& height, AEGfxTexture* tex);
 	void RenderText(s8 fontID, std::string text, float x, float y, float scale, Vec3<float> color = { 1.0f,1.0f,1.0f });
+	void RenderRect(const float& x, const float& y, const float& width, const float& height, AEGfxTexture* tex);
+	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec4<float> color = { 1.0f,1.0f,1.0f,1.0f });
 
-	AEGfxVertexList* renderMesh;
 
 	/*!***********************************************************************
 	* SPRITE BATCHES
@@ -43,13 +40,16 @@ namespace RenderSystem {
 	std::list<Sprite> buildingBatch;
 	std::list<Sprite> natureBatch;
 	std::list<Sprite> cardBatch;
-	std::vector<std::list<Sprite>> renderBatches = { tileBatch,buildingBatch,natureBatch, cardBatch };
+	std::vector<std::list<Sprite>> spriteBatches = { tileBatch, buildingBatch, natureBatch, cardBatch };
 
 	/*!***********************************************************************
-	* UI BATCHES
+	* UI BATCHES (DATA IS ADDED THROUGH UIMANAGER)
 	*************************************************************************/
 	std::list<UIManager::UIData> UIBatch;
 
+	/*!***********************************************************************
+	* MATRICES
+	*************************************************************************/
 	AEMtx33 identityMtx{
 		1,0,0,
 		0,1,0,
@@ -58,8 +58,11 @@ namespace RenderSystem {
 	AEMtx33 transformMtx, translateMtx, scaleMtx, rotMtx = identityMtx;
 
 	/*!***********************************************************************
-	* MESH FOR PIVOT POINTS.
+	* MESH FOR RENDERING + PIVOT MESHES.
 	*************************************************************************/
+	AEGfxVertexList* renderMesh;
+
+	// renderMesh is assigned to one of the pivot meshes below to tell the renderer how to render subsequent obj.
 	AEGfxVertexList* TOP_LEFT_MESH;
 	AEGfxVertexList* TOP_MID_MESH;
 	AEGfxVertexList* TOP_RIGHT_MESH;
@@ -96,7 +99,7 @@ namespace RenderSystem {
 	Sprite industrial_L_Sprite;
 
 	/*!***********************************************************************
-	* UI SPRITE
+	* CARD SPRITE
 	*************************************************************************/
 	Sprite card_Sprite;
 
@@ -115,7 +118,7 @@ namespace RenderSystem {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		UpdateRenderSetting();
 
-		for (auto& batch : renderBatches) {
+		for (auto& batch : spriteBatches) {
 			// Sort batch based on sprite's layer before drawing.
 			SortSpriteBatch(batch);
 			for (auto& sprite : batch) {
@@ -151,9 +154,7 @@ namespace RenderSystem {
 					// Render rect with color.
 					RenderRect(data.transform.x, data.transform.y, data.transform.width, data.transform.height, data.graphics.color);
 				}
-
 			}
-
 			// Draw text above graphics.
 			if (data.text.hasText) {
 				RenderText(data.text.fontID, const_cast<char*>(data.text.text.c_str()), data.text.x, data.text.y, data.text.scale, data.text.color);
@@ -163,8 +164,7 @@ namespace RenderSystem {
 		UIBatch.clear();
 	}
 
-	void AddBatch(const SPRITE_BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer, const RENDER_PIVOT& pivot, RenderSetting setting) {
-
+	void AddSpriteBatch(const SPRITE_BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer, const RENDER_PIVOT& pivot, RenderSetting setting) {
 		Sprite sprite = GetSprite(type);
 		sprite.type = type;
 		sprite.x = x;
@@ -173,11 +173,11 @@ namespace RenderSystem {
 		sprite.setting = setting;
 
 		// Add to batch.
-		renderBatches[GetBatch(id)].push_back(sprite);
+		spriteBatches[id].push_back(sprite);
 	}
 
-	void AddBatch(const SpriteInfo& batch) {
-		AddBatch(batch.id, batch.type, batch.x, batch.y, batch.layer, batch.pivot, batch.setting);
+	void AddSpriteBatch(const SpriteInfo& batch) {
+		AddSpriteBatch(batch.id, batch.type, batch.x, batch.y, batch.layer, batch.pivot, batch.setting);
 	}
 
 	void AddUIBatch(UIManager::UIData data) {
@@ -226,25 +226,6 @@ namespace RenderSystem {
 		}
 	}
 
-	int GetBatch(const SPRITE_BATCH_TYPE& id) {
-		switch (id)
-		{
-		case TILE_BATCH:
-			return TILE_BATCH;
-			break;
-		case BUILDING_BATCH:
-			return BUILDING_BATCH;
-			break;
-		case NATURE_BATCH:
-			return NATURE_BATCH;
-			break;
-		case CARD_BATCH:
-			return CARD_BATCH;
-			break;
-		default:
-			break;
-		}
-	}
 
 	/*!***********************************************************************
 	\brief

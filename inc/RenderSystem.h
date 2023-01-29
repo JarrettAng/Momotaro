@@ -90,7 +90,7 @@ namespace RenderSystem {
 	AEGfxVertexList* GetRenderMesh();
 	void SetRenderMesh(RENDER_PIVOT pivot);
 
-	void AddBatch(const SPRITE_BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer = 0, const RENDER_PIVOT& pivot = MID, RenderSetting setting = {});
+	void AddSpriteBatch(const SPRITE_BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer = 0, const RENDER_PIVOT& pivot = MID, RenderSetting setting = {});
 	void AddUIBatch(UIManager::UIData data);
 
 

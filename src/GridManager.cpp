@@ -113,13 +113,13 @@ namespace GridManager {
 				case iso::COMMERCIAL:
 					break;
 				case iso::NATURE:
-					RenderSystem::AddBatch(RenderSystem::NATURE_BATCH, RenderSystem::NATURE, grid[index].pos.x, grid[index].pos.y);
+					RenderSystem::AddSpriteBatch(RenderSystem::NATURE_BATCH, RenderSystem::NATURE, grid[index].pos.x, grid[index].pos.y);
 					break;
 				default:
-					RenderSystem::AddBatch(RenderSystem::BUILDING_BATCH, RenderSystem::RESIDENTIAL_S, grid[index].pos.x, grid[index].pos.y);
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::RESIDENTIAL_S, grid[index].pos.x, grid[index].pos.y);
 					break;
 				}
-				if (grid[index].isRenderable) RenderSystem::AddBatch(RenderSystem::TILE_BATCH, RenderSystem::TILE, grid[index].pos.x, grid[index].pos.y);
+				if (grid[index].isRenderable) RenderSystem::AddSpriteBatch(RenderSystem::TILE_BATCH, RenderSystem::TILE, grid[index].pos.x, grid[index].pos.y);
 			}
 		}
 	}

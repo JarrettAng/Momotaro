@@ -105,7 +105,7 @@ namespace UIManager {
 		roboto.L = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 60);
 	}
 
-	void RenderText(const s8& font, const float& x, const float& y, const int& layer, std::string text, const Vec3<float>& color)
+	void AddTextToBatch(const s8& font, const float& x, const float& y, const int& layer, std::string text, const Vec3<float>& color)
 	{
 		UIData data;
 		// Order of rendering UI.
@@ -118,7 +118,7 @@ namespace UIManager {
 		RenderSystem::AddUIBatch(data);
 	}
 
-	void RenderRect(const float& x, const float& y, const float& width, const float& height, const int& layer, const Vec4<float>& color, AEGfxTexture* tex)
+	void AddRectToBatch(const float& x, const float& y, const float& width, const float& height, const int& layer, const Vec4<float>& color, AEGfxTexture* tex)
 	{
 		UIData data;
 		// Order of rendering UI.
@@ -137,7 +137,7 @@ namespace UIManager {
 		RenderSystem::AddUIBatch(data);
 	}
 
-	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, AEGfxTexture* tex, const Vec3<float>& txtColor, const Vec4<float>& btnColor) {
+	void AddButtonToBatch(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, AEGfxTexture* tex, const Vec3<float>& txtColor, const Vec4<float>& btnColor) {
 
 		UIData data;
 		// Order of rendering UI.
@@ -172,12 +172,12 @@ namespace UIManager {
 	* OVERLOADED RENDER BUTTON FUNCS
 	*************************************************************************/
 	// Button with TEXTURE + text.
-	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, AEGfxTexture* tex, const Vec3<float>& txtColor) {
-		RenderButton(x, y, xPadding, yPadding, layer, font, text, tex, txtColor, Vec4<float>{});
+	void AddButtonToBatch(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, AEGfxTexture* tex, const Vec3<float>& txtColor) {
+		AddButtonToBatch(x, y, xPadding, yPadding, layer, font, text, tex, txtColor, Vec4<float>{});
 	}
 	// Button with COLOR + text.
-	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, const Vec4<float>& btnColor, const Vec3<float>& txtColor) {
-		RenderButton(x, y, xPadding, yPadding, layer, font, text, nullptr, txtColor, btnColor);
+	void AddButtonToBatch(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, const Vec4<float>& btnColor, const Vec3<float>& txtColor) {
+		AddButtonToBatch(x, y, xPadding, yPadding, layer, font, text, nullptr, txtColor, btnColor);
 	}
 	/*************************************************************************/
 
@@ -185,12 +185,12 @@ namespace UIManager {
 	* OVERLOADED RENDER RECT FUNCS
 	*************************************************************************/
 	// Rect with TEXTURE.
-	void RenderRect(const float& x, const float& y, const float& width, const float& height, const int& layer, AEGfxTexture* tex) {
-		RenderRect(x, y, width, height, layer, Vec4<float>{}, tex);
+	void AddRectToBatch(const float& x, const float& y, const float& width, const float& height, const int& layer, AEGfxTexture* tex) {
+		AddRectToBatch(x, y, width, height, layer, Vec4<float>{}, tex);
 	}
 	// Rect with COLOR.
-	void RenderRect(const float& x, const float& y, const float& width, const float& height, const int& layer, const Vec4<float>& btnColor) {
-		RenderRect(x, y, width, height, layer, btnColor, nullptr);
+	void AddRectToBatch(const float& x, const float& y, const float& width, const float& height, const int& layer, const Vec4<float>& btnColor) {
+		AddRectToBatch(x, y, width, height, layer, btnColor, nullptr);
 	}
 	/*************************************************************************/
 
@@ -255,8 +255,8 @@ namespace UIManager {
 	void MakeWindow() {
 		//HARDCODED x and y, Window scales unevenly shifts the local axis
 		if (AEInputCheckPrev(AEVK_SPACE)) {
-			RenderRect(-750, 750, 1500, 1500, 0, pauseTex);
-			RenderText(roboto.M, -0.1f, 0.0f, 0, "PAUSED", { (0.0f), (0.0f), (0.0f) });
+			AddRectToBatch(-750, 750, 1500, 1500, 0, pauseTex);
+			AddTextToBatch(roboto.M, -0.1f, 0.0f, 0, "PAUSED", { (0.0f), (0.0f), (0.0f) });
 		}
 
 
@@ -264,8 +264,8 @@ namespace UIManager {
 
 	void MakeText() {
 		//TEMP location
-		RenderText(roboto.M, -0.9f, 0.9f, 0, "EXPERIENCE", { (0.0f), (0.0f), (0.0f) });
-		RenderText(roboto.M, -0.6f, 0.9f, 0, "0/100", { (0.0f), (0.0f), (0.0f) });
+		AddTextToBatch(roboto.M, -0.9f, 0.9f, 0, "EXPERIENCE", { (0.0f), (0.0f), (0.0f) });
+		AddTextToBatch(roboto.M, -0.6f, 0.9f, 0, "0/100", { (0.0f), (0.0f), (0.0f) });
 	}
 
 
@@ -309,7 +309,7 @@ namespace UIManager {
 				}
 			}
 
-			RenderSystem::AddBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, c1.x, c1.y);
+			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, c1.x, c1.y);
 		}
 
 		//Card2
@@ -341,7 +341,7 @@ namespace UIManager {
 				}
 			}
 
-			RenderSystem::AddBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, c2.x, c2.y);
+			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, c2.x, c2.y);
 		}
 
 		//Card3
@@ -374,7 +374,7 @@ namespace UIManager {
 			}
 
 
-			RenderSystem::AddBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, c3.x, c3.y);
+			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, c3.x, c3.y);
 		}
 
 		//Card4
@@ -406,7 +406,7 @@ namespace UIManager {
 				}
 			}
 
-			RenderSystem::AddBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, c4.x, c4.y);
+			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, c4.x, c4.y);
 		}
 
 		//Card5
@@ -438,7 +438,7 @@ namespace UIManager {
 				}
 			}
 
-			RenderSystem::AddBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, c5.x, c5.y);
+			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, c5.x, c5.y);
 		}
 
 	}
