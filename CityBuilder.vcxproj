@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="src\Building.cpp" />
     <ClCompile Include="src\BuildingManager.cpp" />
+    <ClCompile Include="src\Card.cpp" />
     <ClCompile Include="src\CardManager.cpp" />
     <ClCompile Include="src\EventSystem.cpp" />
     <ClCompile Include="src\FileIOManager.cpp" />
@@ -32,6 +33,7 @@
   <ItemGroup>
     <ClInclude Include="inc\Building.h" />
     <ClInclude Include="inc\BuildingManager.h" />
+    <ClInclude Include="inc\Card.h" />
     <ClInclude Include="inc\ColorTable.h" />
     <ClInclude Include="inc\CardManager.h" />
     <ClInclude Include="inc\EventSystem.h" />

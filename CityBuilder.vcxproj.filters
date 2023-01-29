@@ -1,22 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\Building.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\EventSystem.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameObject.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\IsometricGrid.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\Main.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\RenderSystem.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\BuildingManager.cpp">
@@ -52,29 +37,26 @@
     <ClCompile Include="src\Scene.cpp">
       <Filter>src\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\Building.cpp">
+      <Filter>src\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Card.cpp">
+      <Filter>src\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EventSystem.cpp">
+      <Filter>src\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObject.cpp">
+      <Filter>src\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IsometricGrid.cpp">
+      <Filter>src\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderSystem.cpp">
+      <Filter>src\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\Building.h">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\ColorTable.h">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\EventSystem.h">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\GameObject.h">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\IsometricGrid.h">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\MomoMaths.h">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\RenderSystem.h">
-      <Filter>inc</Filter>
-    </ClInclude>
     <ClInclude Include="inc\BuildingManager.h">
       <Filter>inc\Managers</Filter>
     </ClInclude>
@@ -108,6 +90,30 @@
     <ClInclude Include="inc\SceneSplashscreen.h">
       <Filter>inc\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="inc\Building.h">
+      <Filter>inc\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\GameObject.h">
+      <Filter>inc\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\MomoMaths.h">
+      <Filter>inc\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\EventSystem.h">
+      <Filter>inc\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\RenderSystem.h">
+      <Filter>inc\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\IsometricGrid.h">
+      <Filter>inc\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\ColorTable.h">
+      <Filter>inc\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Card.h">
+      <Filter>inc\GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -127,6 +133,18 @@
     </Filter>
     <Filter Include="inc\Scene">
       <UniqueIdentifier>{191f3e6c-4c1b-4d9e-b2a0-8c158399cb49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc\Systems">
+      <UniqueIdentifier>{41a7913c-be16-447b-a5df-2ba4f53c659d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc\GameObjects">
+      <UniqueIdentifier>{af4cf061-f94a-400a-928b-07ca3c44dd8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\GameObjects">
+      <UniqueIdentifier>{19f53659-362c-4724-9639-836fb7f3a455}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Systems">
+      <UniqueIdentifier>{bbd48993-a36f-43ef-8905-c4217b241c98}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
