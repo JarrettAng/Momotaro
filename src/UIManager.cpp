@@ -200,7 +200,6 @@ namespace UIManager {
 		{
 		case ROBOTO:
 			return roboto;
-			break;
 		default:
 			break;
 		}
@@ -310,7 +309,7 @@ namespace UIManager {
 				}
 			}
 
-			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, c1.x, c1.y);
+			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, RenderSystem::CARD_BLUE, c1.x, c1.y);
 		}
 
 		//Card2
@@ -342,7 +341,7 @@ namespace UIManager {
 				}
 			}
 
-			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, c2.x, c2.y);
+			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, RenderSystem::CARD_BLUE, c2.x, c2.y);
 		}
 
 		//Card3
@@ -375,7 +374,7 @@ namespace UIManager {
 			}
 
 
-			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, c3.x, c3.y);
+			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, RenderSystem::CARD_BLUE, c3.x, c3.y);
 		}
 
 		//Card4
@@ -407,7 +406,7 @@ namespace UIManager {
 				}
 			}
 
-			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, c4.x, c4.y);
+			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, RenderSystem::CARD_BLUE, c4.x, c4.y);
 		}
 
 		//Card5
@@ -439,7 +438,7 @@ namespace UIManager {
 				}
 			}
 
-			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, c5.x, c5.y);
+			RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, RenderSystem::CARD_BLUE, c5.x, c5.y);
 		}
 
 	}

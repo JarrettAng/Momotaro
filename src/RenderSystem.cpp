@@ -19,8 +19,7 @@ namespace RenderSystem {
 #pragma region Foward Declaration & Variables
 	void InitMesh();
 	void LoadTextures();
-
-	Sprite& GetSprite(const  SPRITE_TYPE& type);
+	void InitializeSprite();
 
 	void SortUIBatch();
 	void SortSpriteBatch(std::list<Sprite> batch);
@@ -31,6 +30,10 @@ namespace RenderSystem {
 	void RenderText(s8 fontID, std::string text, float x, float y, float scale, Vec3<float> color = { 1.0f,1.0f,1.0f });
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, AEGfxTexture* tex);
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec4<float> color = { 1.0f,1.0f,1.0f,1.0f });
+
+	Sprite& GetSprite(const  SPRITE_TYPE& type);
+	AEVec2 GetSpriteSize(const SPRITE_TYPE& type);
+	AEGfxTexture* GetSpriteTex(const SPRITE_TEX_TYPE& type);
 
 	/*!***********************************************************************
 	* SPRITE BATCHES
@@ -73,34 +76,24 @@ namespace RenderSystem {
 	AEGfxVertexList* BOT_RIGHT_MESH;
 
 	/*!***********************************************************************
-	* TILE SPRITE
+	* SPRITES
 	*************************************************************************/
-	Sprite tileSprite;
-
-	/*!***********************************************************************
-	* NATURE SPRITE
-	*************************************************************************/
+	Sprite tile_Sprite;
 	Sprite nature_Sprite;
-
-	/*!***********************************************************************
-	* BUILDING SPRITE
-	*************************************************************************/
-	Sprite residential_S_Sprite;
-	Sprite residential_M_Sprite;
-	Sprite residential_L_Sprite;
-
-	Sprite Commercial_S_Sprite;
-	Sprite Commercial_M_Sprite;
-	Sprite Commercial_L_Sprite;
-
-	Sprite industrial_S_Sprite;
-	Sprite industrial_M_Sprite;
-	Sprite industrial_L_Sprite;
-
-	/*!***********************************************************************
-	* CARD SPRITE
-	*************************************************************************/
+	Sprite building_Sprite;
 	Sprite card_Sprite;
+
+	/*!***********************************************************************
+	* SPRITE TEXTURE
+	*************************************************************************/
+	AEGfxTexture* tile_Tex;
+	AEGfxTexture* nature_Tex;
+	AEGfxTexture* residential_S_Tex;
+	AEGfxTexture* residential_M_Tex;
+	AEGfxTexture* residential_L_Tex;
+	AEGfxTexture* card_Tex;
+
+
 
 #pragma endregion
 
@@ -108,6 +101,7 @@ namespace RenderSystem {
 		InitMesh();
 		SetRenderMesh(TOP_LEFT);
 		LoadTextures();
+		InitializeSprite();
 	}
 
 	void Render() {
@@ -121,12 +115,12 @@ namespace RenderSystem {
 			// Sort batch based on sprite's layer before drawing.
 			SortSpriteBatch(batch);
 			for (auto& sprite : batch) {
-				AEGfxTextureSet(sprite.tex, 0, 0);
+				AEGfxTextureSet(GetSpriteTex(sprite.tex), 0, 0);
 				// Change render setting if needed.
 				if (!sprite.setting.isDefault()) UpdateRenderSetting(sprite.setting);
 
 				// Set position, rotation and scale of sprite.
-				UpdateRenderTransformMtx(sprite.x, sprite.y, sprite.scale, sprite.rot);
+				UpdateRenderTransformMtx(sprite.x, sprite.y, sprite.size, sprite.rot);
 				// Render sprites on screen.
 				AEGfxMeshDraw(TOP_LEFT_MESH, AE_GFX_MDM_TRIANGLES);
 
@@ -164,14 +158,15 @@ namespace RenderSystem {
 	}
 
 	void AddSpriteBatch(const SpriteInfo& batch) {
-		AddSpriteBatch(batch.id, batch.type, batch.x, batch.y, batch.layer, batch.pivot, batch.setting);
+		AddSpriteBatch(batch.id, batch.type, batch.tex, batch.x, batch.y, batch.layer, batch.rot, batch.setting);
 	}
 
-	void AddSpriteBatch(const SPRITE_BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer, const RENDER_PIVOT& pivot, RenderSetting setting) {
+	void AddSpriteBatch(const SPRITE_BATCH_TYPE& id, const SPRITE_TYPE& type, const SPRITE_TEX_TYPE& tex, const int& x, const int& y, const int& layer, const float& rot, RenderSetting setting) {
 		Sprite sprite = GetSprite(type);
-		sprite.type = type;
+		sprite.tex = tex;
 		sprite.x = x;
 		sprite.y = y;
+		sprite.rot = rot;
 		sprite.layer = layer;
 		sprite.setting = setting;
 
@@ -183,6 +178,9 @@ namespace RenderSystem {
 		UIBatch.push_back(data);
 	}
 
+	/*!***********************************************************************
+	* FOR RENDERING UI ELEMENTS
+	*************************************************************************/
 	void RenderText(s8 fontID, std::string text, float x, float y, float scale, Vec3<float> color) {
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		// Allow transperant text for fading?
@@ -202,27 +200,63 @@ namespace RenderSystem {
 		UpdateRenderTransformMtx(x, y, AEVec2{ width,height });
 		AEGfxMeshDraw(GetRenderMesh(), AE_GFX_MDM_TRIANGLES);
 	}
+	/*************************************************************************/
 
 	Sprite& GetSprite(const SPRITE_TYPE& type) {
 		switch (type)
 		{
 		case TILE:
-			return tileSprite;
-			break;
-		case RESIDENTIAL_S:
-			return residential_S_Sprite;
-		case RESIDENTIAL_M:
-			return residential_M_Sprite;
-			break;
+			return tile_Sprite;
 		case NATURE:
 			return nature_Sprite;
-			break;
+		case BUILDING:
+			return building_Sprite;
 		case CARD:
 			return card_Sprite;
-			break;
 		default:
 			break;
 		}
+		std::cout << "INVALID SPRITE TYPE WHEN CALLING GetSprite().";
+	}
+
+	AEGfxTexture* GetSpriteTex(const SPRITE_TEX_TYPE& type) {
+		switch (type)
+		{
+		case TILE_TEX:
+			return tile_Tex;
+		case NATURE:
+			return nature_Tex;
+		case RESIDENTIAL_S:
+			return residential_S_Tex;
+		case RESIDENTIAL_M:
+			return residential_M_Tex;
+		case RESIDENTIAL_L:
+			return residential_L_Tex;
+		case CARD_BLUE:
+			return card_Tex;
+		default:
+			break;
+		}
+		std::cout << "INVALID SPRITE TYPE WHEN CALLING GetSpriteTex().";
+		return nullptr;
+	}
+
+	AEVec2 GetSpriteSize(const SPRITE_TYPE& type) {
+		switch (type)
+		{
+		case TILE_TEX:
+			return tile_Sprite.size;
+		case NATURE:
+			return nature_Sprite.size;
+		case BUILDING:
+			return building_Sprite.size;
+		case CARD_BLUE:
+			return card_Sprite.size;
+		default:
+			break;
+		}
+		std::cout << "INVALID SPRITE TYPE WHEN CALLING GetSpriteSize()";
+		return AEVec2{};
 	}
 
 	/*!***********************************************************************
@@ -235,6 +269,7 @@ namespace RenderSystem {
 	void SortUIBatch() {
 		UIBatch.sort([](const UIManager::UIData& a, const  UIManager::UIData& b) { return a.layer < b.layer; });
 	}
+	/*************************************************************************/
 
 	/*!***********************************************************************
 	\brief
@@ -269,6 +304,14 @@ namespace RenderSystem {
 
 		// Apply transform matrix to mesh to be drawn.
 		AEGfxSetTransform(transformMtx.m);
+	}
+
+	/*!***********************************************************************
+	\brief
+		Get / set the render mesh to determine how graphics are drawn.
+	*************************************************************************/
+	AEGfxVertexList* GetRenderMesh() {
+		return renderMesh;
 	}
 
 	void SetRenderMesh(RENDER_PIVOT pivot) {
@@ -306,44 +349,26 @@ namespace RenderSystem {
 			break;
 		}
 	}
-	AEGfxVertexList* GetRenderMesh() {
-		return renderMesh;
+	/*************************************************************************/
+
+	/*!***********************************************************************
+	\brief
+		Initialize sprite type and size. (Size is used for mesh scaling)
+	*************************************************************************/
+	void InitializeSprite() {
+		tile_Sprite.type = TILE;
+		nature_Sprite.type = NATURE;
+		building_Sprite.type = BUILDING;
+		card_Sprite.type = CARD;
+
+		// TODO: GET SIZE USING FILE I/O
+		tile_Sprite.size = { 100,100 };
+		nature_Sprite.size = { 100,100 };
+		building_Sprite.size = { 100,100 };
+		card_Sprite.size = { 100,100 };
 	}
 
 	void InitMesh() {
-		/*!***********************************************************************
-		\brief
-			// TODO: GET INFO USING FILE I/O
-			Initialize mesh width and height.
-		*************************************************************************/
-		// TILE
-		tileSprite.width = 100;
-		tileSprite.height = 100;
-		tileSprite.scale = { tileSprite.width,tileSprite.height };
-		tileSprite.midWidth = tileSprite.width / 2;
-		tileSprite.midHeight = tileSprite.height / 2;
-
-		//RESIDENTIAL_S
-		residential_S_Sprite.width = 50;
-		residential_S_Sprite.height = 100;
-		residential_S_Sprite.scale = { residential_S_Sprite.width,residential_S_Sprite.height };
-		residential_S_Sprite.midWidth = residential_S_Sprite.width / 2;
-		residential_S_Sprite.midHeight = residential_S_Sprite.height / 2;
-
-		//NATURE
-		nature_Sprite.width = 25;
-		nature_Sprite.height = 50;
-		nature_Sprite.scale = { nature_Sprite.width,nature_Sprite.height };
-		nature_Sprite.midWidth = nature_Sprite.width / 2;
-		nature_Sprite.midHeight = nature_Sprite.height / 2;
-
-		//CARD
-		card_Sprite.width = 100;
-		card_Sprite.height = 100;
-		card_Sprite.scale = { card_Sprite.width,card_Sprite.height };
-		card_Sprite.midWidth = card_Sprite.width / 2;
-		card_Sprite.midHeight = card_Sprite.height / 2;
-
 		/*!***********************************************************************
 		\brief
 			Initialize meshes.
@@ -432,10 +457,9 @@ namespace RenderSystem {
 	}
 
 	void LoadTextures() {
-		tileSprite.tex = AEGfxTextureLoad("Assets/Tile.png");
-		card_Sprite.tex = AEGfxTextureLoad("Assets/Card.png");
-		// tileSprite.tex = AEGfxTextureLoad("Assets/BlueRect.png");
-		residential_S_Sprite.tex = AEGfxTextureLoad("Assets/residential_s_test.png");
-		nature_Sprite.tex = AEGfxTextureLoad("Assets/tree_test.png");
+		tile_Tex = AEGfxTextureLoad("Assets/Tile.png");
+		card_Tex = AEGfxTextureLoad("Assets/Card.png");
+		residential_S_Tex = AEGfxTextureLoad("Assets/residential_s_test.png");
+		nature_Tex = AEGfxTextureLoad("Assets/tree_test.png");
 	}
 }

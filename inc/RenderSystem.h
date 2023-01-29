@@ -37,10 +37,17 @@ namespace RenderSystem {
 	enum SPRITE_TYPE {
 		TILE,
 		NATURE,
+		BUILDING,
+		CARD,
+	};
+
+	enum SPRITE_TEX_TYPE {
+		TILE_TEX,
+		NATURE_TREE,
 		RESIDENTIAL_S,
 		RESIDENTIAL_M,
 		RESIDENTIAL_L,
-		CARD,
+		CARD_BLUE,
 	};
 
 	enum SPRITE_BATCH_TYPE {
@@ -64,23 +71,21 @@ namespace RenderSystem {
 
 	struct Sprite {
 		SPRITE_TYPE type;
-		int x, y;
-		float rot = 0;
-		AEVec2 scale = { 1,1 };
+		SPRITE_TEX_TYPE tex;
+		float x, y;
 		int layer = 0;
-		AEGfxTexture* tex;
+		float rot = 0;
+		AEVec2 size = { 1,1 };
 		RenderSetting setting;
-
-		float height, midHeight;
-		float width, midWidth;
 	};
 
 	struct SpriteInfo {
 		SPRITE_BATCH_TYPE id;
 		SPRITE_TYPE type;
+		SPRITE_TEX_TYPE tex;
 		int x, y;
+		float rot = 0;
 		int layer = 0;
-		RENDER_PIVOT pivot = MID;
 		RenderSetting setting = {};
 	};
 
@@ -90,7 +95,7 @@ namespace RenderSystem {
 	AEGfxVertexList* GetRenderMesh();
 	void SetRenderMesh(RENDER_PIVOT pivot);
 
-	void AddSpriteBatch(const SPRITE_BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer = 0, const RENDER_PIVOT& pivot = MID, RenderSetting setting = {});
+	void AddSpriteBatch(const SPRITE_BATCH_TYPE& id, const SPRITE_TYPE& type, const SPRITE_TEX_TYPE& tex, const int& x, const int& y, const int& layer = 0, const float& rot = 0, RenderSetting setting = {});
 	void AddUIBatch(UIManager::UIData data);
 
 
