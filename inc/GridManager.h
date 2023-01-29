@@ -4,6 +4,12 @@
 namespace GridManager {
 	namespace iso = IsometricGrid;
 
+	enum UpgradeLevel {
+		SMALL = 0,
+		MEDIUM = 100,
+		LARGE = 200,
+	};
+	
 	void Initialize();
 	void UpdateMouseToGrid();
 	void PrepareTileRenderBatch();

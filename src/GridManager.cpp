@@ -143,28 +143,42 @@ namespace GridManager {
 				int index = GetIndex(x, y);
 
 				switch (grid[index].ID) {
-				case iso::RESIDENTIAL:
+					//RESIDENTIAL
+				case iso::RESIDENTIAL + SMALL:
 					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::RESIDENTIAL_1X1_L1, grid[index].pos.x, grid[index].pos.y);
 					break;
-				case iso::COMMERCIAL:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::COMMERCIAL_1X1_L1, grid[index].pos.x, grid[index].pos.y);
-					break;
-				case iso::COMMERCIAL+100:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::COMMERCIAL_1X1_L2, grid[index].pos.x, grid[index].pos.y);
-					break;	
-				case iso::COMMERCIAL+200:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::COMMERCIAL_1X1_L3, grid[index].pos.x, grid[index].pos.y);
-					break;	
-				case iso::INDUSTRIAL:
-					break;
-				case iso::NATURE:
-					RenderSystem::AddSpriteBatch(RenderSystem::NATURE_BATCH, RenderSystem::NATURE, TextureManager::NATURE_TREE, grid[index].pos.x, grid[index].pos.y);
-					break;
-				case iso::RESIDENTIAL+100:
+				case iso::RESIDENTIAL+MEDIUM:
 					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::RESIDENTIAL_1X1_L2, grid[index].pos.x, grid[index].pos.y);
 					break;
-				case iso::RESIDENTIAL+200:
+				case iso::RESIDENTIAL+LARGE:
 					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::RESIDENTIAL_1X1_L3, grid[index].pos.x, grid[index].pos.y);
+					break;
+
+					//COMMERCIAL
+				case iso::COMMERCIAL+SMALL:
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::COMMERCIAL_1X1_L1, grid[index].pos.x, grid[index].pos.y);
+					break;
+				case iso::COMMERCIAL+MEDIUM:
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::COMMERCIAL_1X1_L2, grid[index].pos.x, grid[index].pos.y);
+					break;	
+				case iso::COMMERCIAL+LARGE:
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::COMMERCIAL_1X1_L3, grid[index].pos.x, grid[index].pos.y);
+					break;	
+
+					//INDUSTRIAL
+				case iso::INDUSTRIAL+SMALL:
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::INDUSTRIAL_1X1_L1, grid[index].pos.x, grid[index].pos.y);
+					break;
+				case iso::INDUSTRIAL+MEDIUM:
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::INDUSTRIAL_1X1_L2, grid[index].pos.x, grid[index].pos.y);
+					break;
+				case iso::INDUSTRIAL+LARGE:
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::INDUSTRIAL_1X1_L3, grid[index].pos.x, grid[index].pos.y);
+					break;
+
+					//NATURE
+				case iso::NATURE:
+					RenderSystem::AddSpriteBatch(RenderSystem::NATURE_BATCH, RenderSystem::NATURE, TextureManager::NATURE_TREE, grid[index].pos.x, grid[index].pos.y);
 					break;
 
 				default:
