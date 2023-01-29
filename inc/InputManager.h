@@ -13,9 +13,10 @@ namespace InputManager {
 	extern EventSystem::Event<void> onEscPressed;
 	extern EventSystem::Event<void> onCKeyPressed;
 	extern EventSystem::Event<void> onRKeyPressed;
-	extern EventSystem::Event<void> on1KeyPressed;
-	extern EventSystem::Event<void> on2KeyPressed;
-	extern EventSystem::Event<void> on3KeyPressed;
+	extern EventSystem::Event<Vec2<int>> on1KeyPressed;
+	extern EventSystem::Event<Vec2<int>> on2KeyPressed;
+	extern EventSystem::Event<Vec2<int>> on3KeyPressed;
+	extern EventSystem::Event<Vec2<int>> onNKeyPressed;
 
 	void HandleInput();
 }

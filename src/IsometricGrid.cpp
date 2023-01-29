@@ -72,7 +72,35 @@ namespace IsometricGrid
 			static_cast<int>((x + y) * (-25.f)+25.f)		//offset for the correct pos because of the height diff
 		};
 	}
-	vec2i ScreenPosToIso(int x, int y) {
+	vec2i ScreenPosToIso(int xPos, int yPos) {
+		//MOUSE INPUTS (Tile width = 100, tile height = 50)
+		int cellX = xPos / 100;
+		int cellY = yPos / 50;
+		int index = cellX + 20 * cellY;
+
+		int xOffset = xPos % 100;
+		int yOffset = yPos % 50;
+		//Origin -> screen/tile. For now I use numbers
+		int originX = AEGetWindowWidth() / 2 / 100;
+		int originY = AEGetWindowHeight() / 2 / 50;
+
+		// int selectX = (cellX - originX) + (cellY - originY);
+		// int selectY = (cellY - originY) - (cellX - originX);
+
+		vec2i SelectedCell{
+			(cellX - originX) + (cellY - originY)+10,		//x
+			(cellY - originY) - (cellX - originX)+10		//y
+		};
+		//TOP LEFT
+		if (isInside(xOffset, yOffset, 0, 0, 0, 25, 50, 0))SelectedCell.x--;
+		//BOTTOM LEFT
+		if (isInside(xOffset, yOffset, 0, 25, 0, 50, 50, 50))SelectedCell.y++;
+		//TOP RIGHT
+		if (isInside(xOffset, yOffset, 50, 0, 100, 0, 100, 25))SelectedCell.y--;
+		//BOTTOM RIGHT
+		if (isInside(xOffset, yOffset, 50, 50, 100, 50, 100, 25))SelectedCell.x++;
+
+		return SelectedCell;
 		// //MOUSE INPUTS (Tile width = 100, tile height = 50)
 		// int cellX = x / 100;
 		// int cellY = y / 50;
@@ -83,10 +111,10 @@ namespace IsometricGrid
 
 		// int selectX = (cellX - originX) + (cellY - originY);
 		// int selectY = (cellY - originY) - (cellX - originX);
-		return vec2i{
-			static_cast<int>((x / (tileWidth / 2)) + (y / (tileHeight / 2))),
-			static_cast<int>((y / (tileHeight / 2)) - (x / (tileWidth / 2)))
-		};
+		// return vec2i{
+		// 	static_cast<int>((x / (tileWidth / 2)) + (y / (tileHeight / 2))),
+		// 	static_cast<int>((y / (tileHeight / 2)) - (x / (tileWidth / 2)))
+		// };
 	}
 	vec2i MouseToCell(int mouseX, int mouseY) {
 		return vec2i{

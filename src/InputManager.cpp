@@ -10,10 +10,11 @@ namespace InputManager {
 	EventSystem::Event<void> onEscPressed;
 	
 	EventSystem::Event<void> onCKeyPressed;
+	EventSystem::Event<Vec2<int>> onNKeyPressed;
 	EventSystem::Event<void> onRKeyPressed;
-	EventSystem::Event<void> on1KeyPressed;
-	EventSystem::Event<void> on2KeyPressed;
-	EventSystem::Event<void> on3KeyPressed;
+	EventSystem::Event<Vec2<int>> on1KeyPressed;
+	EventSystem::Event<Vec2<int>> on2KeyPressed;
+	EventSystem::Event<Vec2<int>> on3KeyPressed;
 
 	EventSystem::Event<void> onButtonPressed;
 
@@ -33,6 +34,18 @@ namespace InputManager {
 		}
 		if (AEInputCheckTriggered(AEVK_R)) {
 			onRKeyPressed.Invoke();
+		}
+		if (AEInputCheckTriggered(AEVK_1)) {
+			on1KeyPressed.Invoke(mousePos);
+		}
+		if (AEInputCheckTriggered(AEVK_2)) {
+			on2KeyPressed.Invoke(mousePos);
+		}
+		if (AEInputCheckTriggered(AEVK_3)) {
+			on3KeyPressed.Invoke(mousePos);
+		}
+		if (AEInputCheckTriggered(AEVK_N)) {
+			onNKeyPressed.Invoke(mousePos);
 		}
 
 

@@ -1,3 +1,12 @@
+/*!************************************************************************
+\file GridManager.cpp
+\author Amadeus Chia
+\par DP email: amadeusjinhan.chia@digipen.edu
+\par Course: CSD1171B
+\date 30/01/2023
+\brief
+This source file implements functions that manage the game grid. This includes the merge logic and the placement of buildings
+**************************************************************************/
 
 #include <InputManager.h>
 #include <RenderSystem.h>
@@ -56,8 +65,53 @@ namespace GridManager {
 		InputManager::onMouseClick.Subscribe(storeClickData);
 		InputManager::onCKeyPressed.Subscribe(ClearGrid);
 		InputManager::onRKeyPressed.Subscribe(RandomiseTerrain);
+		InputManager::on1KeyPressed.Subscribe(SpawnResidential);
+		InputManager::on2KeyPressed.Subscribe(SpawnCommerical);
+		InputManager::on3KeyPressed.Subscribe(SpawnIndustrial);
+		InputManager::onNKeyPressed.Subscribe(SpawnNature);
 	}
 
+
+	bool isCellSafe(iso::vec2i selectedCell){
+		if((((selectedCell.x) < 0) || ((selectedCell.x) > gridX)) || ((selectedCell.y) < 0 || (selectedCell.y) > gridY)) return false; 
+		if(!grid[GetIndex(selectedCell.x,selectedCell.y)].isRenderable) return false;
+		return true;
+	}
+
+	void SpawnResidential(Vec2<int> mousePos){
+		iso::vec2i SelectedCell{iso::ScreenPosToIso(mousePos.x,mousePos.y)};
+		int index = GetIndex(SelectedCell.x,SelectedCell.y);
+		if(!isCellSafe(SelectedCell)) return;
+
+		grid[index].ID = iso::RESIDENTIAL;
+		CheckCellNeighbor(grid, SelectedCell);
+	}
+	void SpawnCommerical(Vec2<int> mousePos){
+		iso::vec2i SelectedCell{iso::ScreenPosToIso(mousePos.x,mousePos.y)};
+		int index = GetIndex(SelectedCell.x,SelectedCell.y);
+		if(!isCellSafe(SelectedCell)) return;
+
+		grid[index].ID = iso::COMMERCIAL;
+		CheckCellNeighbor(grid, SelectedCell);
+	}
+	void SpawnIndustrial(Vec2<int> mousePos){
+		iso::vec2i SelectedCell{iso::ScreenPosToIso(mousePos.x,mousePos.y)};
+		int index = GetIndex(SelectedCell.x, SelectedCell.y);
+		if(!isCellSafe(SelectedCell)) return;
+
+		grid[index].ID = iso::INDUSTRIAL;
+		CheckCellNeighbor(grid, SelectedCell);
+	}
+	void SpawnNature(Vec2<int> mousePos){
+		iso::vec2i SelectedCell{iso::ScreenPosToIso(mousePos.x,mousePos.y)};
+		int index = GetIndex(SelectedCell.x, SelectedCell.y);
+		if(!isCellSafe(SelectedCell)) return;
+		randomNature= rand()%2;
+		if(randomNature%2==0)
+		grid[index].ID = iso::TREE;
+		else
+		grid[index].ID = iso::ROCK;
+	}
 	void RandomiseTerrain(){
 		/*
 		TOP LEFT = x--;
@@ -248,36 +302,36 @@ namespace GridManager {
 	}
 
 	void storeClickData(Vec2<int> mousePos) {
-		//MOUSE INPUTS (Tile width = 100, tile height = 50)
-		int cellX = mousePos.x / 100;
-		int cellY = mousePos.y / 50;
-		int index = cellX + gridX * cellY;
+		// //MOUSE INPUTS (Tile width = 100, tile height = 50)
+		// int cellX = mousePos.x / 100;
+		// int cellY = mousePos.y / 50;
+		// int index = cellX + gridX * cellY;
 
-		int xOffset = mousePos.x % 100;
-		int yOffset = mousePos.y % 50;
-		//Origin -> screen/tile. For now I use numbers
-		int originX = AEGetWindowWidth() / 2 / 100;
-		int originY = AEGetWindowHeight() / 2 / 50;
+		// int xOffset = mousePos.x % 100;
+		// int yOffset = mousePos.y % 50;
+		// //Origin -> screen/tile. For now I use numbers
+		// int originX = AEGetWindowWidth() / 2 / 100;
+		// int originY = AEGetWindowHeight() / 2 / 50;
 
-		// int selectX = (cellX - originX) + (cellY - originY);
-		// int selectY = (cellY - originY) - (cellX - originX);
+		// // int selectX = (cellX - originX) + (cellY - originY);
+		// // int selectY = (cellY - originY) - (cellX - originX);
 
-		iso::vec2i SelectedCell{
-			(cellX - originX) + (cellY - originY)+10,		//x
-			(cellY - originY) - (cellX - originX)+10		//y
-		};
-		//TOP LEFT
-		if (iso::isInside(xOffset, yOffset, 0, 0, 0, 25, 50, 0))SelectedCell.x--;
-		//BOTTOM LEFT
-		if (iso::isInside(xOffset, yOffset, 0, 25, 0, 50, 50, 50))SelectedCell.y++;
-		//TOP RIGHT
-		if (iso::isInside(xOffset, yOffset, 50, 0, 100, 0, 100, 25))SelectedCell.y--;
-		//BOTTOM RIGHT
-		if (iso::isInside(xOffset, yOffset, 50, 50, 100, 50, 100, 25))SelectedCell.x++;
-
+		// iso::vec2i SelectedCell{
+		// 	(cellX - originX) + (cellY - originY)+10,		//x
+		// 	(cellY - originY) - (cellX - originX)+10		//y
+		// };
+		// //TOP LEFT
+		// if (iso::isInside(xOffset, yOffset, 0, 0, 0, 25, 50, 0))SelectedCell.x--;
+		// //BOTTOM LEFT
+		// if (iso::isInside(xOffset, yOffset, 0, 25, 0, 50, 50, 50))SelectedCell.y++;
+		// //TOP RIGHT
+		// if (iso::isInside(xOffset, yOffset, 50, 0, 100, 0, 100, 25))SelectedCell.y--;
+		// //BOTTOM RIGHT
+		// if (iso::isInside(xOffset, yOffset, 50, 50, 100, 50, 100, 25))SelectedCell.x++;
+		iso::vec2i SelectedCell{iso::ScreenPosToIso(mousePos.x,mousePos.y)};
 		//We offset by 10 units x and y because of how iso works. We moved the grid up by 10 units
 		if((((SelectedCell.x) < 0) || ((SelectedCell.x) > gridX)) || ((SelectedCell.y) < 0 || (SelectedCell.y) > gridY)) return; 
-		index = (SelectedCell.x)+gridX*(SelectedCell.y);
+		int index = (SelectedCell.x)+gridX*(SelectedCell.y);
 		index = GetIndex(SelectedCell.x, SelectedCell.y);
 
 		//if the cell is water (means it doesn't need to be rendered) we don't allow placement
@@ -394,7 +448,7 @@ namespace GridManager {
 		int SouthIndex = GetIndex(cellIndex.x,cellIndex.y+1);
 		int WestIndex = GetIndex(cellIndex.x-1,cellIndex.y);
 		//NORTH
-		#if 1
+		#if DEBUG
 		std::cout << "Index : " << cellIndex.x << ", " << cellIndex.y << '\n';
 		std::cout << "Selected : "<< grid[gridIndex].ID << '\n';
 		std::cout << "North : " << grid[NorthIndex].ID << '\n';
