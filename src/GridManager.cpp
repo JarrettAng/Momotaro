@@ -146,15 +146,25 @@ namespace GridManager {
 				case iso::RESIDENTIAL:
 					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::RESIDENTIAL_S, grid[index].pos.x, grid[index].pos.y);
 					break;
-				case iso::INDUSTRIAL:
-					break;
 				case iso::COMMERCIAL:
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::COMMERCIAL_S, grid[index].pos.x, grid[index].pos.y);
+					break;
+				case iso::COMMERCIAL+100:
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::COMMERCIAL_M, grid[index].pos.x, grid[index].pos.y);
+					break;	
+				case iso::COMMERCIAL+200:
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::COMMERCIAL_L, grid[index].pos.x, grid[index].pos.y);
+					break;	
+				case iso::INDUSTRIAL:
 					break;
 				case iso::NATURE:
 					RenderSystem::AddSpriteBatch(RenderSystem::NATURE_BATCH, RenderSystem::NATURE, TextureManager::NATURE_TREE, grid[index].pos.x, grid[index].pos.y);
 					break;
-					case iso::RESIDENTIAL+100:
+				case iso::RESIDENTIAL+100:
 					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::RESIDENTIAL_M, grid[index].pos.x, grid[index].pos.y);
+					break;
+				case iso::RESIDENTIAL+200:
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::RESIDENTIAL_L, grid[index].pos.x, grid[index].pos.y);
 					break;
 
 				default:
@@ -170,12 +180,7 @@ namespace GridManager {
     void GridManager::CheckCellNeighbor(iso::cell* grid,iso::vec2i cellIndex)
     {
 		//The order to check is CLOCKWISE, so we go NORTH, EAST, SOUTH, WEST
-		// // //Note that Alpha engine Y minus GOES UP!!!
-		// iso::vec2i NorthCell{cellIndex.x,cellIndex.y--};
-		// iso::vec2i EastCell{cellIndex.x++,cellIndex.y};
-		// iso::vec2i SouthCell{cellIndex.x,cellIndex.y++};
-		// iso::vec2i WestCell{cellIndex.x--,cellIndex.y};
-		// iso::cell test{GetNeighbor(grid,NorthCell,cellIndex)};
+
 		int matchCount{0};
 		int matchedCells[2];
 		int gridIndex = GetIndex(cellIndex.x,cellIndex.y);
@@ -250,42 +255,45 @@ namespace GridManager {
 			}
 		}
 		std::cout << matchCount <<'\n';
-		if (matchCount == 2){
+		//if more than 200 means it's lvl 3
+		if (matchCount == 2 && grid[gridIndex].ID < 200){
 			for(int c : matchedCells){
 				grid[c].ID = iso::NONE;
 			}
 			grid[gridIndex].ID += 100;
+			//then we recurse and check again till no matches
+			CheckCellNeighbor(grid,cellIndex);
 		}
     }
 
-	iso::cell& GetNeighbor(iso::cell*&grid,iso::vec2i indexToCheck, iso::vec2i selectedCell){
-		int selectedIndex = GetIndex(selectedCell.x,selectedCell.y);	//The starting index
-		int NorthIndex = GetIndex(indexToCheck.x,indexToCheck.y--);		
-		std::cout << "Selected : " << selectedCell.x << ", " << selectedCell.y << '\n';
-		std::cout << "North : " << indexToCheck.x << ", " << --indexToCheck.y << '\n';
-		// std::cout << " og index : " << selectedIndex << " , north index : " << NorthIndex << '\n';
-		//If the index I'm checking has a north neighbor and it's NOT the cell I came from
-		if((NorthIndex >= 0) && (NorthIndex <= (gridX*gridY)) && (NorthIndex!=selectedIndex)){
-			//if it's the same tile type, we want to keep track of it
-			if(grid[NorthIndex].ID == grid[GetIndex(selectedCell.x,selectedCell.y)]._tileType) return grid[NorthIndex];
-		}
+	// iso::cell& GetNeighbor(iso::cell*&grid,iso::vec2i indexToCheck, iso::vec2i selectedCell){
+	// 	int selectedIndex = GetIndex(selectedCell.x,selectedCell.y);	//The starting index
+	// 	int NorthIndex = GetIndex(indexToCheck.x,indexToCheck.y--);		
+	// 	std::cout << "Selected : " << selectedCell.x << ", " << selectedCell.y << '\n';
+	// 	std::cout << "North : " << indexToCheck.x << ", " << --indexToCheck.y << '\n';
+	// 	// std::cout << " og index : " << selectedIndex << " , north index : " << NorthIndex << '\n';
+	// 	//If the index I'm checking has a north neighbor and it's NOT the cell I came from
+	// 	if((NorthIndex >= 0) && (NorthIndex <= (gridX*gridY)) && (NorthIndex!=selectedIndex)){
+	// 		//if it's the same tile type, we want to keep track of it
+	// 		if(grid[NorthIndex].ID == grid[GetIndex(selectedCell.x,selectedCell.y)]._tileType) return grid[NorthIndex];
+	// 	}
 
-		int EastIndex = GetIndex(indexToCheck.x++,indexToCheck.y);
-		if((EastIndex >=0) && (EastIndex <= gridX*gridY) && (EastIndex!=selectedIndex)){
-			if(grid[EastIndex].ID == grid[GetIndex(selectedCell.x,selectedCell.y)]._tileType) return grid[EastIndex];
-		}
+	// 	int EastIndex = GetIndex(indexToCheck.x++,indexToCheck.y);
+	// 	if((EastIndex >=0) && (EastIndex <= gridX*gridY) && (EastIndex!=selectedIndex)){
+	// 		if(grid[EastIndex].ID == grid[GetIndex(selectedCell.x,selectedCell.y)]._tileType) return grid[EastIndex];
+	// 	}
 
-		int SouthIndex = GetIndex(indexToCheck.x,indexToCheck.y++);
-		if((SouthIndex >=0) && (SouthIndex <= gridX*gridY) && (SouthIndex!=selectedIndex)){
-			if(grid[SouthIndex].ID == grid[GetIndex(selectedCell.x,selectedCell.y)]._tileType) return grid[SouthIndex];
-		}
+	// 	int SouthIndex = GetIndex(indexToCheck.x,indexToCheck.y++);
+	// 	if((SouthIndex >=0) && (SouthIndex <= gridX*gridY) && (SouthIndex!=selectedIndex)){
+	// 		if(grid[SouthIndex].ID == grid[GetIndex(selectedCell.x,selectedCell.y)]._tileType) return grid[SouthIndex];
+	// 	}
 
-		int WestIndex = GetIndex(indexToCheck.x--,indexToCheck.y);
-		if((WestIndex >=0) && (WestIndex <= gridX*gridY) && (WestIndex!=selectedIndex)){
-			if(grid[WestIndex].ID == grid[GetIndex(selectedCell.x,selectedCell.y)]._tileType) return grid[WestIndex];
-		}
-		return grid[selectedIndex];
-	}
+	// 	int WestIndex = GetIndex(indexToCheck.x--,indexToCheck.y);
+	// 	if((WestIndex >=0) && (WestIndex <= gridX*gridY) && (WestIndex!=selectedIndex)){
+	// 		if(grid[WestIndex].ID == grid[GetIndex(selectedCell.x,selectedCell.y)]._tileType) return grid[WestIndex];
+	// 	}
+	// 	return grid[selectedIndex];
+	// }
     int GetIndex(int x, int y)
     {
         return x+gridX * y;

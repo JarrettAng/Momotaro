@@ -17,6 +17,9 @@ namespace TextureManager {
 	AEGfxTexture* residential_S_Tex;
 	AEGfxTexture* residential_M_Tex;
 	AEGfxTexture* residential_L_Tex;
+	AEGfxTexture* commercial_S_Tex;
+	AEGfxTexture* commercial_M_Tex;
+	AEGfxTexture* commercial_L_Tex;
 	AEGfxTexture* card_Tex;
 	AEGfxTexture* pause_Tex;
 
@@ -29,6 +32,10 @@ namespace TextureManager {
 		card_Tex = AEGfxTextureLoad("Assets/Card.png");
 		residential_S_Tex = AEGfxTextureLoad("Assets/residential_s_test.png");
 		residential_M_Tex = AEGfxTextureLoad("Assets/residential_m_test.png");
+		residential_L_Tex = AEGfxTextureLoad("Assets/residential_l_test.png");
+		commercial_S_Tex = AEGfxTextureLoad("Assets/commercial_s_test.png");
+		commercial_M_Tex = AEGfxTextureLoad("Assets/commercial_m_test.png");
+		commercial_L_Tex = AEGfxTextureLoad("Assets/commercial_l_test.png");
 		nature_Tex = AEGfxTextureLoad("Assets/tree_test.png");
 		pause_Tex = AEGfxTextureLoad("Assets/GameWindow.png");
 	}
@@ -40,6 +47,12 @@ namespace TextureManager {
 			return tile_Tex;
 		case NATURE_TREE:
 			return nature_Tex;
+		case COMMERCIAL_S:
+			return commercial_S_Tex;
+		case COMMERCIAL_M:
+			return commercial_M_Tex;
+		case COMMERCIAL_L:
+			return commercial_L_Tex;
 		case RESIDENTIAL_S:
 			return residential_S_Tex;
 		case RESIDENTIAL_M:
