@@ -72,7 +72,7 @@ namespace TextureManager {
 		default:
 			break;
 		}
-		std::cout << "INVALID SPRITE TYPE WHEN CALLING GetSpriteTex().";
+		std::cout << "INVALID SPRITE TYPE ( " << type << " ) WHEN CALLING GetTexture()\n";
 		return nullptr;
 	}
 }

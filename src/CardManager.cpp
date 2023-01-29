@@ -33,10 +33,10 @@ namespace CardManager {
 		selectedCard = nullptr;
 
 		handBackground.width = AEGfxGetWinMaxX();
-		handBackground.height = AEGfxGetWinMaxY() * 0.35f;
+		handBackground.height = AEGfxGetWinMaxY() * 0.25f;
 
 		handBackground.x = -handBackground.width / 2.0f;
-		handBackground.y = AEGfxGetWinMinY() * 0.9f + handBackground.height;
+		handBackground.y = AEGfxGetWinMinY() * 0.95f + handBackground.height;
 
 		cardSpacing = AEGfxGetWinMaxX() * 0.025f;
 
@@ -67,13 +67,13 @@ namespace CardManager {
 
 			switch (card.deckCardData->card.type) {
 				case BuildingEnum::RESIDENTIAL:
-					UIManager::AddRectToBatch(card.position.x + card.position.width * 0.025f, card.position.y - card.position.height * 0.025f, card.position.width * 0.95f, card.position.height * 0.95f, 2, COLOR_CARD_R);
+					UIManager::AddRectToBatch(card.position.x + card.position.width * 0.05f, card.position.y - card.position.height * 0.035f, card.position.width * 0.9f, card.position.height * 0.925f, 2, COLOR_CARD_R);
 					break;
 				case BuildingEnum::COMMERCIAL:
-					UIManager::AddRectToBatch(card.position.x + card.position.width * 0.025f, card.position.y - card.position.height * 0.025f, card.position.width * 0.95f, card.position.height * 0.95f, 2, COLOR_CARD_C);
+					UIManager::AddRectToBatch(card.position.x + card.position.width * 0.05f, card.position.y - card.position.height * 0.035f, card.position.width * 0.9f, card.position.height * 0.925f, 2, COLOR_CARD_C);
 					break;
 				case BuildingEnum::INDUSTRIAL:
-					UIManager::AddRectToBatch(card.position.x + card.position.width * 0.025f, card.position.y - card.position.height * 0.025f, card.position.width * 0.95f, card.position.height * 0.95f, 2, COLOR_CARD_I);
+					UIManager::AddRectToBatch(card.position.x + card.position.width * 0.05f, card.position.y - card.position.height * 0.035f, card.position.width * 0.9f, card.position.height * 0.925f, 2, COLOR_CARD_I);
 					break;
 			}
 
