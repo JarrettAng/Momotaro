@@ -40,15 +40,14 @@ namespace RenderSystem {
 		RESIDENTIAL_S,
 		RESIDENTIAL_M,
 		RESIDENTIAL_L,
-		UI,
-		UI_WINDOW,
+		CARD,
 	};
 
-	enum BATCH_TYPE {
+	enum SPRITE_BATCH_TYPE {
 		TILE_BATCH = 0,
 		BUILDING_BATCH,
 		NATURE_BATCH,
-		UI_BATCH,
+		CARD_BATCH,
 	};
 
 	enum RENDER_PIVOT {
@@ -77,7 +76,7 @@ namespace RenderSystem {
 	};
 
 	struct SpriteInfo {
-		BATCH_TYPE id;
+		SPRITE_BATCH_TYPE id;
 		SPRITE_TYPE type;
 		int x, y;
 		int layer = 0;
@@ -87,14 +86,13 @@ namespace RenderSystem {
 
 	void Initialize();
 	void Render();
+
 	AEGfxVertexList* GetRenderMesh();
 	void SetRenderMesh(RENDER_PIVOT pivot);
 
-	void AddBatch(const BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer = 0, const RENDER_PIVOT& pivot = MID, RenderSetting setting = {});
+	void AddBatch(const SPRITE_BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer = 0, const RENDER_PIVOT& pivot = MID, RenderSetting setting = {});
 	void AddUIBatch(UIManager::UIData data);
 
-	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec4<float> color = { 1.0f,1.0f,1.0f,1.0f });
-	void RenderRect(const float& x, const float& y, const float& width, const float& height, AEGfxTexture* tex);
-	void RenderText(s8 fontID, std::string text, float x, float y, float scale, Vec3<float> color = { 1.0f,1.0f,1.0f });
+
 }
 

@@ -22,13 +22,17 @@ namespace RenderSystem {
 
 	Sprite& GetSprite(const  SPRITE_TYPE& type);
 
-	int GetBatch(const BATCH_TYPE& id);
+	int GetBatch(const SPRITE_BATCH_TYPE& id);
 
 	void SortUIBatch();
 	void SortSpriteBatch(std::list<Sprite> batch);
 
 	void UpdateRenderSetting(RenderSetting setting = {});
 	void UpdateRenderTransformMtx(const int& x, const int& y, const AEVec2& scale, const float& rot = 0);
+
+	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec4<float> color = { 1.0f,1.0f,1.0f,1.0f });
+	void RenderRect(const float& x, const float& y, const float& width, const float& height, AEGfxTexture* tex);
+	void RenderText(s8 fontID, std::string text, float x, float y, float scale, Vec3<float> color = { 1.0f,1.0f,1.0f });
 
 	AEGfxVertexList* renderMesh;
 
@@ -38,8 +42,8 @@ namespace RenderSystem {
 	std::list<Sprite> tileBatch;
 	std::list<Sprite> buildingBatch;
 	std::list<Sprite> natureBatch;
-	std::list<Sprite> UsIBatch;
-	std::vector<std::list<Sprite>> renderBatches = { tileBatch,buildingBatch,natureBatch, UsIBatch };
+	std::list<Sprite> cardBatch;
+	std::vector<std::list<Sprite>> renderBatches = { tileBatch,buildingBatch,natureBatch, cardBatch };
 
 	/*!***********************************************************************
 	* UI BATCHES
@@ -94,8 +98,7 @@ namespace RenderSystem {
 	/*!***********************************************************************
 	* UI SPRITE
 	*************************************************************************/
-	Sprite ui_Sprite;
-	Sprite window_Sprite;
+	Sprite card_Sprite;
 
 #pragma endregion
 
@@ -160,7 +163,7 @@ namespace RenderSystem {
 		UIBatch.clear();
 	}
 
-	void AddBatch(const BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer, const RENDER_PIVOT& pivot, RenderSetting setting) {
+	void AddBatch(const SPRITE_BATCH_TYPE& id, const SPRITE_TYPE& type, const int& x, const int& y, const int& layer, const RENDER_PIVOT& pivot, RenderSetting setting) {
 
 		Sprite sprite = GetSprite(type);
 		sprite.type = type;
@@ -215,18 +218,15 @@ namespace RenderSystem {
 		case NATURE:
 			return nature_Sprite;
 			break;
-		case UI:
-			return ui_Sprite;
-			break;
-		case UI_WINDOW:
-			return window_Sprite;
+		case CARD:
+			return card_Sprite;
 			break;
 		default:
 			break;
 		}
 	}
 
-	int GetBatch(const BATCH_TYPE& id) {
+	int GetBatch(const SPRITE_BATCH_TYPE& id) {
 		switch (id)
 		{
 		case TILE_BATCH:
@@ -238,8 +238,8 @@ namespace RenderSystem {
 		case NATURE_BATCH:
 			return NATURE_BATCH;
 			break;
-		case UI_BATCH:
-			return UI_BATCH;
+		case CARD_BATCH:
+			return CARD_BATCH;
 			break;
 		default:
 			break;
@@ -358,19 +358,12 @@ namespace RenderSystem {
 		nature_Sprite.midWidth = nature_Sprite.width / 2;
 		nature_Sprite.midHeight = nature_Sprite.height / 2;
 
-		//UI
-		ui_Sprite.width = 100;
-		ui_Sprite.height = 100;
-		ui_Sprite.scale = { ui_Sprite.width,ui_Sprite.height };
-		ui_Sprite.midWidth = ui_Sprite.width / 2;
-		ui_Sprite.midHeight = ui_Sprite.height / 2;
-
-		//IN-GAME WINDOW
-		window_Sprite.width = 1500;
-		window_Sprite.height = 1500;
-		window_Sprite.scale = { window_Sprite.width,window_Sprite.height };
-		window_Sprite.midWidth = window_Sprite.width / 2;
-		window_Sprite.midHeight = window_Sprite.height / 2;
+		//CARD
+		card_Sprite.width = 100;
+		card_Sprite.height = 100;
+		card_Sprite.scale = { card_Sprite.width,card_Sprite.height };
+		card_Sprite.midWidth = card_Sprite.width / 2;
+		card_Sprite.midHeight = card_Sprite.height / 2;
 
 		/*!***********************************************************************
 		\brief
@@ -461,8 +454,7 @@ namespace RenderSystem {
 
 	void LoadTextures() {
 		tileSprite.tex = AEGfxTextureLoad("Assets/Tile.png");
-		ui_Sprite.tex = AEGfxTextureLoad("Assets/Card.png");
-		window_Sprite.tex = AEGfxTextureLoad("Assets/GameWindow.png");
+		card_Sprite.tex = AEGfxTextureLoad("Assets/Card.png");
 		// tileSprite.tex = AEGfxTextureLoad("Assets/BlueRect.png");
 		residential_S_Sprite.tex = AEGfxTextureLoad("Assets/residential_s_test.png");
 		nature_Sprite.tex = AEGfxTextureLoad("Assets/tree_test.png");

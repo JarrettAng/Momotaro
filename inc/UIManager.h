@@ -48,23 +48,6 @@ namespace UIManager {
 		s8 S;
 		s8 M;
 		s8 L;
-
-		s8 size(FONT_SIZE size) {
-			switch (size)
-			{
-			case SMALL:
-				return S;
-				break;
-			case MIDIUM:
-				return M;
-				break;
-			case LARGE:
-				return L;
-				break;
-			default:
-				break;
-			}
-		}
 	};
 
 	void Initialize();
@@ -73,15 +56,15 @@ namespace UIManager {
 	void MakeText();
 
 	FONT GetFont(const FONT_TYPE& type);
-	void RenderText(const FONT_TYPE& font, const float& x, const float& y, std::string text, const Vec3<float>& color = { 1.0f,1.0f,1.0f });
+	void RenderText(const s8& font, const float& x, const float& y, const int& layer, std::string text, const Vec3<float>& color = { 1.0f,1.0f,1.0f });
 
 	/*!***********************************************************************
 	* BUTTON
 	*************************************************************************/
 	// Button with TEXTURE + NO text.
-	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, AEGfxTexture* tex);
+	void RenderRect(const float& x, const float& y, const float& width, const float& height, const int& layer, AEGfxTexture* tex);
 	// Button with COLOR + NO text.
-	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const Vec4<float>& btnColor = { 1.0f,1.0f,1.0f,1.0f });
+	void RenderRect(const float& x, const float& y, const float& width, const float& height, const int& layer, const Vec4<float>& btnColor = { 1.0f,1.0f,1.0f,1.0f });
 
 	// Button with TEXTURE + text.
 	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, AEGfxTexture* tex, const Vec3<float>& txtColor = { 1.0f,1.0f,1.0f });

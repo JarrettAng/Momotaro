@@ -5,11 +5,9 @@
 
 
 namespace UIManager {
-
 	/*!***********************************************************************
-	* DECLARATIONS.
+	* CARDS DECLARATIONS.
 	*************************************************************************/
-
 	//Individual Card Variables
 	struct card {
 		float x, y;
@@ -23,13 +21,32 @@ namespace UIManager {
 
 	//Cursor Var (s32 is an int)
 	int cursor_x, cursor_y;
+	/*************************************************************************/
 
+	/*!***********************************************************************
+	* FONTS
+	*************************************************************************/
 	FONT roboto;
+	/*************************************************************************/
 
+	/*!***********************************************************************
+	* TEXTURES
+	*************************************************************************/
+	AEGfxTexture* pauseTex;
+	/*************************************************************************/
+
+	/*!***********************************************************************
+	* VARIABLE CACHE
+	*************************************************************************/
 	f32 textWidth, textHeight;
+	/*************************************************************************/
 
+	/*!***********************************************************************
+	* FUNCTION DECLARATIONS
+	*************************************************************************/
 	void InitializeFont();
-	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, const int& layer, AEGfxTexture* tex, const Vec3<float>& txtColor, const Vec3<float>& btnColor);
+	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, AEGfxTexture* tex, const Vec3<float>& txtColor, const Vec4<float>& btnColor);
+	/*************************************************************************/
 
 	/*!***********************************************************************
 	* HELPER FUNCTIONS FOR CREATING UI DATA.
@@ -37,13 +54,14 @@ namespace UIManager {
 	void TransformDataToUIData(UIData& data, const float& x, const float& y, const float& width, const float& height);
 	void GraphicsDataToUIData(UIData& data, AEGfxTexture* tex, const Vec4<float>& color);
 	void TextDataToUIData(UIData& data, const s8& font, const float& x, const float& y, std::string text, const Vec3<float>& color, const float& scale);
+	/*************************************************************************/
 
 	/*!***********************************************************************
 	* HELPER FUNCTIONS FOR BUTTON.
 	*************************************************************************/
 	AEVec2 GetButtonSize(const float& xPadding, const float& yPadding);
 	AEVec2 GetCenteredTextPos(const float& x, const float& y, const float& width, const float& height, const float& textWidth, const float& textHeight);
-
+	/*************************************************************************/
 
 	void Initialize() {
 		InitializeFont();
@@ -76,6 +94,8 @@ namespace UIManager {
 
 		c5.x = init_x - 200;
 		c5.y = init_y;
+
+		pauseTex = AEGfxTextureLoad("Assets/GameWindow.png");
 	}
 
 	void InitializeFont() {
@@ -85,18 +105,39 @@ namespace UIManager {
 		roboto.L = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 60);
 	}
 
-	void RenderText(const s8& font, const float& x, const float& y, std::string text, const Vec3<float>& color)
+	void RenderText(const s8& font, const float& x, const float& y, const int& layer, std::string text, const Vec3<float>& color)
 	{
-		// Initialize text data.
 		UIData data;
+		// Order of rendering UI.
+		data.layer = layer;
+
+		// Initialize text data.
 		TextDataToUIData(data, font, x, y, text, color, 1);
 
 		// Add text data to text batch queue in render system.
 		RenderSystem::AddUIBatch(data);
-
 	}
 
-	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, const int& layer, AEGfxTexture* tex, const Vec3<float>& txtColor, const Vec4<float>& btnColor) {
+	void RenderRect(const float& x, const float& y, const float& width, const float& height, const int& layer, const Vec4<float>& color, AEGfxTexture* tex)
+	{
+		UIData data;
+		// Order of rendering UI.
+		data.layer = layer;
+		/*!***********************************************************************
+		* Initialize rect data.
+		*************************************************************************/
+		TransformDataToUIData(data, x, y, width, height);
+
+		/*!***********************************************************************
+		* Initialize graphics data.
+		*************************************************************************/
+		GraphicsDataToUIData(data, tex, color);
+
+		// Add text data to text batch queue in render system.
+		RenderSystem::AddUIBatch(data);
+	}
+
+	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, AEGfxTexture* tex, const Vec3<float>& txtColor, const Vec4<float>& btnColor) {
 
 		UIData data;
 		// Order of rendering UI.
@@ -130,21 +171,26 @@ namespace UIManager {
 	/*!***********************************************************************
 	* OVERLOADED RENDER BUTTON FUNCS
 	*************************************************************************/
-	// Button with TEXTURE + NO text.
-	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, AEGfxTexture* tex = nullptr) {
-		RenderButton(x, y, xPadding, yPadding, NONE, {}, layer, tex, Vec3<float>{}, Vec4<float>{});
-	}
-	// Button with COLOR + NO text.
-	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const Vec4<float>& btnColor) {
-		RenderButton(x, y, xPadding, yPadding, NONE, {}, layer, nullptr, Vec3<float>{}, btnColor);
-	}
 	// Button with TEXTURE + text.
 	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, AEGfxTexture* tex, const Vec3<float>& txtColor) {
-		RenderButton(x, y, xPadding, yPadding, font, text, layer, tex, txtColor, Vec4<float>{});
+		RenderButton(x, y, xPadding, yPadding, layer, font, text, tex, txtColor, Vec4<float>{});
 	}
 	// Button with COLOR + text.
 	void RenderButton(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, const Vec4<float>& btnColor, const Vec3<float>& txtColor) {
-		RenderButton(x, y, xPadding, yPadding, font, text, layer, nullptr, txtColor, btnColor);
+		RenderButton(x, y, xPadding, yPadding, layer, font, text, nullptr, txtColor, btnColor);
+	}
+	/*************************************************************************/
+
+	/*!***********************************************************************
+	* OVERLOADED RENDER RECT FUNCS
+	*************************************************************************/
+	// Rect with TEXTURE.
+	void RenderRect(const float& x, const float& y, const float& width, const float& height, const int& layer, AEGfxTexture* tex) {
+		RenderRect(x, y, width, height, layer, Vec4<float>{}, tex);
+	}
+	// Rect with COLOR.
+	void RenderRect(const float& x, const float& y, const float& width, const float& height, const int& layer, const Vec4<float>& btnColor) {
+		RenderRect(x, y, width, height, layer, btnColor, nullptr);
 	}
 	/*************************************************************************/
 
@@ -209,17 +255,17 @@ namespace UIManager {
 	void MakeWindow() {
 		//HARDCODED x and y, Window scales unevenly shifts the local axis
 		if (AEInputCheckPrev(AEVK_SPACE)) {
-			RenderSystem::AddBatch(RenderSystem::UI_BATCH, RenderSystem::UI_WINDOW, -750, 750, 0, RenderSystem::TOP_LEFT);
-			UIManager::RenderText(roboto.M, -0.1f, 0.0f, "PAUSED", { (0.0f), (0.0f), (0.0f) });
+			RenderRect(-750, 750, 1500, 1500, 0, pauseTex);
+			RenderText(roboto.M, -0.1f, 0.0f, 0, "PAUSED", { (0.0f), (0.0f), (0.0f) });
 		}
-		
+
 
 	}
 
 	void MakeText() {
 		//TEMP location
-		UIManager::RenderText(roboto.M, -0.9f, 0.9f, "EXPERIENCE", { (0.0f), (0.0f), (0.0f) });
-		UIManager::RenderText(roboto.M, -0.6f, 0.9f, "0/100", { (0.0f), (0.0f), (0.0f) });
+		RenderText(roboto.M, -0.9f, 0.9f, 0, "EXPERIENCE", { (0.0f), (0.0f), (0.0f) });
+		RenderText(roboto.M, -0.6f, 0.9f, 0, "0/100", { (0.0f), (0.0f), (0.0f) });
 	}
 
 
@@ -263,7 +309,7 @@ namespace UIManager {
 				}
 			}
 
-			RenderSystem::AddBatch(RenderSystem::UI_BATCH, RenderSystem::UI, c1.x, c1.y);
+			RenderSystem::AddBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, c1.x, c1.y);
 		}
 
 		//Card2
@@ -295,7 +341,7 @@ namespace UIManager {
 				}
 			}
 
-			RenderSystem::AddBatch(RenderSystem::UI_BATCH, RenderSystem::UI, c2.x, c2.y);
+			RenderSystem::AddBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, c2.x, c2.y);
 		}
 
 		//Card3
@@ -328,7 +374,7 @@ namespace UIManager {
 			}
 
 
-			RenderSystem::AddBatch(RenderSystem::UI_BATCH, RenderSystem::UI, c3.x, c3.y);
+			RenderSystem::AddBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, c3.x, c3.y);
 		}
 
 		//Card4
@@ -360,7 +406,7 @@ namespace UIManager {
 				}
 			}
 
-			RenderSystem::AddBatch(RenderSystem::UI_BATCH, RenderSystem::UI, c4.x, c4.y);
+			RenderSystem::AddBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, c4.x, c4.y);
 		}
 
 		//Card5
@@ -392,7 +438,7 @@ namespace UIManager {
 				}
 			}
 
-			RenderSystem::AddBatch(RenderSystem::UI_BATCH, RenderSystem::UI, c5.x, c5.y);
+			RenderSystem::AddBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, c5.x, c5.y);
 		}
 
 	}

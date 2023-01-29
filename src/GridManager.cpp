@@ -122,6 +122,5 @@ namespace GridManager {
 				if (grid[index].isRenderable) RenderSystem::AddBatch(RenderSystem::TILE_BATCH, RenderSystem::TILE, grid[index].pos.x, grid[index].pos.y);
 			}
 		}
-		UIManager::RenderButton(0, 0, 100, 100, 0, UIManager::GetFont(UIManager::ROBOTO).S, "dawdawdwadwadawdawd", Vec4<float>{1, 1, 0, 1}, Vec3<float>{1, 0, 1});
 	}
 }
