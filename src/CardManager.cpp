@@ -86,16 +86,25 @@ namespace CardManager {
 
 	void DrawCard(BuildingEnum::TYPE type, BuildingEnum::LEVEL level) {
 		BuildingData buildingData = BuildingManager::GetBuildingData(type, BuildingEnum::_1X1, level);
+
+		std::cout << "DEBUG: CardManager Get Data of TYPE " << buildingData.type << " ,SIZE " << buildingData.size << " ,LEVEL " << buildingData.level << "\n";
+
 		AddToDeck(buildingData);
 	}
 
 	void DrawRandomCard(BuildingEnum::LEVEL level) {
 		BuildingData buildingData = BuildingManager::GetRandomBuildingData(level);
+
+		std::cout << "DEBUG: CardManager Get Data of TYPE " << buildingData.type << " ,SIZE " << buildingData.size << " ,LEVEL " << buildingData.level << "\n";
+
 		AddToDeck(buildingData);
 	}
 
 	void DrawRandomCard(BuildingEnum::TYPE type) {
 		BuildingData buildingData = BuildingManager::GetRandomBuildingData(type);
+
+		std::cout << "DEBUG: CardManager Get Data of TYPE " << buildingData.type << " ,SIZE " << buildingData.size << " ,LEVEL " << buildingData.level << "\n";
+
 		AddToDeck(buildingData);
 	}
 
