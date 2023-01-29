@@ -22,13 +22,17 @@ class Card {
 			position = _position;
 			deckCardData = _deckCardData;
 
+			UpdateComponentPositions();
+		}
+
+		void UpdateComponentPositions() {
 			// Load name data based on position
 			name.x = position.x;
-			name.y = position.y + position.height * 0.5f;
+			name.y = position.y;
 
 			// Load desc data based on position
-			name.x = position.x;
-			name.y = name.y + position.height * 0.1f;
+			desc.x = position.x;
+			desc.y = name.y + position.height * 0.1f;
 
 			// Load icon data based on position
 			icon.x = position.x;

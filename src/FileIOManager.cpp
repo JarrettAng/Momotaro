@@ -69,11 +69,11 @@ namespace FileIOManager {
 		//BuildingData newBuilding12{ COMMERCIAL, _2X1, L3, 5, 0, -5, 1, "Small house", "Small lovely house", 112, 000 };
 		//buildingsData.push_back(newBuilding12);
 
-		BuildingData newBuilding13{ BuildingEnum::INDUSTRIAL, BuildingEnum::_2X1, BuildingEnum::L1, -3, -1, 5, 1, "Small house", "Small lovely house", 200, 000 };
+		BuildingData newBuilding13{ BuildingEnum::INDUSTRIAL, BuildingEnum::_1X1, BuildingEnum::L1, -3, -1, 5, 1, "Small house", "Small lovely house", 200, 000 };
 		buildingsData.push_back(newBuilding13);
-		BuildingData newBuilding14{ BuildingEnum::INDUSTRIAL, BuildingEnum::_2X1, BuildingEnum::L2, -3, -1, 5, 1, "Small house", "Small lovely house", 201, 000 };
+		BuildingData newBuilding14{ BuildingEnum::INDUSTRIAL, BuildingEnum::_1X1, BuildingEnum::L2, -3, -1, 5, 1, "Small house", "Small lovely house", 201, 000 };
 		buildingsData.push_back(newBuilding14);
-		BuildingData newBuilding15{ BuildingEnum::INDUSTRIAL, BuildingEnum::_2X1, BuildingEnum::L3, -3, -1, 5, 1, "Small house", "Small lovely house", 202, 000 };
+		BuildingData newBuilding15{ BuildingEnum::INDUSTRIAL, BuildingEnum::_1X1, BuildingEnum::L3, -3, -1, 5, 1, "Small house", "Small lovely house", 202, 000 };
 		buildingsData.push_back(newBuilding15);
 
 		//BuildingData newBuilding16{ INDUSTRIAL, _2X2, L1, -8, -5, 8, 0, "Small house", "Small lovely house", 210, 000 };

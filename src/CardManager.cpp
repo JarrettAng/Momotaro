@@ -8,6 +8,8 @@
 #include <ColorTable.h>
 #include <Card.h>
 
+#include <iostream>
+
 namespace CardManager {
 	u16 startingHandSize;
 	std::vector<DeckData> deck;					// Data on all cards in play 
@@ -15,6 +17,7 @@ namespace CardManager {
 
 	UIManager::Transform cardPositionTemplate;	// Rendering data for a generic card
 	UIManager::Transform handBackground;		// Rendering data for the hand background
+	int cardSpacing;							// Spacing between cards in hand
 
 	Card *selectedCard;							// Pointer to the current card selected by player
 
@@ -30,18 +33,23 @@ namespace CardManager {
 		selectedCard = nullptr;
 
 		handBackground.width = AEGfxGetWinMaxX();
-		handBackground.height = AEGfxGetWinMaxY() * 0.25f;
+		handBackground.height = AEGfxGetWinMaxY() * 0.35f;
 
 		handBackground.x = -handBackground.width / 2.0f;
 		handBackground.y = AEGfxGetWinMinY() * 0.9f + handBackground.height;
 
+		cardSpacing = AEGfxGetWinMaxX() * 0.025f;
+
 		cardPositionTemplate.height = handBackground.height * 0.9f;
 		cardPositionTemplate.width = cardPositionTemplate.height * 0.75f;
+		cardPositionTemplate.y = handBackground.y - (handBackground.height - cardPositionTemplate.height) / 2.0f;
 
-		// Fill hand with 5 random level 1 cards
-		for (u16 count = 0; count < startingHandSize; ++count) {
-			DrawRandomCard(BuildingEnum::L1);
-		}
+		// Fill hand with 5 starting cards
+		DrawCard(BuildingEnum::RESIDENTIAL, BuildingEnum::L1);
+		DrawCard(BuildingEnum::RESIDENTIAL, BuildingEnum::L1);
+		DrawCard(BuildingEnum::RESIDENTIAL, BuildingEnum::L1);
+		DrawCard(BuildingEnum::COMMERCIAL, BuildingEnum::L1);
+		DrawCard(BuildingEnum::INDUSTRIAL, BuildingEnum::L1);
 	}
 
 	void Free() {
@@ -54,9 +62,23 @@ namespace CardManager {
 
 		// Render each card
 		for  (Card& card : hand) {
+
 			UIManager::AddRectToBatch(card.position.x, card.position.y, card.position.width, card.position.height, 1, COLOR_CARD_BORDER);
-			UIManager::AddRectToBatch(card.position.x + card.position.width * 0.025f, card.position.y - card.position.height * 0.025f, card.position.width * 0.95f, card.position.height * 0.95f, 1, COLOR_CARD);
-			//UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).S, card.name.x, card.name.y, 1, card.deckCardData->card.name, COLOR_BLACK);
+
+			switch (card.deckCardData->card.type) {
+				case BuildingEnum::RESIDENTIAL:
+					UIManager::AddRectToBatch(card.position.x + card.position.width * 0.025f, card.position.y - card.position.height * 0.025f, card.position.width * 0.95f, card.position.height * 0.95f, 2, COLOR_CARD_R);
+					break;
+				case BuildingEnum::COMMERCIAL:
+					UIManager::AddRectToBatch(card.position.x + card.position.width * 0.025f, card.position.y - card.position.height * 0.025f, card.position.width * 0.95f, card.position.height * 0.95f, 2, COLOR_CARD_C);
+					break;
+				case BuildingEnum::INDUSTRIAL:
+					UIManager::AddRectToBatch(card.position.x + card.position.width * 0.025f, card.position.y - card.position.height * 0.025f, card.position.width * 0.95f, card.position.height * 0.95f, 2, COLOR_CARD_I);
+					break;
+			}
+
+			UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).S, card.name.x / AEGetWindowWidth(), card.name.y / AEGetWindowHeight(), 3, card.deckCardData->card.name, COLOR_BLACK);
+
 			//UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).S, card.desc.x, card.desc.y, 1, card.deckCardData->card.desc, COLOR_BLACK);
 		}
 	}
@@ -87,11 +109,23 @@ namespace CardManager {
 		// Otherwise, add the new card to the deck
 		DeckData newDeckCardData = { 1, buildingData };
 		deck.push_back(newDeckCardData);
-		AddToHand(&newDeckCardData);
+		AddToHand(&deck.back());
 	}
 
 	void UpdateHandPositions() {
+		// Update the background size to wrap around the cards
+		handBackground.width = hand.size() * cardPositionTemplate.width + (hand.size() + 1) * cardSpacing;
+		handBackground.x = -handBackground.width / 2.0f;
 
+		float currentX = handBackground.x + cardSpacing; // Starting from the left
+
+		// Arrange the cards
+		for (Card& card : hand) {
+			card.position.x = currentX;
+			card.UpdateComponentPositions();
+
+			currentX += cardPositionTemplate.width + cardSpacing;
+		}
 	}
 
 	void PlayCard() {
@@ -103,13 +137,15 @@ namespace CardManager {
 	}
 
 	void AddToHand(DeckData *deckCardData) {
-		cardPositionTemplate.x = handBackground.x;
-		cardPositionTemplate.y = handBackground.y;
 		Card newCard = Card(cardPositionTemplate, deckCardData);
 		hand.push_back(newCard);
+
+		UpdateHandPositions();
 	}
 
 	void RemoveFromHand(Card* cardToRemove) {
 		hand.remove(*cardToRemove);
+
+		UpdateHandPositions();
 	}
 }

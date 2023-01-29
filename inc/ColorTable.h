@@ -8,11 +8,13 @@
 * CARD COLOR
 *************************************************************************/
 #define COLOR_CARD_BACKGROUND {0.25f, 0.25f, 0.25f, 0.75f}
-#define COLOR_CARD {0.0f,0.65f, 0.95f, 1.0f}
+#define COLOR_CARD_R {0.8f,0.9f, 0.55f, 1.0f}
+#define COLOR_CARD_C {0.0f,0.65f, 0.95f, 1.0f}
+#define COLOR_CARD_I {0.95f,0.8f, 0.35f, 1.0f}
 #define COLOR_CARD_BORDER {0.0f, 0.0f, 0.0f, 1.0f}
 
 /*!***********************************************************************
 * BASIC COLOR
 *************************************************************************/
-#define COLOR_BLACK {1.0f, 1.0f, 1.0f}
+#define COLOR_BLACK {0.0f, 0.0f, 0.0f}
 #define COLOR_BLUE {0.0f, 0.0f, 1.0f}
