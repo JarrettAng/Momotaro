@@ -1,10 +1,6 @@
 #pragma once
 namespace IsometricGrid
 {
-    struct vec2i{
-        int x{0};
-        int y{0};
-    };
     enum TileType{
         NONE = 0,
         RESIDENTIAL = 1,
@@ -12,14 +8,19 @@ namespace IsometricGrid
         COMMERCIAL = 3,
         NATURE = 99,
     };
+    	struct vec2i{
+        int x;
+        int y;
+    };
+   
     struct cell{
 		vec2i pos;
         bool isRenderable;
-        int ID{ 0 };
+        int ID;
         TileType _tileType;
 	};
 
-
+    
 
     /// @brief Return 
     /// @param x1 
@@ -49,8 +50,10 @@ namespace IsometricGrid
     /// @param y y index of the world cell
     /// @return Screen position in the form of vec2i
     vec2i WorldIndexToScreenPos(int x, int y);
+    vec2i ToScreen(int x, int y);
     vec2i ScreenPosToIso(int x, int y);
 
     
     vec2i MouseToCell(int mouseX, int mouseY);
+
 } // namespace IsometricGrid
