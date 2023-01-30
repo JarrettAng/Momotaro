@@ -1,7 +1,7 @@
 /*!************************************************************************
 \file:          Scene.cpp
-\author:
-\par DP email:
+\author:		Jarrett Ang
+\par DP email:	a.jiaweijarrett@digipen.edu
 \par Course:    CSD1171B
 \par Software Engineering Project
 \date:          30-01-2023

@@ -1,15 +1,14 @@
 /*!************************************************************************
 \file:          Building.h
-\author:        
-\par DP email:  
+\author:		Jarrett Ang
+\par DP email:	a.jiaweijarrett@digipen.edu
 \par Course:    CSD1171B
 \par Software Engineering Project
 \date:          30-01-2023
 \brief
-
-
-The functions include:
-- 
+This header file contains the data of all possible buildings in the game, 
+information like type, size, and level. It also holds the implementation of the
+building class.
 **************************************************************************/
 
 #pragma once

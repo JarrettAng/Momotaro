@@ -1,7 +1,7 @@
 /*!************************************************************************
 \file:          BuildingManager.cpp
-\author:
-\par DP email:
+\author:		Jarrett Ang
+\par DP email:	a.jiaweijarrett@digipen.edu
 \par Course:    CSD1171B
 \par Software Engineering Project
 \date:          30-01-2023
@@ -88,27 +88,6 @@ namespace BuildingManager {
 
 		CreateBuilding(randType, randSize, randLevel);
 	}
-
-	//void CreateRandomBuilding(TYPE type) {
-	//	SIZE randSize = (SIZE)(rand() % SIZE_LENGTH);
-	//	LEVEL randLevel = (LEVEL)(rand() % LEVEL_LENGTH);
-
-	//	CreateBuilding(type, randSize, randLevel);
-	//}
-
-	//void CreateRandomBuilding(SIZE size) {
-	//	TYPE randType = (TYPE)(rand() % TYPE_LENGTH);
-	//	LEVEL randLevel = (LEVEL)(rand() % LEVEL_LENGTH);
-
-	//	CreateBuilding(randType, size, randLevel);
-	//}
-
-	//void CreateRandomBuilding(LEVEL level) {
-	//	TYPE randType = (TYPE)(rand() % TYPE_LENGTH);
-	//	SIZE randSize = (SIZE)(rand() % SIZE_LENGTH);
-
-	//	CreateBuilding(randType, randSize, level);
-	//}
 
 	void Clear() {
 		buildingsData.clear();

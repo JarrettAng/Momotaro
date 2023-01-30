@@ -1,15 +1,20 @@
 /*!************************************************************************
 \file:          Card.h
-\author:
-\par DP email:
+\author:		Jarrett Ang
+\par DP email:	a.jiaweijarrett@digipen.edu
 \par Course:    CSD1171B
 \par Software Engineering Project
 \date:          30-01-2023
 \brief
-
+This header file contains the information needed for the cards in the player's hand.
+The card stores the positions for rendering all of its text and icon as well as the 
+information, like name, description needed to do so.
 
 The functions include:
-- 
+- Card
+Constructor to create a card, needs information of the building it will represent
+- UpdateComponentPositions
+Updates the rendering positions of the card elements, usually when the hand size updates
 **************************************************************************/
 
 #pragma once

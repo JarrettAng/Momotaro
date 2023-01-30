@@ -1,15 +1,27 @@
 /*!************************************************************************
 \file:          BuildingManager.h
-\author:
-\par DP email:
+\author:		Jarrett Ang
+\par DP email:	a.jiaweijarrett@digipen.edu
 \par Course:    CSD1171B
 \par Software Engineering Project
 \date:          30-01-2023
 \brief
-
+This header file handles the creation/deletion of buildings, and the loading 
+of building data.
 
 The functions include:
--
+- Initialize
+Reads the building data from the JSON file upon loading into the game scene
+- Clear
+Resets the data read on game scene exit
+- GetBuildingData
+Returns the building information of the given type, size, level
+- GetRandomBuildingData
+Returns a random building information, can be controlled by parameters
+- CreateBuilding
+
+- CreateRandomBuilding
+
 **************************************************************************/
 
 #pragma once
