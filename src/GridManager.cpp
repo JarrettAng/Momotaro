@@ -21,7 +21,8 @@ The functions include:
 #include <MomoMaths.h>
 
 #include <UIManager.h>
-#include "GridManager.h"
+#include <GridManager.h>
+#include <PauseManager.h>
 
 namespace GridManager {
 	namespace iso = IsometricGrid;
@@ -84,6 +85,7 @@ namespace GridManager {
 	}
 
 	void SpawnResidential(Vec2<int> mousePos){
+		if(PauseManager::IsPaused()) return;
 		iso::vec2i SelectedCell{iso::ScreenPosToIso(mousePos.x,mousePos.y)};
 		int index = GetIndex(SelectedCell.x,SelectedCell.y);
 		if(!isCellSafe(SelectedCell)) return;
@@ -92,6 +94,8 @@ namespace GridManager {
 		CheckCellNeighbor(grid, SelectedCell);
 	}
 	void SpawnCommerical(Vec2<int> mousePos){
+		if(PauseManager::IsPaused()) return;
+
 		iso::vec2i SelectedCell{iso::ScreenPosToIso(mousePos.x,mousePos.y)};
 		int index = GetIndex(SelectedCell.x,SelectedCell.y);
 		if(!isCellSafe(SelectedCell)) return;
@@ -100,6 +104,8 @@ namespace GridManager {
 		CheckCellNeighbor(grid, SelectedCell);
 	}
 	void SpawnIndustrial(Vec2<int> mousePos){
+		if(PauseManager::IsPaused()) return;
+
 		iso::vec2i SelectedCell{iso::ScreenPosToIso(mousePos.x,mousePos.y)};
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if(!isCellSafe(SelectedCell)) return;
@@ -108,6 +114,8 @@ namespace GridManager {
 		CheckCellNeighbor(grid, SelectedCell);
 	}
 	void SpawnNature(Vec2<int> mousePos){
+		if(PauseManager::IsPaused()) return;
+
 		iso::vec2i SelectedCell{iso::ScreenPosToIso(mousePos.x,mousePos.y)};
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if(!isCellSafe(SelectedCell)) return;
@@ -118,6 +126,8 @@ namespace GridManager {
 		grid[index].ID = iso::ROCK;
 	}
 	void RandomiseTerrain(){
+		if(PauseManager::IsPaused()) return;
+
 		/*
 		TOP LEFT = x--;
 		TOP RIGHT = y--;
@@ -290,6 +300,8 @@ namespace GridManager {
 	}
 
 	void UpdateMouseToGrid() {
+		if(PauseManager::IsPaused()) return;
+
 		// //MOUSE INPUTS (Tile width = 100, tile height = 50)
 		// int cellX = InputManager::mousePos.x / 100;
 		// int cellY = InputManager::mousePos.y / 50;
@@ -318,6 +330,9 @@ namespace GridManager {
 	}
 
 	void storeClickData(Vec2<int> mousePos) {
+		if(PauseManager::IsPaused()) return;
+		
+
 		//Convert the mouse position into iso
 		iso::vec2i SelectedCell{iso::ScreenPosToIso(mousePos.x,mousePos.y)};
 		//We offset by 10 units x and y because of how iso works. We moved the grid up by 10 units
@@ -361,6 +376,8 @@ namespace GridManager {
 	}
 
 	void ClearGrid(){
+		if(PauseManager::IsPaused()) return;
+
 		for (int y{ 0 }; y < gridY; ++y) {
 			for (int x{ 0 }; x < gridX; ++x) {
 				int index = GetIndex(x, y);
