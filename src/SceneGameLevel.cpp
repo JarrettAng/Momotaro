@@ -39,7 +39,7 @@ void SceneGameLevel::Initialize() {
 
 void SceneGameLevel::Update() {
 	GridManager::UpdateMouseToGrid();
-
+	UIManager::UpdateUI();
 	//UIManager::UIPause();
 
 	for (auto object : objects) {

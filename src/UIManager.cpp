@@ -5,6 +5,7 @@
 #include <InputManager.h>
 #include <TextureManager.h>
 #include <PauseManager.h>
+#include <SceneManager.h>
 
 namespace UIManager {
 	/*!***********************************************************************
@@ -24,7 +25,8 @@ namespace UIManager {
 	//Cursor Var (s32 is an int)
 	int cursor_x, cursor_y;
 
-	std::list<UIData> ListOfButtons; 
+	// std::list<UIData> ListOfButtons; 
+	std::vector<UIData> ListOfButtons;
 	/*************************************************************************/
 
 
@@ -50,7 +52,7 @@ namespace UIManager {
 	* FUNCTION FORWARD DECLARATIONS
 	*************************************************************************/
 	void InitializeFont();
-    void OnButtonclicked(Vec2<int> mousePos);
+    void OnMouseButtonclicked(Vec2<int> mousePos);
     void AddButtonToBatch(const float &x, const float &y, const float &xPadding, const float &yPadding, const int &layer, const s8 &font, const std::string &text, AEGfxTexture *tex, const Vec3<float> &txtColor, const Vec4<float> &btnColor);
     /*************************************************************************/
 
@@ -68,6 +70,9 @@ namespace UIManager {
 	AEVec2 GetButtonSize(const float& xPadding, const float& yPadding);
 	AEVec2 GetCenteredTextPos(const float& x, const float& y, const float& width, const float& height, const float& textWidth, const float& textHeight);
 	/*************************************************************************/
+	UIData pauseButtonData{};
+	UIData continueButtonData{};
+	UIData exitButtonData{};
 
 	void Initialize() {
 		InitializeFont();
@@ -101,28 +106,57 @@ namespace UIManager {
 		c5.x = init_x - 200;
 		c5.y = init_y;
 		//std::cout << "UIMANAGER INIT" << '\n';
-		UIData pauseButtonData;
-		TransformDataToUIData(pauseButtonData,700.0f,425.0f,70.0f,70.0f);
-		ListOfButtons.push_back(pauseButtonData);
-		InputManager::onMouseClick.Subscribe(OnButtonclicked);
-	}
+		
+		pauseButtonData.isActive = true;
+		TransformDataToUIData(pauseButtonData,700.0f,-425.0f,70.0f,70.0f);
+		pauseButtonData.FunctionPtr = PauseManager::TogglePause;
 
-	void OnButtonclicked(Vec2<int> mousePos){
-		std::cout << "Mouse has been clicked in UIMANAGER!" << '\n';
-		std::cout << "LIST  COUNT : " << ListOfButtons.size() << '\n';
+		continueButtonData.isActive = false;
+		TransformDataToUIData(continueButtonData,-250.0f,50.0f,250.0f,100.0f);
+		continueButtonData.FunctionPtr = PauseManager::TogglePause;
+		continueButtonData.text.text = "CONTINUE";
+
+		exitButtonData.isActive = false;
+		TransformDataToUIData(exitButtonData,50.0f,50.0f,250.0f,100.0f);
+		exitButtonData.FunctionPtr = quitgame;
+
+
+		ListOfButtons.push_back(pauseButtonData);
+		ListOfButtons.push_back(continueButtonData);
+		ListOfButtons.push_back(exitButtonData);
+		
+		InputManager::onMouseClick.Subscribe(OnMouseButtonclicked);
+	}
+	void quitgame(){
+		SceneManager::LoadScene(SceneManager::QUIT);
+	}
+	void UpdateUI(){
+		ListOfButtons[1].isActive = PauseManager::IsPaused();
+		ListOfButtons[2].isActive = PauseManager::IsPaused();
+
+		// continueButtonData.isActive = PauseManager::IsPaused();
+		// exitButtonData.isActive = PauseManager::IsPaused();
+		// std::cout << continueButtonData.isActive << '\n';
+	}
+	void OnMouseButtonclicked(Vec2<int> mousePos){
+		// std::cout << "Mouse has been clicked in UIMANAGER!" << '\n';
+		// std::cout << "LIST  COUNT : " << ListOfButtons.size() << '\n';
 		for(auto& button : ListOfButtons){
 			std::cout << "ButtonStats : " << button.text.text << '\n';
 			std::cout << "Button Pos : " << button.transform.x << ", " << button.transform.y << '\n';
 			std::cout << "Button Size : " << button.transform.width << ", " << button.transform.height << '\n';
 			std::cout << "Mouse Pos : " << mousePos.x << ", " << mousePos.y << '\n';
-			std::cout << "Mouse pos offset : " << (mousePos.x-AEGetWindowWidth()/2) << ", " << (mousePos.y+AEGetWindowHeight()/2) << '\n';
+			std::cout << "Mouse pos offset : " << (mousePos.x-AEGetWindowWidth()/2) << ", " << (mousePos.y-AEGetWindowHeight()/2) << '\n';
 			std::cout << "Button pos offset : " << button.transform.y+button.transform.height << '\n';
+			std::cout << "==================================================================" << '\n';
 			//Left and right bounds (since mouse is offset by half screen size)
 			if(((mousePos.x-AEGetWindowWidth()/2) > button.transform.x) && (mousePos.x-AEGetWindowWidth()/2 < button.transform.x+button.transform.width)){
+			std::cout << "Continue is " << continueButtonData.isActive << '\n';
 				//Top and bottom bounds
-				if(((mousePos.y+AEGetWindowHeight()/2) > button.transform.y) && (mousePos.y+AEGetWindowHeight()/2) > button.transform.y+button.transform.height){
-					// std::cout << "BUTTON CLICKED : " << button.text.text << '\n';
-					PauseManager::TogglePause();
+				if(((mousePos.y-AEGetWindowHeight()/2) > button.transform.y) && ((mousePos.y-AEGetWindowHeight()/2) < button.transform.y+button.transform.height)){
+					std::cout << "BUTTON CLICKED : " << button.text.text << '\n';
+					if(button.isActive) button.FunctionPtr();
+					// PauseManager::TogglePause();
 				}
 			}
 		}
@@ -312,20 +346,19 @@ namespace UIManager {
 		AEInputGetCursorPosition(&x, &y);
 		//bool isPaused;
 
-		EventSystem::Event<bool> onTogglePause;
+		// EventSystem::Event<bool> onTogglePause;
 
 		//TEMP---------------------------------------------------------------------
-		if (AEInputCheckTriggered(AEVK_LBUTTON) && (y <= 93 && y >= 23 && x <= 1568 && x >= 1502)) {
-			// std::cout << "PAUSE CLICKED\n";
-			//printf("%d.x, %d.y\n",x,y );
-			//InputManager::onEscPressed.Subscribe(TogglePause);
-			PauseManager::onTogglePause;
-			//onTogglePause.Invoke(isPaused);
+		// if (AEInputCheckTriggered(AEVK_LBUTTON) && (y <= 93 && y >= 23 && x <= 1568 && x >= 1502)) {
+		// 	// std::cout << "PAUSE CLICKED\n";
+		// 	//printf("%d.x, %d.y\n",x,y );
+		// 	//InputManager::onEscPressed.Subscribe(TogglePause);
+		// 	PauseManager::onTogglePause;
+		// 	//onTogglePause.Invoke(isPaused);
 
-		}
+		// }
 
 
-		
 		if(!PauseManager::IsPaused()){
 			UIManager::AddRectToBatch(700.0f, 425.0f, 70.0f, 70.0f, 0, TextureManager::GetTexture(TextureManager::PAUSE_BUTTON));	
 		}
