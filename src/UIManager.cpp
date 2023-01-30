@@ -23,6 +23,8 @@ namespace UIManager {
 
 	//Cursor Var (s32 is an int)
 	int cursor_x, cursor_y;
+
+	std::list<UIData> ListOfButtons; 
 	/*************************************************************************/
 
 
@@ -48,8 +50,9 @@ namespace UIManager {
 	* FUNCTION FORWARD DECLARATIONS
 	*************************************************************************/
 	void InitializeFont();
-	void AddButtonToBatch(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, AEGfxTexture* tex, const Vec3<float>& txtColor, const Vec4<float>& btnColor);
-	/*************************************************************************/
+    void OnButtonclicked(Vec2<int> mousePos);
+    void AddButtonToBatch(const float &x, const float &y, const float &xPadding, const float &yPadding, const int &layer, const s8 &font, const std::string &text, AEGfxTexture *tex, const Vec3<float> &txtColor, const Vec4<float> &btnColor);
+    /*************************************************************************/
 
 	/*!***********************************************************************
 	* HELPER FUNCTIONS FOR CREATING UI DATA.
@@ -97,7 +100,32 @@ namespace UIManager {
 
 		c5.x = init_x - 200;
 		c5.y = init_y;
+		//std::cout << "UIMANAGER INIT" << '\n';
+		UIData pauseButtonData;
+		TransformDataToUIData(pauseButtonData,700.0f,425.0f,70.0f,70.0f);
+		ListOfButtons.push_back(pauseButtonData);
+		InputManager::onMouseClick.Subscribe(OnButtonclicked);
+	}
 
+	void OnButtonclicked(Vec2<int> mousePos){
+		std::cout << "Mouse has been clicked in UIMANAGER!" << '\n';
+		std::cout << "LIST  COUNT : " << ListOfButtons.size() << '\n';
+		for(auto& button : ListOfButtons){
+			std::cout << "ButtonStats : " << button.text.text << '\n';
+			std::cout << "Button Pos : " << button.transform.x << ", " << button.transform.y << '\n';
+			std::cout << "Button Size : " << button.transform.width << ", " << button.transform.height << '\n';
+			std::cout << "Mouse Pos : " << mousePos.x << ", " << mousePos.y << '\n';
+			std::cout << "Mouse pos offset : " << (mousePos.x-AEGetWindowWidth()/2) << ", " << (mousePos.y+AEGetWindowHeight()/2) << '\n';
+			std::cout << "Button pos offset : " << button.transform.y+button.transform.height << '\n';
+			//Left and right bounds (since mouse is offset by half screen size)
+			if(((mousePos.x-AEGetWindowWidth()/2) > button.transform.x) && (mousePos.x-AEGetWindowWidth()/2 < button.transform.x+button.transform.width)){
+				//Top and bottom bounds
+				if(((mousePos.y+AEGetWindowHeight()/2) > button.transform.y) && (mousePos.y+AEGetWindowHeight()/2) > button.transform.y+button.transform.height){
+					// std::cout << "BUTTON CLICKED : " << button.text.text << '\n';
+					PauseManager::TogglePause();
+				}
+			}
+		}
 	}
 
 	void InitializeFont() {
@@ -288,16 +316,21 @@ namespace UIManager {
 
 		//TEMP---------------------------------------------------------------------
 		if (AEInputCheckTriggered(AEVK_LBUTTON) && (y <= 93 && y >= 23 && x <= 1568 && x >= 1502)) {
-			std::cout << "PAUSE CLICKED\n";
+			// std::cout << "PAUSE CLICKED\n";
 			//printf("%d.x, %d.y\n",x,y );
 			//InputManager::onEscPressed.Subscribe(TogglePause);
 			PauseManager::onTogglePause;
 			//onTogglePause.Invoke(isPaused);
 
 		}
+
+
 		
-		
-		UIManager::AddRectToBatch(700.0f, 425.0f, 70.0f, 70.0f, 0, TextureManager::GetTexture(TextureManager::PAUSE_BUTTON));
+		if(!PauseManager::IsPaused()){
+			UIManager::AddRectToBatch(700.0f, 425.0f, 70.0f, 70.0f, 0, TextureManager::GetTexture(TextureManager::PAUSE_BUTTON));	
+		}
+		// UIManager::AddRectToBatch(700.0f, 425.0f, 70.0f, 70.0f, 0, TextureManager::GetTexture(TextureManager::PAUSE_BUTTON));
+
 		//RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, TextureManager::CARD_BLUE, c1.x, c1.y);
 
 	}																	

@@ -11,19 +11,24 @@ namespace PauseManager {
 	EventSystem::Event<bool> onTogglePause;
 
 #pragma region Forward Delcarations
-	void TogglePause();
 	//void UnPause();
 	//void TogglePauseMenu();
 #pragma endregion
 
-	void Initialize() {
-		isPaused = false;
+    bool IsPaused()
+    {
+        return isPaused;
+    }
+
+    void Initialize()
+    {
+        isPaused = false;
 		InputManager::onEscPressed.Subscribe(TogglePause);
 
 		onTogglePause.Invoke(isPaused);
-	}
+    }
 
-	void PauseManager::Update() {
+    void PauseManager::Update() {
 		if (isPaused) {
 			//"WINDOW"
 			UIManager::AddRectToBatch(-780, 750, 1500, 1500, 0, TextureManager::GetTexture(TextureManager::PAUSE_WINDOW));

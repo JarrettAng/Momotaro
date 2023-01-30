@@ -1,7 +1,7 @@
 /**
  * @file GridManager.h
  * @author amadeusjinhan.chia@digipen.edu
- * @brief GridManager handles the grid logic with merging, synergy and placement of the buildings. It also handles map generation
+ * @brief GridManager handles the grid logic with merging, synergy and placement of the buildings. It also handles * map generation
  * @version 0.1
  * @date 2023-01-30
  * 

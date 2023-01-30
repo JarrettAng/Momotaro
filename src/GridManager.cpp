@@ -129,7 +129,7 @@ namespace GridManager {
 				else grid[index].isRenderable =false;
 			}
 		}
-		std::cout << terrainNum << '\n';
+		// std::cout << terrainNum << '\n';
 		switch (terrainNum)
 		{
 		case 0:
@@ -267,7 +267,18 @@ namespace GridManager {
 		grid[GetIndex(14, 13)].isRenderable = true;
 		grid[GetIndex(15, 13)].isRenderable = true;
 		grid[GetIndex(15, 12)].isRenderable = true;
-
+		terrainNum++;
+		break;
+		case 3:
+		for (int y{ 0 }; y < gridY; ++y) {
+			for (int x{ 0 }; x < gridX; ++x) {
+				int index = GetIndex(x,y);
+				if ((x >= 8 && x <= 13)&&(y >= 8 && y <= 13)) {
+					grid[index].isRenderable = true;
+				}
+				else grid[index].isRenderable =false;
+			}
+		}
 		terrainNum = 0;		
 		break;
 		}
@@ -302,32 +313,7 @@ namespace GridManager {
 	}
 
 	void storeClickData(Vec2<int> mousePos) {
-		// //MOUSE INPUTS (Tile width = 100, tile height = 50)
-		// int cellX = mousePos.x / 100;
-		// int cellY = mousePos.y / 50;
-		// int index = cellX + gridX * cellY;
-
-		// int xOffset = mousePos.x % 100;
-		// int yOffset = mousePos.y % 50;
-		// //Origin -> screen/tile. For now I use numbers
-		// int originX = AEGetWindowWidth() / 2 / 100;
-		// int originY = AEGetWindowHeight() / 2 / 50;
-
-		// // int selectX = (cellX - originX) + (cellY - originY);
-		// // int selectY = (cellY - originY) - (cellX - originX);
-
-		// iso::vec2i SelectedCell{
-		// 	(cellX - originX) + (cellY - originY)+10,		//x
-		// 	(cellY - originY) - (cellX - originX)+10		//y
-		// };
-		// //TOP LEFT
-		// if (iso::isInside(xOffset, yOffset, 0, 0, 0, 25, 50, 0))SelectedCell.x--;
-		// //BOTTOM LEFT
-		// if (iso::isInside(xOffset, yOffset, 0, 25, 0, 50, 50, 50))SelectedCell.y++;
-		// //TOP RIGHT
-		// if (iso::isInside(xOffset, yOffset, 50, 0, 100, 0, 100, 25))SelectedCell.y--;
-		// //BOTTOM RIGHT
-		// if (iso::isInside(xOffset, yOffset, 50, 50, 100, 50, 100, 25))SelectedCell.x++;
+		//Convert the mouse position into iso
 		iso::vec2i SelectedCell{iso::ScreenPosToIso(mousePos.x,mousePos.y)};
 		//We offset by 10 units x and y because of how iso works. We moved the grid up by 10 units
 		if((((SelectedCell.x) < 0) || ((SelectedCell.x) > gridX)) || ((SelectedCell.y) < 0 || (SelectedCell.y) > gridY)) return; 
@@ -515,7 +501,7 @@ namespace GridManager {
 				}
 			}
 		}
-		std::cout << matchCount <<'\n';
+		// std::cout << matchCount <<'\n';
 		//if more than 200 means it's lvl 3
 		if (matchCount == 2 && grid[gridIndex].ID < 200){
 			for(int c : matchedCells){
