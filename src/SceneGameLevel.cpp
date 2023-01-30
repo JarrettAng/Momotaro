@@ -49,6 +49,8 @@ void SceneGameLevel::Draw() {
 	CardManager::PrepareUIRenderBatch();
 	PauseManager::Update();
 	UIManager::LevelUI();
+	//Debug
+	//printf("MinX %f\nMaxX %f\nMinY %f\nMaxY %f\n", AEGfxGetWinMinX(), AEGfxGetWinMaxX(), AEGfxGetWinMinY(), AEGfxGetWinMaxY);
 
 	//Add the pause button
 	//UIManager::AddRectToBatch(800.0f, -400.0f, 10.0f, 10.0f, 6 , AEGfxTexture * tex);

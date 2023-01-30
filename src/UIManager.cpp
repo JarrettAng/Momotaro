@@ -1,6 +1,7 @@
 #include "UIManager.h"
 #include "RenderSystem.h"
 #include <iostream>
+#include <string>
 #include <TextureManager.h>
 
 namespace UIManager {
@@ -258,8 +259,15 @@ namespace UIManager {
 
 	void MakeText() {
 		//PLACEHOLDER values
-		AddTextToBatch(roboto.M, -0.9f, 0.9f, 0, "SYNERGY", { (0.0f), (0.0f), (0.0f) });
-		AddTextToBatch(roboto.M, -0.6f, 0.9f, 0, "0/100",   { (0.0f), (0.0f), (0.0f) });
+		int s = { 50 }, t = { 100 };
+		std::string synergy = std::to_string(s);
+		std::string treshold = std::to_string(t);
+
+		//AddTextToBatch(roboto.M, ((-AEGfxGetWinMinX() + AEGfxGetWinMaxX()) * 0.0001f), 0.9f, 0, "SYNERGY", {(0.0f), (0.0f), (0.0f)});
+		AddTextToBatch(roboto.M, -0.9f, 0.9f, 0, ("SYNERGY    " + synergy), { (0.0f), (0.0f), (0.0f) });
+		//AddTextToBatch(roboto.M, -0.6f, 0.9f, 0, synergy,   { (0.0f), (0.0f), (0.0f) });
+		AddTextToBatch(roboto.M, -0.55f, 0.9f, 0, ("/ " + treshold), {(0.0f), (0.0f), (0.0f)});
+
 	}
 
 	/*!***********************************************************************
