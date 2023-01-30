@@ -59,6 +59,6 @@ namespace PauseManager {
 	//}
 
 	void Free() {
-		InputManager::onButtonPressed.Unsubscribe(TogglePause);
+		InputManager::onEscPressed.Unsubscribe(TogglePause);
 	}
 }
