@@ -29,21 +29,27 @@ namespace InputManager {
 		if (AEInputCheckTriggered(AEVK_RBUTTON)) {
 			onMouseRightClick.Invoke(mousePos);
 		}
+		//C
 		if (AEInputCheckTriggered(AEVK_C)) {
 			onCKeyPressed.Invoke();
 		}
+		//R
 		if (AEInputCheckTriggered(AEVK_R)) {
 			onRKeyPressed.Invoke();
 		}
+		//1
 		if (AEInputCheckTriggered(AEVK_1)) {
 			on1KeyPressed.Invoke(mousePos);
 		}
+		//2
 		if (AEInputCheckTriggered(AEVK_2)) {
 			on2KeyPressed.Invoke(mousePos);
 		}
+		//3
 		if (AEInputCheckTriggered(AEVK_3)) {
 			on3KeyPressed.Invoke(mousePos);
 		}
+		//N
 		if (AEInputCheckTriggered(AEVK_N)) {
 			onNKeyPressed.Invoke(mousePos);
 		}

@@ -2,7 +2,9 @@
 #include "RenderSystem.h"
 #include <iostream>
 #include <string>
+#include <InputManager.h>
 #include <TextureManager.h>
+#include <PauseManager.h>
 
 namespace UIManager {
 	/*!***********************************************************************
@@ -263,6 +265,7 @@ namespace UIManager {
 		std::string synergy = std::to_string(s);
 		std::string treshold = std::to_string(t);
 
+
 		//AddTextToBatch(roboto.M, ((-AEGfxGetWinMinX() + AEGfxGetWinMaxX()) * 0.0001f), 0.9f, 0, "SYNERGY", {(0.0f), (0.0f), (0.0f)});
 		AddTextToBatch(roboto.M, -0.9f, 0.9f, 0, ("SYNERGY    " + synergy), { (0.0f), (0.0f), (0.0f) });
 		//AddTextToBatch(roboto.M, -0.6f, 0.9f, 0, synergy,   { (0.0f), (0.0f), (0.0f) });
@@ -275,6 +278,25 @@ namespace UIManager {
 	*************************************************************************/
 
 	void LevelUI() {
+		//InputManager::onMouseClick.Subscribe(TogglePause);
+		
+		int x, y;
+		AEInputGetCursorPosition(&x, &y);
+		//bool isPaused;
+
+		EventSystem::Event<bool> onTogglePause;
+
+		//TEMP---------------------------------------------------------------------
+		if (AEInputCheckTriggered(AEVK_LBUTTON) && (y <= 93 && y >= 23 && x <= 1568 && x >= 1502)) {
+			std::cout << "PAUSE CLICKED\n";
+			//printf("%d.x, %d.y\n",x,y );
+			//InputManager::onEscPressed.Subscribe(TogglePause);
+			PauseManager::onTogglePause;
+			//onTogglePause.Invoke(isPaused);
+
+		}
+		
+		
 		UIManager::AddRectToBatch(700.0f, 425.0f, 70.0f, 70.0f, 0, TextureManager::GetTexture(TextureManager::PAUSE_BUTTON));
 		//RenderSystem::AddSpriteBatch(RenderSystem::CARD_BATCH, RenderSystem::CARD, TextureManager::CARD_BLUE, c1.x, c1.y);
 
