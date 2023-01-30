@@ -1,13 +1,18 @@
-/**
- * @file GridManager.h
- * @author amadeusjinhan.chia@digipen.edu
- * @brief GridManager handles the grid logic with merging, synergy and placement of the buildings. It also handles * map generation
- * @version 0.1
- * @date 2023-01-30
- * 
- * @copyright Copyright (c) 2023 GGPEN
- * 
- */
+ /*!************************************************************************
+ \file:         GridManager.h
+ \author:		Amadeus Chia
+ \par DP email:	amadeusjinhan.chia@digipen.edu
+ \par Course:   CSD1171B
+ \par Software Engineering Project
+ \date:         30-01-2023
+ \brief
+ GridManager handles the grid logic with merging, synergy and placement of the 
+ buildings, it also handles * map generation.
+
+ The functions include:
+ -
+ **************************************************************************/
+
 #pragma once
 
 #include <IsometricGrid.h> 

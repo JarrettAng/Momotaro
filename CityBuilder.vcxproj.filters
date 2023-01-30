@@ -40,12 +40,6 @@
     <ClCompile Include="src\Building.cpp">
       <Filter>src\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="src\Card.cpp">
-      <Filter>src\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\EventSystem.cpp">
-      <Filter>src\Systems</Filter>
-    </ClCompile>
     <ClCompile Include="src\GameObject.cpp">
       <Filter>src\GameObjects</Filter>
     </ClCompile>

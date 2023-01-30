@@ -1,3 +1,16 @@
+/*!************************************************************************
+\file:          PauseManager.cpp
+\author:
+\par DP email:
+\par Course:    CSD1171B
+\par Software Engineering Project
+\date:          30-01-2023
+\brief
+
+
+The functions include:
+-
+**************************************************************************/
 
 #include <PauseManager.h>
 #include <InputManager.h>

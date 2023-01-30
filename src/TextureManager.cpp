@@ -1,3 +1,17 @@
+/*!************************************************************************
+\file:          TextureManager.cpp
+\author:
+\par DP email:
+\par Course:    CSD1171B
+\par Software Engineering Project
+\date:          30-01-2023
+\brief
+
+
+The functions include:
+-
+**************************************************************************/
+
 #include <AEEngine.h>
 #include <TextureManager.h>
 #include <iostream>

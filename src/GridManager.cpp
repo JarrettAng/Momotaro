@@ -1,11 +1,16 @@
 /*!************************************************************************
-\file GridManager.cpp
-\author Amadeus Chia
-\par DP email: amadeusjinhan.chia@digipen.edu
-\par Course: CSD1171B
-\date 30/01/2023
+\file:          GridManager.cpp
+\author:		Amadeus Chia
+\par DP email:	amadeusjinhan.chia@digipen.edu
+\par Course:    CSD1171B
+\par Software Engineering Project
+\date:          30-01-2023
 \brief
-This source file implements functions that manage the game grid. This includes the merge logic and the placement of buildings
+This source file implements functions that manage the game grid. 
+This includes the merge logic and the placement of buildings
+
+The functions include:
+-
 **************************************************************************/
 
 #include <InputManager.h>

@@ -1,15 +1,17 @@
 /*!************************************************************************
-\file MomoMaths.hpp
+\file MomoMaths.h
 \author Tan Jun Rong
 \par DP email: t.junrong@digipen.edu
 \par Course: CSD1171B
-\date 18/01/2023
+\par Software Engineering Project
+\date 18-01-2023
 \brief
 This header file declares
 
 **************************************************************************/
 
 #pragma once
+
 template<class T>
 struct Vec4
 {

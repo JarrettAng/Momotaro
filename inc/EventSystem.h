@@ -1,8 +1,9 @@
 /*!************************************************************************
-\file EventSystem.hpp
+\file EventSystem.h
 \author Ang Jiawei Jarrett
 \par DP email: a.jiaweijarrett@digipen.edu
 \par Course: CSD1171B
+\par Software Engineering Project
 \date 12/01/2023
 \brief
 This header file declares a generic event system that allows functions with
