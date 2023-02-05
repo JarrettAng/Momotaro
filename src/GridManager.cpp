@@ -92,6 +92,59 @@ namespace GridManager {
 
 		grid[index].ID = iso::RESIDENTIAL;
 		CheckCellNeighbor(grid, SelectedCell);
+
+		Vec2<int> test1{1,1};
+		Vec2<int> test11{2,2};
+		Vec3<int> test2{1,1,1};
+		Vec3<int> test22{2,2,2};
+		Vec4<int> test3{1,1,1,1};
+		Vec4<int> test33{2,2,2,2};
+
+		std::cout <<"TEST 1 (vec+=vec)\n"; 
+
+		std::cout << (test11+=test1) << " = (3,3)"<<'\n';
+		std::cout << (test22+=test2) << " = (3,3,3)"<<'\n';
+		std::cout << (test33+=test3) << " = (3,3,3,3)" <<'\n';
+
+		std::cout <<"TEST 2 (vec-=vec)\n";
+		std::cout << (test11-=test1) << " = (2,2)"<<'\n';
+		std::cout << (test22-=test2) << " = (2,2,2)"<<'\n';
+		std::cout << (test33-=test3) << " = (2,2,2,2)"<<'\n';
+
+		std::cout <<"TEST 3 (vec-vec higher)\n";
+		std::cout << test33-test1 << " = (1,1,2,2)"<< '\n';
+		std::cout << test33-test2 << " = (1,1,1,2)"<<'\n';
+		std::cout << test33-test3 << " = (1,1,1,1)"<< '\n';
+		std::cout << test22-test1 << " = (1,1,2)"<< '\n';
+		std::cout << test22-test2 << " = (1,1,1)"<< '\n';
+
+		// std::cout <<"TEST 4 (vec-vec lower)\n";
+		// std::cout << test1-test33 << " = (1,1,2,2)"<< '\n';
+		// std::cout << test2-test33 << " = (1,1,1,2)"<<'\n';
+		// std::cout << test3-test33 << " = (1,1,1,1)"<< '\n';
+		// std::cout << test1-test22 << " = (1,1,2)"<< '\n';
+		// std::cout << test2-test22 << " = (1,1,1)"<< '\n';
+
+		std::cout <<"TEST 5 (vec+vec)\n";
+		std::cout << test1+test33 << " = (3,3,2,2)"<< '\n';
+		std::cout << test2+test33 << " = (3,3,3,2)"<<'\n';
+		std::cout << test3+test33 << " = (3,3,3,3)"<< '\n';
+		std::cout << test1+test22 << " = (3,3,2)"<< '\n';
+		std::cout << test2+test22 << " = (3,3,3)"<< '\n';
+
+		std::cout <<"TEST 6 (vec*=vec)\n";
+		test1*=4;
+		test2*=4;
+		test3*=4;
+		std::cout << test1 << " = (4,4)"<< '\n';
+		std::cout << test2 << " = (4,4,4)"<< '\n';
+		std::cout << test3 << " = (4,4,4,4)"<< '\n';
+
+		std::cout <<"TEST 7 (vec*T)\n";
+		std::cout << test11*2 << " = (4,4)"<< '\n';
+		std::cout << test22*2 << " = (4,4,4)"<< '\n';
+		std::cout << test33*2 << " = (4,4,4,4)"<< '\n';
+
 	}
 	void SpawnCommerical(Vec2<int> mousePos){
 		if(PauseManager::IsPaused()) return;
