@@ -17,17 +17,8 @@ The functions include:
 namespace InputManager {
 	Vec2<int> mousePos{};
 
-	// Store input keys to check for. (WIP, WILL CHANGE)
-	std::initializer_list<u8> keys{ AEVK_LBUTTON, AEVK_RBUTTON, AEVK_C, AEVK_R, AEVK_1, AEVK_2, AEVK_3, AEVK_N, AEVK_ESCAPE };
 	// Store key + keyevent.
 	std::deque<std::pair<u8, EventSystem::Event<void>>> onKeyTriggered;
-
-	// Initialize deque with key and its respective event.
-	void InputManager::Initialize() {
-		for (const auto& k : keys) {
-			onKeyTriggered.push_back(std::pair < u8, EventSystem::Event<void>>{k, {}});
-		}
-	}
 
 	// Loop through all keys and check if user triggered any.
 	// If so, invoke key event.
@@ -35,6 +26,7 @@ namespace InputManager {
 		for (auto& k : onKeyTriggered) {
 			if (AEInputCheckTriggered(k.first)) {
 				k.second.Invoke();
+				return;
 			}
 		}
 	}
@@ -42,10 +34,17 @@ namespace InputManager {
 	// Subscribe func to key event.
 	void SubscribeToKeyTriggered(u8 key, void (*func)()) {
 		for (auto& k : onKeyTriggered) {
+			// Subscribe to key event if key is found.
 			if (k.first == key) {
 				k.second.Subscribe(func);
+				return;
 			}
 		}
+
+		// Create and add new key event if key is not found.
+		std::pair < u8, EventSystem::Event<void>> keyEvent = { key,{} };
+		keyEvent.second.Subscribe(func);
+		onKeyTriggered.push_back(keyEvent);
 	}
 
 	// Unsubscribe func from key event.
@@ -53,8 +52,10 @@ namespace InputManager {
 		for (auto& k : onKeyTriggered) {
 			if (k.first == key) {
 				k.second.Unsubscribe(func);
+				return;
 			}
 		}
+		std::cout << "KEY NOT FOUND IN OnKeyTriggered DEQUE." << std::endl;
 	}
 
 	Vec2<int> GetMousePos() {

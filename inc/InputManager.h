@@ -19,7 +19,6 @@ The functions include:
 #include <AEEngine.h>
 
 namespace InputManager {
-	void Initialize();
 	void HandleInput();
 	Vec2<int> GetMousePos();
 	void SubscribeToKeyTriggered(u8 key, void (*func)());
