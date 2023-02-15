@@ -46,8 +46,6 @@ AE_API s32	AEVec2Test				(s32 i1, s32 i2);
 \param      [out] pResult
             Pointer to AEVec2 to be set.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void	AEVec2Zero				(AEVec2* pResult);
@@ -69,8 +67,6 @@ AE_API void	AEVec2Zero				(AEVec2* pResult);
 \param      [in] y
             Y value to set with.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void	AEVec2Set				(AEVec2* pResult, f32 x, f32 y);
@@ -88,8 +84,6 @@ AE_API void	AEVec2Set				(AEVec2* pResult, f32 x, f32 y);
 \param      [in] pVec0
             Pointer to AEVec2 for input.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void	AEVec2Neg				(AEVec2* pResult, AEVec2* pVec0);
@@ -111,8 +105,6 @@ AE_API void	AEVec2Neg				(AEVec2* pResult, AEVec2* pVec0);
 \param      [in] pVec1
             Pointer to AEVec2 for input.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void	AEVec2Add				(AEVec2* pResult, AEVec2* pVec0, AEVec2* pVec1);
@@ -134,8 +126,6 @@ AE_API void	AEVec2Add				(AEVec2* pResult, AEVec2* pVec0, AEVec2* pVec1);
 \param      [in] pVec1
             Pointer to AEVec2 for input.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void	AEVec2Sub				(AEVec2* pResult, AEVec2* pVec0, AEVec2* pVec1);
@@ -153,8 +143,6 @@ AE_API void	AEVec2Sub				(AEVec2* pResult, AEVec2* pVec0, AEVec2* pVec1);
 \param      [in] pVec0
             Pointer to AEVec2 for input.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void	AEVec2Normalize			(AEVec2* pResult, AEVec2* pVec0);
@@ -176,8 +164,6 @@ AE_API void	AEVec2Normalize			(AEVec2* pResult, AEVec2* pVec0);
 \param      [in] s
             Value to scale with.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void	AEVec2Scale				(AEVec2* pResult, AEVec2* pVec0, f32 s);
@@ -205,8 +191,6 @@ AE_API void	AEVec2Scale				(AEVec2* pResult, AEVec2* pVec0, f32 s);
 \param      [in] s
             Value to scale with.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void	AEVec2ScaleAdd			(AEVec2* pResult, AEVec2* pVec0, AEVec2* pVec1, f32 s);
@@ -234,8 +218,6 @@ AE_API void	AEVec2ScaleAdd			(AEVec2* pResult, AEVec2* pVec0, AEVec2* pVec1, f32
 \param      [in] s
             Value to scale with.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void	AEVec2ScaleSub			(AEVec2* pResult, AEVec2* pVec0, AEVec2* pVec1, f32 s);
@@ -257,8 +239,6 @@ AE_API void	AEVec2ScaleSub			(AEVec2* pResult, AEVec2* pVec0, AEVec2* pVec1, f32
 \param      [in] pVec1
             Pointer to AEVec2 for input.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void	AEVec2Project			(AEVec2* pResult, AEVec2* pVec0, AEVec2* pVec1);
@@ -281,8 +261,6 @@ AE_API void	AEVec2Project			(AEVec2* pResult, AEVec2* pVec0, AEVec2* pVec1);
 \param      [in] pVec1
             Pointer to AEVec2 for input.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void	AEVec2ProjectPerp		(AEVec2* pResult, AEVec2* pVec0, AEVec2* pVec1);
@@ -313,8 +291,6 @@ AE_API void	AEVec2ProjectPerp		(AEVec2* pResult, AEVec2* pVec0, AEVec2* pVec1);
             At t = 0.0f, the result will be pVec0.
             At t = 1.0f, the result will be pVec1.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void	AEVec2Lerp				(AEVec2* pResult, AEVec2* pVec0, AEVec2* pVec1, f32 t);
@@ -439,8 +415,6 @@ AE_API f32	AEVec2CrossProductMag	(AEVec2* pVec0, AEVec2* pVec1);
 \param      [in] angle
             Angle of the unit vector.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void	AEVec2FromAngle         (AEVec2* pResult, f32 angle);

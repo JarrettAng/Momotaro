@@ -87,8 +87,6 @@ extern "C"
 \param      [in] pUnload
             Function pointer to the unload function of the new GameState.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGameStateMgrAdd(u32 gameStateIdx, 
@@ -114,8 +112,6 @@ AE_API void AEGameStateMgrAdd(u32 gameStateIdx,
 \param      [in] gameStateInit
             ID of the initial GameState.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGameStateMgrInit(u32 gameStateInit);
@@ -129,8 +125,6 @@ AE_API void AEGameStateMgrInit(u32 gameStateInit);
 \details    Call this function when the GameState changes to
             set the function pointers for the new state.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGameStateMgrUpdate();

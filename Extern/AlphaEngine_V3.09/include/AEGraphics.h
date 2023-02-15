@@ -135,8 +135,6 @@ AE_API s32 AEGfxInit(s32 Width, s32 Height);
 
 \warning    
 
-\retval     void
-No return.
 */
 /******************************************************************************/
 AE_API void SetVSync(bool vsync);
@@ -149,8 +147,6 @@ AE_API void SetVSync(bool vsync);
 
 \warning    This function is already called in AESysReset.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGfxReset();
@@ -163,8 +159,6 @@ AE_API void AEGfxReset();
 
 \warning    This function is already called in AESysExit.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGfxExit();
@@ -177,8 +171,6 @@ AE_API void AEGfxExit();
 
 \warning    This function is already called in AESysFrameStart.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGfxStart();
@@ -191,8 +183,6 @@ AE_API void AEGfxStart();
 
 \warning    This function is already called in AESysFrameEnd.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGfxEnd();
@@ -214,8 +204,6 @@ AE_API void AEGfxEnd();
 \param      [in] Blue
             Percentage of blue. Range from 0.0f to 1.0f.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGfxSetBackgroundColor(f32 Red, f32 Green, f32 Blue);
@@ -232,9 +220,6 @@ AE_API void AEGfxSetBackgroundColor(f32 Red, f32 Green, f32 Blue);
 \param      [in] RenderMode
             The AEGfxRenderMode to set.
             
-
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGfxSetRenderMode(AEGfxRenderMode RenderMode);
@@ -248,8 +233,6 @@ AE_API void AEGfxSetRenderMode(AEGfxRenderMode RenderMode);
 \param      [in] BlendMode
             The AEGfxBlendMode to set.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void	AEGfxSetBlendMode(AEGfxBlendMode BlendMode);
@@ -320,8 +303,6 @@ AE_API f32 AEGfxGetWinMaxY(void);
 \param      [in] Y
             Y position to set camera to.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGfxSetCamPosition(f32 X, f32 Y);
@@ -338,8 +319,6 @@ AE_API void AEGfxSetCamPosition(f32 X, f32 Y);
 \param      [out] pY
             Pointer to f32 to store the Y position in.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGfxGetCamPosition(f32 *pX, f32 *pY);
@@ -360,8 +339,6 @@ AE_API void AEGfxGetCamPosition(f32 *pX, f32 *pY);
 \param      [out] Y
             Y position to render from.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGfxSetPosition(f32 X, f32 Y);
@@ -379,8 +356,6 @@ AE_API void AEGfxSetPosition(f32 X, f32 Y);
             Pointer to a 3x3 matrix to set with.
             User may pass in a AEMtx33.m. 
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGfxSetTransform(f32 pTransform[3][3]);
@@ -397,8 +372,6 @@ AE_API void AEGfxSetTransform(f32 pTransform[3][3]);
 \param      [in] pTransform
             Pointer to a 4x4 matrix to set with.
             
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGfxSetTransform3D(f32 pTransform[4][4]);
@@ -416,8 +389,6 @@ AE_API void AEGfxSetTransform3D(f32 pTransform[4][4]);
             Percentage of alpha (transparency). 
             Range from 0.0f (clear) to 1.0f (opaque).
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGfxSetTransparency(f32 Alpha);
@@ -445,8 +416,6 @@ AE_API void AEGfxSetTransparency(f32 Alpha);
             Percentage of alpha (transparency). 
             Range from 0.0f (clear) to 1.0f (opaque).
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGfxSetBlendColor(f32 Red, f32 Green, f32 Blue, f32 Alpha);
@@ -474,8 +443,6 @@ AE_API void AEGfxSetBlendColor(f32 Red, f32 Green, f32 Blue, f32 Alpha);
             Percentage of alpha (transparency). 
             Range from 0.0f (clear) to 1.0f (opaque).
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGfxSetTintColor(float Red, float Green, float Blue, float Alpha);
@@ -489,8 +456,6 @@ AE_API void AEGfxSetTintColor(float Red, float Green, float Blue, float Alpha);
 \details    Call this function once before adding any points 
             to the mesh.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void		    	AEGfxMeshStart	();
@@ -552,8 +517,6 @@ AE_API void		    	AEGfxMeshStart	();
 \param      [in] tv2
             Texture translation of pt2.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void			    AEGfxTriAdd		(f32 x0, f32 y0, u32 c0, f32 tu0, f32 tv0,
@@ -587,8 +550,6 @@ AE_API void			    AEGfxTriAdd		(f32 x0, f32 y0, u32 c0, f32 tu0, f32 tv0,
 \param      [in] tv0
             Texture translation of the point.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void			    AEGfxVertexAdd	(f32 x0, f32 y0, u32 c0, f32 tu0, f32 tv0);
@@ -624,8 +585,6 @@ AE_API AEGfxVertexList*	AEGfxMeshEnd	();
 \param      [in] MeshDrawMode
             The AEGfxMeshDrawMode to use for rendering the mesh.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void				AEGfxMeshDraw	(AEGfxVertexList* pVertexList, AEGfxMeshDrawMode MeshDrawMode);
@@ -642,8 +601,6 @@ AE_API void				AEGfxMeshDraw	(AEGfxVertexList* pVertexList, AEGfxMeshDrawMode Me
 \param      [in] pVertexList
             Pointer to the AEGfxVertexList to be free.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void				AEGfxMeshFree	(AEGfxVertexList* pVertexList);
@@ -682,8 +639,6 @@ AE_API AEGfxTexture*	AEGfxTextureLoad(const s8 *pFileName);
 \param      [in] offset_y
             Y offset for the texture. Range from 0.0f to 1.0f.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void				AEGfxTextureSet(AEGfxTexture *pTexture, f32 offset_x, f32 offset_y);
@@ -697,8 +652,6 @@ AE_API void				AEGfxTextureSet(AEGfxTexture *pTexture, f32 offset_x, f32 offset_
 \param      [in] pTexture
             Pointer to AEGfxTexture to be unloaded.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void				AEGfxTextureUnload(AEGfxTexture *pTexture);
@@ -740,8 +693,6 @@ AE_API AEGfxTexture*	AEGfxTextureLoadFromMemory(u8 *pColors, u32 Width, u32 Heig
             Pointer to a null-terminated string containing the
             relative path of the file.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void				AEGfxSaveTextureToFile(AEGfxTexture* pTexture, s8 *pFileName);
@@ -755,8 +706,6 @@ AE_API void				AEGfxSaveTextureToFile(AEGfxTexture* pTexture, s8 *pFileName);
 \param      [in] TextureMode
             The AEGfxTextureMode to set.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void				AEGfxSetTextureMode(AEGfxTextureMode TextureMode);
@@ -785,8 +734,6 @@ AE_API void				AEGfxSetTextureMode(AEGfxTextureMode TextureMode);
 \param      [in] c0
             Color value of point
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void			    AEGfxPoint		(f32 x0, f32 y0, f32 z0, u32 c0);
@@ -848,8 +795,6 @@ AE_API void			    AEGfxPoint		(f32 x0, f32 y0, f32 z0, u32 c0);
             Percentage of alpha (transparency) of pt1. 
             Range from 0.0f (clear) to 1.0f (opaque).
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void			    AEGfxLine		(f32 x0, f32 y0, f32 z0, f32 r0, f32 g0, f32 b0, f32 a0, 
@@ -906,8 +851,6 @@ AE_API void			    AEGfxLine		(f32 x0, f32 y0, f32 z0, f32 r0, f32 g0, f32 b0, f3
 \param      [in] c2
             Color value of pt2
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void			    AEGfxTri		(f32 x0, f32 y0, f32 z0, u32 c0, 
@@ -978,8 +921,6 @@ AE_API void			    AEGfxTri		(f32 x0, f32 y0, f32 z0, u32 c0,
 \param      [in] c3
             Color value of pt3
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void			    AEGfxQuad		(f32 x0, f32 y0, f32 z0, u32 c0, 
@@ -1028,8 +969,6 @@ AE_API void			    AEGfxQuad		(f32 x0, f32 y0, f32 z0, u32 c0,
 \param      [in] c1
             Second color of the box.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void			    AEGfxBox		(f32 x0, f32 y0, f32 z0, f32 sizeX, f32 sizeY, f32 sizeZ, u32 c0, u32 c1);
@@ -1075,8 +1014,6 @@ AE_API void			    AEGfxBox		(f32 x0, f32 y0, f32 z0, f32 sizeX, f32 sizeY, f32 s
 \param      [in] division
             Number of parts to divide the sphere by. 
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void			    AEGfxSphere		(f32 x0, f32 y0, f32 z0, 
@@ -1099,8 +1036,6 @@ AE_API void			    AEGfxSphere		(f32 x0, f32 y0, f32 z0,
 \param      [in] scale
             Size of the axis
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void			    AEGfxAxis		(f32 scale);
@@ -1125,8 +1060,6 @@ AE_API void			    AEGfxAxis		(f32 scale);
             At t = 0.0f, the result will be c0.
             At t = 1.0f, the result will be c1.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API u32				AEGfxColInterp	(u32 c0, u32 c1, f32 t);
@@ -1161,7 +1094,7 @@ AE_API s8  AEGfxCreateFont(const char * fontName, int sizeF);
 \fn		    void AEGfxPrint(s8 fontId, s8* pStr,
 							f32 screenX, f32 screenY,
 							f32 scale,
-							f32 red, f32 Green, f32 blue)
+							f32 red, f32 green, f32 blue)
 
 \brief      Prints a text on screen
 
@@ -1198,8 +1131,6 @@ AE_API s8  AEGfxCreateFont(const char * fontName, int sizeF);
 \param      [in] blue
             Percentage of blue. Range from 0.0f to 1.0f.
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGfxPrint(s8 fontId, s8* pStr, f32 screenX, f32 screenY, f32 scale, f32 red, f32 green, f32 blue);
@@ -1226,8 +1157,6 @@ AE_API void AEGfxPrint(s8 fontId, s8* pStr, f32 screenX, f32 screenY, f32 scale,
 \param      [out] height
             height of the text. In screen Percent ( 0 = empty, to 2 = full screen).
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGfxGetPrintSize(s8 fontId, s8* pStr, f32 scale, f32& width, f32& height);
@@ -1242,8 +1171,6 @@ AE_API void AEGfxGetPrintSize(s8 fontId, s8* pStr, f32 scale, f32& width, f32& h
 \param      [in] fontId
             ID returned from the AEGfxCreateFont(...) function
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGfxDestroyFont(s8 fontId);
@@ -1256,8 +1183,6 @@ AE_API void AEGfxDestroyFont(s8 fontId);
 
 \warning   	This function is already called in AESysInit. Do not call it
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGfxFontSystemStart();
@@ -1270,8 +1195,6 @@ AE_API void AEGfxFontSystemStart();
 
 \warning    This function is already called in AESysExit. Do not call it
 
-\retval     void
-            No return.
 */
 /******************************************************************************/
 AE_API void AEGfxFontSystemEnd();
