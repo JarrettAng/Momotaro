@@ -52,6 +52,9 @@
     <ClCompile Include="src\TextureManager.cpp">
       <Filter>src\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="src\ScoreManager.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\BuildingManager.h">
@@ -112,6 +115,9 @@
       <Filter>inc\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="inc\TextureManager.h">
+      <Filter>inc\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\ScoreManager.h">
       <Filter>inc\Managers</Filter>
     </ClInclude>
   </ItemGroup>

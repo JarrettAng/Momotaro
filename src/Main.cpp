@@ -10,6 +10,7 @@
 #include <GridManager.h>
 #include <TextureManager.h>
 #include <InputManager.h>
+#include <ScoreManager.h>
 
 // ---------------------------------------------------------------------------
 // main
@@ -35,6 +36,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// Manager Initialization
 	InputManager::Intialize();
 	GridManager::Initialize();
+	ScoreManger::Intialize();
 	TextureManager::Initialize();
 	UIManager::Initialize();
 	RenderSystem::Initialize();

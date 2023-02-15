@@ -26,6 +26,7 @@
     <ClCompile Include="src\SceneGameLevel.cpp" />
     <ClCompile Include="src\SceneManager.cpp" />
     <ClCompile Include="src\SceneSplashscreen.cpp" />
+    <ClCompile Include="src\ScoreManager.cpp" />
     <ClCompile Include="src\TextureManager.cpp" />
     <ClCompile Include="src\UIManager.cpp" />
   </ItemGroup>
@@ -48,6 +49,7 @@
     <ClInclude Include="inc\SceneGameLevel.h" />
     <ClInclude Include="inc\SceneManager.h" />
     <ClInclude Include="inc\SceneSplashscreen.h" />
+    <ClInclude Include="inc\ScoreManager.h" />
     <ClInclude Include="inc\TextureManager.h" />
     <ClInclude Include="inc\UIManager.h" />
   </ItemGroup>

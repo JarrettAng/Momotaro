@@ -18,10 +18,10 @@ This source file declares
 namespace InputManager {
 	struct KeyEvent {
 		u32 clickTime{};	// Frame time this key was triggered.
-		EventSystem::Event<void> onKeyTriggered{};
-		EventSystem::Event<void> onKeyReleased{};
-		EventSystem::Event<void> onKeyPressed{};
-		EventSystem::Event<void> onKeyDoubleClick{};
+		EventSystem::Event<void> onKeyTriggered;
+		EventSystem::Event<void> onKeyReleased;
+		EventSystem::Event<void> onKeyPressed;
+		EventSystem::Event<void> onKeyDoubleClick;
 	};
 
 	/*!***********************************************************************
