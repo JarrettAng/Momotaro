@@ -32,14 +32,14 @@ namespace CardManager {
 	UIManager::Transform handBackground;		// Rendering data for the hand background
 	int cardSpacing;							// Spacing between cards in hand
 
-	Card *selectedCard;							// Pointer to the current card selected by player
+	Card* selectedCard;							// Pointer to the current card selected by player
 
-	#pragma region Forward Declarations
+#pragma region Forward Declarations
 	void AddToDeck(BuildingData buildingData);
 	void AddToHand(DeckData deckCardData);
 	void RemoveFromHand(Card* cardToRemove);
-	void HandleClick(Vec2<int> mousePos);
-	#pragma endregion
+	void HandleClick();
+#pragma endregion
 
 	void Initialize() {
 		// TODO: Use JSON for all these data
@@ -65,14 +65,14 @@ namespace CardManager {
 		DrawCard(BuildingEnum::COMMERCIAL, BuildingEnum::L1);
 		DrawCard(BuildingEnum::INDUSTRIAL, BuildingEnum::L1);
 
-		InputManager::onMouseClick.Subscribe(HandleClick);
+		InputManager::SubscribeToKeyTriggered(AEVK_LBUTTON, HandleClick);
 	}
 
 	void Free() {
 		deck.clear();
 		hand.clear();
 
-		InputManager::onMouseClick.Unsubscribe(HandleClick);
+		InputManager::UnSubscribeToKeyTriggered(AEVK_LBUTTON, HandleClick);
 	}
 
 	void PrepareUIRenderBatch() {
@@ -80,7 +80,7 @@ namespace CardManager {
 
 		// Render each card
 		for (int index = 0; index < hand.size(); ++index) {
-			Card *card = &hand[index];
+			Card* card = &hand[index];
 
 			UIManager::AddRectToBatch(card->position.x, card->position.y, card->position.width, card->position.height, 1, card->borderColor);
 
@@ -172,8 +172,9 @@ namespace CardManager {
 		UpdateHandPositions();
 	}
 
-	void HandleClick(Vec2<int> mousePos) {
+	void HandleClick() {
 		// Check if any card clicked
+		Vec2<int> mousePos = InputManager::GetMousePos();
 
 	}
 }

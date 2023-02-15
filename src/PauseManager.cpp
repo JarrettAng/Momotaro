@@ -28,20 +28,20 @@ namespace PauseManager {
 	//void TogglePauseMenu();
 #pragma endregion
 
-    bool IsPaused()
-    {
-        return isPaused;
-    }
+	bool IsPaused()
+	{
+		return isPaused;
+	}
 
-    void Initialize()
-    {
-        isPaused = false;
-		InputManager::onEscPressed.Subscribe(TogglePause);
+	void Initialize()
+	{
+		isPaused = false;
+		InputManager::SubscribeToKeyTriggered(AEVK_ESCAPE, TogglePause);
 
 		onTogglePause.Invoke(isPaused);
-    }
+	}
 
-    void PauseManager::Update() {
+	void PauseManager::Update() {
 		if (isPaused) {
 			//"WINDOW"
 			UIManager::AddRectToBatch(-780, 750, 1500, 1500, 0, TextureManager::GetTexture(TextureManager::PAUSE_WINDOW));
@@ -49,16 +49,16 @@ namespace PauseManager {
 			UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).L, -0.1f, 0.0f, 0, "PAUSED", { (0.0f), (0.0f), (0.0f) });
 
 			//UNPAUSE
-			UIManager::AddButtonToBatch(-250.0f, -50.0f, 30.0f, 30.0f, 0, 
-										(UIManager::GetFont(UIManager::ROBOTO).M), "CONTINUE", 
-										{ (1.0f), (1.0f), (1.0f), (1.0f) } , 
-										{ (0.0f), (0.0f), (0.0f) });
+			UIManager::AddButtonToBatch(-250.0f, -50.0f, 30.0f, 30.0f, 0,
+				(UIManager::GetFont(UIManager::ROBOTO).M), "CONTINUE",
+				{ (1.0f), (1.0f), (1.0f), (1.0f) },
+				{ (0.0f), (0.0f), (0.0f) });
 
 			//EXIT
 			UIManager::AddButtonToBatch(50.0f, -50.0f, 80.0f, 30.0f, 0,
-										(UIManager::GetFont(UIManager::ROBOTO).M), "EXIT",
-										{ (1.0f), (1.0f), (1.0f), (1.0f) },
-										{ (0.0f), (0.0f), (0.0f) });
+				(UIManager::GetFont(UIManager::ROBOTO).M), "EXIT",
+				{ (1.0f), (1.0f), (1.0f), (1.0f) },
+				{ (0.0f), (0.0f), (0.0f) });
 
 			//Check if button is pressed
 			//InputManager::onButtonPressed.Subscribe(Free);
@@ -79,6 +79,6 @@ namespace PauseManager {
 	//}
 
 	void Free() {
-		InputManager::onEscPressed.Unsubscribe(TogglePause);
+		InputManager::UnSubscribeToKeyTriggered(AEVK_ESCAPE, TogglePause);
 	}
 }

@@ -9,6 +9,7 @@
 #include <SceneManager.h>
 #include <GridManager.h>
 #include <TextureManager.h>
+#include <InputManager.h>
 
 // ---------------------------------------------------------------------------
 // main
@@ -32,6 +33,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	//AEToogleFullScreen(true);
 
 	// Manager Initialization
+	InputManager::Initialize();
 	GridManager::Initialize();
 	TextureManager::Initialize();
 	UIManager::Initialize();

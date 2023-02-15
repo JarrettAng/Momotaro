@@ -6,7 +6,7 @@
 \par Software Engineering Project
 \date:          30-01-2023
 \brief
-This source file implements functions that manage the game grid. 
+This source file implements functions that manage the game grid.
 This includes the merge logic and the placement of buildings
 
 The functions include:
@@ -27,15 +27,15 @@ The functions include:
 namespace GridManager {
 	namespace iso = IsometricGrid;
 
-	int synergyPoints{0};
-	int terrainNum{0};
+	int synergyPoints{ 0 };
+	int terrainNum{ 0 };
 
 	iso::cell* grid;
 	const int gridX{ 20 }, gridY{ 20 };
 
-	void storeClickData(Vec2<int> mousePos);
+	void storeClickData();
 
-	int randomNature{0};
+	int randomNature{ 0 };
 
 	void Initialize() {
 		grid = { new iso::cell[gridX * gridY]{} };
@@ -56,7 +56,7 @@ namespace GridManager {
 				// 	grid[index].isRenderable = true;
 				// }
 				//basically we want the grid to be from -2 to 2, but since there's a 10 unit offset, we add 10
-				if ((x >= 8 && x <= 13)&&(y >= 8 && y <= 13)) {
+				if ((x >= 8 && x <= 13) && (y >= 8 && y <= 13)) {
 					// grid[index].ID = iso::RESIDENTIAL;
 					grid[index].isRenderable = true;
 					// std::cout << "y is " << y << " and iso is " << test.x<<'\n';
@@ -66,57 +66,58 @@ namespace GridManager {
 
 		// Hardcoded island parts
 		// Top left
-		
 
-		InputManager::onMouseClick.Subscribe(storeClickData);
-		InputManager::onCKeyPressed.Subscribe(ClearGrid);
-		InputManager::onRKeyPressed.Subscribe(RandomiseTerrain);
-		InputManager::on1KeyPressed.Subscribe(SpawnResidential);
-		InputManager::on2KeyPressed.Subscribe(SpawnCommerical);
-		InputManager::on3KeyPressed.Subscribe(SpawnIndustrial);
-		InputManager::onNKeyPressed.Subscribe(SpawnNature);
+
+		InputManager::SubscribeToKeyTriggered(AEVK_LBUTTON, storeClickData);
+		InputManager::SubscribeToKeyTriggered(AEVK_C, ClearGrid);
+		InputManager::SubscribeToKeyTriggered(AEVK_R, RandomiseTerrain);
+		InputManager::SubscribeToKeyTriggered(AEVK_1, SpawnResidential);
+		InputManager::SubscribeToKeyTriggered(AEVK_2, SpawnCommerical);
+		InputManager::SubscribeToKeyTriggered(AEVK_3, SpawnIndustrial);
+		InputManager::SubscribeToKeyTriggered(AEVK_N, SpawnNature);
 	}
 
 
-	bool isCellSafe(iso::vec2i selectedCell){
-		if((((selectedCell.x) < 0) || ((selectedCell.x) > gridX)) || ((selectedCell.y) < 0 || (selectedCell.y) > gridY)) return false; 
-		if(!grid[GetIndex(selectedCell.x,selectedCell.y)].isRenderable) return false;
+	bool isCellSafe(iso::vec2i selectedCell) {
+		if ((((selectedCell.x) < 0) || ((selectedCell.x) > gridX)) || ((selectedCell.y) < 0 || (selectedCell.y) > gridY)) return false;
+		if (!grid[GetIndex(selectedCell.x, selectedCell.y)].isRenderable) return false;
 		return true;
 	}
 
-	void SpawnResidential(Vec2<int> mousePos){
-		if(PauseManager::IsPaused()) return;
-		iso::vec2i SelectedCell{iso::ScreenPosToIso(mousePos.x,mousePos.y)};
-		int index = GetIndex(SelectedCell.x,SelectedCell.y);
-		if(!isCellSafe(SelectedCell)) return;
+	void SpawnResidential() {
+		if (PauseManager::IsPaused()) return;
+		Vec2<int> mousePos = InputManager::GetMousePos();
+		iso::vec2i SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
+		int index = GetIndex(SelectedCell.x, SelectedCell.y);
+		if (!isCellSafe(SelectedCell)) return;
 
 		grid[index].ID = iso::RESIDENTIAL;
 		CheckCellNeighbor(grid, SelectedCell);
 
-		Vec2<int> test1{1,1};
-		Vec2<int> test11{2,2};
-		Vec3<int> test2{1,1,1};
-		Vec3<int> test22{2,2,2};
-		Vec4<int> test3{1,1,1,1};
-		Vec4<int> test33{2,2,2,2};
+		Vec2<int> test1{ 1,1 };
+		Vec2<int> test11{ 2,2 };
+		Vec3<int> test2{ 1,1,1 };
+		Vec3<int> test22{ 2,2,2 };
+		Vec4<int> test3{ 1,1,1,1 };
+		Vec4<int> test33{ 2,2,2,2 };
 
-		std::cout <<"TEST 1 (vec+=vec)\n"; 
+		std::cout << "TEST 1 (vec+=vec)\n";
 
-		std::cout << (test11+=test1) << " = (3,3)"<<'\n';
-		std::cout << (test22+=test2) << " = (3,3,3)"<<'\n';
-		std::cout << (test33+=test3) << " = (3,3,3,3)" <<'\n';
+		std::cout << (test11 += test1) << " = (3,3)" << '\n';
+		std::cout << (test22 += test2) << " = (3,3,3)" << '\n';
+		std::cout << (test33 += test3) << " = (3,3,3,3)" << '\n';
 
-		std::cout <<"TEST 2 (vec-=vec)\n";
-		std::cout << (test11-=test1) << " = (2,2)"<<'\n';
-		std::cout << (test22-=test2) << " = (2,2,2)"<<'\n';
-		std::cout << (test33-=test3) << " = (2,2,2,2)"<<'\n';
+		std::cout << "TEST 2 (vec-=vec)\n";
+		std::cout << (test11 -= test1) << " = (2,2)" << '\n';
+		std::cout << (test22 -= test2) << " = (2,2,2)" << '\n';
+		std::cout << (test33 -= test3) << " = (2,2,2,2)" << '\n';
 
-		std::cout <<"TEST 3 (vec-vec higher)\n";
-		std::cout << test33-test1 << " = (1,1,2,2)"<< '\n';
-		std::cout << test33-test2 << " = (1,1,1,2)"<<'\n';
-		std::cout << test33-test3 << " = (1,1,1,1)"<< '\n';
-		std::cout << test22-test1 << " = (1,1,2)"<< '\n';
-		std::cout << test22-test2 << " = (1,1,1)"<< '\n';
+		std::cout << "TEST 3 (vec-vec higher)\n";
+		std::cout << test33 - test1 << " = (1,1,2,2)" << '\n';
+		std::cout << test33 - test2 << " = (1,1,1,2)" << '\n';
+		std::cout << test33 - test3 << " = (1,1,1,1)" << '\n';
+		std::cout << test22 - test1 << " = (1,1,2)" << '\n';
+		std::cout << test22 - test2 << " = (1,1,1)" << '\n';
 
 		// std::cout <<"TEST 4 (vec-vec lower)\n";
 		// std::cout << test1-test33 << " = (1,1,2,2)"<< '\n';
@@ -125,61 +126,61 @@ namespace GridManager {
 		// std::cout << test1-test22 << " = (1,1,2)"<< '\n';
 		// std::cout << test2-test22 << " = (1,1,1)"<< '\n';
 
-		std::cout <<"TEST 5 (vec+vec)\n";
-		std::cout << test1+test33 << " = (3,3,2,2)"<< '\n';
-		std::cout << test2+test33 << " = (3,3,3,2)"<<'\n';
-		std::cout << test3+test33 << " = (3,3,3,3)"<< '\n';
-		std::cout << test1+test22 << " = (3,3,2)"<< '\n';
-		std::cout << test2+test22 << " = (3,3,3)"<< '\n';
+		std::cout << "TEST 5 (vec+vec)\n";
+		std::cout << test1 + test33 << " = (3,3,2,2)" << '\n';
+		std::cout << test2 + test33 << " = (3,3,3,2)" << '\n';
+		std::cout << test3 + test33 << " = (3,3,3,3)" << '\n';
+		std::cout << test1 + test22 << " = (3,3,2)" << '\n';
+		std::cout << test2 + test22 << " = (3,3,3)" << '\n';
 
-		std::cout <<"TEST 6 (vec*=vec)\n";
-		test1*=4;
-		test2*=4;
-		test3*=4;
-		std::cout << test1 << " = (4,4)"<< '\n';
-		std::cout << test2 << " = (4,4,4)"<< '\n';
-		std::cout << test3 << " = (4,4,4,4)"<< '\n';
+		std::cout << "TEST 6 (vec*=vec)\n";
+		test1 *= 4;
+		test2 *= 4;
+		test3 *= 4;
+		std::cout << test1 << " = (4,4)" << '\n';
+		std::cout << test2 << " = (4,4,4)" << '\n';
+		std::cout << test3 << " = (4,4,4,4)" << '\n';
 
-		std::cout <<"TEST 7 (vec*T)\n";
-		std::cout << test11*2 << " = (4,4)"<< '\n';
-		std::cout << test22*2 << " = (4,4,4)"<< '\n';
-		std::cout << test33*2 << " = (4,4,4,4)"<< '\n';
+		std::cout << "TEST 7 (vec*T)\n";
+		std::cout << test11 * 2 << " = (4,4)" << '\n';
+		std::cout << test22 * 2 << " = (4,4,4)" << '\n';
+		std::cout << test33 * 2 << " = (4,4,4,4)" << '\n';
 
 	}
-	void SpawnCommerical(Vec2<int> mousePos){
-		if(PauseManager::IsPaused()) return;
-
-		iso::vec2i SelectedCell{iso::ScreenPosToIso(mousePos.x,mousePos.y)};
-		int index = GetIndex(SelectedCell.x,SelectedCell.y);
-		if(!isCellSafe(SelectedCell)) return;
+	void SpawnCommerical() {
+		if (PauseManager::IsPaused()) return;
+		Vec2<int> mousePos = InputManager::GetMousePos();
+		iso::vec2i SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
+		int index = GetIndex(SelectedCell.x, SelectedCell.y);
+		if (!isCellSafe(SelectedCell)) return;
 
 		grid[index].ID = iso::COMMERCIAL;
 		CheckCellNeighbor(grid, SelectedCell);
 	}
-	void SpawnIndustrial(Vec2<int> mousePos){
-		if(PauseManager::IsPaused()) return;
-
-		iso::vec2i SelectedCell{iso::ScreenPosToIso(mousePos.x,mousePos.y)};
+	void SpawnIndustrial() {
+		if (PauseManager::IsPaused()) return;
+		Vec2<int> mousePos = InputManager::GetMousePos();
+		iso::vec2i SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
-		if(!isCellSafe(SelectedCell)) return;
+		if (!isCellSafe(SelectedCell)) return;
 
 		grid[index].ID = iso::INDUSTRIAL;
 		CheckCellNeighbor(grid, SelectedCell);
 	}
-	void SpawnNature(Vec2<int> mousePos){
-		if(PauseManager::IsPaused()) return;
-
-		iso::vec2i SelectedCell{iso::ScreenPosToIso(mousePos.x,mousePos.y)};
+	void SpawnNature() {
+		if (PauseManager::IsPaused()) return;
+		Vec2<int> mousePos = InputManager::GetMousePos();
+		iso::vec2i SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
-		if(!isCellSafe(SelectedCell)) return;
-		randomNature= rand()%2;
-		if(randomNature%2==0)
-		grid[index].ID = iso::TREE;
+		if (!isCellSafe(SelectedCell)) return;
+		randomNature = rand() % 2;
+		if (randomNature % 2 == 0)
+			grid[index].ID = iso::TREE;
 		else
-		grid[index].ID = iso::ROCK;
+			grid[index].ID = iso::ROCK;
 	}
-	void RandomiseTerrain(){
-		if(PauseManager::IsPaused()) return;
+	void RandomiseTerrain() {
+		if (PauseManager::IsPaused()) return;
 
 		/*
 		TOP LEFT = x--;
@@ -190,170 +191,170 @@ namespace GridManager {
 		ClearGrid();
 		for (int y{ 0 }; y < gridY; ++y) {
 			for (int x{ 0 }; x < gridX; ++x) {
-				int index = GetIndex(x,y);
-				if ((x >= 8 && x <= 13)&&(y >= 8 && y <= 13)) {
+				int index = GetIndex(x, y);
+				if ((x >= 8 && x <= 13) && (y >= 8 && y <= 13)) {
 					grid[index].isRenderable = true;
 				}
-				else grid[index].isRenderable =false;
+				else grid[index].isRenderable = false;
 			}
 		}
 		// std::cout << terrainNum << '\n';
 		switch (terrainNum)
 		{
 		case 0:
-		//Top Left
-		grid[GetIndex(7, 9)].isRenderable = true;
-		grid[GetIndex(7, 10)].isRenderable = true;
-		grid[GetIndex(7, 11)].isRenderable = true;
-		grid[GetIndex(7, 12)].isRenderable = true;
-		grid[GetIndex(6, 11)].isRenderable = true;
-		grid[GetIndex(6, 12)].isRenderable = true;
-		// Bottom left
-		grid[GetIndex(9, 16)].isRenderable = true;
-		grid[GetIndex(9, 15)].isRenderable = true;
-		grid[GetIndex(9, 14)].isRenderable = true;
-		grid[GetIndex(10, 14)].isRenderable = true;
-		grid[GetIndex(10, 15)].isRenderable = true;
-		grid[GetIndex(11, 14)].isRenderable = true;
-		grid[GetIndex(12, 14)].isRenderable = true;
-		grid[GetIndex(12, 15)].isRenderable = true;
-		grid[GetIndex(10, 15)].isRenderable = true;
-		grid[GetIndex(11, 15)].isRenderable = true;
-		// Bottom right
-		grid[GetIndex(14, 9)].isRenderable = true;
-		grid[GetIndex(14, 10)].isRenderable = true;
-		grid[GetIndex(14, 11)].isRenderable = true;
-		grid[GetIndex(14, 12)].isRenderable = true;
-		grid[GetIndex(15, 11)].isRenderable = true;
-		grid[GetIndex(15, 12)].isRenderable = true;
-		// Top right
-		grid[GetIndex(10, 7)].isRenderable = true;
-		grid[GetIndex(11, 7)].isRenderable = true;
-		grid[GetIndex(12, 7)].isRenderable = true;
-		grid[GetIndex(11, 6)].isRenderable = true;
-		grid[GetIndex(12, 6)].isRenderable = true;
-		terrainNum++;
-		break;
+			//Top Left
+			grid[GetIndex(7, 9)].isRenderable = true;
+			grid[GetIndex(7, 10)].isRenderable = true;
+			grid[GetIndex(7, 11)].isRenderable = true;
+			grid[GetIndex(7, 12)].isRenderable = true;
+			grid[GetIndex(6, 11)].isRenderable = true;
+			grid[GetIndex(6, 12)].isRenderable = true;
+			// Bottom left
+			grid[GetIndex(9, 16)].isRenderable = true;
+			grid[GetIndex(9, 15)].isRenderable = true;
+			grid[GetIndex(9, 14)].isRenderable = true;
+			grid[GetIndex(10, 14)].isRenderable = true;
+			grid[GetIndex(10, 15)].isRenderable = true;
+			grid[GetIndex(11, 14)].isRenderable = true;
+			grid[GetIndex(12, 14)].isRenderable = true;
+			grid[GetIndex(12, 15)].isRenderable = true;
+			grid[GetIndex(10, 15)].isRenderable = true;
+			grid[GetIndex(11, 15)].isRenderable = true;
+			// Bottom right
+			grid[GetIndex(14, 9)].isRenderable = true;
+			grid[GetIndex(14, 10)].isRenderable = true;
+			grid[GetIndex(14, 11)].isRenderable = true;
+			grid[GetIndex(14, 12)].isRenderable = true;
+			grid[GetIndex(15, 11)].isRenderable = true;
+			grid[GetIndex(15, 12)].isRenderable = true;
+			// Top right
+			grid[GetIndex(10, 7)].isRenderable = true;
+			grid[GetIndex(11, 7)].isRenderable = true;
+			grid[GetIndex(12, 7)].isRenderable = true;
+			grid[GetIndex(11, 6)].isRenderable = true;
+			grid[GetIndex(12, 6)].isRenderable = true;
+			terrainNum++;
+			break;
 		case 1:
-		//Top Left
-		grid[GetIndex(7, 9)].isRenderable = true;
-		grid[GetIndex(7, 10)].isRenderable = true;
-		grid[GetIndex(7, 11)].isRenderable = true;
-		grid[GetIndex(7, 12)].isRenderable = true;
-		grid[GetIndex(6, 11)].isRenderable = true;
-		grid[GetIndex(6, 12)].isRenderable = true;
-		grid[GetIndex(6, 13)].isRenderable = true;
-		grid[GetIndex(6, 14)].isRenderable = true;
-		grid[GetIndex(7, 13)].isRenderable = true;
-		grid[GetIndex(7, 14)].isRenderable = true;
-		grid[GetIndex(8, 14)].isRenderable = true;
-		// Bottom left
-		grid[GetIndex(9, 13)].isRenderable = true;
-		grid[GetIndex(9, 14)].isRenderable = true;
-		grid[GetIndex(11, 14)].isRenderable = true;
-		grid[GetIndex(11, 15)].isRenderable = true;
-		grid[GetIndex(12, 14)].isRenderable = true;
-		grid[GetIndex(12, 15)].isRenderable = true;
-		grid[GetIndex(10, 15)].isRenderable = true;
-		grid[GetIndex(11, 15)].isRenderable = true;
-		grid[GetIndex(11, 16)].isRenderable = true;
-		// Bottom right
-		grid[GetIndex(14, 9)].isRenderable = true;
-		grid[GetIndex(14, 11)].isRenderable = true;
-		grid[GetIndex(14, 12)].isRenderable = true;
-		grid[GetIndex(15, 11)].isRenderable = true;
-		grid[GetIndex(15, 12)].isRenderable = true;
-		grid[GetIndex(15, 9)].isRenderable = true;
-		// Top right
-		grid[GetIndex(11, 8)].isRenderable = true;
-		grid[GetIndex(12, 8)].isRenderable = true;
-		grid[GetIndex(12, 7)].isRenderable = true;
-		grid[GetIndex(11, 6)].isRenderable = true;
-		grid[GetIndex(12, 6)].isRenderable = true;
-		terrainNum++;
-		break;
+			//Top Left
+			grid[GetIndex(7, 9)].isRenderable = true;
+			grid[GetIndex(7, 10)].isRenderable = true;
+			grid[GetIndex(7, 11)].isRenderable = true;
+			grid[GetIndex(7, 12)].isRenderable = true;
+			grid[GetIndex(6, 11)].isRenderable = true;
+			grid[GetIndex(6, 12)].isRenderable = true;
+			grid[GetIndex(6, 13)].isRenderable = true;
+			grid[GetIndex(6, 14)].isRenderable = true;
+			grid[GetIndex(7, 13)].isRenderable = true;
+			grid[GetIndex(7, 14)].isRenderable = true;
+			grid[GetIndex(8, 14)].isRenderable = true;
+			// Bottom left
+			grid[GetIndex(9, 13)].isRenderable = true;
+			grid[GetIndex(9, 14)].isRenderable = true;
+			grid[GetIndex(11, 14)].isRenderable = true;
+			grid[GetIndex(11, 15)].isRenderable = true;
+			grid[GetIndex(12, 14)].isRenderable = true;
+			grid[GetIndex(12, 15)].isRenderable = true;
+			grid[GetIndex(10, 15)].isRenderable = true;
+			grid[GetIndex(11, 15)].isRenderable = true;
+			grid[GetIndex(11, 16)].isRenderable = true;
+			// Bottom right
+			grid[GetIndex(14, 9)].isRenderable = true;
+			grid[GetIndex(14, 11)].isRenderable = true;
+			grid[GetIndex(14, 12)].isRenderable = true;
+			grid[GetIndex(15, 11)].isRenderable = true;
+			grid[GetIndex(15, 12)].isRenderable = true;
+			grid[GetIndex(15, 9)].isRenderable = true;
+			// Top right
+			grid[GetIndex(11, 8)].isRenderable = true;
+			grid[GetIndex(12, 8)].isRenderable = true;
+			grid[GetIndex(12, 7)].isRenderable = true;
+			grid[GetIndex(11, 6)].isRenderable = true;
+			grid[GetIndex(12, 6)].isRenderable = true;
+			terrainNum++;
+			break;
 		case 2:
-		//mini island
-		grid[GetIndex(16, 3)].isRenderable = true;
-		grid[GetIndex(16, 4)].isRenderable = true;
-		grid[GetIndex(15, 4)].isRenderable = true;
-		grid[GetIndex(15, 5)].isRenderable = true;
-		grid[GetIndex(14, 5)].isRenderable = true;
-		grid[GetIndex(14, 4)].isRenderable = true;
+			//mini island
+			grid[GetIndex(16, 3)].isRenderable = true;
+			grid[GetIndex(16, 4)].isRenderable = true;
+			grid[GetIndex(15, 4)].isRenderable = true;
+			grid[GetIndex(15, 5)].isRenderable = true;
+			grid[GetIndex(14, 5)].isRenderable = true;
+			grid[GetIndex(14, 4)].isRenderable = true;
 
-		grid[GetIndex(8, 7)].isRenderable = true;
-		grid[GetIndex(7, 7)].isRenderable = true;
-		grid[GetIndex(6, 7)].isRenderable = true;
-		grid[GetIndex(8, 6)].isRenderable = true;
-		grid[GetIndex(7, 6)].isRenderable = true;
-		grid[GetIndex(6, 5)].isRenderable = true;
-		grid[GetIndex(6, 7)].isRenderable = true;
-		grid[GetIndex(5, 7)].isRenderable = true;
-		grid[GetIndex(5, 8)].isRenderable = true;
-		grid[GetIndex(6, 8)].isRenderable = true;
-		grid[GetIndex(7, 8)].isRenderable = true;
-		grid[GetIndex(4, 8)].isRenderable = true;
-		grid[GetIndex(3, 8)].isRenderable = true;
-		grid[GetIndex(7, 8)].isRenderable = true;
-		grid[GetIndex(7, 9)].isRenderable = true;
-		grid[GetIndex(7, 10)].isRenderable = true;
-		grid[GetIndex(7, 11)].isRenderable = true;
-		grid[GetIndex(7, 12)].isRenderable = true;
-		grid[GetIndex(7, 13)].isRenderable = true;
-		grid[GetIndex(6, 13)].isRenderable = true;
-		grid[GetIndex(6, 12)].isRenderable = true;
-		grid[GetIndex(6, 11)].isRenderable = true;
-		grid[GetIndex(6, 10)].isRenderable = true;
-		grid[GetIndex(6, 9)].isRenderable = true;
-		grid[GetIndex(6, 8)].isRenderable = true;
-		grid[GetIndex(5, 8)].isRenderable = true;
-		grid[GetIndex(5, 9)].isRenderable = true;
-		grid[GetIndex(5, 10)].isRenderable = true;
-		grid[GetIndex(5, 11)].isRenderable = true;
-		grid[GetIndex(5, 12)].isRenderable = true;
-		grid[GetIndex(5, 13)].isRenderable = true;
-		grid[GetIndex(4, 11)].isRenderable = true;
-		grid[GetIndex(4, 10)].isRenderable = true;
-		grid[GetIndex(4, 12)].isRenderable = true;
-		grid[GetIndex(9, 7)].isRenderable = true;
-		grid[GetIndex(10, 7)].isRenderable = true;
-		grid[GetIndex(11, 7)].isRenderable = true;
-		grid[GetIndex(12, 7)].isRenderable = true;
-		grid[GetIndex(13, 14)].isRenderable = true;
-		grid[GetIndex(12, 14)].isRenderable = true;
-		grid[GetIndex(11, 14)].isRenderable = true;
-		grid[GetIndex(10, 14)].isRenderable = true;
-		grid[GetIndex(9, 14)].isRenderable = true;
-		grid[GetIndex(8, 14)].isRenderable = true;
-		grid[GetIndex(7, 14)].isRenderable = true;
-		grid[GetIndex(7, 15)].isRenderable = true;
-		grid[GetIndex(8, 15)].isRenderable = true;
-		grid[GetIndex(9, 15)].isRenderable = true;
-		grid[GetIndex(14, 10)].isRenderable = true;
-		grid[GetIndex(14, 11)].isRenderable = true;
-		grid[GetIndex(14, 12)].isRenderable = true;
-		grid[GetIndex(14, 13)].isRenderable = true;
-		grid[GetIndex(15, 13)].isRenderable = true;
-		grid[GetIndex(15, 12)].isRenderable = true;
-		terrainNum++;
-		break;
+			grid[GetIndex(8, 7)].isRenderable = true;
+			grid[GetIndex(7, 7)].isRenderable = true;
+			grid[GetIndex(6, 7)].isRenderable = true;
+			grid[GetIndex(8, 6)].isRenderable = true;
+			grid[GetIndex(7, 6)].isRenderable = true;
+			grid[GetIndex(6, 5)].isRenderable = true;
+			grid[GetIndex(6, 7)].isRenderable = true;
+			grid[GetIndex(5, 7)].isRenderable = true;
+			grid[GetIndex(5, 8)].isRenderable = true;
+			grid[GetIndex(6, 8)].isRenderable = true;
+			grid[GetIndex(7, 8)].isRenderable = true;
+			grid[GetIndex(4, 8)].isRenderable = true;
+			grid[GetIndex(3, 8)].isRenderable = true;
+			grid[GetIndex(7, 8)].isRenderable = true;
+			grid[GetIndex(7, 9)].isRenderable = true;
+			grid[GetIndex(7, 10)].isRenderable = true;
+			grid[GetIndex(7, 11)].isRenderable = true;
+			grid[GetIndex(7, 12)].isRenderable = true;
+			grid[GetIndex(7, 13)].isRenderable = true;
+			grid[GetIndex(6, 13)].isRenderable = true;
+			grid[GetIndex(6, 12)].isRenderable = true;
+			grid[GetIndex(6, 11)].isRenderable = true;
+			grid[GetIndex(6, 10)].isRenderable = true;
+			grid[GetIndex(6, 9)].isRenderable = true;
+			grid[GetIndex(6, 8)].isRenderable = true;
+			grid[GetIndex(5, 8)].isRenderable = true;
+			grid[GetIndex(5, 9)].isRenderable = true;
+			grid[GetIndex(5, 10)].isRenderable = true;
+			grid[GetIndex(5, 11)].isRenderable = true;
+			grid[GetIndex(5, 12)].isRenderable = true;
+			grid[GetIndex(5, 13)].isRenderable = true;
+			grid[GetIndex(4, 11)].isRenderable = true;
+			grid[GetIndex(4, 10)].isRenderable = true;
+			grid[GetIndex(4, 12)].isRenderable = true;
+			grid[GetIndex(9, 7)].isRenderable = true;
+			grid[GetIndex(10, 7)].isRenderable = true;
+			grid[GetIndex(11, 7)].isRenderable = true;
+			grid[GetIndex(12, 7)].isRenderable = true;
+			grid[GetIndex(13, 14)].isRenderable = true;
+			grid[GetIndex(12, 14)].isRenderable = true;
+			grid[GetIndex(11, 14)].isRenderable = true;
+			grid[GetIndex(10, 14)].isRenderable = true;
+			grid[GetIndex(9, 14)].isRenderable = true;
+			grid[GetIndex(8, 14)].isRenderable = true;
+			grid[GetIndex(7, 14)].isRenderable = true;
+			grid[GetIndex(7, 15)].isRenderable = true;
+			grid[GetIndex(8, 15)].isRenderable = true;
+			grid[GetIndex(9, 15)].isRenderable = true;
+			grid[GetIndex(14, 10)].isRenderable = true;
+			grid[GetIndex(14, 11)].isRenderable = true;
+			grid[GetIndex(14, 12)].isRenderable = true;
+			grid[GetIndex(14, 13)].isRenderable = true;
+			grid[GetIndex(15, 13)].isRenderable = true;
+			grid[GetIndex(15, 12)].isRenderable = true;
+			terrainNum++;
+			break;
 		case 3:
-		for (int y{ 0 }; y < gridY; ++y) {
-			for (int x{ 0 }; x < gridX; ++x) {
-				int index = GetIndex(x,y);
-				if ((x >= 8 && x <= 13)&&(y >= 8 && y <= 13)) {
-					grid[index].isRenderable = true;
+			for (int y{ 0 }; y < gridY; ++y) {
+				for (int x{ 0 }; x < gridX; ++x) {
+					int index = GetIndex(x, y);
+					if ((x >= 8 && x <= 13) && (y >= 8 && y <= 13)) {
+						grid[index].isRenderable = true;
+					}
+					else grid[index].isRenderable = false;
 				}
-				else grid[index].isRenderable =false;
 			}
-		}
-		terrainNum = 0;		
-		break;
+			terrainNum = 0;
+			break;
 		}
 	}
 
 	void UpdateMouseToGrid() {
-		if(PauseManager::IsPaused()) return;
+		if (PauseManager::IsPaused()) return;
 
 		// //MOUSE INPUTS (Tile width = 100, tile height = 50)
 		// int cellX = InputManager::mousePos.x / 100;
@@ -382,15 +383,15 @@ namespace GridManager {
 
 	}
 
-	void storeClickData(Vec2<int> mousePos) {
-		if(PauseManager::IsPaused()) return;
-		
+	void storeClickData() {
+		if (PauseManager::IsPaused()) return;
 
+		Vec2<int> mousePos = InputManager::GetMousePos();
 		//Convert the mouse position into iso
-		iso::vec2i SelectedCell{iso::ScreenPosToIso(mousePos.x,mousePos.y)};
+		iso::vec2i SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
 		//We offset by 10 units x and y because of how iso works. We moved the grid up by 10 units
-		if((((SelectedCell.x) < 0) || ((SelectedCell.x) > gridX)) || ((SelectedCell.y) < 0 || (SelectedCell.y) > gridY)) return; 
-		int index = (SelectedCell.x)+gridX*(SelectedCell.y);
+		if ((((SelectedCell.x) < 0) || ((SelectedCell.x) > gridX)) || ((SelectedCell.y) < 0 || (SelectedCell.y) > gridY)) return;
+		int index = (SelectedCell.x) + gridX * (SelectedCell.y);
 		index = GetIndex(SelectedCell.x, SelectedCell.y);
 
 		//if the cell is water (means it doesn't need to be rendered) we don't allow placement
@@ -408,11 +409,11 @@ namespace GridManager {
 			grid[index].ID = iso::COMMERCIAL;
 			break;
 		case iso::COMMERCIAL:
-			randomNature= rand()%2;
-			if(randomNature%2==0)
-			grid[index].ID = iso::TREE;
+			randomNature = rand() % 2;
+			if (randomNature % 2 == 0)
+				grid[index].ID = iso::TREE;
 			else
-			grid[index].ID = iso::ROCK;
+				grid[index].ID = iso::ROCK;
 			break;
 		case iso::ROCK:
 			grid[index].ID = iso::NONE;
@@ -428,8 +429,8 @@ namespace GridManager {
 
 	}
 
-	void ClearGrid(){
-		if(PauseManager::IsPaused()) return;
+	void ClearGrid() {
+		if (PauseManager::IsPaused()) return;
 
 		for (int y{ 0 }; y < gridY; ++y) {
 			for (int x{ 0 }; x < gridX; ++x) {
@@ -451,41 +452,41 @@ namespace GridManager {
 				case iso::RESIDENTIAL + SMALL:
 					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::RESIDENTIAL_1X1_L1, grid[index].pos.x, grid[index].pos.y);
 					break;
-				case iso::RESIDENTIAL+MEDIUM:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::RESIDENTIAL_1X1_L2, grid[index].pos.x, grid[index].pos.y);
+				case iso::RESIDENTIAL + MEDIUM:
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::RESIDENTIAL_1X1_L2, grid[index].pos.x, grid[index].pos.y);
 					break;
-				case iso::RESIDENTIAL+LARGE:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::RESIDENTIAL_1X1_L3, grid[index].pos.x, grid[index].pos.y);
+				case iso::RESIDENTIAL + LARGE:
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::RESIDENTIAL_1X1_L3, grid[index].pos.x, grid[index].pos.y);
 					break;
 
 					//COMMERCIAL
-				case iso::COMMERCIAL+SMALL:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::COMMERCIAL_1X1_L1, grid[index].pos.x, grid[index].pos.y);
+				case iso::COMMERCIAL + SMALL:
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::COMMERCIAL_1X1_L1, grid[index].pos.x, grid[index].pos.y);
 					break;
-				case iso::COMMERCIAL+MEDIUM:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::COMMERCIAL_1X1_L2, grid[index].pos.x, grid[index].pos.y);
-					break;	
-				case iso::COMMERCIAL+LARGE:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::COMMERCIAL_1X1_L3, grid[index].pos.x, grid[index].pos.y);
-					break;	
+				case iso::COMMERCIAL + MEDIUM:
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::COMMERCIAL_1X1_L2, grid[index].pos.x, grid[index].pos.y);
+					break;
+				case iso::COMMERCIAL + LARGE:
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::COMMERCIAL_1X1_L3, grid[index].pos.x, grid[index].pos.y);
+					break;
 
 					//INDUSTRIAL
-				case iso::INDUSTRIAL+SMALL:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::INDUSTRIAL_1X1_L1, grid[index].pos.x, grid[index].pos.y);
+				case iso::INDUSTRIAL + SMALL:
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::INDUSTRIAL_1X1_L1, grid[index].pos.x, grid[index].pos.y);
 					break;
-				case iso::INDUSTRIAL+MEDIUM:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::INDUSTRIAL_1X1_L2, grid[index].pos.x, grid[index].pos.y);
+				case iso::INDUSTRIAL + MEDIUM:
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::INDUSTRIAL_1X1_L2, grid[index].pos.x, grid[index].pos.y);
 					break;
-				case iso::INDUSTRIAL+LARGE:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING,TextureManager::INDUSTRIAL_1X1_L3, grid[index].pos.x, grid[index].pos.y);
+				case iso::INDUSTRIAL + LARGE:
+					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::INDUSTRIAL_1X1_L3, grid[index].pos.x, grid[index].pos.y);
 					break;
 
 					//NATURE
 				case iso::TREE:
-						RenderSystem::AddSpriteBatch(RenderSystem::NATURE_BATCH, RenderSystem::NATURE, TextureManager::NATURE_TREE, grid[index].pos.x, grid[index].pos.y);
+					RenderSystem::AddSpriteBatch(RenderSystem::NATURE_BATCH, RenderSystem::NATURE, TextureManager::NATURE_TREE, grid[index].pos.x, grid[index].pos.y);
 					break;
 				case iso::ROCK:
-						RenderSystem::AddSpriteBatch(RenderSystem::NATURE_BATCH, RenderSystem::NATURE, TextureManager::NATURE_ROCK, grid[index].pos.x, grid[index].pos.y);
+					RenderSystem::AddSpriteBatch(RenderSystem::NATURE_BATCH, RenderSystem::NATURE, TextureManager::NATURE_ROCK, grid[index].pos.x, grid[index].pos.y);
 					break;
 
 				default:
@@ -498,79 +499,79 @@ namespace GridManager {
 		// UIManager::RenderButton(0, 0, 100, 100, 0, UIManager::GetFont(UIManager::ROBOTO).S, "dawdawdwadwadawdawd", Vec4<float>{1, 1, 0, 1}, Vec3<float>{1, 0, 1});
 	}
 
-    void GridManager::CheckCellNeighbor(iso::cell* grid,iso::vec2i cellIndex)
-    {
+	void GridManager::CheckCellNeighbor(iso::cell* grid, iso::vec2i cellIndex)
+	{
 		//The order to check is CLOCKWISE, so we go NORTH, EAST, SOUTH, WEST
-		int matchCount{0};
+		int matchCount{ 0 };
 		int matchedCells[2];
-		int gridIndex = GetIndex(cellIndex.x,cellIndex.y);
-		int NorthIndex = GetIndex(cellIndex.x,cellIndex.y-1);
-		int EastIndex = GetIndex(cellIndex.x+1,cellIndex.y);
-		int SouthIndex = GetIndex(cellIndex.x,cellIndex.y+1);
-		int WestIndex = GetIndex(cellIndex.x-1,cellIndex.y);
+		int gridIndex = GetIndex(cellIndex.x, cellIndex.y);
+		int NorthIndex = GetIndex(cellIndex.x, cellIndex.y - 1);
+		int EastIndex = GetIndex(cellIndex.x + 1, cellIndex.y);
+		int SouthIndex = GetIndex(cellIndex.x, cellIndex.y + 1);
+		int WestIndex = GetIndex(cellIndex.x - 1, cellIndex.y);
 		//NORTH
-		#if DEBUG
+#if DEBUG
 		std::cout << "Index : " << cellIndex.x << ", " << cellIndex.y << '\n';
-		std::cout << "Selected : "<< grid[gridIndex].ID << '\n';
+		std::cout << "Selected : " << grid[gridIndex].ID << '\n';
 		std::cout << "North : " << grid[NorthIndex].ID << '\n';
 		std::cout << "West : " << grid[WestIndex].ID << '\n';
-		std:: cout << "Is true? : " << (grid[NorthIndex].ID == grid[gridIndex].ID) << '\n';
-		std:: cout << "Is true? : " << (grid[SouthIndex].ID == grid[gridIndex].ID) << '\n';
-		std:: cout << "Is true? : " << (grid[EastIndex].ID == grid[gridIndex].ID) << '\n';
-		std:: cout << "Is true? : " << (grid[WestIndex].ID == grid[gridIndex].ID) << '\n';
-		#endif
-		if(grid[NorthIndex].ID == grid[gridIndex].ID && grid[NorthIndex].ID){
-			if(matchCount < 2) {
+		std::cout << "Is true? : " << (grid[NorthIndex].ID == grid[gridIndex].ID) << '\n';
+		std::cout << "Is true? : " << (grid[SouthIndex].ID == grid[gridIndex].ID) << '\n';
+		std::cout << "Is true? : " << (grid[EastIndex].ID == grid[gridIndex].ID) << '\n';
+		std::cout << "Is true? : " << (grid[WestIndex].ID == grid[gridIndex].ID) << '\n';
+#endif
+		if (grid[NorthIndex].ID == grid[gridIndex].ID && grid[NorthIndex].ID) {
+			if (matchCount < 2) {
 				matchedCells[matchCount] = NorthIndex;
 				matchCount++;
-			}	
+			}
 		}
-		if(grid[EastIndex].ID == grid[gridIndex].ID && grid[EastIndex].ID){
-			if(matchCount < 2){
+		if (grid[EastIndex].ID == grid[gridIndex].ID && grid[EastIndex].ID) {
+			if (matchCount < 2) {
 				matchedCells[matchCount] = EastIndex;
 				matchCount++;
 			}
 		}
-		if(grid[SouthIndex].ID == grid[gridIndex].ID && grid[SouthIndex].ID){
-			if(matchCount < 2){
+		if (grid[SouthIndex].ID == grid[gridIndex].ID && grid[SouthIndex].ID) {
+			if (matchCount < 2) {
 				matchedCells[matchCount] = SouthIndex;
 				matchCount++;
 			}
 		}
-		if(grid[WestIndex].ID == grid[gridIndex].ID && grid[WestIndex].ID){
-			if(matchCount< 2){
+		if (grid[WestIndex].ID == grid[gridIndex].ID && grid[WestIndex].ID) {
+			if (matchCount < 2) {
 				matchedCells[matchCount] = WestIndex;
 				matchCount++;
 			}
 		}
-		if(matchCount == 1){
+		if (matchCount == 1) {
 			//Now we check using the selected neighbor
 			int selectedNeighbor = matchedCells[0];
-			int NorthIndex = selectedNeighbor-gridX;
-			int EastIndex = selectedNeighbor +1;
-			int SouthIndex = selectedNeighbor+gridX;
-			int WestIndex = selectedNeighbor-1;
+			int NorthIndex = selectedNeighbor - gridX;
+			int EastIndex = selectedNeighbor + 1;
+			int SouthIndex = selectedNeighbor + gridX;
+			int WestIndex = selectedNeighbor - 1;
 
-			if(grid[NorthIndex].ID == grid[selectedNeighbor].ID && (NorthIndex != gridIndex)){
-				if(matchCount <2){
+			if (grid[NorthIndex].ID == grid[selectedNeighbor].ID && (NorthIndex != gridIndex)) {
+				if (matchCount < 2) {
 					matchedCells[matchCount] = NorthIndex;
 					matchCount++;
 				}
 			}
-			if(grid[EastIndex].ID == grid[selectedNeighbor].ID && (EastIndex != gridIndex)){
-				if(matchCount <2){
+			if (grid[EastIndex].ID == grid[selectedNeighbor].ID && (EastIndex != gridIndex)) {
+				if (matchCount < 2) {
 					matchedCells[matchCount] = EastIndex;
 					matchCount++;
 				}
 			}
-			if(grid[SouthIndex].ID == grid[selectedNeighbor].ID && (SouthIndex != gridIndex)){
-				if(matchCount <2){
+			if (grid[SouthIndex].ID == grid[selectedNeighbor].ID && (SouthIndex != gridIndex)) {
+				if (matchCount < 2) {
 					matchedCells[matchCount] = SouthIndex;
 					matchCount++;
 				}
 			}
-			if(grid[WestIndex].ID == grid[selectedNeighbor].ID && (WestIndex != gridIndex)){
-				if(matchCount <2){
+			if (grid[WestIndex].ID == grid[selectedNeighbor].ID && (WestIndex != gridIndex)) {
+				if (matchCount < 2) {
 					matchedCells[matchCount] = WestIndex;
 					matchCount++;
 				}
@@ -578,15 +579,15 @@ namespace GridManager {
 		}
 		// std::cout << matchCount <<'\n';
 		//if more than 200 means it's lvl 3
-		if (matchCount == 2 && grid[gridIndex].ID < 200){
-			for(int c : matchedCells){
+		if (matchCount == 2 && grid[gridIndex].ID < 200) {
+			for (int c : matchedCells) {
 				grid[c].ID = iso::NONE;
 			}
 			grid[gridIndex].ID += 100;
 			//then we recurse and check again till no matches
-			CheckCellNeighbor(grid,cellIndex);
+			CheckCellNeighbor(grid, cellIndex);
 		}
-    }
+	}
 
 	// iso::cell& GetNeighbor(iso::cell*&grid,iso::vec2i indexToCheck, iso::vec2i selectedCell){
 	// 	int selectedIndex = GetIndex(selectedCell.x,selectedCell.y);	//The starting index
@@ -616,8 +617,8 @@ namespace GridManager {
 	// 	}
 	// 	return grid[selectedIndex];
 	// }
-    int GetIndex(int x, int y)
-    {
-        return x+gridX * y;
-    }
+	int GetIndex(int x, int y)
+	{
+		return x + gridX * y;
+	}
 }

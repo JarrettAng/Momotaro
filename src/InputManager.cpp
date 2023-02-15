@@ -12,69 +12,64 @@ The functions include:
 -
 **************************************************************************/
 
-#include <AEEngine.h>
 #include <InputManager.h>
-
+#include <deque>
 namespace InputManager {
-	Vec2<int> mousePos;
+	Vec2<int> mousePos{};
 
-	EventSystem::Event<Vec2<int>> onMouseClick;
-	EventSystem::Event<Vec2<int>> onMouseRightClick;
-	EventSystem::Event<void> onEscPressed;
-	
-	EventSystem::Event<void> onCKeyPressed;
-	EventSystem::Event<Vec2<int>> onNKeyPressed;
-	EventSystem::Event<void> onRKeyPressed;
-	EventSystem::Event<Vec2<int>> on1KeyPressed;
-	EventSystem::Event<Vec2<int>> on2KeyPressed;
-	EventSystem::Event<Vec2<int>> on3KeyPressed;
+	// Store input keys to check for. (WIP, WILL CHANGE)
+	std::initializer_list<u8> keys{ AEVK_LBUTTON, AEVK_RBUTTON, AEVK_C, AEVK_R, AEVK_1, AEVK_2, AEVK_3, AEVK_N, AEVK_ESCAPE };
+	// Store key + keyevent.
+	std::deque<std::pair<u8, EventSystem::Event<void>>> onKeyTriggered;
 
-	EventSystem::Event<void> onButtonPressed;
+	// Initialize deque with key and its respective event.
+	void InputManager::Initialize() {
+		for (const auto& k : keys) {
+			onKeyTriggered.push_back(std::pair < u8, EventSystem::Event<void>>{k, {}});
+		}
+	}
+
+	// Loop through all keys and check if user triggered any.
+	// If so, invoke key event.
+	void HandleKeyTriggered() {
+		for (auto& k : onKeyTriggered) {
+			if (AEInputCheckTriggered(k.first)) {
+				k.second.Invoke();
+			}
+		}
+	}
+
+	// Subscribe func to key event.
+	void SubscribeToKeyTriggered(u8 key, void (*func)()) {
+		for (auto& k : onKeyTriggered) {
+			if (k.first == key) {
+				k.second.Subscribe(func);
+			}
+		}
+	}
+
+	// Unsubscribe func from key event.
+	void UnSubscribeToKeyTriggered(u8 key, void (*func)()) {
+		for (auto& k : onKeyTriggered) {
+			if (k.first == key) {
+				k.second.Unsubscribe(func);
+			}
+		}
+	}
+
+	Vec2<int> GetMousePos() {
+		return mousePos;
+	}
 
 	void HandleInput() {
 		AEInputGetCursorPosition(&mousePos.x, &mousePos.y);
 
-		// Check mouse-click
-		if (AEInputCheckTriggered(AEVK_LBUTTON)) {
-			onMouseClick.Invoke(mousePos);
-		}
-		//Check mouse-right click
-		if (AEInputCheckTriggered(AEVK_RBUTTON)) {
-			onMouseRightClick.Invoke(mousePos);
-		}
-		//C
-		if (AEInputCheckTriggered(AEVK_C)) {
-			onCKeyPressed.Invoke();
-		}
-		//R
-		if (AEInputCheckTriggered(AEVK_R)) {
-			onRKeyPressed.Invoke();
-		}
-		//1
-		if (AEInputCheckTriggered(AEVK_1)) {
-			on1KeyPressed.Invoke(mousePos);
-		}
-		//2
-		if (AEInputCheckTriggered(AEVK_2)) {
-			on2KeyPressed.Invoke(mousePos);
-		}
-		//3
-		if (AEInputCheckTriggered(AEVK_3)) {
-			on3KeyPressed.Invoke(mousePos);
-		}
-		//N
-		if (AEInputCheckTriggered(AEVK_N)) {
-			onNKeyPressed.Invoke(mousePos);
-		}
+		// Check and invoke any key triggered events.
+		HandleKeyTriggered();
 
-
-
-		// Check escape pressed
-		if (AEInputCheckTriggered(AEVK_ESCAPE)) {
-			onEscPressed.Invoke();
-			// Check mouse click on button
-			onButtonPressed.Invoke();
-		}
-
+		// Check for drag.
+		if (DragDetect(AESysGetWindowHandle(), POINT{ mousePos.x, mousePos.y })) {
+			//std::cout << "IS DRAGGING" << std::endl;
+		};
 	}
 }
