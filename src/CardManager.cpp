@@ -72,7 +72,7 @@ namespace CardManager {
 		deck.clear();
 		hand.clear();
 
-		InputManager::UnSubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
+		InputManager::UnsubscribeKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
 	}
 
 	void PrepareUIRenderBatch() {

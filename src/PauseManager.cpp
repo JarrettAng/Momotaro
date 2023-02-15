@@ -79,6 +79,6 @@ namespace PauseManager {
 	//}
 
 	void Free() {
-		InputManager::UnSubscribeToKey(AEVK_ESCAPE, InputManager::TRIGGERED, TogglePause);
+		InputManager::UnsubscribeKey(AEVK_ESCAPE, InputManager::TRIGGERED, TogglePause);
 	}
 }

@@ -12,19 +12,34 @@ This source file declares
 
 #include <InputManager.h>
 #include <deque>
+#include <CardManager.h>
+#include <Building.h>
+
 namespace InputManager {
 	struct KeyEvent {
-		u32 clickDt{};	// Frame time this key was triggered.
+		u32 clickTime{};	// Frame time this key was triggered.
 		EventSystem::Event<void> onKeyTriggered{};
 		EventSystem::Event<void> onKeyReleased{};
 		EventSystem::Event<void> onKeyPressed{};
 		EventSystem::Event<void> onKeyDoubleClick{};
 	};
 
-	// Amount of frames between clicks triggered to be counted as double clicking.
-	const int DOUBLE_CLICK_TIME = 20;
+	/*!***********************************************************************
+	* FORWARD DECLARATIONS
+	*************************************************************************/
+	void TryToDrag();
+	void StopDragging();
 
+	/*!***********************************************************************
+	* CONST VARIABLES
+	*************************************************************************/
+	const int DOUBLE_CLICK_TIME = 20;	// Amount of frames between clicks triggered to be counted as double clicking.
+
+	/*!***********************************************************************
+	* MOUSE RELATED VARIABLES
+	*************************************************************************/
 	Vec2<int> mousePos{};
+	bool isDragging = false;
 
 	std::deque<std::pair<u8, KeyEvent>> keys;
 
@@ -36,11 +51,11 @@ namespace InputManager {
 				k.second.onKeyTriggered.Invoke();
 
 				// Check if player is double clicking based on time between key triggered.
-				if (AEFrameRateControllerGetFrameCount() - k.second.clickDt < DOUBLE_CLICK_TIME) {
+				if (AEFrameRateControllerGetFrameCount() - k.second.clickTime < DOUBLE_CLICK_TIME) {
 					k.second.onKeyDoubleClick.Invoke();
 				}
 				// Cache time when player clicked.
-				k.second.clickDt = AEFrameRateControllerGetFrameCount();
+				k.second.clickTime = AEFrameRateControllerGetFrameCount();
 				continue;
 			}
 
@@ -109,7 +124,7 @@ namespace InputManager {
 	}
 
 	// Unsubscribe func from key event.
-	void UnSubscribeToKey(u8 key, KEY_EVENT_TYPE type, void (*func)()) {
+	void UnsubscribeKey(u8 key, KEY_EVENT_TYPE type, void (*func)()) {
 		for (auto& k : keys) {
 			switch (type) {
 			case InputManager::TRIGGERED:
@@ -132,19 +147,44 @@ namespace InputManager {
 		std::cout << "KEY NOT FOUND IN DEQUE." << std::endl;
 	}
 
-	Vec2<int> GetMousePos() {
-		return mousePos;
+	void InputManager::Intialize() {
+		SubscribeToKey(AEVK_LBUTTON, PRESSED, TryToDrag);
+		SubscribeToKey(AEVK_LBUTTON, RELEASED, StopDragging);
 	}
 
 	void HandleInput() {
 		AEInputGetCursorPosition(&mousePos.x, &mousePos.y);
 
-		// Check and invoke any key triggered events.
+		// Check and invoke any key events.
 		HandleKeyEvents();
+	}
 
-		// Check for drag.
+	void Free() {
+		// Free all key events.
+		for (auto& k : keys) {
+			k.second.onKeyTriggered.UnsubscribeAll();
+			k.second.onKeyPressed.UnsubscribeAll();
+			k.second.onKeyReleased.UnsubscribeAll();
+			k.second.onKeyDoubleClick.UnsubscribeAll();
+		}
+	}
+
+	Vec2<int> GetMousePos() {
+		return mousePos;
+	}
+
+	bool IsDragging() {
+		return isDragging;
+	}
+
+	void TryToDrag() {
 		if (DragDetect(AESysGetWindowHandle(), POINT{ mousePos.x, mousePos.y })) {
-			//std::cout << "IS DRAGGING" << std::endl;
+			isDragging = true;
 		};
 	}
+
+	void StopDragging() {
+		if (isDragging) isDragging = false;
+	}
+
 }

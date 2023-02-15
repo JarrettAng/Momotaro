@@ -33,6 +33,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	//AEToogleFullScreen(true);
 
 	// Manager Initialization
+	InputManager::Intialize();
 	GridManager::Initialize();
 	TextureManager::Initialize();
 	UIManager::Initialize();
