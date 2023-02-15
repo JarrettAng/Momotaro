@@ -126,7 +126,7 @@ namespace UIManager {
 		ListOfButtons.push_back(continueButtonData);
 		ListOfButtons.push_back(exitButtonData);
 
-		InputManager::SubscribeToKeyTriggered(AEVK_LBUTTON, OnMouseButtonclicked);
+		InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, OnMouseButtonclicked);
 	}
 	void quitgame() {
 		SceneManager::LoadScene(SceneManager::QUIT);

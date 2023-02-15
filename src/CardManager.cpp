@@ -65,14 +65,14 @@ namespace CardManager {
 		DrawCard(BuildingEnum::COMMERCIAL, BuildingEnum::L1);
 		DrawCard(BuildingEnum::INDUSTRIAL, BuildingEnum::L1);
 
-		InputManager::SubscribeToKeyTriggered(AEVK_LBUTTON, HandleClick);
+		InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
 	}
 
 	void Free() {
 		deck.clear();
 		hand.clear();
 
-		InputManager::UnSubscribeToKeyTriggered(AEVK_LBUTTON, HandleClick);
+		InputManager::UnSubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
 	}
 
 	void PrepareUIRenderBatch() {

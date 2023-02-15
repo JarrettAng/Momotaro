@@ -1,15 +1,13 @@
 /*!************************************************************************
-\file:          InputManager.h
-\author:
-\par DP email:
-\par Course:    CSD1171B
+\file InputManager.h
+\author Tan Jun Rong
+\par DP email: t.junrong@digipen.edu
+\par Course: CSD1171B
 \par Software Engineering Project
-\date:          30-01-2023
+\date 15-02-2023
 \brief
+This header file declares
 
-
-The functions include:
--
 **************************************************************************/
 
 #pragma once
@@ -19,8 +17,16 @@ The functions include:
 #include <AEEngine.h>
 
 namespace InputManager {
+
+	enum KEY_EVENT_TYPE {
+		TRIGGERED,
+		RELEASED,
+		PRESSED,
+		D_CLICK
+	};
+
 	void HandleInput();
 	Vec2<int> GetMousePos();
-	void SubscribeToKeyTriggered(u8 key, void (*func)());
-	void UnSubscribeToKeyTriggered(u8 key, void (*func)());
+	void SubscribeToKey(u8 key, KEY_EVENT_TYPE type, void (*func)());
+	void UnSubscribeToKey(u8 key, KEY_EVENT_TYPE type, void (*func)());
 }

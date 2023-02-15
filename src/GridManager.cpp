@@ -68,13 +68,13 @@ namespace GridManager {
 		// Top left
 
 
-		InputManager::SubscribeToKeyTriggered(AEVK_LBUTTON, storeClickData);
-		InputManager::SubscribeToKeyTriggered(AEVK_C, ClearGrid);
-		InputManager::SubscribeToKeyTriggered(AEVK_R, RandomiseTerrain);
-		InputManager::SubscribeToKeyTriggered(AEVK_1, SpawnResidential);
-		InputManager::SubscribeToKeyTriggered(AEVK_2, SpawnCommerical);
-		InputManager::SubscribeToKeyTriggered(AEVK_3, SpawnIndustrial);
-		InputManager::SubscribeToKeyTriggered(AEVK_N, SpawnNature);
+		InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, storeClickData);
+		InputManager::SubscribeToKey(AEVK_C, InputManager::TRIGGERED, ClearGrid);
+		InputManager::SubscribeToKey(AEVK_R, InputManager::TRIGGERED, RandomiseTerrain);
+		InputManager::SubscribeToKey(AEVK_1, InputManager::PRESSED, SpawnResidential);
+		InputManager::SubscribeToKey(AEVK_2, InputManager::TRIGGERED, SpawnCommerical);
+		InputManager::SubscribeToKey(AEVK_3, InputManager::TRIGGERED, SpawnIndustrial);
+		InputManager::SubscribeToKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
 	}
 
 

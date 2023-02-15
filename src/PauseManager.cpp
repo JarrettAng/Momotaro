@@ -36,7 +36,7 @@ namespace PauseManager {
 	void Initialize()
 	{
 		isPaused = false;
-		InputManager::SubscribeToKeyTriggered(AEVK_ESCAPE, TogglePause);
+		InputManager::SubscribeToKey(AEVK_ESCAPE, InputManager::TRIGGERED, TogglePause);
 
 		onTogglePause.Invoke(isPaused);
 	}
@@ -79,6 +79,6 @@ namespace PauseManager {
 	//}
 
 	void Free() {
-		InputManager::UnSubscribeToKeyTriggered(AEVK_ESCAPE, TogglePause);
+		InputManager::UnSubscribeToKey(AEVK_ESCAPE, InputManager::TRIGGERED, TogglePause);
 	}
 }
