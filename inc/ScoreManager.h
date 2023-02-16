@@ -6,8 +6,9 @@
 #include <iostream>
 
 namespace ScoreManger {
-	EventSystem::Event<void> onScoreUpdate;
-	EventSystem::Event<void> onLevelChange;
+	extern EventSystem::Event<void> onScoreUpdate;
+	extern EventSystem::Event<void> onLevelChange;
 	void Intialize();
+	void Draw();
 	void AddScore(int modifier);
 }

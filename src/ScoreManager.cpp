@@ -1,15 +1,19 @@
 #include <ScoreManager.h>
+#include <UIManager.h>
 
 namespace ScoreManger {
 	struct Level
 	{
-		int level{};
+		int level = 0;
 		std::string levelDesc = "";
 		bool receivedReward = false;	// Has player received reward for this level?
 	};
 
 	const float EXP_MOD = 0.3f;				// Affects amount of exp. Lower values = more XP required per level
 	const float EXP_INCREASE_MOD = 2.0f;	// Affects how quicky required exp per level. Higher values = larger gaps between levels
+
+	EventSystem::Event<void> onScoreUpdate;
+	EventSystem::Event<void> onLevelChange;
 
 	Level currLevel{};			// Current player's level.
 	int score{};				// Current player's score.
@@ -52,7 +56,6 @@ namespace ScoreManger {
 
 		// Every time score is incremented or decremented, check for change in level.
 		onScoreUpdate.Subscribe(CheckForLevelChange);
-		onScoreUpdate.Subscribe(UpdateScoreUI);
 	}
 
 	void CheckForLevelChange() {
@@ -71,9 +74,14 @@ namespace ScoreManger {
 		}
 	}
 
-	void UpdateScoreUI() {
+	void ScoreManger::Draw() {
 		// Tell ui manager to draw score ui.
 		// Use currLevel and score to draw.
+		std::string synergy = "SYNGERGY " + std::to_string(score);
+		std::string threshold = "/ " + std::to_string(GetThreshold(currLevel.level + 1));
+
+		UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).M, -0.9f, 0.9f, 0, synergy);
+		UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).M, -0.6f, 0.9f, 0, threshold);
 	}
 
 	Level GetCurrLevel() {
@@ -92,6 +100,6 @@ namespace ScoreManger {
 
 	// Calculate score needed based on current level and score.
 	int GetThreshold(int level) {
-		return pow(level / EXP_MOD, EXP_INCREASE_MOD);
+		return static_cast<int>(pow(level / EXP_MOD, EXP_INCREASE_MOD));
 	}
 }

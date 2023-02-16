@@ -21,6 +21,7 @@ namespace PauseManager {
 	bool IsPaused();
 	void Initialize();
 	void Update();
+	void Draw();
 	void Free();
 	void TogglePause();
 }

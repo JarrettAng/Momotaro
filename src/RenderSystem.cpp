@@ -122,9 +122,9 @@ namespace RenderSystem {
 		/*!***********************************************************************
 		* UI RENDERING
 		*************************************************************************/
+		// Sort batch before drawing.
 		SortUIBatch();
 		for (auto& data : UIBatch) {
-			// Sort batch before drawing.
 			if (data.graphics.hasGraphics) {
 				// Mesh CANNOT contain both texture and color.
 				if (data.graphics.tex) {

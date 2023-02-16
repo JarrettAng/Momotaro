@@ -153,6 +153,7 @@ namespace InputManager {
 	}
 
 	void HandleInput() {
+		// Update mouse position.
 		AEInputGetCursorPosition(&mousePos.x, &mousePos.y);
 
 		// Check and invoke any key events.
@@ -173,12 +174,14 @@ namespace InputManager {
 		return mousePos;
 	}
 
+	// Read-only bool.
 	bool IsDragging() {
 		return isDragging;
 	}
 
 	void TryToDrag() {
-		if (DragDetect(AESysGetWindowHandle(), POINT{ mousePos.x, mousePos.y })) {
+		// Check if player is trying to drag.
+		if (!isDragging && DragDetect(AESysGetWindowHandle(), POINT{ mousePos.x, mousePos.y })) {
 			isDragging = true;
 		};
 	}

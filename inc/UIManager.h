@@ -31,7 +31,7 @@ namespace UIManager {
 		GraphicsData graphics;
 		TextData text;
 		int layer;
-		void(*FunctionPtr)(void);
+		void(*func)(void);
 	};
 
 	enum FONT_SIZE {
@@ -53,14 +53,9 @@ namespace UIManager {
 	};
 
 	void Initialize();
-    void quitgame();
-    void UpdateUI();
-    void LevelUI();
-    void PrepareUIRenderBatch();
-	void MakeText();
-
 	FONT GetFont(const FONT_TYPE& type);
-
+	void TransformDataToUIData(UIData& data, const float& x, const float& y, const float& width, const float& height);
+	void GraphicsDataToUIData(UIData& data, const float& x, const float& y, const float& width, const float& height);
 	/*!***********************************************************************
 	* TEXT
 	*************************************************************************/

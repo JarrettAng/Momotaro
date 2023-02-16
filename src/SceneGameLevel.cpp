@@ -25,6 +25,7 @@ The functions include:
 #include <ColorTable.h>
 #include <PauseManager.h>
 #include <UIManager.h>
+#include <ScoreManager.h>
 
 
 void SceneGameLevel::Load() {
@@ -39,8 +40,6 @@ void SceneGameLevel::Initialize() {
 
 void SceneGameLevel::Update() {
 	GridManager::UpdateMouseToGrid();
-	UIManager::UpdateUI();
-	//UIManager::UIPause();
 
 	for (auto object : objects) {
 		object->Update();
@@ -58,21 +57,16 @@ void SceneGameLevel::Draw() {
 
 	//Make the grid
 	GridManager::PrepareTileRenderBatch();
-	//UIManager::PrepareUIRenderBatch();
 	CardManager::PrepareUIRenderBatch();
 	PauseManager::Update();
-	UIManager::LevelUI();
+	PauseManager::Draw();
+	ScoreManger::Draw();
 	//Debug
 	//printf("MinX %f\nMaxX %f\nMinY %f\nMaxY %f\n", AEGfxGetWinMinX(), AEGfxGetWinMaxX(), AEGfxGetWinMinY(), AEGfxGetWinMaxY);
 
 	//Add the pause button
 	//UIManager::AddRectToBatch(800.0f, -400.0f, 10.0f, 10.0f, 6 , AEGfxTexture * tex);
 
-
-	//TEMP--------------------------------------------------------------------------
-	//Change when Scoring system has been made
-	//Change to UI element that changes accordingly
-	UIManager::MakeText();
 
 	for (auto object : objects) {
 		// renderer.AddBatch(object->Render());
