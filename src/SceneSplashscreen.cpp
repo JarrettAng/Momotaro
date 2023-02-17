@@ -34,14 +34,16 @@ void SceneSplashscreen::FixedUpdate() {
 }
 
 void SceneSplashscreen::Draw() {
-	AEGfxSetBackgroundColor(0.52f, 0.89f, 1.0f);
-
+	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
 	for (auto object : objects) {
 		// renderer.AddBatch(object->Render());
 	}
 
 	RenderSystem::Render();
+
+	UIManager::AddRectToBatch(0, 0, 1500, 1500, 0, TextureManager::GetTexture(TextureManager::SPLASH_SCREEN));
+
 }
 
 void SceneSplashscreen::Free() {

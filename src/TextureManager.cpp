@@ -41,6 +41,7 @@ namespace TextureManager {
 	AEGfxTexture* card_Tex;
 	AEGfxTexture* pause_Tex;
 	AEGfxTexture* pauseButton_Tex;
+	AEGfxTexture* splash_Tex;
 
 	void Initialize() {
 		LoadTextures();
@@ -49,6 +50,7 @@ namespace TextureManager {
 	void LoadTextures() {
 		tile_Tex = AEGfxTextureLoad("Assets/Tile.png");
 		card_Tex = AEGfxTextureLoad("Assets/Card.png");
+		splash_Tex = AEGfxTextureLoad("Assets/SplashScreen");
 		residential_S_Tex = AEGfxTextureLoad("Assets/residential_s_test.png");
 		residential_M_Tex = AEGfxTextureLoad("Assets/residential_m_test.png");
 		residential_L_Tex = AEGfxTextureLoad("Assets/residential_l_test.png");
@@ -97,6 +99,8 @@ namespace TextureManager {
 			return pause_Tex;
 		case PAUSE_BUTTON:
 			return pauseButton_Tex;
+		case SPLASH_SCREEN:
+			return splash_Tex;
 		default:
 			break;
 		}

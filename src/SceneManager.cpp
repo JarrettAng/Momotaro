@@ -29,6 +29,7 @@ namespace SceneManager {
     Scene* currentScene;
 
     SceneGameLevel gameLevel;
+    SceneGameLevel splashLevel;
     // SceneMainMenu mainMenu;
     // SceneSettings settings;
     
@@ -46,6 +47,9 @@ namespace SceneManager {
 
     void SwitchScene() {
         switch (current) {
+        case SPLASHSCREEN:
+            currentScene = &splashLevel;
+            break;
         case GAME_LEVEL:
             currentScene = &gameLevel;
             break;

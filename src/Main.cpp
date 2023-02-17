@@ -40,7 +40,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	TextureManager::Initialize();
 	UIManager::Initialize();
 	RenderSystem::Initialize();
-	SceneManager::Initialize(SceneManager::GAME_LEVEL);				// Game Loop happens in SceneManager
+	SceneManager::Initialize(SceneManager::SPLASHSCREEN);				// Game Loop happens in SceneManager
 
 	// Engine Exit
 	AESysExit();

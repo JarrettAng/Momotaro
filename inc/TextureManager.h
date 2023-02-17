@@ -34,6 +34,7 @@ namespace TextureManager {
 		CARD_BLUE,
 		PAUSE_WINDOW,
 		PAUSE_BUTTON,
+		SPLASH_SCREEN,
 	};
 	void Initialize();
 	AEGfxTexture* GetTexture(const TEX_TYPE& type);
