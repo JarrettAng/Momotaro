@@ -217,7 +217,7 @@ namespace RenderSystem {
 
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, TextureManager::TEX_TYPE tex) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		AEGfxTextureSet(TextureManager::GetTexture(tex), TextureManager::GetTW(tex), TextureManager::GetTW(tex));
+		AEGfxTextureSet(TextureManager::GetTexture(tex), TextureManager::GetTW(tex), TextureManager::GetTH(tex));
 		UpdateRenderTransformMtx(x, y, AEVec2{ width,height });
 		AEGfxMeshDraw(TextureManager::GetMesh(tex), AE_GFX_MDM_TRIANGLES);
 	}
