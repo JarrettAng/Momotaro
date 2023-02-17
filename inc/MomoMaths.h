@@ -88,7 +88,11 @@ bool operator==(const Vec2<T>& lhs, const Vec2<T>& rhs)
 {
 	return (lhs.x == rhs.x && lhs.y == rhs.y);
 }
-
+template<class T>
+bool operator!=(const Vec2<T>& lhs, const Vec2<T>& rhs)
+{
+	return !(lhs.x == rhs.x && lhs.y == rhs.y);
+}
 /*============================================================================
 * OPERATOR OVER LOADS FOR VECTOR ADDITION
 */

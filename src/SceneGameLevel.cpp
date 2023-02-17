@@ -29,12 +29,12 @@ The functions include:
 
 
 void SceneGameLevel::Load() {
-	// BuildingManager::Initialize();
+	BuildingManager::Initialize();
 }
 
 void SceneGameLevel::Initialize() {
 	PauseManager::Initialize();
-	// CardManager::Initialize();
+	CardManager::Initialize();
 }
 
 void SceneGameLevel::Update() {

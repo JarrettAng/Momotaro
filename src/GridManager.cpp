@@ -61,7 +61,7 @@ namespace GridManager {
 		BuildingEnum::RIGHT,
 		1,5,-8,1,
 		"Residential Lvl 1","Bigger Joe",
-		TextureManager::RESIDENTIAL_1X1_L1 };
+		TextureManager::RESIDENTIAL_1X2_L1 };
 
 	Building CommercialLvl1{
 		BuildingEnum::COMMERCIAL,
@@ -136,7 +136,7 @@ namespace GridManager {
 		InputManager::SubscribeToKey(AEVK_2, InputManager::TRIGGERED, SpawnCommerical);
 		InputManager::SubscribeToKey(AEVK_3, InputManager::TRIGGERED, SpawnIndustrial);
 		InputManager::SubscribeToKey(AEVK_Q, InputManager::TRIGGERED, SpawnBigResidential);
-		InputManager::SubscribeToKey(AEVK_W, InputManager::TRIGGERED, SpawnBigResidential);
+		InputManager::SubscribeToKey(AEVK_W, InputManager::TRIGGERED, SpawnBigResidential3x1);
 		InputManager::SubscribeToKey(AEVK_E, InputManager::TRIGGERED, SpawnBigResidential);
 		InputManager::SubscribeToKey(AEVK_S, InputManager::TRIGGERED, SpawnBigResidential);
 		InputManager::SubscribeToKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
@@ -159,17 +159,26 @@ namespace GridManager {
 	void SpawnBigResidential(){
 		//1x2
 		if (PauseManager::IsPaused()) return;
-		ClearGrid();
+		// ClearGrid();
 		Vec2<int> mousePos = InputManager::GetMousePos();
 		iso::vec2i SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
 		ChangeOrientation();
 		SetGridIndex(TestOrientation,BigResidentialLvl1.data.size,SelectedCell.x,SelectedCell.y);
-		// SetGridIndex(BuildingEnum::RIGHT,BigResidentialLvl1.data.size,SelectedCell.x,SelectedCell.y);
-		// SetGridIndex(BuildingEnum::DOWN,BigResidentialLvl1.data.size,SelectedCell.x,SelectedCell.y);
-		// SetGridIndex(BuildingEnum::LEFT,BigResidentialLvl1.data.size,SelectedCell.x,SelectedCell.y);
-		// SetGridIndex(BigResidentialLvl1.data.orientation,BigResidentialLvl1.data.size,SelectedCell.x,SelectedCell.y);
+		// grid[index].ID = ++buildingID;
+		// grid[index]._building = ResidentialLvl1;
+	}
+	void SpawnBigResidential3x1(){
+		//1x2
+		if (PauseManager::IsPaused()) return;
+		// ClearGrid();
+		Vec2<int> mousePos = InputManager::GetMousePos();
+		iso::vec2i SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
+		int index = GetIndex(SelectedCell.x, SelectedCell.y);
+		if (!isCellSafe(SelectedCell)) return;
+		ChangeOrientation();
+		SetGridIndex(TestOrientation,Vec2<int>{3,1},SelectedCell.x,SelectedCell.y);
 		// grid[index].ID = ++buildingID;
 		// grid[index]._building = ResidentialLvl1;
 	}
@@ -454,74 +463,84 @@ namespace GridManager {
     void SetGridIndex(BuildingEnum::ORIENTATION _orientation, Vec2<int> _size, int _x, int _y)
     {
 		int index = GetIndex(_x,_y);
-		TextureManager::TEX_TYPE test{TextureManager::RESIDENTIAL_1X2_L1};
-		
-		for(int y{0}; y < _size.y; ++y){
-			for(int x{0}; x<_size.x; ++x){
-				switch (_orientation)
-				{
-				case BuildingEnum::RIGHT:
-					if(!isCellSafe(iso::vec2i{_x+x,y+_y})){
-						std::cout << "Invalid position!\n";
-						return;
-					}
-				case BuildingEnum::TOP:
-					if(!isCellSafe(iso::vec2i{_x+x,_y-y})){
-						std::cout << "Invalid position!\n";
-						return;
-					}
-				case BuildingEnum::LEFT:
-					if(!isCellSafe(iso::vec2i{_x-x,_y-y})){
-						std::cout << "Invalid position!\n";
-						return;
-					}
-				case BuildingEnum::DOWN:
-					if(!isCellSafe(iso::vec2i{_x-x,y+_y})){
-						std::cout << "Invalid position!\n";
-						return;
-					}
-				}
-			}
-		}
+		// TextureManager::TEX_TYPE test{TextureManager::RESIDENTIAL_1X2_L1};
+		iso::vec2i _SelectedCell{0,0};
+		// for(int y{0}; y < _size.y; ++y){
+		// 	for(int x{0}; x<_size.x; ++x){
+		// 		switch (_orientation)
+		// 		{
+		// 		case BuildingEnum::RIGHT:
+		// 			if(!isCellSafe(iso::vec2i{_x+x,y+_y})){
+		// 				std::cout << "Invalid position!\n";
+		// 				return;
+		// 			}
+		// 		case BuildingEnum::TOP:
+		// 			if(!isCellSafe(iso::vec2i{_x+x,_y-y})){
+		// 				std::cout << "Invalid position!\n";
+		// 				return;
+		// 			}
+		// 		case BuildingEnum::LEFT:
+		// 			if(!isCellSafe(iso::vec2i{_x-x,_y-y})){
+		// 				std::cout << "Invalid position!\n";
+		// 				return;
+		// 			}
+		// 		case BuildingEnum::DOWN:
+		// 			if(!isCellSafe(iso::vec2i{_x-x,y+_y})){
+		// 				std::cout << "Invalid position!\n";
+		// 				return;
+		// 			}
+		// 		}
+		// 	}
+		// }
 
 		std::cout << "Cell Pos : " << _x << ", " << _y <<'\n';
+		//if the orientation is right or left, we have to swap the 2x1 into 1x2
+		if(_orientation == BuildingEnum::RIGHT || _orientation == BuildingEnum::LEFT){
+			_size = Vec2<int>{_size.y,_size.x};
+		}
+		grid[index].ID = ++buildingID;
+		// grid[index]._building = BigResidentialLvl1;
 		for(int y{0}; y< _size.y; ++y){
 			for(int x{0}; x<_size.x; ++x){
 				int otherIndex{0};
+				// grid[otherIndex]._building = BigResidentialLvl1;
 				switch (_orientation)
 				{
 				case BuildingEnum::RIGHT:
+				// std::cout<<"RIGHT\n";
 				otherIndex = GetIndex(_x+x,y+_y);
-				grid[index].ID = ++buildingID;
-				grid[otherIndex].ID = buildingID;
-				// grid[otherIndex]._building.data.TextureID = test;
-				grid[otherIndex]._building.data.TextureID = TextureManager::NATURE_ROCK;
+				_SelectedCell = {_x+x,y+y};
 					break;
 				case BuildingEnum::TOP:
+				// std::cout<<"TOP\n";
 				otherIndex = GetIndex(_x+x,_y-y);
-				grid[index].ID = ++buildingID;
-				grid[otherIndex].ID = buildingID;
-				// grid[otherIndex]._building.data.TextureID = test;
-				grid[otherIndex]._building.data.TextureID = TextureManager::NATURE_ROCK;
+				_SelectedCell = {_x+x,_y-y};
+
 					break;
 				case BuildingEnum::LEFT:
+				// std::cout<<"LEFT\n";
 				otherIndex = GetIndex(_x-x,_y-y);
-				grid[index].ID = ++buildingID;
-				grid[otherIndex].ID = buildingID;
-				// grid[otherIndex]._building.data.TextureID = test;
-				grid[otherIndex]._building.data.TextureID = TextureManager::NATURE_ROCK;
+				_SelectedCell = {_x-x,_y-y};
+
 					break;
 				case BuildingEnum::DOWN:
+				std::cout<<"DOWN\n";
 				otherIndex = GetIndex(_x-x,y+_y);
-				grid[index].ID = ++buildingID;
-				grid[otherIndex].ID = buildingID;
-				// grid[otherIndex]._building.data.TextureID = test;
-				grid[otherIndex]._building.data.TextureID = TextureManager::NATURE_ROCK;
+				_SelectedCell = {_x-x,y+_y};
 					break;
 				}
-				grid[index]._building.data.TextureID = test;
+				grid[otherIndex].ID = buildingID;
+				// std::cout <<"INDEX ID : "<< grid[index].ID << '\n';
+				// std::cout <<"OTHER INDEX ID : " <<grid[otherIndex].ID << '\n';
+				// std::cout << "SELECTED CELL : " << _SelectedCell.x << ", " << _SelectedCell.y << '\n';
+				// grid[otherIndex]._building.data.TextureID = test;
+				grid[otherIndex]._building = BigResidentialLvl1;
+				// grid[otherIndex]._building.data.TextureID = TextureManager::NATURE_ROCK;
+				std::cout << grid[otherIndex]._building.data.type << '\n';
+				// CheckCellNeighbor(grid,_SelectedCell);
 			}
 		}
+		// grid[index]._building.data.TextureID = test;
     }
 
     void UpdateMouseToGrid() {
@@ -620,15 +639,14 @@ namespace GridManager {
 				int index = GetIndex(x, y);
 
 				if (grid[index].ID > 0) {
-					if (grid[index]._building.data.size ==Vec2<int>{1,1}) {
 						RenderSystem::AddRectToBatch(
 							RenderSystem::GAME_PIECES_BATCH,
 							grid[index].pos.x, grid[index].pos.y,
 							100, 100,
 							grid[index]._building.data.TextureID
 						);
-					}
 				}
+				if (grid[index].isRenderable) RenderSystem::AddRectToBatch(RenderSystem::TILE_BATCH, grid[index].pos.x, grid[index].pos.y, 100, 100, TextureManager::TILE_TEX);
 
 #pragma region Old Code
 				// switch (grid[index].ID) {
@@ -678,7 +696,6 @@ namespace GridManager {
 				// 	break;
 				// }
 #pragma endregion
-				if (grid[index].isRenderable) RenderSystem::AddRectToBatch(RenderSystem::TILE_BATCH, grid[index].pos.x, grid[index].pos.y, 100, 100, TextureManager::TILE_TEX);
 			}
 		}
 		// UIManager::RenderButton(0, 0, 100, 100, 0, UIManager::GetFont(UIManager::ROBOTO).S, "dawdawdwadwadawdawd", Vec4<float>{1, 1, 0, 1}, Vec3<float>{1, 0, 1});
@@ -695,7 +712,7 @@ namespace GridManager {
 		int SouthIndex = GetIndex(cellIndex.x, cellIndex.y + 1);
 		int WestIndex = GetIndex(cellIndex.x - 1, cellIndex.y);
 		//NORTH
-#if DEBUG
+#if 1
 		std::cout << "Index : " << cellIndex.x << ", " << cellIndex.y << '\n';
 		std::cout << "Selected : " << grid[gridIndex]._building.data.type << '\n';
 		std::cout << "North : " << grid[NorthIndex]._building.data.type << '\n';
@@ -709,25 +726,25 @@ namespace GridManager {
 		std::cout << "Is W true? : " << (grid[WestIndex].ID != 0 && grid[WestIndex]._building.data.type == grid[gridIndex]._building.data.type) << '\n';
 #endif
 
-		if (grid[NorthIndex].ID!=0 && grid[NorthIndex]._building == grid[gridIndex]._building) {
+		if (grid[NorthIndex].ID!=0 && grid[NorthIndex]._building == grid[gridIndex]._building && grid[NorthIndex].ID != grid[gridIndex].ID) {
 			if (matchCount < 2) {
 				matchedCells[matchCount] = NorthIndex;
 				matchCount++;
 			}
 		}
-		if (grid[EastIndex].ID!=0 && grid[EastIndex]._building == grid[gridIndex]._building) {
+		if (grid[EastIndex].ID!=0 && grid[EastIndex]._building == grid[gridIndex]._building&& grid[EastIndex].ID != grid[gridIndex].ID) {
 			if (matchCount < 2) {
 				matchedCells[matchCount] = EastIndex;
 				matchCount++;
 			}
 		}
-		if (grid[SouthIndex].ID!=0 && grid[SouthIndex]._building == grid[gridIndex]._building) {
+		if (grid[SouthIndex].ID!=0 && grid[SouthIndex]._building == grid[gridIndex]._building&& grid[SouthIndex].ID != grid[gridIndex].ID) {
 			if (matchCount < 2) {
 				matchedCells[matchCount] = SouthIndex;
 				matchCount++;
 			}
 		}
-		if (grid[WestIndex].ID!=0 && grid[WestIndex]._building == grid[gridIndex]._building) {
+		if (grid[WestIndex].ID!=0 && grid[WestIndex]._building == grid[gridIndex]._building && grid[WestIndex].ID != grid[gridIndex].ID) {
 			if (matchCount < 2) {
 				matchedCells[matchCount] = WestIndex;
 				matchCount++;
@@ -741,37 +758,80 @@ namespace GridManager {
 			int SouthIndex = selectedNeighbor + gridX;
 			int WestIndex = selectedNeighbor - 1;
 			//If it is not the cell you came from and the building types match
-			if ((NorthIndex != gridIndex)&&grid[NorthIndex]._building == grid[selectedNeighbor]._building) {
+			if ((NorthIndex != gridIndex)&&grid[NorthIndex]._building == grid[selectedNeighbor]._building && grid[NorthIndex].ID != grid[gridIndex].ID) {
 				if (matchCount < 2) {
 					matchedCells[matchCount] = NorthIndex;
 					matchCount++;
 				}
 			}
-			if ((EastIndex != gridIndex)&&grid[EastIndex]._building == grid[selectedNeighbor]._building) {
+			if ((EastIndex != gridIndex)&&grid[EastIndex]._building == grid[selectedNeighbor]._building && grid[EastIndex].ID != grid[gridIndex].ID) {
 				if (matchCount < 2) {
 					matchedCells[matchCount] = EastIndex;
 					matchCount++;
 				}
 			}
-			if ((SouthIndex != gridIndex)&&grid[SouthIndex]._building == grid[selectedNeighbor]._building) {
+			if ((SouthIndex != gridIndex)&&grid[SouthIndex]._building == grid[selectedNeighbor]._building && grid[SouthIndex].ID != grid[gridIndex].ID) {
 				if (matchCount < 2) {
 					matchedCells[matchCount] = SouthIndex;
 					matchCount++;
 				}
 			}
-			if ((WestIndex != gridIndex)&&grid[WestIndex]._building == grid[selectedNeighbor]._building) {
+			if ((WestIndex != gridIndex)&&grid[WestIndex]._building == grid[selectedNeighbor]._building && grid[WestIndex].ID != grid[gridIndex].ID) {
 				if (matchCount < 2) {
 					matchedCells[matchCount] = WestIndex;
 					matchCount++;
 				}
 			}
 		}
-		// std::cout << "match count is " << matchCount <<'\n';
+		std::cout << "match count is " << matchCount <<'\n';
 		//if more than 200 means it's lvl 3
 		if (matchCount == 2 && grid[gridIndex]._building.data.level < BuildingEnum::L3) {
 			for (int c : matchedCells) {
+				std::cout << "MATCH!\n"; 
 				grid[c].ID = 0;
 				grid[c]._building = Building{};
+					// if(grid[c]._building.data.size != Vec2<int>{1,1}){
+					// Vec2<int> _size{grid[c]._building.data.size};
+					// 	if(grid[c]._building.data.orientation == BuildingEnum::RIGHT || grid[c]._building.data.orientation == BuildingEnum::LEFT){
+					// 		_size = Vec2<int>{_size.y,_size.x};
+					// 	}
+					// 	int _x{grid[c].pos.x};
+					// 	int _y{grid[c].pos.y};
+					// 	iso::vec2i _SelectedCell{};
+					// 	for(int y{0}; y< _size.y; ++y){
+					// 		for(int x{0}; x<_size.x; ++x){
+					// 			int otherIndex{0};
+					// 			// grid[otherIndex]._building = BigResidentialLvl1;
+					// 			switch (grid[c]._building.data.orientation)
+					// 			{
+					// 			case BuildingEnum::RIGHT:
+					// 			std::cout<<"RIGHT\n";
+					// 			otherIndex = GetIndex(_x+x,y+_y);
+					// 			_SelectedCell = {_x+x,y+y};
+					// 				break;
+					// 			case BuildingEnum::TOP:
+					// 			std::cout<<"TOP\n";
+					// 			otherIndex = GetIndex(_x+x,_y-y);
+					// 			_SelectedCell = {_x+x,_y-y};
+
+					// 				break;
+					// 			case BuildingEnum::LEFT:
+					// 			std::cout<<"LEFT\n";
+					// 			otherIndex = GetIndex(_x-x,_y-y);
+					// 			_SelectedCell = {_x-x,_y-y};
+
+					// 				break;
+					// 			case BuildingEnum::DOWN:
+					// 			std::cout<<"DOWN\n";
+					// 			otherIndex = GetIndex(_x-x,y+_y);
+					// 			_SelectedCell = {_x-x,y+_y};
+					// 				break;
+					// 			}
+					// 			grid[GetIndex(_SelectedCell.x,_SelectedCell.y)].ID=0;
+					// 			grid[GetIndex(_SelectedCell.x,_SelectedCell.y)]._building = Building{};
+					// 		}
+					// 	}
+					// }
 			}
 			grid[gridIndex]._building.LevelUp();
 			//then we recurse and check again till no matches

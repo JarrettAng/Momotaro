@@ -43,6 +43,7 @@ namespace GridManager {
 
     /// @brief 
     void SpawnBigResidential();
+    void SpawnBigResidential3x1();
 
     /**
 	 * @brief Spawns a commerical building at mouse pos. Overwrites any existing structure.
