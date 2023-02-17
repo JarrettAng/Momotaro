@@ -103,7 +103,7 @@ namespace RenderSystem {
 			// Sort batch based on sprite's layer before drawing.
 			SortSpriteBatch(batch);
 			for (auto& sprite : batch) {
-				AEGfxTextureSet(TextureManager::GetTexture(sprite.tex), .5, 0);
+				AEGfxTextureSet(TextureManager::GetTexture(sprite.tex), 0, 0);
 				// Change render setting if needed.
 				if (!sprite.setting.isDefault()) UpdateRenderSetting(sprite.setting);
 
@@ -367,11 +367,12 @@ namespace RenderSystem {
 		AEGfxMeshStart();
 		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
 			0.0f, -1.0f, 0xFFFFFFFF, 0.0f, 1.0f,
-			1.0f, -1.0f, 0xFFFFFFFF, .5f, 1.0f);
-		AEGfxTriAdd(1.0f, -1.0f, 0xFFFFFFFF, .5f, 1.0f,
-			1.0f, 0.0f, 0xFFFFFFFF, .5f, 0.0f,
+			1.0f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);
+		AEGfxTriAdd(1.0f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f,
+			1.0f, 0.0f, 0xFFFFFFFF, 1.0f, 0.0f,
 			0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f);
 		TOP_LEFT_MESH = AEGfxMeshEnd();
+
 
 		AEGfxMeshStart();
 		AEGfxTriAdd(-0.5f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
