@@ -103,7 +103,7 @@ namespace RenderSystem {
 			// Sort batch based on sprite's layer before drawing.
 			SortSpriteBatch(batch);
 			for (auto& sprite : batch) {
-				AEGfxTextureSet(TextureManager::GetTexture(sprite.tex), 0, 0);
+				AEGfxTextureSet(TextureManager::GetTexture(sprite.tex), .5, 0);
 				// Change render setting if needed.
 				if (!sprite.setting.isDefault()) UpdateRenderSetting(sprite.setting);
 
@@ -146,17 +146,16 @@ namespace RenderSystem {
 	}
 
 	void AddSpriteBatch(const SpriteInfo& batch) {
-		AddSpriteBatch(batch.id, batch.type, batch.tex, batch.x, batch.y, batch.layer, batch.rot, batch.setting);
+		AddSpriteBatch(batch.id, batch.type, batch.tex, batch.x, batch.y, batch.layer, batch.rot);
 	}
 
-	void AddSpriteBatch(const SPRITE_BATCH_TYPE& id, const SPRITE_TYPE& type, const TextureManager::TEX_TYPE& tex, const int& x, const int& y, const int& layer, const float& rot, RenderSetting setting) {
+	void AddSpriteBatch(const SPRITE_BATCH_TYPE& id, const SPRITE_TYPE& type, const TextureManager::TEX_TYPE& tex, const int& x, const int& y, const int& layer, const float& rot) {
 		Sprite sprite = GetSprite(type);
 		sprite.tex = tex;
 		sprite.x = x;
 		sprite.y = y;
 		sprite.rot = rot;
 		sprite.layer = layer;
-		sprite.setting = setting;
 
 		// Add to batch.
 		spriteBatches[id].push_back(sprite);
@@ -368,10 +367,10 @@ namespace RenderSystem {
 		AEGfxMeshStart();
 		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
 			0.0f, -1.0f, 0xFFFFFFFF, 0.0f, 1.0f,
-			1.0f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);
-		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
-			1.0f, 0.0f, 0xFFFFFFFF, 1.0f, 0.0f,
-			1.0f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);
+			1.0f, -1.0f, 0xFFFFFFFF, .5f, 1.0f);
+		AEGfxTriAdd(1.0f, -1.0f, 0xFFFFFFFF, .5f, 1.0f,
+			1.0f, 0.0f, 0xFFFFFFFF, .5f, 0.0f,
+			0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f);
 		TOP_LEFT_MESH = AEGfxMeshEnd();
 
 		AEGfxMeshStart();
