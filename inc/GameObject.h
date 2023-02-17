@@ -7,7 +7,7 @@
 \date:          30-01-2023
 \brief
 This header file contains the class which all game objects in the scene will
-inherit. The scene will be able to access the respective functions needed like 
+inherit. The scene will be able to access the respective functions needed like
 Update() or Start() during the right part of the game loop.
 **************************************************************************/
 
@@ -17,16 +17,16 @@ Update() or Start() during the right part of the game loop.
 #include <RenderSystem.h>
 
 class GameObject {
-	public:
-		virtual void Start();
-		
-		virtual void Update();
-		virtual void FixedUpdate();
+public:
+	virtual void Start();
 
-		virtual void Render();
+	virtual void Update();
+	virtual void FixedUpdate();
 
-		virtual void Destroy();
+	virtual void Render();
 
-		Vec3<int> position;
-		RenderSystem::SpriteInfo spriteInfo;
+	virtual void Destroy();
+
+	Vec3<int> position;
+	//RenderSystem::SpriteInfo spriteInfo;
 };

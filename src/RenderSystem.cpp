@@ -15,39 +15,35 @@ This source file declares
 #include <iostream>
 #include <algorithm>
 #include <TextureManager.h>
+#include <FontManager.h>
 
 namespace RenderSystem {
 
 #pragma region Foward Declaration & Variables
 	void InitMesh();
-	void InitializeSprite();
-
-	void SortUIBatch();
-	void SortSpriteBatch(std::list<Sprite> batch);
+	void SortBatch(std::vector<Renderable> batch);
 
 	void UpdateRenderSetting(RenderSetting setting = {});
 	void UpdateRenderTransformMtx(const int& x, const int& y, const AEVec2& scale, const float& rot = 0);
 
-	void RenderText(s8 fontID, std::string text, float x, float y, float scale, Vec3<float> color = { 1.0f,1.0f,1.0f });
-	void RenderRect(const float& x, const float& y, const float& width, const float& height, AEGfxTexture* tex);
+	void RenderText(s8 fontID, std::string text, float x, float y, Vec3<float> color = { 1.0f,1.0f,1.0f });
+	void RenderRect(const float& x, const float& y, const float& width, const float& height, TextureManager::TEX_TYPE  tex);
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec4<float> color = { 1.0f,1.0f,1.0f,1.0f });
 
-	Sprite& GetSprite(const  SPRITE_TYPE& type);
-	AEVec2 GetSpriteSize(const SPRITE_TYPE& type);
+	void AddRectToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& width, const float& height, const float& rot, const int& layer, const Vec4<float>& color, TextureManager::TEX_TYPE tex);
+	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, const int& layer, TextureManager::TEX_TYPE tex = TextureManager::NONE, const Vec4<float>& btnColor = { 1,1,1,1 }, const Vec3<float>& txtColor = { 1,1,1 });
+
+	AEVec2 GetButtonSize(const float& xPadding, const float& yPadding);
+	AEVec2 GetCenteredTextPos(const float& x, const float& y, const float& width, const float& height, const float& textWidth, const float& textHeight);
+	f32 textWidth, textHeight;
 
 	/*!***********************************************************************
-	* SPRITE BATCHES
+	* RENDER BATCHES
 	*************************************************************************/
-	std::list<Sprite> tileBatch;
-	std::list<Sprite> buildingBatch;
-	std::list<Sprite> natureBatch;
-	std::list<Sprite> cardBatch;
-	std::vector<std::list<Sprite>> spriteBatches = { tileBatch, buildingBatch, natureBatch, cardBatch };
-
-	/*!***********************************************************************
-	* UI BATCHES (DATA IS ADDED THROUGH UIMANAGER)
-	*************************************************************************/
-	std::list<UIManager::UIData> UIBatch;
+	std::vector<Renderable> tileBatch;
+	std::vector<Renderable> gamePieceBatch;
+	std::vector<Renderable> UIBatch;
+	std::vector<std::vector<Renderable>> renderBatches = { tileBatch, gamePieceBatch, UIBatch };
 
 	/*!***********************************************************************
 	* MATRICES
@@ -75,94 +71,111 @@ namespace RenderSystem {
 	AEGfxVertexList* BOT_MID_MESH;
 	AEGfxVertexList* BOT_RIGHT_MESH;
 
-	/*!***********************************************************************
-	* SPRITES
-	*************************************************************************/
-	Sprite tile_Sprite;
-	Sprite nature_Sprite;
-	Sprite building_Sprite;
-	Sprite card_Sprite;
-
-
 #pragma endregion
 
 	void Initialize() {
 		InitMesh();
 		SetRenderPivot(TOP_LEFT);
-		InitializeSprite();
 	}
 
 	void Render() {
-		/*!***********************************************************************
-		* SPRITE RENDERING
-		*************************************************************************/
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		UpdateRenderSetting();
-
-		for (auto& batch : spriteBatches) {
+		for (auto& batch : renderBatches) {
 			// Sort batch based on sprite's layer before drawing.
-			SortSpriteBatch(batch);
-			for (auto& sprite : batch) {
-				AEGfxTextureSet(TextureManager::GetTexture(sprite.tex), 0, 0);
-				// Change render setting if needed.
-				if (!sprite.setting.isDefault()) UpdateRenderSetting(sprite.setting);
-
-				// Set position, rotation and scale of sprite.
-				UpdateRenderTransformMtx(sprite.x, sprite.y, sprite.size, sprite.rot);
-				// Render sprites on screen.
-				AEGfxMeshDraw(GetRenderMesh(), AE_GFX_MDM_TRIANGLES);
-
-				// Reset back to default render setting if changed, for next sprite.
-				if (!sprite.setting.isDefault()) UpdateRenderSetting();
+			SortBatch(batch);
+			for (auto& obj : batch) {
+				switch (obj.type) {
+				case RECT:
+					if (obj.rect.graphics.tex != TextureManager::NONE) {
+						// RENDER RECT WITH TEXTURE.
+						RenderRect(obj.rect.transform.pos.x, obj.rect.transform.pos.y, obj.rect.transform.size.x, obj.rect.transform.size.y, obj.rect.graphics.tex);
+					}
+					else {
+						// RENDER RECT WITH COLOR.
+						RenderRect(obj.rect.transform.pos.x, obj.rect.transform.pos.y, obj.rect.transform.size.x, obj.rect.transform.size.y, obj.rect.graphics.color);
+					}
+					break;
+				case TEXT:
+					// RENDER TEXT
+					RenderText(obj.text.fontID, const_cast<char*>(obj.text.text.c_str()), obj.text.pos.x, obj.text.pos.y, obj.text.color);
+					break;
+				default:
+					break;
+				}
 			}
-			// Clear sprites in batch.
+			// Clear batch.
 			batch.clear();
 		}
+	}
 
-		/*!***********************************************************************
-		* UI RENDERING
-		*************************************************************************/
-		// Sort batch before drawing.
-		SortUIBatch();
-		for (auto& data : UIBatch) {
-			if (data.graphics.hasGraphics) {
-				// Mesh CANNOT contain both texture and color.
-				if (data.graphics.tex) {
-					// Render rect with texture.
-					RenderRect(data.transform.x, data.transform.y, data.transform.width, data.transform.height, data.graphics.tex);
-				}
-				else {
-					// Render rect with color.
-					RenderRect(data.transform.x, data.transform.y, data.transform.width, data.transform.height, data.graphics.color);
-				}
-			}
-			// Draw text above graphics.
-			if (data.text.hasText) {
-				RenderText(data.text.fontID, const_cast<char*>(data.text.text.c_str()), data.text.x, data.text.y, data.text.scale, data.text.color);
-			}
+	// Rect with TEXTURE.
+	void AddRectToBatch(const BATCH_TYPE& batch, const float& x, const float& y, const float& width, const float& height, TextureManager::TEX_TYPE tex, const int& layer, const float& rot) {
+		AddRectToBatch(batch, x, y, width, height, rot, layer, {}, tex);
+	}
+	// Rect with COLOR.
+	void AddRectToBatch(const BATCH_TYPE& batch, const float& x, const float& y, const float& width, const float& height, const Vec4<float>& btnColor, const int& layer, const float& rot) {
+		AddRectToBatch(batch, x, y, width, height, rot, layer, btnColor, TextureManager::NONE);
+	}
+
+	void AddRectToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& width, const float& height, const float& rot, const int& layer, const Vec4<float>& color, TextureManager::TEX_TYPE tex)
+	{
+		Renderable obj;
+		obj.type = RECT;
+		obj.layer = layer;
+
+		obj.rect.transform.pos = { x,y };
+		obj.rect.transform.size = { width,height };
+		obj.rect.transform.rot = rot;
+		obj.rect.graphics.color = color;
+		obj.rect.graphics.tex = tex;
+
+		renderBatches[id].push_back(obj);
+	}
+
+	void AddTextToBatch(const BATCH_TYPE& id, const s8& font, const float& x, const float& y, std::string text, const Vec3<float>& color, const int& layer)
+	{
+		Renderable obj;
+		obj.type = TEXT;
+		obj.layer = layer;
+
+		obj.text.pos = { x,y };
+		obj.text.fontID = font;
+		obj.text.text = text;
+		obj.text.color = color;
+
+		renderBatches[id].push_back(obj);
+	}
+
+	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, TextureManager::TEX_TYPE tex, const int& layer, const Vec3<float>& txtColor) {
+		AddButtonToBatch(id, x, y, xPadding, yPadding, font, text, layer, tex, {}, txtColor);
+	}
+	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, const int& layer, const Vec4<float>& btnColor, const Vec3<float>& txtColor) {
+		AddButtonToBatch(id, x, y, xPadding, yPadding, font, text, layer, TextureManager::NONE, btnColor, txtColor);
+	}
+
+	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, const int& layer, TextureManager::TEX_TYPE tex, const Vec4<float>& btnColor, const Vec3<float>& txtColor) {
+		AEGfxGetPrintSize(font, const_cast<char*>(text.c_str()), 1, textWidth, textHeight);
+		AEVec2 buttonSize = GetButtonSize(xPadding, yPadding);
+		AEVec2 textPos = RenderSystem::GetPivotPos(GetCenteredTextPos(x, y, buttonSize.x, buttonSize.y, textWidth, textHeight), buttonSize.x / AEGetWindowWidth() * 2, buttonSize.y / AEGetWindowHeight() * 2);
+
+		if (tex == TextureManager::NONE) {
+			AddRectToBatch(id, x, y, buttonSize.x, buttonSize.y, btnColor, layer);
 		}
-		// Clear UI in batch.
-		UIBatch.clear();
+		else {
+			AddRectToBatch(id, x, y, buttonSize.x, buttonSize.y, tex, layer);
+		}
+		AddTextToBatch(id, font, textPos.x, textPos.y, text, txtColor, layer);
 	}
 
-	void AddSpriteBatch(const SpriteInfo& batch) {
-		AddSpriteBatch(batch.id, batch.type, batch.tex, batch.x, batch.y, batch.layer, batch.rot);
+	AEVec2 GetButtonSize(const float& xPadding, const float& yPadding) {
+		// Get button's width and height by adding text width/height with padding given.
+		return AEVec2{ textWidth * AEGetWindowWidth() / 2 + xPadding * 2 , textHeight * AEGetWindowHeight() / 2 + yPadding * 2 };
 	}
 
-	void AddSpriteBatch(const SPRITE_BATCH_TYPE& id, const SPRITE_TYPE& type, const TextureManager::TEX_TYPE& tex, const int& x, const int& y, const int& layer, const float& rot) {
-		Sprite sprite = GetSprite(type);
-		sprite.tex = tex;
-		sprite.x = x;
-		sprite.y = y;
-		sprite.rot = rot;
-		sprite.layer = layer;
-
-		// Add to batch.
-		spriteBatches[id].push_back(sprite);
-	}
-
-	void AddUIBatch(UIManager::UIData data) {
-		UIBatch.push_back(data);
+	AEVec2 GetCenteredTextPos(const float& x, const float& y, const float& width, const float& height, const float& textWidth, const float& textHeight) {
+		// It just works
+		return AEVec2{ ((x / AEGetWindowWidth()) * 2) + ((((width / AEGetWindowWidth()) * 2) - textWidth) / 2) , ((y / AEGetWindowHeight()) * 2) - ((height / 2) / AEGetWindowHeight()) * 2 - (textHeight / 2) };
 	}
 
 	AEVec2 GetPivotPos(const AEVec2& pos, const float& width, const float& height) {
@@ -196,71 +209,33 @@ namespace RenderSystem {
 	/*!***********************************************************************
 	* FOR RENDERING UI ELEMENTS
 	*************************************************************************/
-	void RenderText(s8 fontID, std::string text, float x, float y, float scale, Vec3<float> color) {
+	void RenderText(s8 fontID, std::string text, float x, float y, Vec3<float> color) {
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		// Allow transperant text for fading?
-		AEGfxPrint(fontID, const_cast<char*>(text.c_str()), x, y, scale, color.x, color.y, color.z);
+		AEGfxPrint(fontID, const_cast<char*>(text.c_str()), x, y, 1, color.x, color.y, color.z);
 	}
 
-	void RenderRect(const float& x, const float& y, const float& width, const float& height, AEGfxTexture* tex) {
+	void RenderRect(const float& x, const float& y, const float& width, const float& height, TextureManager::TEX_TYPE tex) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		AEGfxTextureSet(tex, 0, 0);
+		AEGfxTextureSet(TextureManager::GetTexture(tex), TextureManager::GetTW(tex), TextureManager::GetTW(tex));
 		UpdateRenderTransformMtx(x, y, AEVec2{ width,height });
-		AEGfxMeshDraw(GetRenderMesh(), AE_GFX_MDM_TRIANGLES);
+		AEGfxMeshDraw(TextureManager::GetMesh(tex), AE_GFX_MDM_TRIANGLES);
 	}
 
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec4<float> color) {
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxSetTintColor(color.w, color.x, color.y, color.z);
 		UpdateRenderTransformMtx(x, y, AEVec2{ width,height });
-		AEGfxMeshDraw(GetRenderMesh(), AE_GFX_MDM_TRIANGLES);
+		AEGfxMeshDraw(TextureManager::GetMesh(TextureManager::NONE), AE_GFX_MDM_TRIANGLES);
 	}
 	/*************************************************************************/
-
-	Sprite& GetSprite(const SPRITE_TYPE& type) {
-		switch (type)
-		{
-		case TILE:
-			return tile_Sprite;
-		case NATURE:
-			return nature_Sprite;
-		case BUILDING:
-			return building_Sprite;
-		case CARD:
-			return card_Sprite;
-		default:
-			break;
-		}
-		std::cout << "INVALID SPRITE TYPE WHEN CALLING GetSprite().";
-	}
-
-	AEVec2 GetSpriteSize(const SPRITE_TYPE& type) {
-		switch (type)
-		{
-		case TILE:
-			return tile_Sprite.size;
-		case NATURE:
-			return nature_Sprite.size;
-		case BUILDING:
-			return building_Sprite.size;
-		case CARD:
-			return card_Sprite.size;
-		default:
-			break;
-		}
-		std::cout << "INVALID SPRITE TYPE WHEN CALLING GetSpriteSize()";
-		return AEVec2{};
-	}
 
 	/*!***********************************************************************
 	\brief
 		Sort batch list based on layer value.
 	*************************************************************************/
-	void SortSpriteBatch(std::list<Sprite> batch) {
-		batch.sort([](const Sprite& a, const Sprite& b) { return a.layer < b.layer; });
-	}
-	void SortUIBatch() {
-		UIBatch.sort([](const UIManager::UIData& a, const  UIManager::UIData& b) { return a.layer < b.layer; });
+	void SortBatch(std::vector<Renderable> batch) {
+		std::sort(batch.begin(), batch.end(), [](const Renderable& a, const Renderable& b) { return a.layer < b.layer; });
 	}
 	/*************************************************************************/
 
@@ -337,26 +312,8 @@ namespace RenderSystem {
 		}
 		return TOP_LEFT_MESH;
 	}
-
-
 	/*************************************************************************/
 
-	/*!***********************************************************************
-	\brief
-		Initialize sprite type and size. (Size is used for mesh scaling)
-	*************************************************************************/
-	void InitializeSprite() {
-		tile_Sprite.type = TILE;
-		nature_Sprite.type = NATURE;
-		building_Sprite.type = BUILDING;
-		card_Sprite.type = CARD;
-
-		// TODO: GET SIZE USING FILE I/O
-		tile_Sprite.size = { 100,100 };
-		nature_Sprite.size = { 100,100 };
-		building_Sprite.size = { 100,100 };
-		card_Sprite.size = { 100,100 };
-	}
 
 	void InitMesh() {
 		/*!***********************************************************************

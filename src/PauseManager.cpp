@@ -15,15 +15,16 @@ The functions include:
 #include <PauseManager.h>
 #include <InputManager.h>
 #include <SceneManager.h>
-#include <UIManager.h>
 #include <TextureManager.h>
+#include <RenderSystem.h>
+#include <FontManager.h>
 
 namespace PauseManager {
 	bool isPaused;
-	UIManager::UIData pauseButtonData{};
-	UIManager::UIData continueButtonData{};
-	UIManager::UIData exitButtonData{};
-	std::vector<UIManager::UIData> pauseMenuBtns;
+	RenderSystem::Interactable pauseButtonData{};
+	RenderSystem::Interactable continueButtonData{};
+	RenderSystem::Interactable exitButtonData{};
+	std::vector<RenderSystem::Interactable> pauseMenuBtns;
 	EventSystem::Event<bool> onTogglePause;
 
 #pragma region Forward Delcarations;
@@ -43,17 +44,27 @@ namespace PauseManager {
 
 		onTogglePause.Invoke(isPaused);
 
+		pauseButtonData.render.rect.transform.pos.x = 700.0f;
+		pauseButtonData.render.rect.transform.pos.y = -425.0f;
+		pauseButtonData.render.rect.transform.size.x = 70.0f;
+		pauseButtonData.render.rect.transform.size.y = 70.0f;
 		pauseButtonData.isActive = true;
-		TransformDataToUIData(pauseButtonData, 700.0f, -425.0f, 70.0f, 70.0f);
-		pauseButtonData.func = PauseManager::TogglePause;
+		pauseButtonData.func = TogglePause;
 
+		continueButtonData.render.rect.transform.pos.x = -250.0f;
+		continueButtonData.render.rect.transform.pos.y = 50.0f;
+		continueButtonData.render.rect.transform.size.x = 250.0f;
+		continueButtonData.render.rect.transform.size.y = 100.0f;
 		continueButtonData.isActive = false;
-		TransformDataToUIData(continueButtonData, -250.0f, 50.0f, 250.0f, 100.0f);
-		continueButtonData.func = PauseManager::TogglePause;
-		continueButtonData.text.text = "CONTINUE";
+		continueButtonData.func = TogglePause;
 
+
+
+		exitButtonData.render.rect.transform.pos.x = 50.0f;
+		exitButtonData.render.rect.transform.pos.y = 50.0f;
+		exitButtonData.render.rect.transform.size.x = 250.0f;
+		exitButtonData.render.rect.transform.size.y = 100.0f;
 		exitButtonData.isActive = false;
-		TransformDataToUIData(exitButtonData, 50.0f, 50.0f, 250.0f, 100.0f);
 		exitButtonData.func = Quitgame;
 
 
@@ -69,21 +80,16 @@ namespace PauseManager {
 
 		if (isPaused) {
 			//"WINDOW"
-			UIManager::AddRectToBatch(-780, 750, 1500, 1500, 0, TextureManager::GetTexture(TextureManager::PAUSE_WINDOW));
+			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, -780, 750, 1500, 1500, TextureManager::PAUSE_WINDOW);
 			//TEXT
-			UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).L, -0.1f, 0.0f, 0, "PAUSED", { (0.0f), (0.0f), (0.0f) });
+			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, FontManager::GetFont(FontManager::ROBOTO).L, -0.1f, 0.0f, "PAUSED", { 0,0,0 });
 
 			//UNPAUSE
-			UIManager::AddButtonToBatch(-250.0f, -50.0f, 30.0f, 30.0f, 0,
-				(UIManager::GetFont(UIManager::ROBOTO).M), "CONTINUE",
-				{ (1.0f), (1.0f), (1.0f), (1.0f) },
-				{ (0.0f), (0.0f), (0.0f) });
+
+			RenderSystem::AddButtonToBatch(RenderSystem::UI_BATCH, -250.0f, -50.0f, 30.0f, 30.0f, FontManager::GetFont(FontManager::ROBOTO).M, "CONTINUE", 0, { 1,1,1,1 }, { 0,0,0 });
 
 			//EXIT
-			UIManager::AddButtonToBatch(50.0f, -50.0f, 80.0f, 30.0f, 0,
-				(UIManager::GetFont(UIManager::ROBOTO).M), "EXIT",
-				{ (1.0f), (1.0f), (1.0f), (1.0f) },
-				{ (0.0f), (0.0f), (0.0f) });
+			RenderSystem::AddButtonToBatch(RenderSystem::UI_BATCH, 50.0f, -50.0f, 80.0f, 30.0f, FontManager::GetFont(FontManager::ROBOTO).M, "EXIT", 0, { 1,1,1,1 }, { 0,0,0 });
 
 			//Check if button is pressed
 			//InputManager::onButtonPressed.Subscribe(Free);
@@ -93,7 +99,7 @@ namespace PauseManager {
 
 	void PauseManager::Draw() {
 		if (!IsPaused()) {
-			UIManager::AddRectToBatch(700.0f, 425.0f, 70.0f, 70.0f, 0, TextureManager::GetTexture(TextureManager::PAUSE_BUTTON));
+			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, 700.0f, 425.0f, 70.0f, 70.0f, TextureManager::PAUSE_BUTTON);
 		}
 	}
 
@@ -122,7 +128,7 @@ namespace PauseManager {
 		// std::cout << "Mouse has been clicked in UIMANAGER!" << '\n';
 		// std::cout << "LIST  COUNT : " << ListOfButtons.size() << '\n';
 		for (auto& button : pauseMenuBtns) {
-			#if DEBUG
+#if DEBUG
 			std::cout << "ButtonStats : " << button.text.text << '\n';
 			std::cout << "Button Pos : " << button.transform.x << ", " << button.transform.y << '\n';
 			std::cout << "Button Size : " << button.transform.width << ", " << button.transform.height << '\n';
@@ -130,12 +136,12 @@ namespace PauseManager {
 			std::cout << "Mouse pos offset : " << (mousePos.x - AEGetWindowWidth() / 2) << ", " << (mousePos.y - AEGetWindowHeight() / 2) << '\n';
 			std::cout << "Button pos offset : " << button.transform.y + button.transform.height << '\n';
 			std::cout << "==================================================================" << '\n';
-			#endif
+#endif
 			//Left and right bounds (since mouse is offset by half screen size)
-			if (((mousePos.x - AEGetWindowWidth() / 2) > button.transform.x) && (mousePos.x - AEGetWindowWidth() / 2 < button.transform.x + button.transform.width)) {
+			if (((mousePos.x - AEGetWindowWidth() / 2) > button.render.rect.transform.pos.x) && (mousePos.x - AEGetWindowWidth() / 2 < button.render.rect.transform.pos.x + button.render.rect.transform.size.x)) {
 				// std::cout << "Continue is " << continueButtonData.isActive << '\n';
 				//Top and bottom bounds
-				if (((mousePos.y - AEGetWindowHeight() / 2) > button.transform.y) && ((mousePos.y - AEGetWindowHeight() / 2) < button.transform.y + button.transform.height)) {
+				if (((mousePos.y - AEGetWindowHeight() / 2) > button.render.rect.transform.pos.y) && ((mousePos.y - AEGetWindowHeight() / 2) < button.render.rect.transform.pos.y + button.render.rect.transform.size.y)) {
 					// std::cout << "BUTTON CLICKED : " << button.text.text << '\n';
 					if (button.isActive) button.func();
 					// PauseManager::TogglePause();

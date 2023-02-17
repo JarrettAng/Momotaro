@@ -18,7 +18,9 @@ The functions include:
 
 namespace TextureManager {
 
+
 	enum TEX_TYPE {
+		NONE = 0,
 		RESIDENTIAL_1X1_L1 = 1,
 		RESIDENTIAL_1X1_L2,
 		RESIDENTIAL_1X1_L3,
@@ -36,7 +38,26 @@ namespace TextureManager {
 		PAUSE_BUTTON,
 		SPLASH_SCREEN,
 	};
+
+	struct TextureSheet {
+		TEX_TYPE tex;
+		int	rows;
+		int cols;
+
+		// Animation
+		float frameInterval;
+		float currInterval = 0;
+		float tw;	// width offset 1/rows
+		float th;	// height offset 1/cols
+		float ctw = 0; // current width offset
+		float cth = 0; // current height offset
+	};
+
 	void Initialize();
+	void Update();
+	float GetTW(const TEX_TYPE& type);
+	float GetTH(const TEX_TYPE& type);
+	AEGfxVertexList* GetMesh(const TEX_TYPE& type);
 	AEGfxTexture* GetTexture(const TEX_TYPE& type);
 }
 

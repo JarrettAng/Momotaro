@@ -20,7 +20,6 @@ The functions include:
 #include <iostream>
 #include <MomoMaths.h>
 
-#include <UIManager.h>
 #include <GridManager.h>
 #include <PauseManager.h>
 
@@ -37,7 +36,7 @@ namespace GridManager {
 
 	int randomNature{ 0 };
 
-	int buildingID{0};			//THIS ID IS FOR TRACKING BUILDINGS!
+	int buildingID{ 0 };			//THIS ID IS FOR TRACKING BUILDINGS!
 
 	//Temporary stuff for buildings
 	Building ResidentialLvl1{
@@ -47,18 +46,16 @@ namespace GridManager {
 		BuildingEnum::RIGHT,
 		1,3,-3,2,
 		"Residential Lvl 1","Joe",
-		TextureManager::RESIDENTIAL_1X1_L1,
-		RenderSystem::BUILDING};
+		TextureManager::RESIDENTIAL_1X1_L1 };
 
 	Building BigResidentialLvl1{
-		BuildingEnum::RESIDENTIAL, 
+		BuildingEnum::RESIDENTIAL,
 		BuildingEnum::_2X1,
 		BuildingEnum::L1,
 		BuildingEnum::RIGHT,
 		1,5,-8,1,
 		"Residential Lvl 1","Bigger Joe",
-		TextureManager::RESIDENTIAL_1X1_L1,
-		RenderSystem::BUILDING};
+		TextureManager::RESIDENTIAL_1X1_L1 };
 
 	Building CommercialLvl1{
 		BuildingEnum::COMMERCIAL,
@@ -67,8 +64,7 @@ namespace GridManager {
 		BuildingEnum::RIGHT,
 		3,0,-1,1,
 		"Commercial Lvl 1","Sugondese",
-		TextureManager::COMMERCIAL_1X1_L1,
-		RenderSystem::BUILDING};
+		TextureManager::COMMERCIAL_1X1_L1 };
 
 	Building IndustrialLvl1{
 		BuildingEnum::INDUSTRIAL,
@@ -77,8 +73,7 @@ namespace GridManager {
 		BuildingEnum::RIGHT,
 		-3,-1,3,0,
 		"Industrial Lvl 1","Candice",
-		TextureManager::INDUSTRIAL_1X1_L1,
-		RenderSystem::BUILDING};
+		TextureManager::INDUSTRIAL_1X1_L1 };
 
 	Building NatureTree{
 		BuildingEnum::NATURE,
@@ -87,7 +82,7 @@ namespace GridManager {
 		BuildingEnum::RIGHT,
 		0,0,0,0,
 		"Nature!","Tree",
-		TextureManager::NATURE_TREE,RenderSystem::BUILDING
+		TextureManager::NATURE_TREE
 	};
 	Building NatureRock{
 		BuildingEnum::NATURE,
@@ -96,9 +91,9 @@ namespace GridManager {
 		BuildingEnum::RIGHT,
 		0,0,0,0,
 		"Nature!","The Rock",
-		TextureManager::NATURE_ROCK,RenderSystem::NATURE
+		TextureManager::NATURE_ROCK
 	};
-	
+
 
 
 	void Initialize() {
@@ -155,7 +150,7 @@ namespace GridManager {
 		grid[index]._building = ResidentialLvl1;
 		CheckCellNeighbor(grid, SelectedCell);
 
-		#if testVector
+#if testVector
 		Vec2<int> test1{ 1,1 };
 		Vec2<int> test11{ 2,2 };
 		Vec3<int> test2{ 1,1,1 };
@@ -207,7 +202,7 @@ namespace GridManager {
 		std::cout << test11 * 2 << " = (4,4)" << '\n';
 		std::cout << test22 * 2 << " = (4,4,4)" << '\n';
 		std::cout << test33 * 2 << " = (4,4,4,4)" << '\n';
-		#endif
+#endif
 
 	}
 	void SpawnCommerical() {
@@ -513,18 +508,18 @@ namespace GridManager {
 			for (int x{ 0 }; x < gridX; ++x) {
 				int index = GetIndex(x, y);
 
-				if(grid[index].ID > 0){
-					if(grid[index]._building.data.size == BuildingEnum::_1X1){
-						RenderSystem::AddSpriteBatch(
-							RenderSystem::BUILDING_BATCH,
-							grid[index]._building.data.MeshID,
-							grid[index]._building.data.TextureID,
-							grid[index].pos.x, grid[index].pos.y
-							);
+				if (grid[index].ID > 0) {
+					if (grid[index]._building.data.size == BuildingEnum::_1X1) {
+						RenderSystem::AddRectToBatch(
+							RenderSystem::GAME_PIECES_BATCH,
+							grid[index].pos.x, grid[index].pos.y,
+							100, 100,
+							grid[index]._building.data.TextureID
+						);
 					}
 				}
-				
-			#pragma region Old Code
+
+#pragma region Old Code
 				// switch (grid[index].ID) {
 				// 	//RESIDENTIAL
 				// case iso::RESIDENTIAL + SMALL:
@@ -571,8 +566,8 @@ namespace GridManager {
 				// 	// RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::RESIDENTIAL_S, grid[index].pos.x, grid[index].pos.y);
 				// 	break;
 				// }
-				#pragma endregion
-				if (grid[index].isRenderable) RenderSystem::AddSpriteBatch(RenderSystem::TILE_BATCH, RenderSystem::TILE, TextureManager::TILE_TEX, grid[index].pos.x, grid[index].pos.y);
+#pragma endregion
+				if (grid[index].isRenderable) RenderSystem::AddRectToBatch(RenderSystem::TILE_BATCH, grid[index].pos.x, grid[index].pos.y, 100, 100, TextureManager::TILE_TEX);
 			}
 		}
 		// UIManager::RenderButton(0, 0, 100, 100, 0, UIManager::GetFont(UIManager::ROBOTO).S, "dawdawdwadwadawdawd", Vec4<float>{1, 1, 0, 1}, Vec3<float>{1, 0, 1});
@@ -589,7 +584,7 @@ namespace GridManager {
 		int SouthIndex = GetIndex(cellIndex.x, cellIndex.y + 1);
 		int WestIndex = GetIndex(cellIndex.x - 1, cellIndex.y);
 		//NORTH
-		#if DEBUG
+#if DEBUG
 		std::cout << "Index : " << cellIndex.x << ", " << cellIndex.y << '\n';
 		std::cout << "Selected : " << grid[gridIndex]._building.data.type << '\n';
 		std::cout << "North : " << grid[NorthIndex]._building.data.type << '\n';
@@ -597,31 +592,31 @@ namespace GridManager {
 		std::cout << "South : " << grid[SouthIndex]._building.data.type << '\n';
 		std::cout << "West : " << grid[WestIndex]._building.data.type << '\n';
 
-		std::cout << "Is N true? : " << (grid[NorthIndex].ID!=0 && grid[NorthIndex]._building.data.type == grid[gridIndex]._building.data.type) << '\n';
-		std::cout << "Is E true? : " << (grid[EastIndex].ID!=0 && grid[EastIndex]._building.data.type == grid[gridIndex]._building.data.type) << '\n';
-		std::cout << "Is S true? : " << (grid[SouthIndex].ID!=0 && grid[SouthIndex]._building.data.type == grid[gridIndex]._building.data.type) << '\n';
-		std::cout << "Is W true? : " << (grid[WestIndex].ID!=0 && grid[WestIndex]._building.data.type == grid[gridIndex]._building.data.type) << '\n';
-		#endif
+		std::cout << "Is N true? : " << (grid[NorthIndex].ID != 0 && grid[NorthIndex]._building.data.type == grid[gridIndex]._building.data.type) << '\n';
+		std::cout << "Is E true? : " << (grid[EastIndex].ID != 0 && grid[EastIndex]._building.data.type == grid[gridIndex]._building.data.type) << '\n';
+		std::cout << "Is S true? : " << (grid[SouthIndex].ID != 0 && grid[SouthIndex]._building.data.type == grid[gridIndex]._building.data.type) << '\n';
+		std::cout << "Is W true? : " << (grid[WestIndex].ID != 0 && grid[WestIndex]._building.data.type == grid[gridIndex]._building.data.type) << '\n';
+#endif
 
-		if (grid[NorthIndex].ID!=0 && grid[NorthIndex]._building.data.TextureID == grid[gridIndex]._building.data.TextureID) {
+		if (grid[NorthIndex].ID != 0 && grid[NorthIndex]._building.data.TextureID == grid[gridIndex]._building.data.TextureID) {
 			if (matchCount < 2) {
 				matchedCells[matchCount] = NorthIndex;
 				matchCount++;
 			}
 		}
-		if (grid[EastIndex].ID!=0 && grid[EastIndex]._building.data.TextureID == grid[gridIndex]._building.data.TextureID) {
+		if (grid[EastIndex].ID != 0 && grid[EastIndex]._building.data.TextureID == grid[gridIndex]._building.data.TextureID) {
 			if (matchCount < 2) {
 				matchedCells[matchCount] = EastIndex;
 				matchCount++;
 			}
 		}
-		if (grid[SouthIndex].ID!=0 && grid[SouthIndex]._building.data.TextureID == grid[gridIndex]._building.data.TextureID) {
+		if (grid[SouthIndex].ID != 0 && grid[SouthIndex]._building.data.TextureID == grid[gridIndex]._building.data.TextureID) {
 			if (matchCount < 2) {
 				matchedCells[matchCount] = SouthIndex;
 				matchCount++;
 			}
 		}
-		if (grid[WestIndex].ID!=0 && grid[WestIndex]._building.data.TextureID == grid[gridIndex]._building.data.TextureID) {
+		if (grid[WestIndex].ID != 0 && grid[WestIndex]._building.data.TextureID == grid[gridIndex]._building.data.TextureID) {
 			if (matchCount < 2) {
 				matchedCells[matchCount] = WestIndex;
 				matchCount++;
@@ -635,25 +630,25 @@ namespace GridManager {
 			int SouthIndex = selectedNeighbor + gridX;
 			int WestIndex = selectedNeighbor - 1;
 			//If it is not the cell you came from and the building types match
-			if ((NorthIndex != gridIndex)&&grid[NorthIndex]._building.data.TextureID == grid[selectedNeighbor]._building.data.TextureID) {
+			if ((NorthIndex != gridIndex) && grid[NorthIndex]._building.data.TextureID == grid[selectedNeighbor]._building.data.TextureID) {
 				if (matchCount < 2) {
 					matchedCells[matchCount] = NorthIndex;
 					matchCount++;
 				}
 			}
-			if ((EastIndex != gridIndex)&&grid[EastIndex]._building.data.TextureID == grid[selectedNeighbor]._building.data.TextureID ) {
+			if ((EastIndex != gridIndex) && grid[EastIndex]._building.data.TextureID == grid[selectedNeighbor]._building.data.TextureID) {
 				if (matchCount < 2) {
 					matchedCells[matchCount] = EastIndex;
 					matchCount++;
 				}
 			}
-			if ((SouthIndex != gridIndex)&&grid[SouthIndex]._building.data.TextureID == grid[selectedNeighbor]._building.data.TextureID) {
+			if ((SouthIndex != gridIndex) && grid[SouthIndex]._building.data.TextureID == grid[selectedNeighbor]._building.data.TextureID) {
 				if (matchCount < 2) {
 					matchedCells[matchCount] = SouthIndex;
 					matchCount++;
 				}
 			}
-			if ((WestIndex != gridIndex)&&grid[WestIndex]._building.data.TextureID == grid[selectedNeighbor]._building.data.TextureID) {
+			if ((WestIndex != gridIndex) && grid[WestIndex]._building.data.TextureID == grid[selectedNeighbor]._building.data.TextureID) {
 				if (matchCount < 2) {
 					matchedCells[matchCount] = WestIndex;
 					matchCount++;

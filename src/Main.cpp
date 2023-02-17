@@ -5,12 +5,12 @@
 #include <AEEngine.h>
 
 #include <RenderSystem.h>
-#include <UIManager.h>
 #include <SceneManager.h>
 #include <GridManager.h>
 #include <TextureManager.h>
 #include <InputManager.h>
 #include <ScoreManager.h>
+#include <FontManager.h>
 
 // ---------------------------------------------------------------------------
 // main
@@ -35,10 +35,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	// Manager Initialization
 	InputManager::Intialize();
+	FontManager::Initialize();
 	GridManager::Initialize();
 	ScoreManger::Intialize();
 	TextureManager::Initialize();
-	UIManager::Initialize();
 	RenderSystem::Initialize();
 	SceneManager::Initialize(SceneManager::SPLASHSCREEN);				// Game Loop happens in SceneManager
 

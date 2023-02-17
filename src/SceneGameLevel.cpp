@@ -24,8 +24,8 @@ The functions include:
 #include <SceneGameLevel.h>
 #include <ColorTable.h>
 #include <PauseManager.h>
-#include <UIManager.h>
 #include <ScoreManager.h>
+#include <TextureManager.h>
 
 
 void SceneGameLevel::Load() {
@@ -39,6 +39,8 @@ void SceneGameLevel::Initialize() {
 
 void SceneGameLevel::Update() {
 	GridManager::UpdateMouseToGrid();
+	PauseManager::Update();
+	TextureManager::Update();
 
 	for (auto object : objects) {
 		object->Update();
@@ -57,7 +59,6 @@ void SceneGameLevel::Draw() {
 	//Make the grid
 	GridManager::PrepareTileRenderBatch();
 	CardManager::PrepareUIRenderBatch();
-	PauseManager::Update();
 	PauseManager::Draw();
 	ScoreManger::Draw();
 	//Debug

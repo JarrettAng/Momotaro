@@ -1,5 +1,6 @@
 #include <ScoreManager.h>
-#include <UIManager.h>
+#include <FontManager.h>
+#include <RenderSystem.h>
 
 namespace ScoreManger {
 	struct Level
@@ -79,9 +80,8 @@ namespace ScoreManger {
 		// Use currLevel and score to draw.
 		std::string synergy = "SYNGERGY " + std::to_string(score);
 		std::string threshold = "/ " + std::to_string(GetThreshold(currLevel.level + 1));
-
-		UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).M, -0.9f, 0.9f, 0, synergy);
-		UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).M, -0.6f, 0.9f, 0, threshold);
+		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, FontManager::GetFont(FontManager::ROBOTO).M, -0.9f, 0.9f, synergy);
+		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, FontManager::GetFont(FontManager::ROBOTO).M, -0.6f, 0.9f, threshold);
 	}
 
 	Level GetCurrLevel() {

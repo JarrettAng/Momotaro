@@ -16,7 +16,6 @@ This header file declares
 #include <AEEngine.h>
 #include <MomoMaths.h>
 #include <string>
-#include <UIManager.h>
 #include <TextureManager.h>
 
 namespace RenderSystem {
@@ -37,20 +36,10 @@ namespace RenderSystem {
 		bool isDefault() { return blendMode == BLEND_MODE && blendColor == BLEND_COLOR && transperancy == TRANSPERANCY && tint == TINT; }
 	};
 
-	enum SPRITE_TYPE {
-		TILE,
-		NATURE,
-		BUILDING,
-		CARD,
-	};
-
-
-
-	enum SPRITE_BATCH_TYPE {
+	enum BATCH_TYPE {
 		TILE_BATCH = 0,
-		BUILDING_BATCH,
-		NATURE_BATCH,
-		CARD_BATCH,
+		GAME_PIECES_BATCH,
+		UI_BATCH
 	};
 
 	enum RENDER_PIVOT {
@@ -65,35 +54,75 @@ namespace RenderSystem {
 		BOT_RIGHT
 	};
 
-	struct Sprite {
-		SPRITE_TYPE type;
-		TextureManager::TEX_TYPE tex;
-		float x, y;
-		int layer = 0;
-		float rot = 0;
+	struct Transform {
+		AEVec2 pos{};
 		AEVec2 size = { 1,1 };
-		RenderSetting setting;
+		float rot = 0;
 	};
 
-	struct SpriteInfo {
-		SPRITE_BATCH_TYPE id;
-		SPRITE_TYPE type;
+	struct Graphics {
 		TextureManager::TEX_TYPE tex;
-		int x, y;
-		float rot = 0;
+		Vec4<float> color;
+	};
+
+	struct Rect {
+		Transform transform;
+		Graphics graphics;
+	};
+
+	struct Text {
+		s8 fontID;
+		AEVec2 pos{};
+		std::string text;
+		Vec3<float> color;
+	};
+
+	enum RENDER_TYPE {
+		RECT,
+		TEXT
+	};
+
+	struct Renderable {
+		RENDER_TYPE type;
+		Rect rect;
+		Text text;
 		int layer = 0;
-		RenderSetting setting = {};
+	};
+
+	struct Interactable {
+		Renderable render;
+		bool isActive;
+		void (*func)();
 	};
 
 	void Initialize();
 	void Render();
-
 	AEGfxVertexList* GetRenderMesh();
 	void SetRenderPivot(const RENDER_PIVOT& pivot);
 	AEVec2 GetPivotPos(const AEVec2& pos, const float& width, const float& height);
-	void AddSpriteBatch(const SPRITE_BATCH_TYPE& id, const SPRITE_TYPE& type, const TextureManager::TEX_TYPE& tex, const int& x, const int& y, const int& layer = 0, const float& rot = 0);
-	void AddUIBatch(UIManager::UIData data);
 
+	/*!***********************************************************************
+	* TEXT
+	*************************************************************************/
+	void AddTextToBatch(const BATCH_TYPE& id, const s8& font, const float& x, const float& y, std::string text, const Vec3<float>& color = { 1,1,1 }, const int& layer = 0);
+	/*************************************************************************/
 
+	/*!***********************************************************************
+	* RECT
+	*************************************************************************/
+	// Rect with TEXTURE.
+	void AddRectToBatch(const BATCH_TYPE& batch, const float& x, const float& y, const float& width, const float& height, TextureManager::TEX_TYPE tex, const int& layer = 0, const float& rot = 0);
+	// Rect with COLOR
+	void AddRectToBatch(const BATCH_TYPE& batch, const float& x, const float& y, const float& width, const float& height, const Vec4<float>& btnColor = { 1,1,1 ,1 }, const int& layer = 0, const float& rot = 0);
+	/*************************************************************************/
+
+	/*!***********************************************************************
+	* BUTTON
+	*************************************************************************/
+	// Button with TEXTURE + text.
+	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, TextureManager::TEX_TYPE tex, const int& layer = 0, const Vec3<float>& txtColor = { 1.0f,1.0f,1.0f });
+	// Button with COLOR + text.
+	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, const int& layer = 0, const Vec4<float>& btnColor = { 1.0f,1.0f,1.0f,1.0f }, const Vec3<float>& txtColor = { 1.0f,1.0f,1.0f });
+	/*************************************************************************/
 }
 

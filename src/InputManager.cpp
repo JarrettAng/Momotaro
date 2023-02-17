@@ -12,8 +12,6 @@ This source file declares
 
 #include <InputManager.h>
 #include <deque>
-#include <CardManager.h>
-#include <Building.h>
 
 namespace InputManager {
 	struct KeyEvent {

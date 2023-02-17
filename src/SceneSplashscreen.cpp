@@ -42,7 +42,7 @@ void SceneSplashscreen::Draw() {
 
 	RenderSystem::Render();
 
-	UIManager::AddRectToBatch(0, 0, 1500, 1500, 0, TextureManager::GetTexture(TextureManager::SPLASH_SCREEN));
+	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, 0, 0, 1500, 1500, TextureManager::SPLASH_SCREEN);
 
 }
 

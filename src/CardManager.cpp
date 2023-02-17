@@ -14,9 +14,9 @@ The functions include:
 
 #include <vector>
 
-#include <UIManager.h>
 #include <CardManager.h>
 #include <InputManager.h>
+#include <FontManager.h>
 
 #include <ColorTable.h>
 #include <Card.h>
@@ -27,15 +27,15 @@ namespace CardManager {
 	int startingHandSize;
 	std::vector<Card> hand;						// Data on rendering for current cards held
 
-	UIManager::Transform cardPositionTemplate;	// Rendering data for a generic card
-	UIManager::Transform handBackground;		// Rendering data for the hand background
+	RenderSystem::Transform cardPositionTemplate;	// Rendering data for a generic card
+	RenderSystem::Transform handBackground;			// Rendering data for the hand background
 	int cardSpacing;							// Spacing between cards in hand
 
 	Card* selectedCard;							// Pointer to the current card selected by player
 
 #pragma region Forward Declarations
 	void AddToHand(BuildingData cardData);
-	void RemoveFromHand(Card *cardToRemove);
+	void RemoveFromHand(Card* cardToRemove);
 	void HandleClick();
 	void UpdateHandPositions();
 #pragma endregion
@@ -45,17 +45,17 @@ namespace CardManager {
 		startingHandSize = 5;
 		selectedCard = nullptr;
 
-		handBackground.width = AEGfxGetWinMaxX();
-		handBackground.height = AEGfxGetWinMaxY() * 0.25f;
+		handBackground.size.x = AEGfxGetWinMaxX();
+		handBackground.size.y = AEGfxGetWinMaxY() * 0.25f;
 
-		handBackground.x = -handBackground.width / 2.0f;
-		handBackground.y = AEGfxGetWinMinY() * 0.95f + handBackground.height;
+		handBackground.pos.x = -handBackground.size.x / 2.0f;
+		handBackground.pos.y = AEGfxGetWinMinY() * 0.95f + handBackground.size.y;
 
 		cardSpacing = AEGfxGetWinMaxX() * 0.025f;
 
-		cardPositionTemplate.height = handBackground.height * 0.9f;
-		cardPositionTemplate.width = cardPositionTemplate.height * 0.75f;
-		cardPositionTemplate.y = handBackground.y - (handBackground.height - cardPositionTemplate.height) / 2.0f;
+		cardPositionTemplate.size.y = handBackground.size.y * 0.9f;
+		cardPositionTemplate.size.x = cardPositionTemplate.size.y * 0.75f;
+		cardPositionTemplate.pos.y = handBackground.pos.y - (handBackground.size.y - cardPositionTemplate.size.y) / 2.0f;
 
 		// Fill hand with 5 starting cards
 		DrawCard(BuildingEnum::RESIDENTIAL, BuildingEnum::L1);
@@ -73,21 +73,21 @@ namespace CardManager {
 	}
 
 	void PrepareUIRenderBatch() {
-		UIManager::AddRectToBatch(handBackground.x, handBackground.y, handBackground.width, handBackground.height, 0, COLOR_CARD_BACKGROUND);
+		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, handBackground.pos.x, handBackground.pos.y, handBackground.size.x, handBackground.size.y, COLOR_CARD_BACKGROUND);
 
 		// Render each card
 		for (Card card : hand) {
 			// Drawing border of the card
-			UIManager::AddRectToBatch(card.position.x, card.position.y, card.position.width, card.position.height, 1, card.borderColor);
+			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.position.pos.x, card.position.pos.y, card.position.size.x, card.position.size.y, card.borderColor, 1);
 			// Drawing the card background
-			UIManager::AddRectToBatch(card.position.x + card.position.width * 0.05f, card.position.y - card.position.height * 0.035f, card.position.width * 0.9f, card.position.height * 0.925f, 2, card.color);
+			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.position.pos.x + card.position.size.x * 0.05f, card.position.pos.y - card.position.size.y * 0.035f, card.position.size.x * 0.9f, card.position.size.y * 0.925f, card.color, 2);
 
 			// Drawing the building icon of the card
-			UIManager::AddRectToBatch(card.iconPos.x, card.iconPos.y, card.iconPos.width, card.iconPos.height, 3, TextureManager::GetTexture((TextureManager::TEX_TYPE)(card.bData.type * BuildingEnum::LEVEL_LENGTH + card.bData.level)));
+			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.iconPos.pos.x, card.iconPos.pos.y, card.iconPos.size.x, card.iconPos.size.y, (TextureManager::TEX_TYPE)(card.bData.type * BuildingEnum::LEVEL_LENGTH + card.bData.level), 3);
 
 			// Drawing of the card count at the top right corner of the card
-			UIManager::AddRectToBatch(card.countIconPos.x, card.countIconPos.y, card.countIconPos.width, card.countIconPos.height, 2);
-			UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).S, card.countTextPos.x, card.countTextPos.y, 3, card.countText, COLOR_BLACK);
+			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.countIconPos.pos.x, card.countIconPos.pos.y, card.countIconPos.size.x, card.countIconPos.size.y);
+			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, FontManager::GetFont(FontManager::ROBOTO).S, card.countTextPos.pos.x, card.countTextPos.pos.y, card.countText, COLOR_BLACK, 3);
 		}
 	}
 
@@ -108,7 +108,7 @@ namespace CardManager {
 
 	void AddToHand(BuildingData buildingData) {
 		if (!hand.empty()) {
-			for (Card &card : hand) {
+			for (Card& card : hand) {
 				// If the data for it already exists, add to the count
 				if (card.bData.type == buildingData.type && card.bData.size == buildingData.size && card.bData.level == buildingData.level) {
 					++card.count;
@@ -127,17 +127,17 @@ namespace CardManager {
 
 	void UpdateHandPositions() {
 		// Update the background size to wrap around the cards
-		handBackground.width = hand.size() * cardPositionTemplate.width + (hand.size() + 1) * cardSpacing;
-		handBackground.x = -handBackground.width / 2.0f;
+		handBackground.size.x = hand.size() * cardPositionTemplate.size.x + (hand.size() + 1) * cardSpacing;
+		handBackground.pos.x = -handBackground.size.x / 2.0f;
 
-		float currentX = handBackground.x + cardSpacing; // Starting from the left
+		float currentX = handBackground.pos.x + cardSpacing; // Starting from the left
 
 		// Arrange the cards
-		for (Card &card : hand) {
-			card.position.x = currentX;
+		for (Card& card : hand) {
+			card.position.pos.x = currentX;
 			card.UpdateComponentPositions();
 
-			currentX += cardPositionTemplate.width + cardSpacing;
+			currentX += cardPositionTemplate.size.x + cardSpacing;
 		}
 	}
 

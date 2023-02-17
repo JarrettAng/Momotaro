@@ -6,7 +6,7 @@
 \par Software Engineering Project
 \date:          30-01-2023
 \brief
-This header file contains the data of all possible buildings in the game, 
+This header file contains the data of all possible buildings in the game,
 information like type, size, and level. It also holds the implementation of the
 building class.
 **************************************************************************/
@@ -65,19 +65,18 @@ struct BuildingData {
 	std::string desc = "You're not suppose to see this!";
 
 	TextureManager::TEX_TYPE TextureID;
-	RenderSystem::SPRITE_TYPE MeshID;
+	//RenderSystem::SPRITE_TYPE MeshID;
 };
 
 class Building : public virtual GameObject {
-	public:
-		BuildingData data;
-		Building();
-		Building(BuildingData data);
-		Building(
-			BuildingEnum::TYPE type, BuildingEnum::SIZE size, BuildingEnum::LEVEL level, BuildingEnum::ORIENTATION orientation,
-			int SynergyResidential, int SynergyCommercial, int SynergyIndustrial, int SynergyNature,
-			std::string name, std::string desc,
-			TextureManager::TEX_TYPE TextureID,
-			RenderSystem::SPRITE_TYPE MeshID);
-		void LevelUp();
+public:
+	BuildingData data;
+	Building();
+	Building(BuildingData data);
+	Building(
+		BuildingEnum::TYPE type, BuildingEnum::SIZE size, BuildingEnum::LEVEL level, BuildingEnum::ORIENTATION orientation,
+		int SynergyResidential, int SynergyCommercial, int SynergyIndustrial, int SynergyNature,
+		std::string name, std::string desc,
+		TextureManager::TEX_TYPE TextureID);
+	void LevelUp();
 };
