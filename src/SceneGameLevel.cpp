@@ -78,6 +78,7 @@ void SceneGameLevel::Draw() {
 void SceneGameLevel::Free() {
 	PauseManager::Free();
 	InputManager::Free();
+	CardManager::Free();
 
 	for (auto object : objects) {
 		object->Destroy();

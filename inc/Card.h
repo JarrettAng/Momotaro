@@ -28,11 +28,17 @@ Updates the rendering positions of the card elements, usually when the hand size
 class Card {
 	public:
 		UIManager::Transform position;
-		UIManager::Transform icon;
-		UIManager::Transform count;
-		UIManager::Transform name;
-		UIManager::Transform desc;
-		CardManager::DeckData deckCardData;
+		UIManager::Transform iconPos;
+
+		int count;
+		std::string countText;
+		UIManager::Transform countTextPos;
+		UIManager::Transform countIconPos;
+
+		UIManager::Transform namePos;
+		UIManager::Transform descPos;
+
+		BuildingData bData;
 
 		Vec4<float> color;
 		Vec4<float> borderColor;
@@ -40,11 +46,12 @@ class Card {
 		//bool operator == (const Card card) const { return deckCardData == card.deckCardData; }
 		//bool operator != (const Card card) const { return !operator==(card); }
 
-		Card(UIManager::Transform _position, CardManager::DeckData _deckCardData) {
+		Card(UIManager::Transform _position, BuildingData _bData) {
 			position = _position;
-			deckCardData = _deckCardData;
 
-			switch (deckCardData.card.type) {
+			bData = _bData;
+
+			switch (bData.type) {
 				case BuildingEnum::RESIDENTIAL: 
 					color.w = 0.8f;
 					color.x = 0.9f;
@@ -70,26 +77,33 @@ class Card {
 			borderColor.y = 0.0f;
 			borderColor.z = 1.0f;
 
+			// Set count to 1 (Cards constructed are the first of its kind
+			count = 1;
+			countText = "1";
+
 			UpdateComponentPositions();
 		}
 
 		void UpdateComponentPositions() {
 			// Load name data based on position
-			name.x = position.x;
-			name.y = position.y;
+			namePos.x = position.x;
+			namePos.y = position.y;
 
 			// Load desc data based on position
-			desc.x = position.x;
-			desc.y = name.y + position.height * 0.1f;
+			descPos.x = position.x;
+			descPos.y = namePos.y + position.height * 0.1f;
 
 			// Load icon data based on position
-			icon.width = position.width * 1.5f;
-			icon.height = icon.width;
-			icon.x = position.x - (icon.width - position.width) / 2.0f;
-			icon.y = position.y + icon.width * 0.25f;
+			iconPos.width = position.width * 1.5f;
+			iconPos.height = iconPos.width;
+			iconPos.x = position.x - (iconPos.width - position.width) / 2.0f;
+			iconPos.y = position.y + iconPos.width * 0.25f;
 
 			// Load count data based on position
-			count.x = position.x + position.width;
-			count.y = position.y;
+			countIconPos.height = countIconPos.width = position.width * 0.35f;
+			countIconPos.x = position.x + position.width * 0.8f;
+			countIconPos.y = position.y + position.height * 0.075f;
+			countTextPos.x = (countIconPos.x + position.width * 0.1f) / AEGfxGetWinMaxX();
+			countTextPos.y = (countIconPos.y - position.height * 0.2f) / AEGfxGetWinMaxY();
 		}
 };

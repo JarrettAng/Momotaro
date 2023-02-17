@@ -22,15 +22,10 @@ Draws a random draw into the player's hand
 
 #pragma once
 
+#include <string>
 #include <BuildingManager.h>
 
 namespace CardManager {
-
-	struct DeckData {
-		int count;
-		BuildingData card;
-	};
-
 	void Initialize();
 
 	void PrepareUIRenderBatch();
@@ -39,4 +34,6 @@ namespace CardManager {
 
 	void DrawRandomCard(BuildingEnum::LEVEL level);
 	void DrawRandomCard(BuildingEnum::TYPE type);
+
+	void Free();
 }
