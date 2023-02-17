@@ -76,9 +76,7 @@ namespace CardManager {
 		UIManager::AddRectToBatch(handBackground.x, handBackground.y, handBackground.width, handBackground.height, 0, COLOR_CARD_BACKGROUND);
 
 		// Render each card
-		for (int index = 0; index < hand.size(); ++index) {
-			Card &card = hand[index];
-
+		for (Card card : hand) {
 			// Drawing border of the card
 			UIManager::AddRectToBatch(card.position.x, card.position.y, card.position.width, card.position.height, 1, card.borderColor);
 			// Drawing the card background
@@ -90,21 +88,6 @@ namespace CardManager {
 			// Drawing of the card count at the top right corner of the card
 			UIManager::AddRectToBatch(card.countIconPos.x, card.countIconPos.y, card.countIconPos.width, card.countIconPos.height, 2);
 			UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).S, card.countTextPos.x, card.countTextPos.y, 3, card.countText, COLOR_BLACK);
-
-			//// Drawing border of the card
-			//UIManager::AddRectToBatch(card->position.x, card->position.y, card->position.width, card->position.height, 1, card->borderColor);
-			//// Drawing the card background
-			//UIManager::AddRectToBatch(card->position.x + card->position.width * 0.05f, card->position.y - card->position.height * 0.035f, card->position.width * 0.9f, card->position.height * 0.925f, 2, card->color);
-
-			//// Drawing the building icon of the card
-			//UIManager::AddRectToBatch(card->iconPos.x, card->iconPos.y, card->iconPos.width, card->iconPos.height, 3, TextureManager::GetTexture((TextureManager::TEX_TYPE)(card->deckCardData.bData.type * BuildingEnum::LEVEL_LENGTH + card->deckCardData.bData.level)));
-
-			//// Drawing of the card count at the top right corner of the card
-			//UIManager::AddRectToBatch(card->countIconPos.x, card->countIconPos.y, card->countIconPos.width, card->countIconPos.height, 2);
-			//UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).S, card->count.x, card->count.y, 3, card->deckCardData.countText, COLOR_BLACK);
-
-			//UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).S, card.name.x / AEGetWindowWidth(), card.name.y / AEGetWindowHeight(), 3, card.deckCardData->card.name, COLOR_BLACK);
-			//UIManager::AddTextToBatch(UIManager::GetFont(UIManager::ROBOTO).S, card.desc.x / AEGetWindowWidth(), card.desc.y / AEGetWindowHeight(), 1, card.deckCardData->card.desc, COLOR_BLACK);
 		}
 	}
 
@@ -125,7 +108,7 @@ namespace CardManager {
 
 	void AddToHand(BuildingData buildingData) {
 		if (!hand.empty()) {
-			for (Card card : hand) {
+			for (Card &card : hand) {
 				// If the data for it already exists, add to the count
 				if (card.bData.type == buildingData.type && card.bData.size == buildingData.size && card.bData.level == buildingData.level) {
 					++card.count;
@@ -150,7 +133,7 @@ namespace CardManager {
 		float currentX = handBackground.x + cardSpacing; // Starting from the left
 
 		// Arrange the cards
-		for (Card card : hand) {
+		for (Card &card : hand) {
 			card.position.x = currentX;
 			card.UpdateComponentPositions();
 
