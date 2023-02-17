@@ -92,7 +92,7 @@ namespace CardManager {
 	}
 
 	void DrawCard(BuildingEnum::TYPE type, BuildingEnum::LEVEL level) {
-		BuildingData buildingData = BuildingManager::GetBuildingData(type, Vec2<int>{1,1}, level);
+		BuildingData buildingData = BuildingManager::GetBuildingData(type, Vec2<int>{1, 1}, level);
 		AddToHand(buildingData);
 	}
 

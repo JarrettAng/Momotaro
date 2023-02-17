@@ -79,11 +79,9 @@ namespace RenderSystem {
 	}
 
 	void Render() {
-		// return;
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		UpdateRenderSetting();
 		for (auto& batch : renderBatches) {
-			if(batch.empty()) return;
 			// Sort batch based on sprite's layer before drawing.
 			SortBatch(batch);
 			for (auto& obj : batch) {

@@ -59,7 +59,6 @@ void SceneGameLevel::Draw() {
 	//Make the grid
 	GridManager::PrepareTileRenderBatch();
 	CardManager::PrepareUIRenderBatch();
-	PauseManager::Update();
 	PauseManager::Draw();
 	ScoreManger::Draw();
 	//Debug

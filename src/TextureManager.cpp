@@ -81,13 +81,16 @@ namespace TextureManager {
 		// TODO: READ FROM JSON
 		// TO GET: ROWS, COLS AND FRAME INTERVAL, 
 		textures.push_back(TextureSheet{ NONE, 1, 1,-1 });
-		textures.push_back(TextureSheet{ TILE_TEX, 1, 2,.5 });
-		textures.push_back(TextureSheet{ CARD_BLUE, 1, 1, -1 });
-		textures.push_back(TextureSheet{ SPLASH_SCREEN, 1, 1, -1 });
+
 
 		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L1, 1, 1, -1 });
 		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L2, 1, 1, -1 });
 		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L3, 1, 1, -1 });
+
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L1, 1, 1, -1 });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L2, 1, 1, -1 });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L3, 1, 1, -1 });
+
 		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L1, 1, 1, -1 });
 		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L2, 1, 1, -1 });
 		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L3, 1, 1, -1 });
@@ -95,10 +98,15 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L2, 1, 1, -1 });
 		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L3, 1, 1, -1 });
 
+		textures.push_back(TextureSheet{ TILE_TEX, 1, 2,.5 });
 		textures.push_back(TextureSheet{ NATURE_TREE, 1, 1, -1 });
 		textures.push_back(TextureSheet{ NATURE_ROCK, 1, 1, -1 });
+
+		textures.push_back(TextureSheet{ CARD_BLUE, 1, 1, -1 });
 		textures.push_back(TextureSheet{ PAUSE_WINDOW, 1, 1, -1 });
 		textures.push_back(TextureSheet{ PAUSE_BUTTON, 1, 1, -1 });
+		textures.push_back(TextureSheet{ SPLASH_SCREEN, 1, 1, -1 });
+
 
 		for (TextureSheet& t : textures) {
 			t.tw = 1.0 / t.cols;
