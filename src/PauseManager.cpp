@@ -122,6 +122,7 @@ namespace PauseManager {
 		// std::cout << "Mouse has been clicked in UIMANAGER!" << '\n';
 		// std::cout << "LIST  COUNT : " << ListOfButtons.size() << '\n';
 		for (auto& button : pauseMenuBtns) {
+			#if DEBUG
 			std::cout << "ButtonStats : " << button.text.text << '\n';
 			std::cout << "Button Pos : " << button.transform.x << ", " << button.transform.y << '\n';
 			std::cout << "Button Size : " << button.transform.width << ", " << button.transform.height << '\n';
@@ -129,12 +130,13 @@ namespace PauseManager {
 			std::cout << "Mouse pos offset : " << (mousePos.x - AEGetWindowWidth() / 2) << ", " << (mousePos.y - AEGetWindowHeight() / 2) << '\n';
 			std::cout << "Button pos offset : " << button.transform.y + button.transform.height << '\n';
 			std::cout << "==================================================================" << '\n';
+			#endif
 			//Left and right bounds (since mouse is offset by half screen size)
 			if (((mousePos.x - AEGetWindowWidth() / 2) > button.transform.x) && (mousePos.x - AEGetWindowWidth() / 2 < button.transform.x + button.transform.width)) {
-				std::cout << "Continue is " << continueButtonData.isActive << '\n';
+				// std::cout << "Continue is " << continueButtonData.isActive << '\n';
 				//Top and bottom bounds
 				if (((mousePos.y - AEGetWindowHeight() / 2) > button.transform.y) && ((mousePos.y - AEGetWindowHeight() / 2) < button.transform.y + button.transform.height)) {
-					std::cout << "BUTTON CLICKED : " << button.text.text << '\n';
+					// std::cout << "BUTTON CLICKED : " << button.text.text << '\n';
 					if (button.isActive) button.func();
 					// PauseManager::TogglePause();
 				}

@@ -13,6 +13,7 @@ The functions include:
 **************************************************************************/
 
 #pragma once
+#include <Building.h>
 
 namespace IsometricGrid
 {
@@ -31,9 +32,10 @@ namespace IsometricGrid
    
     struct cell{
 		vec2i pos;
-        bool isRenderable;
+        bool isRenderable{false};
         int ID{0};
-        TileType _tileType;
+        Building _building;
+        TileType _tileType{};
 	};
 
     

@@ -37,6 +37,70 @@ namespace GridManager {
 
 	int randomNature{ 0 };
 
+	int buildingID{0};			//THIS ID IS FOR TRACKING BUILDINGS!
+
+	//Temporary stuff for buildings
+	Building ResidentialLvl1{
+		BuildingEnum::RESIDENTIAL,
+		BuildingEnum::_1X1,
+		BuildingEnum::L1,
+		BuildingEnum::RIGHT,
+		1,3,-3,2,
+		"Residential Lvl 1","Joe",
+		TextureManager::RESIDENTIAL_1X1_L1,
+		RenderSystem::BUILDING};
+
+	Building BigResidentialLvl1{
+		BuildingEnum::RESIDENTIAL, 
+		BuildingEnum::_2X1,
+		BuildingEnum::L1,
+		BuildingEnum::RIGHT,
+		1,5,-8,1,
+		"Residential Lvl 1","Bigger Joe",
+		TextureManager::RESIDENTIAL_1X1_L1,
+		RenderSystem::BUILDING};
+
+	Building CommercialLvl1{
+		BuildingEnum::COMMERCIAL,
+		BuildingEnum::_1X1,
+		BuildingEnum::L1,
+		BuildingEnum::RIGHT,
+		3,0,-1,1,
+		"Commercial Lvl 1","Sugondese",
+		TextureManager::COMMERCIAL_1X1_L1,
+		RenderSystem::BUILDING};
+
+	Building IndustrialLvl1{
+		BuildingEnum::INDUSTRIAL,
+		BuildingEnum::_1X1,
+		BuildingEnum::L1,
+		BuildingEnum::RIGHT,
+		-3,-1,3,0,
+		"Industrial Lvl 1","Candice",
+		TextureManager::INDUSTRIAL_1X1_L1,
+		RenderSystem::BUILDING};
+
+	Building NatureTree{
+		BuildingEnum::NATURE,
+		BuildingEnum::_1X1,
+		BuildingEnum::L1,
+		BuildingEnum::RIGHT,
+		0,0,0,0,
+		"Nature!","Tree",
+		TextureManager::NATURE_TREE,RenderSystem::BUILDING
+	};
+	Building NatureRock{
+		BuildingEnum::NATURE,
+		BuildingEnum::_1X1,
+		BuildingEnum::L1,
+		BuildingEnum::RIGHT,
+		0,0,0,0,
+		"Nature!","The Rock",
+		TextureManager::NATURE_ROCK,RenderSystem::NATURE
+	};
+	
+
+
 	void Initialize() {
 		grid = { new iso::cell[gridX * gridY]{} };
 		//GRID SET UP
@@ -50,17 +114,13 @@ namespace GridManager {
 				ScreenPos.y += (gridY * 50) / 2;		//move the grid up by half its size (20 units / 2 = 10)
 				grid[index].pos = ScreenPos;
 
-				//Probably need to redo some of the calc for this, note that x index and y index += same offset because we moved the y up by 10 units
-				// iso::vec2i test = iso::ScreenPosToIso(ScreenPos.x, ScreenPos.y);
-				// if ((test.x >= -5 && test.x <= 5) && (test.y >= -5 && test.y <= 5)) {
-				// 	grid[index].isRenderable = true;
-				// }
 				//basically we want the grid to be from -2 to 2, but since there's a 10 unit offset, we add 10
 				if ((x >= 8 && x <= 13) && (y >= 8 && y <= 13)) {
 					// grid[index].ID = iso::RESIDENTIAL;
 					grid[index].isRenderable = true;
 					// std::cout << "y is " << y << " and iso is " << test.x<<'\n';
 				}
+				grid[index].ID = 0;
 			}
 		}
 
@@ -91,9 +151,11 @@ namespace GridManager {
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
 
-		grid[index].ID = iso::RESIDENTIAL;
+		grid[index].ID = ++buildingID;
+		grid[index]._building = ResidentialLvl1;
 		CheckCellNeighbor(grid, SelectedCell);
 
+		#if testVector
 		Vec2<int> test1{ 1,1 };
 		Vec2<int> test11{ 2,2 };
 		Vec3<int> test2{ 1,1,1 };
@@ -145,6 +207,7 @@ namespace GridManager {
 		std::cout << test11 * 2 << " = (4,4)" << '\n';
 		std::cout << test22 * 2 << " = (4,4,4)" << '\n';
 		std::cout << test33 * 2 << " = (4,4,4,4)" << '\n';
+		#endif
 
 	}
 	void SpawnCommerical() {
@@ -154,7 +217,8 @@ namespace GridManager {
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
 
-		grid[index].ID = iso::COMMERCIAL;
+		grid[index].ID = ++buildingID;
+		grid[index]._building = CommercialLvl1;
 		CheckCellNeighbor(grid, SelectedCell);
 	}
 	void SpawnIndustrial() {
@@ -164,7 +228,8 @@ namespace GridManager {
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
 
-		grid[index].ID = iso::INDUSTRIAL;
+		grid[index].ID = ++buildingID;
+		grid[index]._building = IndustrialLvl1;
 		CheckCellNeighbor(grid, SelectedCell);
 	}
 	void SpawnNature() {
@@ -175,9 +240,10 @@ namespace GridManager {
 		if (!isCellSafe(SelectedCell)) return;
 		randomNature = rand() % 2;
 		if (randomNature % 2 == 0)
-			grid[index].ID = iso::TREE;
+			grid[index]._building = NatureRock;
 		else
-			grid[index].ID = iso::ROCK;
+			grid[index]._building = NatureTree;
+		grid[index].ID = ++buildingID;
 	}
 	void RandomiseTerrain() {
 		if (PauseManager::IsPaused()) return;
@@ -396,36 +462,36 @@ namespace GridManager {
 
 		//if the cell is water (means it doesn't need to be rendered) we don't allow placement
 		if (!grid[index].isRenderable) return;
-		//ROTATES BETWEEN BUILDINGS
-		switch (grid[index].ID)
-		{
-		case iso::NONE:
-			grid[index].ID = iso::RESIDENTIAL;
-			break;
-		case iso::RESIDENTIAL:
-			grid[index].ID = iso::INDUSTRIAL;
-			break;
-		case iso::INDUSTRIAL:
-			grid[index].ID = iso::COMMERCIAL;
-			break;
-		case iso::COMMERCIAL:
-			randomNature = rand() % 2;
-			if (randomNature % 2 == 0)
-				grid[index].ID = iso::TREE;
-			else
-				grid[index].ID = iso::ROCK;
-			break;
-		case iso::ROCK:
-			grid[index].ID = iso::NONE;
-			break;
-		case iso::TREE:
-			grid[index].ID = iso::NONE;
-			break;
-		}
+		// //ROTATES BETWEEN BUILDINGS ON CLICK
+		// switch (grid[index].ID)
+		// {
+		// case iso::NONE:
+		// 	grid[index].ID = iso::RESIDENTIAL;
+		// 	break;
+		// case iso::RESIDENTIAL:
+		// 	grid[index].ID = iso::INDUSTRIAL;
+		// 	break;
+		// case iso::INDUSTRIAL:
+		// 	grid[index].ID = iso::COMMERCIAL;
+		// 	break;
+		// case iso::COMMERCIAL:
+		// 	randomNature = rand() % 2;
+		// 	if (randomNature % 2 == 0)
+		// 		grid[index].ID = iso::TREE;
+		// 	else
+		// 		grid[index].ID = iso::ROCK;
+		// 	break;
+		// case iso::ROCK:
+		// 	grid[index].ID = iso::NONE;
+		// 	break;
+		// case iso::TREE:
+		// 	grid[index].ID = iso::NONE;
+		// 	break;
+		// }
 
 		//This is where it gets messy sorry
 		//MERGE LOGIC
-		CheckCellNeighbor(grid, SelectedCell);
+		// CheckCellNeighbor(grid, SelectedCell);
 
 	}
 
@@ -447,52 +513,65 @@ namespace GridManager {
 			for (int x{ 0 }; x < gridX; ++x) {
 				int index = GetIndex(x, y);
 
-				switch (grid[index].ID) {
-					//RESIDENTIAL
-				case iso::RESIDENTIAL + SMALL:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::RESIDENTIAL_1X1_L1, grid[index].pos.x, grid[index].pos.y);
-					break;
-				case iso::RESIDENTIAL + MEDIUM:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::RESIDENTIAL_1X1_L2, grid[index].pos.x, grid[index].pos.y);
-					break;
-				case iso::RESIDENTIAL + LARGE:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::RESIDENTIAL_1X1_L3, grid[index].pos.x, grid[index].pos.y);
-					break;
-
-					//COMMERCIAL
-				case iso::COMMERCIAL + SMALL:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::COMMERCIAL_1X1_L1, grid[index].pos.x, grid[index].pos.y);
-					break;
-				case iso::COMMERCIAL + MEDIUM:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::COMMERCIAL_1X1_L2, grid[index].pos.x, grid[index].pos.y);
-					break;
-				case iso::COMMERCIAL + LARGE:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::COMMERCIAL_1X1_L3, grid[index].pos.x, grid[index].pos.y);
-					break;
-
-					//INDUSTRIAL
-				case iso::INDUSTRIAL + SMALL:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::INDUSTRIAL_1X1_L1, grid[index].pos.x, grid[index].pos.y);
-					break;
-				case iso::INDUSTRIAL + MEDIUM:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::INDUSTRIAL_1X1_L2, grid[index].pos.x, grid[index].pos.y);
-					break;
-				case iso::INDUSTRIAL + LARGE:
-					RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::INDUSTRIAL_1X1_L3, grid[index].pos.x, grid[index].pos.y);
-					break;
-
-					//NATURE
-				case iso::TREE:
-					RenderSystem::AddSpriteBatch(RenderSystem::NATURE_BATCH, RenderSystem::NATURE, TextureManager::NATURE_TREE, grid[index].pos.x, grid[index].pos.y);
-					break;
-				case iso::ROCK:
-					RenderSystem::AddSpriteBatch(RenderSystem::NATURE_BATCH, RenderSystem::NATURE, TextureManager::NATURE_ROCK, grid[index].pos.x, grid[index].pos.y);
-					break;
-
-				default:
-					// RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::RESIDENTIAL_S, grid[index].pos.x, grid[index].pos.y);
-					break;
+				if(grid[index].ID > 0){
+					if(grid[index]._building.data.size == BuildingEnum::_1X1){
+						RenderSystem::AddSpriteBatch(
+							RenderSystem::BUILDING_BATCH,
+							grid[index]._building.data.MeshID,
+							grid[index]._building.data.TextureID,
+							grid[index].pos.x, grid[index].pos.y
+							);
+					}
 				}
+				
+			#pragma region Old Code
+				// switch (grid[index].ID) {
+				// 	//RESIDENTIAL
+				// case iso::RESIDENTIAL + SMALL:
+				// 	RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::RESIDENTIAL_1X1_L1, grid[index].pos.x, grid[index].pos.y);
+				// 	break;
+				// case iso::RESIDENTIAL + MEDIUM:
+				// 	RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::RESIDENTIAL_1X1_L2, grid[index].pos.x, grid[index].pos.y);
+				// 	break;
+				// case iso::RESIDENTIAL + LARGE:
+				// 	RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::RESIDENTIAL_1X1_L3, grid[index].pos.x, grid[index].pos.y);
+				// 	break;
+
+				// 	//COMMERCIAL
+				// case iso::COMMERCIAL + SMALL:
+				// 	RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::COMMERCIAL_1X1_L1, grid[index].pos.x, grid[index].pos.y);
+				// 	break;
+				// case iso::COMMERCIAL + MEDIUM:
+				// 	RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::COMMERCIAL_1X1_L2, grid[index].pos.x, grid[index].pos.y);
+				// 	break;
+				// case iso::COMMERCIAL + LARGE:
+				// 	RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::COMMERCIAL_1X1_L3, grid[index].pos.x, grid[index].pos.y);
+				// 	break;
+
+				// 	//INDUSTRIAL
+				// case iso::INDUSTRIAL + SMALL:
+				// 	RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::INDUSTRIAL_1X1_L1, grid[index].pos.x, grid[index].pos.y);
+				// 	break;
+				// case iso::INDUSTRIAL + MEDIUM:
+				// 	RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::INDUSTRIAL_1X1_L2, grid[index].pos.x, grid[index].pos.y);
+				// 	break;
+				// case iso::INDUSTRIAL + LARGE:
+				// 	RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::INDUSTRIAL_1X1_L3, grid[index].pos.x, grid[index].pos.y);
+				// 	break;
+
+				// 	//NATURE
+				// case iso::TREE:
+				// 	RenderSystem::AddSpriteBatch(RenderSystem::NATURE_BATCH, RenderSystem::NATURE, TextureManager::NATURE_TREE, grid[index].pos.x, grid[index].pos.y);
+				// 	break;
+				// case iso::ROCK:
+				// 	RenderSystem::AddSpriteBatch(RenderSystem::NATURE_BATCH, RenderSystem::NATURE, TextureManager::NATURE_ROCK, grid[index].pos.x, grid[index].pos.y);
+				// 	break;
+
+				// default:
+				// 	// RenderSystem::AddSpriteBatch(RenderSystem::BUILDING_BATCH, RenderSystem::BUILDING, TextureManager::RESIDENTIAL_S, grid[index].pos.x, grid[index].pos.y);
+				// 	break;
+				// }
+				#pragma endregion
 				if (grid[index].isRenderable) RenderSystem::AddSpriteBatch(RenderSystem::TILE_BATCH, RenderSystem::TILE, TextureManager::TILE_TEX, grid[index].pos.x, grid[index].pos.y);
 			}
 		}
@@ -503,42 +582,46 @@ namespace GridManager {
 	{
 		//The order to check is CLOCKWISE, so we go NORTH, EAST, SOUTH, WEST
 		int matchCount{ 0 };
-		int matchedCells[2];
+		int matchedCells[2]{};
 		int gridIndex = GetIndex(cellIndex.x, cellIndex.y);
 		int NorthIndex = GetIndex(cellIndex.x, cellIndex.y - 1);
 		int EastIndex = GetIndex(cellIndex.x + 1, cellIndex.y);
 		int SouthIndex = GetIndex(cellIndex.x, cellIndex.y + 1);
 		int WestIndex = GetIndex(cellIndex.x - 1, cellIndex.y);
 		//NORTH
-#if DEBUG
+		#if DEBUG
 		std::cout << "Index : " << cellIndex.x << ", " << cellIndex.y << '\n';
-		std::cout << "Selected : " << grid[gridIndex].ID << '\n';
-		std::cout << "North : " << grid[NorthIndex].ID << '\n';
-		std::cout << "West : " << grid[WestIndex].ID << '\n';
-		std::cout << "Is true? : " << (grid[NorthIndex].ID == grid[gridIndex].ID) << '\n';
-		std::cout << "Is true? : " << (grid[SouthIndex].ID == grid[gridIndex].ID) << '\n';
-		std::cout << "Is true? : " << (grid[EastIndex].ID == grid[gridIndex].ID) << '\n';
-		std::cout << "Is true? : " << (grid[WestIndex].ID == grid[gridIndex].ID) << '\n';
-#endif
-		if (grid[NorthIndex].ID == grid[gridIndex].ID && grid[NorthIndex].ID) {
+		std::cout << "Selected : " << grid[gridIndex]._building.data.type << '\n';
+		std::cout << "North : " << grid[NorthIndex]._building.data.type << '\n';
+		std::cout << "East : " << grid[EastIndex]._building.data.type << '\n';
+		std::cout << "South : " << grid[SouthIndex]._building.data.type << '\n';
+		std::cout << "West : " << grid[WestIndex]._building.data.type << '\n';
+
+		std::cout << "Is N true? : " << (grid[NorthIndex].ID!=0 && grid[NorthIndex]._building.data.type == grid[gridIndex]._building.data.type) << '\n';
+		std::cout << "Is E true? : " << (grid[EastIndex].ID!=0 && grid[EastIndex]._building.data.type == grid[gridIndex]._building.data.type) << '\n';
+		std::cout << "Is S true? : " << (grid[SouthIndex].ID!=0 && grid[SouthIndex]._building.data.type == grid[gridIndex]._building.data.type) << '\n';
+		std::cout << "Is W true? : " << (grid[WestIndex].ID!=0 && grid[WestIndex]._building.data.type == grid[gridIndex]._building.data.type) << '\n';
+		#endif
+
+		if (grid[NorthIndex].ID!=0 && grid[NorthIndex]._building.data.TextureID == grid[gridIndex]._building.data.TextureID) {
 			if (matchCount < 2) {
 				matchedCells[matchCount] = NorthIndex;
 				matchCount++;
 			}
 		}
-		if (grid[EastIndex].ID == grid[gridIndex].ID && grid[EastIndex].ID) {
+		if (grid[EastIndex].ID!=0 && grid[EastIndex]._building.data.TextureID == grid[gridIndex]._building.data.TextureID) {
 			if (matchCount < 2) {
 				matchedCells[matchCount] = EastIndex;
 				matchCount++;
 			}
 		}
-		if (grid[SouthIndex].ID == grid[gridIndex].ID && grid[SouthIndex].ID) {
+		if (grid[SouthIndex].ID!=0 && grid[SouthIndex]._building.data.TextureID == grid[gridIndex]._building.data.TextureID) {
 			if (matchCount < 2) {
 				matchedCells[matchCount] = SouthIndex;
 				matchCount++;
 			}
 		}
-		if (grid[WestIndex].ID == grid[gridIndex].ID && grid[WestIndex].ID) {
+		if (grid[WestIndex].ID!=0 && grid[WestIndex]._building.data.TextureID == grid[gridIndex]._building.data.TextureID) {
 			if (matchCount < 2) {
 				matchedCells[matchCount] = WestIndex;
 				matchCount++;
@@ -551,39 +634,40 @@ namespace GridManager {
 			int EastIndex = selectedNeighbor + 1;
 			int SouthIndex = selectedNeighbor + gridX;
 			int WestIndex = selectedNeighbor - 1;
-
-			if (grid[NorthIndex].ID == grid[selectedNeighbor].ID && (NorthIndex != gridIndex)) {
+			//If it is not the cell you came from and the building types match
+			if ((NorthIndex != gridIndex)&&grid[NorthIndex]._building.data.TextureID == grid[selectedNeighbor]._building.data.TextureID) {
 				if (matchCount < 2) {
 					matchedCells[matchCount] = NorthIndex;
 					matchCount++;
 				}
 			}
-			if (grid[EastIndex].ID == grid[selectedNeighbor].ID && (EastIndex != gridIndex)) {
+			if ((EastIndex != gridIndex)&&grid[EastIndex]._building.data.TextureID == grid[selectedNeighbor]._building.data.TextureID ) {
 				if (matchCount < 2) {
 					matchedCells[matchCount] = EastIndex;
 					matchCount++;
 				}
 			}
-			if (grid[SouthIndex].ID == grid[selectedNeighbor].ID && (SouthIndex != gridIndex)) {
+			if ((SouthIndex != gridIndex)&&grid[SouthIndex]._building.data.TextureID == grid[selectedNeighbor]._building.data.TextureID) {
 				if (matchCount < 2) {
 					matchedCells[matchCount] = SouthIndex;
 					matchCount++;
 				}
 			}
-			if (grid[WestIndex].ID == grid[selectedNeighbor].ID && (WestIndex != gridIndex)) {
+			if ((WestIndex != gridIndex)&&grid[WestIndex]._building.data.TextureID == grid[selectedNeighbor]._building.data.TextureID) {
 				if (matchCount < 2) {
 					matchedCells[matchCount] = WestIndex;
 					matchCount++;
 				}
 			}
 		}
-		// std::cout << matchCount <<'\n';
+		// std::cout << "match count is " << matchCount <<'\n';
 		//if more than 200 means it's lvl 3
-		if (matchCount == 2 && grid[gridIndex].ID < 200) {
+		if (matchCount == 2 && grid[gridIndex]._building.data.level < BuildingEnum::L3) {
 			for (int c : matchedCells) {
-				grid[c].ID = iso::NONE;
+				grid[c].ID = 0;
+				grid[c]._building = Building{};
 			}
-			grid[gridIndex].ID += 100;
+			grid[gridIndex]._building.LevelUp();
 			//then we recurse and check again till no matches
 			CheckCellNeighbor(grid, cellIndex);
 		}

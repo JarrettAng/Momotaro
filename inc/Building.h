@@ -15,9 +15,11 @@ building class.
 
 #include <string>
 #include <GameObject.h>
+#include <TextureManager.h>
 
 namespace BuildingEnum {
 	enum TYPE {
+		NONE,
 		RESIDENTIAL,
 		COMMERCIAL,
 		INDUSTRIAL,
@@ -38,12 +40,21 @@ namespace BuildingEnum {
 		L3,
 		LEVEL_LENGTH
 	};
+
+	enum ORIENTATION {
+		//Orientation goes in a anti-clockwise direction if it were normal grid!
+		RIGHT,		//0 degrees
+		TOP,		//90 degrees
+		LEFT,		//180 degrees
+		DOWN		//270 degrees
+	};
 }
 
 struct BuildingData {
 	BuildingEnum::TYPE type;
 	BuildingEnum::SIZE size;
 	BuildingEnum::LEVEL level;
+	BuildingEnum::ORIENTATION orientation;
 
 	int SynergyResidential = 0;
 	int SynergyCommercial = 0;
@@ -53,15 +64,20 @@ struct BuildingData {
 	std::string name = "Building";
 	std::string desc = "You're not suppose to see this!";
 
-	int TextureID;
-	int MeshID;
+	TextureManager::TEX_TYPE TextureID;
+	RenderSystem::SPRITE_TYPE MeshID;
 };
 
 class Building : public virtual GameObject {
 	public:
 		BuildingData data;
-
+		Building();
 		Building(BuildingData data);
-		Building(BuildingEnum::TYPE type, BuildingEnum::SIZE size, BuildingEnum::LEVEL level,
-			int SynergyResidential, int SynergyCommercial, int SynergyIndustrial, int SynergyNature, std::string name, std::string desc, int TextureID, int MeshID);
+		Building(
+			BuildingEnum::TYPE type, BuildingEnum::SIZE size, BuildingEnum::LEVEL level, BuildingEnum::ORIENTATION orientation,
+			int SynergyResidential, int SynergyCommercial, int SynergyIndustrial, int SynergyNature,
+			std::string name, std::string desc,
+			TextureManager::TEX_TYPE TextureID,
+			RenderSystem::SPRITE_TYPE MeshID);
+		void LevelUp();
 };

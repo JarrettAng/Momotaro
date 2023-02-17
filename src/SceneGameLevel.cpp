@@ -34,7 +34,6 @@ void SceneGameLevel::Load() {
 
 void SceneGameLevel::Initialize() {
 	PauseManager::Initialize();
-	// UIManager::Initialize();
 	CardManager::Initialize();
 }
 
