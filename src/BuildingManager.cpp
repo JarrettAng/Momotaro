@@ -29,7 +29,7 @@ namespace BuildingManager {
 		FileIOManager::ReadBuildingsData(buildingsData);
 	}
 
-	BuildingData GetBuildingData(BuildingEnum::TYPE type, BuildingEnum::SIZE size, BuildingEnum::LEVEL level) {
+	BuildingData GetBuildingData(BuildingEnum::TYPE type, Vec2<int> size, BuildingEnum::LEVEL level) {
 		for (BuildingData building : buildingsData) {
 			if (building.type == type && building.size == size && building.level == level) {
 				return building;
@@ -42,11 +42,11 @@ namespace BuildingManager {
 	}
 
 	BuildingData GetRandomBuildingData(BuildingEnum::TYPE type) {
-		BuildingEnum::SIZE randSize = (BuildingEnum::SIZE)(rand() % BuildingEnum::SIZE_LENGTH);
+		Vec2<int> randSize = Vec2<int>{1,1};
 		BuildingEnum::LEVEL randLevel = (BuildingEnum::LEVEL)(rand() % BuildingEnum::LEVEL_LENGTH);
 
 		// TODO: Remove after prototype
-		randSize = BuildingEnum::_1X1;
+		// randSize = BuildingEnum::_1X1;
 
 		for (BuildingData building : buildingsData) {
 			if (building.type == type && building.size == randSize && building.level == randLevel) {
@@ -61,10 +61,10 @@ namespace BuildingManager {
 
 	BuildingData GetRandomBuildingData(BuildingEnum::LEVEL level) {
 		BuildingEnum::TYPE randType = (BuildingEnum::TYPE)(rand() % BuildingEnum::TYPE_LENGTH);
-		BuildingEnum::SIZE randSize = (BuildingEnum::SIZE)(rand() % BuildingEnum::SIZE_LENGTH);
+		Vec2<int> randSize = Vec2<int>{1,1};
 
 		// TODO: Remove after prototype
-		randSize = BuildingEnum::_1X1;
+		randSize = Vec2<int>{1,1};
 
 		for (BuildingData building : buildingsData) {
 			if (building.type == randType && building.size == randSize && building.level == level) {
@@ -77,13 +77,13 @@ namespace BuildingManager {
 		return buildingsData[0];
 	}
 
-	void CreateBuilding(BuildingEnum::TYPE type, BuildingEnum::SIZE size, BuildingEnum::LEVEL level) {
+	void CreateBuilding(BuildingEnum::TYPE type, Vec2<int> size, BuildingEnum::LEVEL level) {
 		buildings.emplace_back(GetBuildingData(type, size, level));
 	}
 
 	void CreateRandomBuilding() {
 		BuildingEnum::TYPE randType = (BuildingEnum::TYPE)(rand() % BuildingEnum::TYPE_LENGTH);
-		BuildingEnum::SIZE randSize = (BuildingEnum::SIZE)(rand() % BuildingEnum::SIZE_LENGTH);
+		Vec2<int> randSize = Vec2<int>{1,1};
 		BuildingEnum::LEVEL randLevel = (BuildingEnum::LEVEL)(rand() % BuildingEnum::LEVEL_LENGTH);
 
 		CreateBuilding(randType, randSize, randLevel);

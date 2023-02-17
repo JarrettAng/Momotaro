@@ -20,16 +20,6 @@ namespace GridManager {
 	namespace iso = IsometricGrid;
 
 	/**
-	 * @brief Upgrade level is an offset used to denote the levels of the buildings
-	 * Level2 buildings onwards will have an ID higher than 100. We can use %100 to figure out what building type it is
-	 */
-	enum UpgradeLevel {
-		SMALL = 0,
-		MEDIUM = 100,
-		LARGE = 200,
-	};
-
-	/**
 	 * @brief Initializes the grid and spawns in the tiles. Also sets which tiles are to be rendered
 	 *
 	 */
@@ -48,14 +38,14 @@ namespace GridManager {
 	/**
 	 * @brief Spawns a residential building at mouse pos. Overwrites any existing structure.
 	 *
-	 * @param mousePos Player's Mouse position
 	 */
-	void SpawnResidential();
+    void SpawnResidential();
 
-	/**
+    /// @brief 
+    void SpawnBigResidential();
+
+    /**
 	 * @brief Spawns a commerical building at mouse pos. Overwrites any existing structure.
-	 *
-	 * @param mousePos Player's Mouse position
 	 */
 	void SpawnCommerical();
 	/**
@@ -111,6 +101,9 @@ namespace GridManager {
 	 *
 	 */
 	void RandomiseTerrain();
+
+	void SetGridIndex(BuildingEnum::ORIENTATION, Vec2<int>,int x,int y);
+	void ChangeOrientation();
 
 	// iso::cell& GetNeighbor(iso::cell* &grid,iso::vec2i indexToCheck, iso::vec2i startingIndex);
 }

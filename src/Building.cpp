@@ -21,7 +21,7 @@ Building::Building(BuildingData _data)
 }
 
 Building::Building(
-	BuildingEnum::TYPE _type, BuildingEnum::SIZE _size, BuildingEnum::LEVEL _level, BuildingEnum::ORIENTATION _orientation,
+	BuildingEnum::TYPE _type, Vec2<int> _size, BuildingEnum::LEVEL _level,BuildingEnum::ORIENTATION _orientation,
 	int _SynergyResidential, int _SynergyCommercial, int _SynergyIndustrial, int _SynergyNature, std::string _name,
 	std::string _desc, TextureManager::TEX_TYPE _TextureID/*, RenderSystem::SPRITE_TYPE _MeshID*/) {
 	data.type = _type;
@@ -59,4 +59,9 @@ void Building::LevelUp()
 	default:
 		break;
 	}
+}
+
+bool operator==(Building const &lhs, Building const &rhs)
+{
+    return ((lhs.data.type == rhs.data.type)&&(lhs.data.level == rhs.data.level)&&(lhs.data.size==rhs.data.size));
 }

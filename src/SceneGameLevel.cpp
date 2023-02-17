@@ -29,12 +29,12 @@ The functions include:
 
 
 void SceneGameLevel::Load() {
-	BuildingManager::Initialize();
+	// BuildingManager::Initialize();
 }
 
 void SceneGameLevel::Initialize() {
 	PauseManager::Initialize();
-	CardManager::Initialize();
+	// CardManager::Initialize();
 }
 
 void SceneGameLevel::Update() {
@@ -59,6 +59,7 @@ void SceneGameLevel::Draw() {
 	//Make the grid
 	GridManager::PrepareTileRenderBatch();
 	CardManager::PrepareUIRenderBatch();
+	PauseManager::Update();
 	PauseManager::Draw();
 	ScoreManger::Draw();
 	//Debug
@@ -78,7 +79,7 @@ void SceneGameLevel::Draw() {
 void SceneGameLevel::Free() {
 	PauseManager::Free();
 	InputManager::Free();
-	CardManager::Free();
+	// CardManager::Free();
 
 	for (auto object : objects) {
 		object->Destroy();
@@ -88,7 +89,7 @@ void SceneGameLevel::Free() {
 }
 
 void SceneGameLevel::Unload() {
-	BuildingManager::Clear();
+	// BuildingManager::Clear();
 }
 
 void SceneGameLevel::AddObject(GameObject* newObject) {

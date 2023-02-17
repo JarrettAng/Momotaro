@@ -28,9 +28,9 @@ namespace BuildingEnum {
 	};
 
 	enum SIZE {
-		_1X1,
-		_2X1,
-		_2X2,
+		_1X1 = 1,
+		_2X1 = 2,
+		_2X2 = 4,
 		SIZE_LENGTH
 	};
 
@@ -46,13 +46,14 @@ namespace BuildingEnum {
 		RIGHT,		//0 degrees
 		TOP,		//90 degrees
 		LEFT,		//180 degrees
-		DOWN		//270 degrees
+		DOWN,		//270 degrees
+		ORIENTATION_LENGTH
 	};
 }
 
 struct BuildingData {
 	BuildingEnum::TYPE type;
-	BuildingEnum::SIZE size;
+	Vec2<int> size;
 	BuildingEnum::LEVEL level;
 	BuildingEnum::ORIENTATION orientation;
 
@@ -69,14 +70,18 @@ struct BuildingData {
 };
 
 class Building : public virtual GameObject {
-public:
-	BuildingData data;
-	Building();
-	Building(BuildingData data);
-	Building(
-		BuildingEnum::TYPE type, BuildingEnum::SIZE size, BuildingEnum::LEVEL level, BuildingEnum::ORIENTATION orientation,
-		int SynergyResidential, int SynergyCommercial, int SynergyIndustrial, int SynergyNature,
-		std::string name, std::string desc,
-		TextureManager::TEX_TYPE TextureID);
-	void LevelUp();
+	public:
+		BuildingData data;
+		Building();
+		Building(BuildingData data);
+		Building(
+			BuildingEnum::TYPE type, 
+			Vec2<int> size, 
+			BuildingEnum::LEVEL level, 
+			BuildingEnum::ORIENTATION orientation,
+			int SynergyResidential, int SynergyCommercial, int SynergyIndustrial, int SynergyNature,
+			std::string name, std::string desc,
+			TextureManager::TEX_TYPE TextureID);
+		void LevelUp();
 };
+bool operator==(Building const& lhs,Building const& rhs);

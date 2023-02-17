@@ -35,14 +35,18 @@ namespace TextureManager {
 	AEGfxTexture* nature_Tex;
 	AEGfxTexture* rock_Tex;
 	AEGfxTexture* residential_S_Tex;
+	AEGfxTexture* residential_1x2_S_Tex;
 	AEGfxTexture* residential_M_Tex;
 	AEGfxTexture* residential_L_Tex;
+
 	AEGfxTexture* commercial_S_Tex;
 	AEGfxTexture* commercial_M_Tex;
 	AEGfxTexture* commercial_L_Tex;
+
 	AEGfxTexture* industrial_S_Tex;
 	AEGfxTexture* industrial_M_Tex;
 	AEGfxTexture* industrial_L_Tex;
+
 	AEGfxTexture* card_Tex;
 	AEGfxTexture* pause_Tex;
 	AEGfxTexture* pauseButton_Tex;
@@ -56,9 +60,10 @@ namespace TextureManager {
 	void LoadTextures() {
 		tile_Tex = AEGfxTextureLoad("Assets/Tile.png");
 		card_Tex = AEGfxTextureLoad("Assets/Card.png");
-		splash_Tex = AEGfxTextureLoad("Assets/SplashScreen");
-
+		splash_Tex = AEGfxTextureLoad("Assets/SplashScreen.png");
 		residential_S_Tex = AEGfxTextureLoad("Assets/residential_s_test.png");
+		// residential_1x2_S_Tex = AEGfxTextureLoad("Assets/residential_s_test.png");
+		residential_1x2_S_Tex = AEGfxTextureLoad("Assets/residential_1x2_test.png");
 		residential_M_Tex = AEGfxTextureLoad("Assets/residential_m_test.png");
 		residential_L_Tex = AEGfxTextureLoad("Assets/residential_l_test.png");
 		commercial_S_Tex = AEGfxTextureLoad("Assets/commercial_s_test.png");
@@ -202,6 +207,12 @@ namespace TextureManager {
 			return residential_M_Tex;
 		case RESIDENTIAL_1X1_L3:
 			return residential_L_Tex;
+		case RESIDENTIAL_1X2_L1:
+			return residential_1x2_S_Tex;
+		case RESIDENTIAL_1X2_L2:
+			return residential_1x2_S_Tex;
+		case RESIDENTIAL_1X2_L3:
+			return residential_1x2_S_Tex;
 		case CARD_BLUE:
 			return card_Tex;
 		case PAUSE_WINDOW:

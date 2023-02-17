@@ -66,6 +66,28 @@ bool operator==(const Vec4<T>& lhs, const Vec4<T>& rhs)
 	}
 	return false;
 }
+/*!***********************************************************************
+\brief
+	Compare the equality of both Vector 3
+\return
+	Return true if both vector are equal. Else return false.
+*************************************************************************/
+template<class T>
+bool operator==(const Vec3<T>& lhs, const Vec3<T>& rhs)
+{
+	return (lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z);
+}
+/*!***********************************************************************
+\brief
+	Compare the equality of both Vector 2
+\return
+	Return true if both vector are equal. Else return false.
+*************************************************************************/
+template<class T>
+bool operator==(const Vec2<T>& lhs, const Vec2<T>& rhs)
+{
+	return (lhs.x == rhs.x && lhs.y == rhs.y);
+}
 
 /*============================================================================
 * OPERATOR OVER LOADS FOR VECTOR ADDITION
