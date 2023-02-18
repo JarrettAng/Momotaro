@@ -24,7 +24,7 @@ namespace RenderSystem {
 	void SetRenderPivot(const RENDER_PIVOT& pivot);
 	AEVec2 GetPivotPos(const AEVec2& pos, const float& width, const float& height);
 
-	void SortBatch(std::vector<Renderable> batch);
+	void SortBatch(std::vector<Renderable>& batch);
 
 	void UpdateRenderSetting(RenderSetting setting = {});
 	void UpdateRenderTransformMtx(const int& x, const int& y, const AEVec2& scale, const float& rot = 0);
@@ -182,12 +182,11 @@ namespace RenderSystem {
 		Add button obj to batch.
 	*************************************************************************/
 	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, const int& layer, TextureManager::TEX_TYPE tex, const Vec4<float>& btnColor, const Vec3<float>& txtColor) {
+		// Get text width and height based on text.
+		AEGfxGetPrintSize(font, const_cast<char*>(text.c_str()), 1, textWidth, textHeight);
 
 		// Get button width and height.
 		AEVec2 buttonSize = GetButtonSize(xPadding, yPadding);
-
-		// Get text width and height based on text.
-		AEGfxGetPrintSize(font, const_cast<char*>(text.c_str()), 1, textWidth, textHeight);
 
 		// Get centereed text position based on button size.
 		AEVec2 textPos = RenderSystem::GetPivotPos(GetCenteredTextPos(x, y, buttonSize.x, buttonSize.y, textWidth, textHeight), buttonSize.x / AEGetWindowWidth() * 2, buttonSize.y / AEGetWindowHeight() * 2);
@@ -265,8 +264,8 @@ namespace RenderSystem {
 	\brief
 		Sort batch list based on layer value.
 	*************************************************************************/
-	void SortBatch(std::vector<Renderable> batch) {
-		std::sort(batch.begin(), batch.end(), [](const Renderable& a, const Renderable& b) { return a.layer < b.layer; });
+	void SortBatch(std::vector<Renderable>& batch) {
+		std::sort(batch.begin(), batch.end(), [](const Renderable& a, const Renderable& b) {  return a.layer < b.layer; });
 	}
 
 	/*!***********************************************************************

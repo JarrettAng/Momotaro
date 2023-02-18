@@ -86,8 +86,8 @@ namespace CardManager {
 			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.iconPos.pos.x, card.iconPos.pos.y, card.iconPos.size.x, card.iconPos.size.y, (TextureManager::TEX_TYPE)(card.bData.type * BuildingEnum::LEVEL_LENGTH + card.bData.level), 3);
 
 			// Drawing of the card count at the top right corner of the card
-			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.countIconPos.pos.x, card.countIconPos.pos.y, card.countIconPos.size.x, card.countIconPos.size.y);
-			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, FontManager::GetFont(FontManager::ROBOTO).S, card.countTextPos.pos.x, card.countTextPos.pos.y, card.countText, COLOR_BLACK, 3);
+			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.countIconPos.pos.x, card.countIconPos.pos.y, card.countIconPos.size.x, card.countIconPos.size.y, { 1,1,1,1 }, 4);
+			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, FontManager::GetFont(FontManager::ROBOTO).S, card.countTextPos.pos.x, card.countTextPos.pos.y, card.countText, COLOR_BLACK, 4);
 		}
 	}
 
