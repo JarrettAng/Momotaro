@@ -25,13 +25,9 @@ namespace IsometricGrid
         TREE = 999,
         ROCK = 1999,
     };
-    struct vec2i{
-        int x{0};
-        int y{0};
-    };
    
     struct cell{
-		vec2i pos;
+        Vec2<int> pos{0,0};
         bool isRenderable{false};
         int ID{0};
         Building _building;
@@ -67,11 +63,11 @@ namespace IsometricGrid
     /// @param x x index of the world cell
     /// @param y y index of the world cell
     /// @return Screen position in the form of vec2i
-    vec2i WorldIndexToScreenPos(int x, int y);
-    vec2i ToScreen(int x, int y);
-    vec2i ScreenPosToIso(int x, int y);
+    Vec2<int> WorldIndexToScreenPos(int x, int y);
+    Vec2<int> ToScreen(int x, int y);
+    Vec2<int> ScreenPosToIso(int x, int y);
 
     
-    vec2i MouseToCell(int mouseX, int mouseY);
+    Vec2<int> MouseToCell(int mouseX, int mouseY);
 
 } // namespace IsometricGrid

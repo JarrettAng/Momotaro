@@ -57,22 +57,22 @@ namespace IsometricGrid
 		float D = area(x1, y1, x2, y2, _mouseX, _mouseY);
 		return (A == (B + C + D));
 	}
-	vec2i ToScreen(int x, int y){
+	Vec2<int> ToScreen(int x, int y){
 		int originX = AEGetWindowWidth() / 2 / 100;
 		int originY = AEGetWindowHeight() / 2 / 50;
-		return vec2i{
+		return Vec2<int>{
 			(originX*tileWidth) + (x-y)*(tileWidth/2),
 			(originY*tileHeight)+(x+y)*(tileHeight/2)
 		};
 	}
 
-	vec2i WorldIndexToScreenPos(int x, int y) {
-		return vec2i{   //we need to keep the tile height and width a float here!
+	Vec2<int> WorldIndexToScreenPos(int x, int y) {
+		return Vec2<int>{   //we need to keep the tile height and width a float here!
 			static_cast<int>((x - y) * (50.f)),
 			static_cast<int>((x + y) * (-25.f)+25.f)		//offset for the correct pos because of the height diff
 		};
 	}
-	vec2i ScreenPosToIso(int xPos, int yPos) {
+	Vec2<int> ScreenPosToIso(int xPos, int yPos) {
 		//MOUSE INPUTS (Tile width = 100, tile height = 50)
 		int cellX = xPos / 100;
 		int cellY = yPos / 50;
@@ -87,7 +87,7 @@ namespace IsometricGrid
 		// int selectX = (cellX - originX) + (cellY - originY);
 		// int selectY = (cellY - originY) - (cellX - originX);
 
-		vec2i SelectedCell{
+		Vec2<int> SelectedCell{
 			(cellX - originX) + (cellY - originY)+10,		//x
 			(cellY - originY) - (cellX - originX)+10		//y
 		};
@@ -116,16 +116,16 @@ namespace IsometricGrid
 		// 	static_cast<int>((y / (tileHeight / 2)) - (x / (tileWidth / 2)))
 		// };
 	}
-	vec2i MouseToCell(int mouseX, int mouseY) {
-		return vec2i{
+	Vec2<int> MouseToCell(int mouseX, int mouseY) {
+		return Vec2<int>{
 			mouseX / tileWidth,
 			mouseY / tileHeight
 		};
 	}
    
-    vec2i MouseCellOffset(int mouseX, int mouseY)
+    Vec2<int> MouseCellOffset(int mouseX, int mouseY)
     {
-        return vec2i{
+        return Vec2<int>{
 			mouseX % tileWidth,
 			mouseY % tileHeight
 		};

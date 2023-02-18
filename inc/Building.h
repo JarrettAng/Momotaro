@@ -83,5 +83,7 @@ class Building : public virtual GameObject {
 			std::string name, std::string desc,
 			TextureManager::TEX_TYPE TextureID);
 		void LevelUp();
+		std::vector<Vec2<int>> buildingCells;
+
 };
 bool operator==(Building const& lhs,Building const& rhs);

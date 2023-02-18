@@ -80,7 +80,7 @@ namespace GridManager {
 	 * @param grid the grid to check
 	 * @param cellIndex the current index to check
 	 */
-	void CheckCellNeighbor(iso::cell* grid, iso::vec2i cellIndex);
+	void CheckCellNeighbor(iso::cell* grid, Vec2<int> cellIndex);
 
 	/**
 	 * @brief Get the Index object using the x + gridX * y conversion
@@ -91,7 +91,11 @@ namespace GridManager {
 	 */
 	int GetIndex(int x, int y);
 
-	/**
+    bool HasID(int* array, int count, int ID);
+
+    int GetIndexFromID(int ID);
+
+    /**
 	 * @brief Clears the whole grid of any structure
 	 *
 	 */
