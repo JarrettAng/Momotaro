@@ -14,28 +14,30 @@ This source file declares
 #include<RenderSystem.h>
 #include <iostream>
 #include <algorithm>
-#include <TextureManager.h>
 #include <FontManager.h>
 
 namespace RenderSystem {
 
-#pragma region Foward Declaration & Variables
-	void InitMesh();
+	/*!***********************************************************************
+	* FORWARD DECLARATIONS
+	*************************************************************************/
+	void SetRenderPivot(const RENDER_PIVOT& pivot);
+	AEVec2 GetPivotPos(const AEVec2& pos, const float& width, const float& height);
+
 	void SortBatch(std::vector<Renderable> batch);
 
 	void UpdateRenderSetting(RenderSetting setting = {});
 	void UpdateRenderTransformMtx(const int& x, const int& y, const AEVec2& scale, const float& rot = 0);
 
+	void AddRectToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& width, const float& height, const float& rot, const int& layer, const Vec4<float>& color, TextureManager::TEX_TYPE tex);
+	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, const int& layer, TextureManager::TEX_TYPE tex = TextureManager::NONE, const Vec4<float>& btnColor = { 1,1,1,1 }, const Vec3<float>& txtColor = { 1,1,1 });
+
 	void RenderText(s8 fontID, std::string text, float x, float y, Vec3<float> color = { 1.0f,1.0f,1.0f });
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, TextureManager::TEX_TYPE  tex);
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec4<float> color = { 1.0f,1.0f,1.0f,1.0f });
 
-	void AddRectToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& width, const float& height, const float& rot, const int& layer, const Vec4<float>& color, TextureManager::TEX_TYPE tex);
-	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, const int& layer, TextureManager::TEX_TYPE tex = TextureManager::NONE, const Vec4<float>& btnColor = { 1,1,1,1 }, const Vec3<float>& txtColor = { 1,1,1 });
-
 	AEVec2 GetButtonSize(const float& xPadding, const float& yPadding);
 	AEVec2 GetCenteredTextPos(const float& x, const float& y, const float& width, const float& height, const float& textWidth, const float& textHeight);
-	f32 textWidth, textHeight;
 
 	/*!***********************************************************************
 	* RENDER BATCHES
@@ -56,34 +58,27 @@ namespace RenderSystem {
 	AEMtx33 transformMtx, translateMtx, scaleMtx, rotMtx = identityMtx;
 
 	/*!***********************************************************************
-	* MESH FOR RENDERING + PIVOT MESHES.
+	* VARIABLES
 	*************************************************************************/
+	f32 textWidth, textHeight;	// Cache text width and height for calculating text position when drawing button.
 	RENDER_PIVOT renderPivot;
 
-	// renderMesh is assigned to one of the pivot meshes below to tell the renderer how to render subsequent obj.
-	AEGfxVertexList* TOP_LEFT_MESH;
-	AEGfxVertexList* TOP_MID_MESH;
-	AEGfxVertexList* TOP_RIGHT_MESH;
-	AEGfxVertexList* MID_LEFT_MESH;
-	AEGfxVertexList* MID_MESH;
-	AEGfxVertexList* MID_RIGHT_MESH;
-	AEGfxVertexList* BOT_LEFT_MESH;
-	AEGfxVertexList* BOT_MID_MESH;
-	AEGfxVertexList* BOT_RIGHT_MESH;
-
-#pragma endregion
-
-	void Initialize() {
-		InitMesh();
+	void RenderSystem::Initialize() {
 		SetRenderPivot(TOP_LEFT);
 	}
 
+	/*!***********************************************************************
+	\brief
+		Main rendering func.
+			- Loop through all batches and render each renderable in batch.
+	*************************************************************************/
 	void Render() {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		UpdateRenderSetting();
 		for (auto& batch : renderBatches) {
-			// Sort batch based on sprite's layer before drawing.
+			// Sort batch based on layer before drawing.
 			SortBatch(batch);
+			// Render every renderable object.
 			for (auto& obj : batch) {
 				switch (obj.type) {
 				case RECT:
@@ -109,6 +104,29 @@ namespace RenderSystem {
 		}
 	}
 
+	/*!***********************************************************************
+	\brief
+		Add text obj to batch.
+	*************************************************************************/
+	void AddTextToBatch(const BATCH_TYPE& id, const s8& font, const float& x, const float& y, std::string text, const Vec3<float>& color, const int& layer)
+	{
+		Renderable obj;
+		obj.type = TEXT;
+		obj.layer = layer;
+
+		obj.text.fontID = font;
+		obj.text.text = text;
+
+		obj.text.pos = { x,y };
+		obj.text.color = color;
+
+		// Add to batch.
+		renderBatches[id].push_back(obj);
+	}
+
+	/*!***********************************************************************
+	* OVERLOADED RECT FUNCTIONS
+	*************************************************************************/
 	// Rect with TEXTURE.
 	void AddRectToBatch(const BATCH_TYPE& batch, const float& x, const float& y, const float& width, const float& height, TextureManager::TEX_TYPE tex, const int& layer, const float& rot) {
 		AddRectToBatch(batch, x, y, width, height, rot, layer, {}, tex);
@@ -117,118 +135,126 @@ namespace RenderSystem {
 	void AddRectToBatch(const BATCH_TYPE& batch, const float& x, const float& y, const float& width, const float& height, const Vec4<float>& btnColor, const int& layer, const float& rot) {
 		AddRectToBatch(batch, x, y, width, height, rot, layer, btnColor, TextureManager::NONE);
 	}
+	/************************************************************************/
 
+	/*!***********************************************************************
+	\brief
+		Add rect obj to batch.
+	*************************************************************************/
 	void AddRectToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& width, const float& height, const float& rot, const int& layer, const Vec4<float>& color, TextureManager::TEX_TYPE tex)
 	{
 		Renderable obj;
 		obj.type = RECT;
 		obj.layer = layer;
 
+		// Set transform.
 		obj.rect.transform.pos = { x,y };
 		obj.rect.transform.size = { width,height };
 		obj.rect.transform.rot = rot;
+
+		// Set graphics.
 		obj.rect.graphics.color = color;
 		obj.rect.graphics.tex = tex;
 
+		// Add to batch.
 		renderBatches[id].push_back(obj);
 	}
 
-	void AddTextToBatch(const BATCH_TYPE& id, const s8& font, const float& x, const float& y, std::string text, const Vec3<float>& color, const int& layer)
-	{
-		Renderable obj;
-		obj.type = TEXT;
-		obj.layer = layer;
 
-		obj.text.pos = { x,y };
-		obj.text.fontID = font;
-		obj.text.text = text;
-		obj.text.color = color;
-
-		renderBatches[id].push_back(obj);
-	}
-
+	/*!***********************************************************************
+	* OVERLOADED BUTTON FUNCTIONS
+	*************************************************************************/
 	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, TextureManager::TEX_TYPE tex, const int& layer, const Vec3<float>& txtColor) {
 		AddButtonToBatch(id, x, y, xPadding, yPadding, font, text, layer, tex, {}, txtColor);
 	}
 	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, const int& layer, const Vec4<float>& btnColor, const Vec3<float>& txtColor) {
 		AddButtonToBatch(id, x, y, xPadding, yPadding, font, text, layer, TextureManager::NONE, btnColor, txtColor);
 	}
+	/************************************************************************/
 
+	/*!***********************************************************************
+	\brief
+		Add button obj to batch.
+	*************************************************************************/
 	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, const int& layer, TextureManager::TEX_TYPE tex, const Vec4<float>& btnColor, const Vec3<float>& txtColor) {
-		AEGfxGetPrintSize(font, const_cast<char*>(text.c_str()), 1, textWidth, textHeight);
+
+		// Get button width and height.
 		AEVec2 buttonSize = GetButtonSize(xPadding, yPadding);
+
+		// Get text width and height based on text.
+		AEGfxGetPrintSize(font, const_cast<char*>(text.c_str()), 1, textWidth, textHeight);
+
+		// Get centereed text position based on button size.
 		AEVec2 textPos = RenderSystem::GetPivotPos(GetCenteredTextPos(x, y, buttonSize.x, buttonSize.y, textWidth, textHeight), buttonSize.x / AEGetWindowWidth() * 2, buttonSize.y / AEGetWindowHeight() * 2);
 
 		if (tex == TextureManager::NONE) {
+			// Add rect with TEXTURE to batch.
 			AddRectToBatch(id, x, y, buttonSize.x, buttonSize.y, btnColor, layer);
 		}
 		else {
+			// Add rect with COLOR to batch.
 			AddRectToBatch(id, x, y, buttonSize.x, buttonSize.y, tex, layer);
 		}
+
+		// Add text to batch.
 		AddTextToBatch(id, font, textPos.x, textPos.y, text, txtColor, layer);
 	}
 
+	/*!***********************************************************************
+	\brief
+		Get button width and height based on pos and padding.
+	*************************************************************************/
 	AEVec2 GetButtonSize(const float& xPadding, const float& yPadding) {
 		// Get button's width and height by adding text width/height with padding given.
 		return AEVec2{ textWidth * AEGetWindowWidth() / 2 + xPadding * 2 , textHeight * AEGetWindowHeight() / 2 + yPadding * 2 };
 	}
 
+	/*!***********************************************************************
+	\brief
+		Calculate centered text position based on rect width and height.
+			- Assuming rect is drawn with TOP-LEFT pivot.
+	*************************************************************************/
 	AEVec2 GetCenteredTextPos(const float& x, const float& y, const float& width, const float& height, const float& textWidth, const float& textHeight) {
 		// It just works
 		return AEVec2{ ((x / AEGetWindowWidth()) * 2) + ((((width / AEGetWindowWidth()) * 2) - textWidth) / 2) , ((y / AEGetWindowHeight()) * 2) - ((height / 2) / AEGetWindowHeight()) * 2 - (textHeight / 2) };
 	}
 
-	AEVec2 GetPivotPos(const AEVec2& pos, const float& width, const float& height) {
-		switch (renderPivot)
-		{
-		case RenderSystem::TOP_LEFT:
-			return pos;
-		case RenderSystem::TOP_MID:
-			return AEVec2{ pos.x - width / 2, pos.y };
-		case RenderSystem::TOP_RIGHT:
-			return AEVec2{ pos.x - width, pos.y };
-		case RenderSystem::MID_LEFT:
-			return AEVec2{ pos.x, pos.y + height / 2 };
-		case RenderSystem::MID:
-			return AEVec2{ pos.x - width / 2, pos.y + height / 2 };
-		case RenderSystem::MID_RIGHT:
-			return AEVec2{ pos.x - width, pos.y + height / 2 };
-		case RenderSystem::BOT_LEFT:
-			return AEVec2{ pos.x, pos.y + height };
-		case RenderSystem::BOT_MID:
-			return AEVec2{ pos.x - width / 2, pos.y + height };
-		case RenderSystem::BOT_RIGHT:
-			return AEVec2{ pos.x - width , pos.y + height };
-		default:
-			break;
-		}
-		std::cout << "UNABLE TO GET PIVOT POS";
-		return pos;
-	}
-
 	/*!***********************************************************************
-	* FOR RENDERING UI ELEMENTS
+	\brief
+		Render text on screen.
 	*************************************************************************/
 	void RenderText(s8 fontID, std::string text, float x, float y, Vec3<float> color) {
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		// Allow transperant text for fading?
 		AEGfxPrint(fontID, const_cast<char*>(text.c_str()), x, y, 1, color.x, color.y, color.z);
 	}
 
+	/*!***********************************************************************
+	\brief
+		Render rect with TEXTURE.
+	*************************************************************************/
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, TextureManager::TEX_TYPE tex) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+		// Get texture + offset UVS for animations.
 		AEGfxTextureSet(TextureManager::GetTexture(tex), TextureManager::GetTW(tex), TextureManager::GetTH(tex));
+		// Position rect.
 		UpdateRenderTransformMtx(x, y, AEVec2{ width,height });
+		// Draw rect.
 		AEGfxMeshDraw(TextureManager::GetMesh(tex), AE_GFX_MDM_TRIANGLES);
 	}
 
+	/*!***********************************************************************
+	\brief
+		Render rect with COLOR.
+	*************************************************************************/
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec4<float> color) {
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		// Set color.
 		AEGfxSetTintColor(color.w, color.x, color.y, color.z);
+		// Position rect.
 		UpdateRenderTransformMtx(x, y, AEVec2{ width,height });
+		// Draw rect.
 		AEGfxMeshDraw(TextureManager::GetMesh(TextureManager::NONE), AE_GFX_MDM_TRIANGLES);
 	}
-	/*************************************************************************/
 
 	/*!***********************************************************************
 	\brief
@@ -237,7 +263,6 @@ namespace RenderSystem {
 	void SortBatch(std::vector<Renderable> batch) {
 		std::sort(batch.begin(), batch.end(), [](const Renderable& a, const Renderable& b) { return a.layer < b.layer; });
 	}
-	/*************************************************************************/
 
 	/*!***********************************************************************
 	\brief
@@ -276,7 +301,7 @@ namespace RenderSystem {
 
 	/*!***********************************************************************
 	\brief
-		Set current render pivot to determine how meshes are drawn.
+		Set current pivot position.
 	*************************************************************************/
 	void SetRenderPivot(const RENDER_PIVOT& pivot) {
 		renderPivot = pivot;
@@ -284,123 +309,33 @@ namespace RenderSystem {
 
 	/*!***********************************************************************
 	\brief
-		Get render mesh based on current render pivot.
+		Convert position based on current pivot position.
 	*************************************************************************/
-	AEGfxVertexList* GetRenderMesh() {
+	AEVec2 GetPivotPos(const AEVec2& pos, const float& width, const float& height) {
 		switch (renderPivot)
 		{
-		case TOP_LEFT:
-			return TOP_LEFT_MESH;
-		case TOP_MID:
-			return TOP_MID_MESH;
-		case TOP_RIGHT:
-			return TOP_RIGHT_MESH;
-		case MID_LEFT:
-			return MID_LEFT_MESH;
-		case MID:
-			return MID_MESH;
-		case MID_RIGHT:
-			return MID_RIGHT_MESH;
-		case BOT_LEFT:
-			return BOT_LEFT_MESH;
-		case BOT_MID:
-			return BOT_MID_MESH;
-		case BOT_RIGHT:
-			return BOT_RIGHT_MESH;
+		case RenderSystem::TOP_LEFT:
+			return pos;
+		case RenderSystem::TOP_MID:
+			return AEVec2{ pos.x - width / 2, pos.y };
+		case RenderSystem::TOP_RIGHT:
+			return AEVec2{ pos.x - width, pos.y };
+		case RenderSystem::MID_LEFT:
+			return AEVec2{ pos.x, pos.y + height / 2 };
+		case RenderSystem::MID:
+			return AEVec2{ pos.x - width / 2, pos.y + height / 2 };
+		case RenderSystem::MID_RIGHT:
+			return AEVec2{ pos.x - width, pos.y + height / 2 };
+		case RenderSystem::BOT_LEFT:
+			return AEVec2{ pos.x, pos.y + height };
+		case RenderSystem::BOT_MID:
+			return AEVec2{ pos.x - width / 2, pos.y + height };
+		case RenderSystem::BOT_RIGHT:
+			return AEVec2{ pos.x - width , pos.y + height };
 		default:
 			break;
 		}
-		return TOP_LEFT_MESH;
-	}
-	/*************************************************************************/
-
-
-	void InitMesh() {
-		/*!***********************************************************************
-		\brief
-			Initialize meshes.
-		*************************************************************************/
-
-		AEGfxMeshStart();
-		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
-			0.0f, -1.0f, 0xFFFFFFFF, 0.0f, 1.0f,
-			1.0f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);
-		AEGfxTriAdd(1.0f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f,
-			1.0f, 0.0f, 0xFFFFFFFF, 1.0f, 0.0f,
-			0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f);
-		TOP_LEFT_MESH = AEGfxMeshEnd();
-
-
-		AEGfxMeshStart();
-		AEGfxTriAdd(-0.5f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
-			-0.5f, -1.0f, 0xFFFFFFFF, 0.0f, 1.0f,
-			0.5f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);
-		AEGfxTriAdd(-0.5f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
-			0.5f, 0.0f, 0xFFFFFFFF, 1.0f, 0.0f,
-			0.5f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);
-		TOP_MID_MESH = AEGfxMeshEnd();
-
-		AEGfxMeshStart();
-		AEGfxTriAdd(-1.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
-			-1.0f, -1.0f, 0xFFFFFFFF, 0.0f, 1.0f,
-			0.0f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);
-		AEGfxTriAdd(-1.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
-			0.0f, 0.0f, 0xFFFFFFFF, 1.0f, 0.0f,
-			0.0f, -1.0f, 0xFFFFFFFF, 1.0f, 1.0f);
-		TOP_RIGHT_MESH = AEGfxMeshEnd();
-
-		AEGfxMeshStart();
-		AEGfxTriAdd(0.0f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
-			0.0f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
-			1.0f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f);
-		AEGfxTriAdd(1.0f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
-			1.0f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
-			0.0f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
-		MID_LEFT_MESH = AEGfxMeshEnd();
-
-		AEGfxMeshStart();
-		AEGfxTriAdd(-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
-			-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
-			0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f);
-		AEGfxTriAdd(0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
-			0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
-			-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
-		MID_MESH = AEGfxMeshEnd();
-
-		AEGfxMeshStart();
-		AEGfxTriAdd(-1.0f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
-			-1.0f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
-			0.0f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f);
-		AEGfxTriAdd(0.0f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
-			0.0f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
-			-1.0f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
-		MID_RIGHT_MESH = AEGfxMeshEnd();
-
-		AEGfxMeshStart();
-		AEGfxTriAdd(0.0f, 1.0f, 0xFFFFFFFF, 0.0f, 0.0f,
-			0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 1.0f,
-			1.0f, 0.0f, 0xFFFFFFFF, 1.0f, 1.0f);
-		AEGfxTriAdd(1.0f, 0.0f, 0xFFFFFFFF, 1.0f, 1.0f,
-			1.0f, 1.0f, 0xFFFFFFFF, 1.0f, 0.0f,
-			0.0f, 1.0f, 0xFFFFFFFF, 0.0f, 0.0f);
-		BOT_LEFT_MESH = AEGfxMeshEnd();
-
-		AEGfxMeshStart();
-		AEGfxTriAdd(-0.5f, 1.0f, 0xFFFFFFFF, 0.0f, 0.0f,
-			-0.5f, 0.0f, 0xFFFFFFFF, 0.0f, 1.0f,
-			0.5f, 0.0f, 0xFFFFFFFF, 1.0f, 1.0f);
-		AEGfxTriAdd(0.5f, 0.0f, 0xFFFFFFFF, 1.0f, 1.0f,
-			0.5f, 1.0f, 0xFFFFFFFF, 1.0f, 0.0f,
-			-0.5f, 1.0f, 0xFFFFFFFF, 0.0f, 0.0f);
-		BOT_MID_MESH = AEGfxMeshEnd();
-
-		AEGfxMeshStart();
-		AEGfxTriAdd(-1.0f, 1.0f, 0xFFFFFFFF, 0.0f, 0.0f,
-			-1.0f, 0.0f, 0xFFFFFFFF, 0.0f, 1.0f,
-			0.0f, 0.0f, 0xFFFFFFFF, 1.0f, 1.0f);
-		AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 1.0f, 1.0f,
-			0.0f, 1.0f, 0xFFFFFFFF, 1.0f, 0.0f,
-			-1.0f, 1.0f, 0xFFFFFFFF, 0.0f, 0.0f);
-		BOT_RIGHT_MESH = AEGfxMeshEnd();
+		std::cout << "UNABLE TO GET PIVOT POS";
+		return pos;
 	}
 }

@@ -20,14 +20,12 @@ This header file declares
 
 namespace RenderSystem {
 
-	// NOT IN USE
 	struct RenderSetting {
 		// Default: Opaque + Allow transperancy. (PNG images)
 		static const AEGfxBlendMode BLEND_MODE{ AE_GFX_BM_BLEND };
 		static constexpr Vec4<float> BLEND_COLOR{ 0,0,0,0 };
 		static constexpr Vec4<float> TINT{ 1.0f,1.0f,1.0f,1.0f };
 		static constexpr float TRANSPERANCY = 1.0f;
-
 
 		AEGfxBlendMode blendMode = BLEND_MODE;
 		Vec4<float> blendColor = BLEND_COLOR;
@@ -61,8 +59,8 @@ namespace RenderSystem {
 	};
 
 	struct Graphics {
-		TextureManager::TEX_TYPE tex;
 		Vec4<float> color;
+		TextureManager::TEX_TYPE tex;
 	};
 
 	struct Rect {
@@ -97,18 +95,17 @@ namespace RenderSystem {
 
 	void Initialize();
 	void Render();
-	AEGfxVertexList* GetRenderMesh();
-	void SetRenderPivot(const RENDER_PIVOT& pivot);
+
 	AEVec2 GetPivotPos(const AEVec2& pos, const float& width, const float& height);
 
 	/*!***********************************************************************
-	* TEXT
+	* TEXT RENDERING
 	*************************************************************************/
 	void AddTextToBatch(const BATCH_TYPE& id, const s8& font, const float& x, const float& y, std::string text, const Vec3<float>& color = { 1,1,1 }, const int& layer = 0);
 	/*************************************************************************/
 
 	/*!***********************************************************************
-	* RECT
+	* RECT RENDERING
 	*************************************************************************/
 	// Rect with TEXTURE.
 	void AddRectToBatch(const BATCH_TYPE& batch, const float& x, const float& y, const float& width, const float& height, TextureManager::TEX_TYPE tex, const int& layer = 0, const float& rot = 0);
@@ -117,7 +114,7 @@ namespace RenderSystem {
 	/*************************************************************************/
 
 	/*!***********************************************************************
-	* BUTTON
+	* BUTTON RENDERING (RECT + TEXT IN MIDDLE OF RECT)
 	*************************************************************************/
 	// Button with TEXTURE + text.
 	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, TextureManager::TEX_TYPE tex, const int& layer = 0, const Vec3<float>& txtColor = { 1.0f,1.0f,1.0f });
