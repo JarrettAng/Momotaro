@@ -63,6 +63,11 @@ namespace RenderSystem {
 	f32 textWidth, textHeight;	// Cache text width and height for calculating text position when drawing button.
 	RENDER_PIVOT renderPivot;
 
+
+	/*!***********************************************************************
+	\brief
+		Initialize render system.
+	*************************************************************************/
 	void RenderSystem::Initialize() {
 		SetRenderPivot(TOP_LEFT);
 	}
@@ -235,7 +240,7 @@ namespace RenderSystem {
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, TextureManager::TEX_TYPE tex) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		// Get texture + offset UVS for animations.
-		AEGfxTextureSet(TextureManager::GetTexture(tex), TextureManager::GetTW(tex), TextureManager::GetTH(tex));
+		AEGfxTextureSet(TextureManager::GetTexture(tex), TextureManager::GetTexWidth(tex), TextureManager::GetTexHeight(tex));
 		// Position rect.
 		UpdateRenderTransformMtx(x, y, AEVec2{ width,height });
 		// Draw rect.

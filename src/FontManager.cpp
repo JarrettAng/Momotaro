@@ -1,3 +1,15 @@
+/*!************************************************************************
+\file FontManager.cpp
+\author Tan Jun Rong
+\par DP email: t.junrong@digipen.edu
+\par Course: CSD1171B
+\par Software Engineering Project
+\date 18-02-2023
+\brief
+This source file declares
+
+**************************************************************************/
+
 #include <FontManager.h>
 
 namespace FontManager {

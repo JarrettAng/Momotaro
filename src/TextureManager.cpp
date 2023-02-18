@@ -1,15 +1,13 @@
 /*!************************************************************************
-\file:          TextureManager.cpp
-\author:
-\par DP email:
-\par Course:    CSD1171B
+\file TextureManager.cpp
+\author Tan Jun Rong
+\par DP email: t.junrong@digipen.edu
+\par Course: CSD1171B
 \par Software Engineering Project
-\date:          30-01-2023
+\date 18-02-2023
 \brief
+This source file declares
 
-
-The functions include:
--
 **************************************************************************/
 
 #include <TextureManager.h>
@@ -17,23 +15,24 @@ The functions include:
 #include <vector>
 
 namespace TextureManager {
-
 	/*!***********************************************************************
 	* FORWARD DECLARATION
 	*************************************************************************/
 	void LoadTextures();
-	void UpdateTextureSheetAnimation();
+	void InitializeTextures();
 	void GenerateMesh();
 
+	void UpdateTextureSheetAnimation();
+
+	/*!***********************************************************************
+	* VARIABLES
+	*************************************************************************/
 	std::vector<TextureSheet> textures;
-	std::vector<AEGfxVertexList*> meshes;
+	std::vector<Mesh> meshes;
 
 	/*!***********************************************************************
 	* TEXTURES
 	*************************************************************************/
-	AEGfxTexture* tile_Tex;
-	AEGfxTexture* nature_Tex;
-	AEGfxTexture* rock_Tex;
 	AEGfxTexture* residential_S_Tex;
 	AEGfxTexture* residential_M_Tex;
 	AEGfxTexture* residential_L_Tex;
@@ -50,6 +49,10 @@ namespace TextureManager {
 	AEGfxTexture* industrial_M_Tex;
 	AEGfxTexture* industrial_L_Tex;
 
+	AEGfxTexture* tile_Tex;
+	AEGfxTexture* nature_Tex;
+	AEGfxTexture* rock_Tex;
+
 	AEGfxTexture* card_Tex;
 	AEGfxTexture* pause_Tex;
 	AEGfxTexture* pauseButton_Tex;
@@ -57,36 +60,49 @@ namespace TextureManager {
 
 	void Initialize() {
 		LoadTextures();
+		InitializeTextures();
 		GenerateMesh();
 	}
 
+	/*!***********************************************************************
+	\brief
+		Load textures from file.
+	*************************************************************************/
 	void LoadTextures() {
-		tile_Tex = AEGfxTextureLoad("Assets/Tile.png");
-		card_Tex = AEGfxTextureLoad("Assets/Card.png");
-		splash_Tex = AEGfxTextureLoad("Assets/SplashScreen.png");
 		residential_S_Tex = AEGfxTextureLoad("Assets/residential_s_test.png");
-		// residential_1x2_S_Tex = AEGfxTextureLoad("Assets/residential_s_test.png");
+		residential_M_Tex = AEGfxTextureLoad("Assets/residential_m_test.png");
+		residential_L_Tex = AEGfxTextureLoad("Assets/residential_l_test.png");
+
 		residential_1x2_S_Tex = AEGfxTextureLoad("Assets/residential_1x2_test.png");
 		residential_1x2_M_Tex = AEGfxTextureLoad("Assets/BlueRect.png");
 		residential_1x2_L_Tex = AEGfxTextureLoad("Assets/BlueRect.png");
-		residential_M_Tex = AEGfxTextureLoad("Assets/residential_m_test.png");
-		residential_L_Tex = AEGfxTextureLoad("Assets/residential_l_test.png");
+
 		commercial_S_Tex = AEGfxTextureLoad("Assets/commercial_s_test.png");
 		commercial_M_Tex = AEGfxTextureLoad("Assets/commercial_m_test.png");
 		commercial_L_Tex = AEGfxTextureLoad("Assets/commercial_l_test.png");
+
 		industrial_S_Tex = AEGfxTextureLoad("Assets/industrial_s_test.png");
 		industrial_M_Tex = AEGfxTextureLoad("Assets/industrial_m_test.png");
 		industrial_L_Tex = AEGfxTextureLoad("Assets/industrial_l_test.png");
 
+		tile_Tex = AEGfxTextureLoad("Assets/Tile.png");
 		nature_Tex = AEGfxTextureLoad("Assets/tree_test.png");
 		rock_Tex = AEGfxTextureLoad("Assets/rock_test.png");
+
+		card_Tex = AEGfxTextureLoad("Assets/Card.png");
 		pause_Tex = AEGfxTextureLoad("Assets/GameWindow.png");
 		pauseButton_Tex = AEGfxTextureLoad("Assets/Pause_Button.png");
+		splash_Tex = AEGfxTextureLoad("Assets/SplashScreen.png");
+	}
 
+	/*!***********************************************************************
+	\brief
+		Initialize texture sheets and properties for animations.
+	*************************************************************************/
+	void InitializeTextures() {
 		// TODO: READ FROM JSON
 		// TO GET: ROWS, COLS AND FRAME INTERVAL, 
 		textures.push_back(TextureSheet{ NONE, 1, 1,-1 });
-
 
 		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L1, 1, 1, -1 });
 		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L2, 1, 1, -1 });
@@ -112,11 +128,30 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ PAUSE_BUTTON, 1, 1, -1 });
 		textures.push_back(TextureSheet{ SPLASH_SCREEN, 1, 1, -1 });
 
-
+		// Initialize frame UV size based on number of cols and rows.
 		for (TextureSheet& t : textures) {
-			t.tw = 1.0 / t.cols;
-			t.th = 1.0 / t.rows;
+			t.texWidth = 1.0 / t.cols;
+			t.texHeight = 1.0 / t.rows;
 			t.currInterval = t.frameInterval;
+		}
+	}
+
+	/*!***********************************************************************
+	\brief
+		Generate mesh for each textures, mesh UV uses height and width offsets for animating.
+	*************************************************************************/
+	void GenerateMesh() {
+		// Generate mesh for each texture sheet.
+		for (TextureSheet& t : textures) {
+			AEGfxMeshStart();
+			// UVS ARE BASED ON NUMBER OF ROWS AND COLS FOR ANIMATIONS.
+			AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
+				0.0f, -1.0f, 0xFFFFFFFF, 0.0f, t.texHeight,
+				1.0f, -1.0f, 0xFFFFFFFF, t.texWidth, t.texHeight);
+			AEGfxTriAdd(1.0f, -1.0f, 0xFFFFFFFF, t.texWidth, t.texHeight,
+				1.0f, 0.0f, 0xFFFFFFFF, t.texWidth, 0.0f,
+				0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f);
+			meshes.push_back({ t.tex,AEGfxMeshEnd() });
 		}
 	}
 
@@ -124,21 +159,10 @@ namespace TextureManager {
 		UpdateTextureSheetAnimation();
 	}
 
-	// TEMP LOCATION
-	void GenerateMesh() {
-		for (TextureSheet& t : textures) {
-			AEGfxMeshStart();
-			// UVS ARE BASED ON NUMBER OF ROWS AND COLS FOR ANIMATIONS.
-			AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
-				0.0f, -1.0f, 0xFFFFFFFF, 0.0f, t.th,
-				1.0f, -1.0f, 0xFFFFFFFF, t.tw, t.th);
-			AEGfxTriAdd(1.0f, -1.0f, 0xFFFFFFFF, t.tw, t.th,
-				1.0f, 0.0f, 0xFFFFFFFF, t.tw, 0.0f,
-				0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f);
-			meshes.push_back(AEGfxMeshEnd());
-		}
-	}
-
+	/*!***********************************************************************
+	\brief
+		Update current UV offset in texture sheet.
+	*************************************************************************/
 	void UpdateTextureSheetAnimation() {
 		// Update animation.
 		for (TextureSheet& t : textures) {
@@ -154,18 +178,18 @@ namespace TextureManager {
 			// Goto next anim frame.
 			if (t.currInterval <= 0) {
 				// Try to go to next frame.
-				t.ctw += t.tw;
+				t.currTexWidth += t.texWidth;
 				// End of row
-				if (t.ctw >= 1) {
+				if (t.currTexWidth >= 1) {
 					// Reset X
-					t.ctw = 0;
+					t.currTexWidth = 0;
 					// Go down Y
-					t.cth += t.th;
+					t.currTexHeight += t.texHeight;
 				}
 				// End of Y
-				if (t.cth >= 1) {
+				if (t.currTexHeight >= 1) {
 					// Back to the top of spritesheet.
-					t.cth = 0;
+					t.currTexHeight = 0;
 				}
 				// Reset timer.
 				t.currInterval = t.frameInterval;
@@ -173,26 +197,46 @@ namespace TextureManager {
 		}
 	}
 
-	float GetTW(const TEX_TYPE& type) {
+	/*!***********************************************************************
+	\brief
+		Get texture width offset.
+	*************************************************************************/
+	float GetTexWidth(const TEX_TYPE& type) {
 		for (TextureSheet& t : textures) {
 			if (t.tex == type) {
-				return t.ctw;
+				return t.currTexWidth;
 			}
 		}
 	}
 
-	float GetTH(const TEX_TYPE& type) {
+	/*!***********************************************************************
+	\brief
+		Get texture height offset.
+	*************************************************************************/
+	float GetTexHeight(const TEX_TYPE& type) {
 		for (TextureSheet& t : textures) {
 			if (t.tex == type) {
-				return t.cth;
+				return t.currTexHeight;
 			}
 		}
 	}
 
+	/*!***********************************************************************
+	\brief
+		Get mesh from texture type.
+	*************************************************************************/
 	AEGfxVertexList* GetMesh(const TEX_TYPE& type) {
-		return meshes[type];
+		for (Mesh& t : meshes) {
+			if (t.tex == type) {
+				return t.mesh;
+			}
+		}
 	}
 
+	/*!***********************************************************************
+	\brief
+		Get texture from texture type.
+	*************************************************************************/
 	AEGfxTexture* GetTexture(const TEX_TYPE& type) {
 		switch (type)
 		{

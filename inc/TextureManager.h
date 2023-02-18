@@ -17,8 +17,6 @@ The functions include:
 #include <AEEngine.h>
 
 namespace TextureManager {
-
-
 	enum TEX_TYPE {
 		NONE = 0,
 		RESIDENTIAL_1X1_L1 = 1,
@@ -47,19 +45,25 @@ namespace TextureManager {
 		int	rows;
 		int cols;
 
-		// Animation
-		float frameInterval;
+		// Animation.
+		float frameInterval;		// Time between each frame.
 		float currInterval = 0;
-		float tw;	// width offset 1/rows
-		float th;	// height offset 1/cols
-		float ctw = 0; // current width offset
-		float cth = 0; // current height offset
+
+		float texWidth;				// Texture frame UV width offset:	1/cols
+		float texHeight;			// Texture frame UV height offset:	1/rows
+		float currTexWidth = 0;		// Current width offset
+		float currTexHeight = 0;	// Current height offset
+	};
+
+	struct Mesh {
+		TEX_TYPE tex;
+		AEGfxVertexList* mesh;
 	};
 
 	void Initialize();
 	void Update();
-	float GetTW(const TEX_TYPE& type);
-	float GetTH(const TEX_TYPE& type);
+	float GetTexWidth(const TEX_TYPE& type);
+	float GetTexHeight(const TEX_TYPE& type);
 	AEGfxVertexList* GetMesh(const TEX_TYPE& type);
 	AEGfxTexture* GetTexture(const TEX_TYPE& type);
 }
