@@ -62,6 +62,14 @@ namespace GridManager {
 		1,5,-8,1,
 		"Residential Lvl 1","Bigger Joe",
 		TextureManager::RESIDENTIAL_1X2_L1 };
+	Building BigResidential3x1Lvl1{
+		BuildingEnum::RESIDENTIAL,
+		Vec2<int>{3,1},
+		BuildingEnum::L1,
+		BuildingEnum::RIGHT,
+		1,5,-8,1,
+		"Residential Lvl 1","Bigger Joe mama",
+		TextureManager::RESIDENTIAL_1X2_L1 };
 
 	Building CommercialLvl1{
 		BuildingEnum::COMMERCIAL,
@@ -166,7 +174,7 @@ namespace GridManager {
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
 		// ChangeOrientation();
-		SetGridIndex(TestOrientation,BigResidentialLvl1.data.size,SelectedCell.x,SelectedCell.y);
+		SetGridIndex(TestOrientation,BigResidentialLvl1.data,SelectedCell.x,SelectedCell.y);
 
 	}
 	void SpawnBigResidential3x1() {
@@ -178,7 +186,7 @@ namespace GridManager {
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
 		// ChangeOrientation();
-		SetGridIndex(TestOrientation, Vec2<int>{3, 1}, SelectedCell.x, SelectedCell.y);
+		SetGridIndex(TestOrientation, BigResidential3x1Lvl1.data, SelectedCell.x, SelectedCell.y);
 
 	}
 
@@ -191,6 +199,7 @@ namespace GridManager {
 
 		grid[index].ID = ++buildingID;
 		grid[index]._building = ResidentialLvl1;
+		grid[index]._building.buildingCells.push_back(SelectedCell);
 		CheckCellNeighbor(grid, SelectedCell);
 
 		#if testVector
@@ -257,6 +266,7 @@ namespace GridManager {
 
 		grid[index].ID = ++buildingID;
 		grid[index]._building = CommercialLvl1;
+		grid[index]._building.buildingCells.push_back(SelectedCell);
 		CheckCellNeighbor(grid, SelectedCell);
 	}
 	void SpawnIndustrial() {
@@ -268,6 +278,7 @@ namespace GridManager {
 
 		grid[index].ID = ++buildingID;
 		grid[index]._building = IndustrialLvl1;
+		grid[index]._building.buildingCells.push_back(SelectedCell);
 		CheckCellNeighbor(grid, SelectedCell);
 	}
 	void SpawnNature() {
@@ -459,9 +470,10 @@ namespace GridManager {
 	}
 #pragma endregion
 
-	void SetGridIndex(BuildingEnum::ORIENTATION _orientation, Vec2<int> _size, int _x, int _y)
+	void SetGridIndex(BuildingEnum::ORIENTATION _orientation, BuildingData _data, int _x, int _y)
 	{
 		int index = GetIndex(_x, _y);
+		Vec2<int> _size = _data.size;
 		// TextureManager::TEX_TYPE test{TextureManager::RESIDENTIAL_1X2_L1};
 		Vec2<int> _SelectedCell{0,0};
 		std::vector<Vec2<int>> AllCells;
@@ -533,7 +545,7 @@ namespace GridManager {
 				// std::cout <<"OTHER INDEX : " <<otherIndex << '\n';
 				// std::cout << "SELECTED CELL : " << _SelectedCell << '\n';
 				// grid[otherIndex]._building.data.TextureID = test;
-				grid[otherIndex]._building.data = BigResidentialLvl1.data;
+				grid[otherIndex]._building.data = _data;
 				AllCells.push_back(_SelectedCell);
 				// grid[otherIndex]._building.data.TextureID = TextureManager::NATURE_ROCK;
 				// std::cout << grid[otherIndex]._building.data.type << '\n';
@@ -541,9 +553,9 @@ namespace GridManager {
 		}
 		for(Vec2<int> cell : AllCells){
 			grid[GetIndex(cell.x,cell.y)]._building.buildingCells.assign(AllCells.begin(),AllCells.end());
-			// std::cout << grid[GetIndex(cell.x,cell.y)]._building.data.type << '\n';
-			CheckCellNeighbor(grid,_SelectedCell);
+			// std::cout << "Cell to check : " << cell << '\n';
 		}
+		CheckCellNeighbor(grid,_SelectedCell);
 		// std::cout <<"ALL CELLS SIZE : "<< AllCells.size() << '\n'; 
 		// std::cout << "INDEX : " << index <<'\n';
 		// std::cout <<"SIZE : "<< grid[index]._building.buildingCells.size() << '\n'; 
@@ -635,95 +647,43 @@ namespace GridManager {
 
 	void GridManager::CheckCellNeighbor(iso::cell* grid, Vec2<int> cellIndex)
 	{
-		//The order to check is CLOCKWISE, so we go NORTH, EAST, SOUTH, WEST
-		int matchCount{ 0 };
-		int matchedCells[2]{};
 		int gridIndex = GetIndex(cellIndex.x, cellIndex.y);
-		int NorthIndex = GetIndex(cellIndex.x, cellIndex.y - 1);
-		int EastIndex = GetIndex(cellIndex.x + 1, cellIndex.y);
-		int SouthIndex = GetIndex(cellIndex.x, cellIndex.y + 1);
-		int WestIndex = GetIndex(cellIndex.x - 1, cellIndex.y);
-		//NORTH
-		#if 1
-		// std::cout << "Index : " << cellIndex.x << ", " << cellIndex.y << '\n';
-		// std::cout << "Selected : " << grid[gridIndex]._building.data.type << '\n';
-		// std::cout << "North : " << grid[NorthIndex]._building.data.type << '\n';
-		// std::cout << "East : " << grid[EastIndex]._building.data.type << '\n';
-		// std::cout << "South : " << grid[SouthIndex]._building.data.type << '\n';
-		// std::cout << "West : " << grid[WestIndex]._building.data.type << '\n';
-
-		std::cout << "Is N true? : " << (grid[NorthIndex].ID != 0 && grid[NorthIndex]._building.data.type == grid[gridIndex]._building.data.type&& grid[NorthIndex].ID != grid[gridIndex].ID) << '\n';
-		std::cout << "Is E true? : " << (grid[EastIndex].ID != 0 && grid[EastIndex]._building.data.type == grid[gridIndex]._building.data.type&& grid[EastIndex].ID != grid[gridIndex].ID) << '\n';
-		std::cout << "Is S true? : " << (grid[SouthIndex].ID != 0 && grid[SouthIndex]._building.data.type == grid[gridIndex]._building.data.type&& grid[SouthIndex].ID != grid[gridIndex].ID) << '\n';
-		std::cout << "Is W true? : " << (grid[WestIndex].ID != 0 && grid[WestIndex]._building.data.type == grid[gridIndex]._building.data.type&& grid[WestIndex].ID != grid[gridIndex].ID) << '\n';
-		#endif
-
-		if (grid[NorthIndex].ID != 0 && grid[NorthIndex]._building == grid[gridIndex]._building && grid[NorthIndex].ID != grid[gridIndex].ID) {
-			if (matchCount < 2) {
-				if(!HasID(matchedCells,matchCount,grid[NorthIndex].ID)){
-					matchedCells[matchCount] = grid[NorthIndex].ID;
-					matchCount++;
-				}
-			}
-		}
-		if (grid[EastIndex].ID!=0 && grid[EastIndex]._building == grid[gridIndex]._building&& grid[EastIndex].ID != grid[gridIndex].ID) {
-			if (matchCount < 2) {
-				if(!HasID(matchedCells,matchCount,grid[EastIndex].ID)){
-					matchedCells[matchCount] = grid[EastIndex].ID;
-					matchCount++;
-				}
-			}
-		}
-		if (grid[SouthIndex].ID != 0 && grid[SouthIndex]._building == grid[gridIndex]._building && grid[SouthIndex].ID != grid[gridIndex].ID) {
-			if (matchCount < 2) {
-				if(!HasID(matchedCells,matchCount,grid[SouthIndex].ID)){
-					matchedCells[matchCount] = grid[SouthIndex].ID;
-					matchCount++;
-				}
-			}
-		}
-		if (grid[WestIndex].ID != 0 && grid[WestIndex]._building == grid[gridIndex]._building && grid[WestIndex].ID != grid[gridIndex].ID) {
-			if (matchCount < 2) {
-				if(!HasID(matchedCells,matchCount,grid[WestIndex].ID)){
-					matchedCells[matchCount] = grid[WestIndex].ID;
-					matchCount++;
-				}
-			}
-		}
-		if (matchCount == 1) {
-			//Now we check using the selected neighbor
-			int selectedNeighbor = GetIndexFromID(matchedCells[0]);
-			int NorthIndex = selectedNeighbor - gridX;
-			int EastIndex = selectedNeighbor + 1;
-			int SouthIndex = selectedNeighbor + gridX;
-			int WestIndex = selectedNeighbor - 1;
-			//If it is not the cell you came from and the building types match
-			if ((NorthIndex != gridIndex) && grid[NorthIndex]._building == grid[selectedNeighbor]._building && grid[NorthIndex].ID != grid[selectedNeighbor].ID) {
-				if (matchCount < 2) {
+		int matchCount{ 1 };
+		int matchedCells[3]{grid[gridIndex].ID};
+		//We need to check for every cell that is in the building
+		for(Vec2<int> cell : grid[gridIndex]._building.buildingCells){
+			//The order to check is CLOCKWISE, so we go NORTH, EAST, SOUTH, WEST
+			gridIndex = GetIndex(cell);
+			int NorthIndex = GetIndex(cell.x, cell.y - 1);
+			int EastIndex = GetIndex(cell.x + 1, cell.y);
+			int SouthIndex = GetIndex(cell.x, cell.y + 1);
+			int WestIndex = GetIndex(cell.x - 1, cell.y);
+			if (grid[NorthIndex].ID != 0 && grid[NorthIndex]._building == grid[gridIndex]._building && grid[NorthIndex].ID != grid[gridIndex].ID) {
+				if (matchCount < 3) {
 					if(!HasID(matchedCells,matchCount,grid[NorthIndex].ID)){
 						matchedCells[matchCount] = grid[NorthIndex].ID;
 						matchCount++;
 					}
 				}
 			}
-			if ((EastIndex != gridIndex) && grid[EastIndex]._building == grid[selectedNeighbor]._building && grid[EastIndex].ID != grid[selectedNeighbor].ID) {
-				if (matchCount < 2) {
+			if (grid[EastIndex].ID!=0 && grid[EastIndex]._building == grid[gridIndex]._building&& grid[EastIndex].ID != grid[gridIndex].ID) {
+				if (matchCount < 3) {
 					if(!HasID(matchedCells,matchCount,grid[EastIndex].ID)){
 						matchedCells[matchCount] = grid[EastIndex].ID;
 						matchCount++;
 					}
 				}
 			}
-			if ((SouthIndex != gridIndex) && grid[SouthIndex]._building == grid[selectedNeighbor]._building && grid[SouthIndex].ID != grid[selectedNeighbor].ID) {
-				if (matchCount < 2) {
+			if (grid[SouthIndex].ID != 0 && grid[SouthIndex]._building == grid[gridIndex]._building && grid[SouthIndex].ID != grid[gridIndex].ID) {
+				if (matchCount < 3) {
 					if(!HasID(matchedCells,matchCount,grid[SouthIndex].ID)){
 						matchedCells[matchCount] = grid[SouthIndex].ID;
 						matchCount++;
 					}
 				}
 			}
-			if ((WestIndex != gridIndex) && grid[WestIndex]._building == grid[selectedNeighbor]._building && grid[WestIndex].ID != grid[selectedNeighbor].ID) {
-				if (matchCount < 2) {
+			if (grid[WestIndex].ID != 0 && grid[WestIndex]._building == grid[gridIndex]._building && grid[WestIndex].ID != grid[gridIndex].ID) {
+				if (matchCount < 3) {
 					if(!HasID(matchedCells,matchCount,grid[WestIndex].ID)){
 						matchedCells[matchCount] = grid[WestIndex].ID;
 						matchCount++;
@@ -731,67 +691,112 @@ namespace GridManager {
 				}
 			}
 		}
+		if (matchCount == 2) {
+			//Now we check using the selected neighbor
+			int selectedNeighbor = GetIndexFromID(matchedCells[1]);
+			for(Vec2<int> cell : grid[selectedNeighbor]._building.buildingCells){
+				selectedNeighbor = GetIndex(cell);
+				int NorthIndex = selectedNeighbor - gridX;
+				int EastIndex = selectedNeighbor + 1;
+				int SouthIndex = selectedNeighbor + gridX;
+				int WestIndex = selectedNeighbor - 1;
+				//If it is not the cell you came from and the building types match
+				if ((NorthIndex != gridIndex) && grid[NorthIndex]._building == grid[selectedNeighbor]._building && grid[NorthIndex].ID != grid[selectedNeighbor].ID) {
+					if (matchCount < 3) {
+						if(!HasID(matchedCells,matchCount,grid[NorthIndex].ID)){
+							matchedCells[matchCount] = grid[NorthIndex].ID;
+							matchCount++;
+						}
+					}
+				}
+				if ((EastIndex != gridIndex) && grid[EastIndex]._building == grid[selectedNeighbor]._building && grid[EastIndex].ID != grid[selectedNeighbor].ID) {
+					if (matchCount < 3) {
+						if(!HasID(matchedCells,matchCount,grid[EastIndex].ID)){
+							matchedCells[matchCount] = grid[EastIndex].ID;
+							matchCount++;
+						}
+					}
+				}
+				if ((SouthIndex != gridIndex) && grid[SouthIndex]._building == grid[selectedNeighbor]._building && grid[SouthIndex].ID != grid[selectedNeighbor].ID) {
+					if (matchCount < 3) {
+						if(!HasID(matchedCells,matchCount,grid[SouthIndex].ID)){
+							matchedCells[matchCount] = grid[SouthIndex].ID;
+							matchCount++;
+						}
+					}
+				}
+				if ((WestIndex != gridIndex) && grid[WestIndex]._building == grid[selectedNeighbor]._building && grid[WestIndex].ID != grid[selectedNeighbor].ID) {
+					if (matchCount < 3) {
+						if(!HasID(matchedCells,matchCount,grid[WestIndex].ID)){
+							matchedCells[matchCount] = grid[WestIndex].ID;
+							matchCount++;
+						}
+					}
+				}
+			}
+		}
 		std::cout << "match count is " << matchCount << '\n';
 		//if more than 200 means it's lvl 3
-		if (matchCount == 2 && grid[gridIndex]._building.data.level < BuildingEnum::L3) {
-			for (int c : matchedCells) {
-				std::cout << "MATCH!\n"; 
-				int index = GetIndexFromID(c);
+		if (matchCount == 3 && grid[gridIndex]._building.data.level < BuildingEnum::L3) {
+			for(int i{0}; i< matchCount; ++i){
+				std::cout << "MATCH!\n" << "Match ID's : " << matchedCells[i] << '\n';
+				int index = GetIndexFromID(matchedCells[i]);
+				if(grid[index].ID == grid[gridIndex].ID){
+					std::cout << "CONTINUED!\n";
+					for(Vec2<int>cell : grid[gridIndex]._building.buildingCells){
+						grid[GetIndex(cell)]._building.LevelUp();
+					}
+					continue;
+				} 
 				// grid[c].ID = 0;
 				if(grid[index]._building.data.size != Vec2<int>{1,1}){
-					for(Vec2<int> cell : grid[index]._building.buildingCells){
-						std::cout << "Building Cells to destroy : " << cell <<'\n';
-						// grid[GetIndex(cell.x,cell.y)].ID = 0;
-						// grid[GetIndex(cell.x,cell.y)]._building =Building{};
+					std::vector<Vec2<int>> tempCells{grid[index]._building.buildingCells};
+					for(Vec2<int> cell : tempCells){
+						// std::cout << "Building Cells to destroy : " << cell <<", ID : " << matchedCells[i] <<'\n';
+						grid[GetIndex(cell.x,cell.y)].ID = 0;
+						grid[GetIndex(cell.x,cell.y)]._building =Building{};
 					}
 				}
 				else{
-					grid[index].ID =0;
+					grid[index].ID = 0;
 					grid[index]._building = Building{};
 				}
 			}
-			grid[gridIndex]._building.LevelUp();
 			//then we recurse and check again till no matches
 			CheckCellNeighbor(grid, cellIndex);
 		}
+		//NORTH
+		#if DEBUG
+		// std::cout << "Index : " << cellIndex.x << ", " << cellIndex.y << '\n';
+		// std::cout << "Selected : " << grid[gridIndex]._building.data.type << '\n';
+		// std::cout << "North : " << grid[NorthIndex]._building.data.type << '\n';
+		// std::cout << "East : " << grid[EastIndex]._building.data.type << '\n';
+		// std::cout << "South : " << grid[SouthIndex]._building.data.type << '\n';
+		// std::cout << "West : " << grid[WestIndex]._building.data.type << '\n';
+
+		std::cout << "Is N true? : " << (grid[NorthIndex].ID != 0 && grid[NorthIndex]._building == grid[gridIndex]._building&& grid[NorthIndex].ID != grid[gridIndex].ID) << '\n';
+		std::cout << "Is E true? : " << (grid[EastIndex].ID != 0 && grid[EastIndex]._building == grid[gridIndex]._building&& grid[EastIndex].ID != grid[gridIndex].ID) << '\n';
+		std::cout << "Is S true? : " << (grid[SouthIndex].ID != 0 && grid[SouthIndex]._building == grid[gridIndex]._building&& grid[SouthIndex].ID != grid[gridIndex].ID) << '\n';
+		std::cout << "Is W true? : " << (grid[WestIndex].ID != 0 && grid[WestIndex]._building == grid[gridIndex]._building&& grid[WestIndex].ID != grid[gridIndex].ID) << '\n';
+		#endif
+
 	}
 
-	// iso::cell& GetNeighbor(iso::cell*&grid,iso::vec2i indexToCheck, iso::vec2i selectedCell){
-	// 	int selectedIndex = GetIndex(selectedCell.x,selectedCell.y);	//The starting index
-	// 	int NorthIndex = GetIndex(indexToCheck.x,indexToCheck.y--);		
-	// 	std::cout << "Selected : " << selectedCell.x << ", " << selectedCell.y << '\n';
-	// 	std::cout << "North : " << indexToCheck.x << ", " << --indexToCheck.y << '\n';
-	// 	// std::cout << " og index : " << selectedIndex << " , north index : " << NorthIndex << '\n';
-	// 	//If the index I'm checking has a north neighbor and it's NOT the cell I came from
-	// 	if((NorthIndex >= 0) && (NorthIndex <= (gridX*gridY)) && (NorthIndex!=selectedIndex)){
-	// 		//if it's the same tile type, we want to keep track of it
-	// 		if(grid[NorthIndex].ID == grid[GetIndex(selectedCell.x,selectedCell.y)]._tileType) return grid[NorthIndex];
-	// 	}
-
-	// 	int EastIndex = GetIndex(indexToCheck.x++,indexToCheck.y);
-	// 	if((EastIndex >=0) && (EastIndex <= gridX*gridY) && (EastIndex!=selectedIndex)){
-	// 		if(grid[EastIndex].ID == grid[GetIndex(selectedCell.x,selectedCell.y)]._tileType) return grid[EastIndex];
-	// 	}
-
-	// 	int SouthIndex = GetIndex(indexToCheck.x,indexToCheck.y++);
-	// 	if((SouthIndex >=0) && (SouthIndex <= gridX*gridY) && (SouthIndex!=selectedIndex)){
-	// 		if(grid[SouthIndex].ID == grid[GetIndex(selectedCell.x,selectedCell.y)]._tileType) return grid[SouthIndex];
-	// 	}
-
-	// 	int WestIndex = GetIndex(indexToCheck.x--,indexToCheck.y);
-	// 	if((WestIndex >=0) && (WestIndex <= gridX*gridY) && (WestIndex!=selectedIndex)){
-	// 		if(grid[WestIndex].ID == grid[GetIndex(selectedCell.x,selectedCell.y)]._tileType) return grid[WestIndex];
-	// 	}
-	// 	return grid[selectedIndex];
-	// }
 	int GetIndex(int x, int y)
 	{
 		return x + gridX * y;
 	}
+	int GetIndex(Vec2<int> cell){
+		return cell.x + gridX * cell.y;
+	}
 	bool HasID(int* array, int count, int ID){
 		if(count < 0) return false;
+		std::cout << "Checking for ID: " << ID <<'\n';
 		for(int i{0}; i< count; ++i){
-			if(*(array+i)==ID) return true;
+			if(*(array+i)==ID) {
+				std::cout << "Has ID: " << *(array+i) << " == " << ID <<'\n';
+				return true;
+				}
 		}
 		return false;
 	}

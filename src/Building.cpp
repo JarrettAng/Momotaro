@@ -42,23 +42,26 @@ Building::Building(
 
 void Building::LevelUp()
 {
-	switch (data.level)
-	{
-	case BuildingEnum::L1:
-		data.level = BuildingEnum::L2;
-		data.TextureID = static_cast<TextureManager::TEX_TYPE>(data.TextureID + 1);
-		break;
-	case BuildingEnum::L2:
-		data.level = BuildingEnum::L3;
-		std::cout << data.TextureID << '\n';
-		data.TextureID = static_cast<TextureManager::TEX_TYPE>(data.TextureID + 1);
-		break;
-	case BuildingEnum::L3:
-		std::cerr << "Error : Building cannot be leveled up anymore! Building.cpp\n";
-		break;
-	default:
-		break;
-	}
+		switch (data.level)
+		{
+		case BuildingEnum::L1:
+			data.level = BuildingEnum::L2;
+			data.TextureID = static_cast<TextureManager::TEX_TYPE>(data.TextureID + 1);
+			break;
+		case BuildingEnum::L2:
+			data.level = BuildingEnum::L3;
+			std::cout << data.TextureID << '\n';
+			data.TextureID = static_cast<TextureManager::TEX_TYPE>(data.TextureID + 1);
+			break;
+		case BuildingEnum::L3:
+			std::cerr << "Error : Building cannot be leveled up anymore! Building.cpp\n";
+			break;
+		default:
+			break;
+		}
+	// for(Vec2<int> cell : buildingCells){
+	// 	// std::cout << "CALLED : " << cell << '\n';
+	// }
 }
 
 bool operator==(Building const &lhs, Building const &rhs)
