@@ -38,6 +38,7 @@ namespace TextureManager {
 		PAUSE_WINDOW,
 		PAUSE_BUTTON,
 		SPLASH_SCREEN,
+		SYNERGY,
 	};
 
 	struct TextureSheet {

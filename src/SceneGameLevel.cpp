@@ -20,6 +20,7 @@ The functions include:
 #include <BuildingManager.h>
 #include <InputManager.h>
 #include <CardManager.h>
+#include <UIManager.h>
 
 #include <SceneGameLevel.h>
 #include <ColorTable.h>
@@ -35,6 +36,9 @@ void SceneGameLevel::Load() {
 void SceneGameLevel::Initialize() {
 	PauseManager::Initialize();
 	CardManager::Initialize();
+
+	//ADDED
+	UIManager::Initialize();
 }
 
 void SceneGameLevel::Update() {
@@ -56,14 +60,17 @@ void SceneGameLevel::FixedUpdate() {
 void SceneGameLevel::Draw() {
 	AEGfxSetBackgroundColor(WATER);
 
+	//ADDED
+	UIManager::DrawUI();
+
 	//Make the grid
 	GridManager::PrepareTileRenderBatch();
 	CardManager::PrepareUIRenderBatch();
 	PauseManager::Draw();
 	ScoreManger::Draw();
+
 	//Debug
 	//printf("MinX %f\nMaxX %f\nMinY %f\nMaxY %f\n", AEGfxGetWinMinX(), AEGfxGetWinMaxX(), AEGfxGetWinMinY(), AEGfxGetWinMaxY);
-
 	//Add the pause button
 	//UIManager::AddRectToBatch(800.0f, -400.0f, 10.0f, 10.0f, 6 , AEGfxTexture * tex);
 

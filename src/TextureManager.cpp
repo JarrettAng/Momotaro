@@ -57,6 +57,7 @@ namespace TextureManager {
 	AEGfxTexture* pause_Tex;
 	AEGfxTexture* pauseButton_Tex;
 	AEGfxTexture* splash_Tex;
+	AEGfxTexture* synergy_Tex;
 
 	void Initialize() {
 		LoadTextures();
@@ -93,6 +94,7 @@ namespace TextureManager {
 		pause_Tex = AEGfxTextureLoad("Assets/GameWindow.png");
 		pauseButton_Tex = AEGfxTextureLoad("Assets/Pause_Button.png");
 		splash_Tex = AEGfxTextureLoad("Assets/SplashScreen.png");
+		synergy_Tex = AEGfxTextureLoad("Assets/synergyTex.png");
 	}
 
 	/*!***********************************************************************
@@ -278,6 +280,8 @@ namespace TextureManager {
 			return pauseButton_Tex;
 		case SPLASH_SCREEN:
 			return splash_Tex;
+		case SYNERGY:
+			return synergy_Tex;
 		default:
 			break;
 		}

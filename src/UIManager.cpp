@@ -1,13 +1,108 @@
-//#include "RenderSystem.h"
-//#include <iostream>
-//#include <string>
-//#include <InputManager.h>
-//#include <TextureManager.h>
-//#include <PauseManager.h>
-//#include <SceneManager.h>
-//
-//
-//namespace UIManager {
+#include "RenderSystem.h"
+#include <iostream>
+#include <string>
+#include <InputManager.h>
+#include <TextureManager.h>
+#include <PauseManager.h>
+#include <SceneManager.h>
+
+//ADDED
+#include "AEEngine.h"
+#include <UIManager.h>
+
+
+namespace UIManager {
+
+	//TRIAL---------------------------------------------------------------------------------------------------------------------
+	//INTEGRATE INTO SYSTEMS LATER-----------------------------------------------------------------------------------------------
+
+
+	AEGfxVertexList* pMesh = 0;
+	AEGfxTexture* pTex;
+
+	float height, width;
+
+	void Initialize() {
+
+		//Debugs--------------------
+		//std::cout << "INITIALIZED\n";
+
+		MakeMesh();
+		Texture();
+
+		height = 1.0f;
+		width = 1.0f;
+	}
+
+	void MakeMesh() {
+		
+
+		AEGfxMeshStart();
+
+		AEGfxTriAdd(0.0f,  0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
+					0.0f, -1.0f, 0xFFFFFFFF, 0.0f, height,
+					1.0f, -1.0f, 0xFFFFFFFF, width, height);
+
+		AEGfxTriAdd(1.0f, -1.0f, 0xFFFFFFFF, width, height,
+					1.0f,  0.0f, 0xFFFFFFFF, width, 0.0f,
+					0.0f,  0.0f, 0xFFFFFFFF, 0.0f, 0.0f);
+
+		pMesh = AEGfxMeshEnd();
+
+		//Debugs--------------------
+		//std::cout << "MESH MADE\n";
+	}
+
+	void Texture() {
+		pTex = AEGfxTextureLoad("Assets/synergyTex.png");
+		AE_ASSERT_MESG(pTex, "Failed to create texture!");
+
+		//Debugs--------------------
+		//std::cout << "TXT LOADED\n";
+	}
+
+	//TEST---------------------------
+	void DrawUI() {
+		// Tell the engine to get ready to draw something with texture.
+		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+
+		// Set the tint to white, so that the sprite can 
+		// display the full range of colors (default is black).
+		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+		// Set blend mode to AE_GFX_BM_BLEND
+		// This will allow transparency.
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		AEGfxSetTransparency(1.0f);
+
+		// Set the texture to pTex
+		AEGfxTextureSet(pTex, 0.5f, 0.5f);
+
+		// Create a scale matrix that scales by 100 x and y
+		AEMtx33 scale = { 0 };
+		AEMtx33Scale(&scale, 10.0f, 10.0f);
+
+		// Create a rotation matrix that rotates by 45 degrees
+		AEMtx33 rotate = { 0 };
+		AEMtx33Rot(&rotate, 0);
+
+		// Create a translation matrix that translates by
+		// 100 in the x-axis and 100 in the y-axis
+		AEMtx33 translate = { 0 };
+		AEMtx33Trans(&translate, 1.0f, 1.0f);
+
+		// Concatenate the matrices (TRS)
+		AEMtx33 transform = { 0 };
+		AEMtx33Concat(&transform, &rotate, &scale);
+		AEMtx33Concat(&transform, &translate, &transform);
+
+
+		AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
+
+
+		//Debugs--------------------
+		//std::cout << "DRAWING UI\n";
+	}
 //	/*!***********************************************************************
 //	* FONTS
 //	*************************************************************************/
@@ -195,7 +290,7 @@
 //		data.text.color = color;
 //		data.text.scale = scale;
 //	}
-//}
-//
-//
-//
+}
+
+
+

@@ -42,6 +42,7 @@ void SceneSplashscreen::Draw() {
 
 	RenderSystem::Render();
 
+	//Display the splash screen
 	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, 0, 0, 1500, 1500, TextureManager::SPLASH_SCREEN);
 
 }

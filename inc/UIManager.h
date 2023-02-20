@@ -1,9 +1,15 @@
-//#pragma once
-//#include <AEEngine.h>
-//#include <MomoMaths.h>
-//#include <string>
-//
-//namespace UIManager {
+#pragma once
+#include <AEEngine.h>
+#include <MomoMaths.h>
+#include <string>
+
+namespace UIManager {
+
+	void Initialize();
+	void Texture();
+	void MakeMesh();
+	void DrawUI();
+
 //	struct Transform {
 //		float x, y;
 //		float width, height;
@@ -81,5 +87,5 @@
 //	// Button with COLOR + text.
 //	void AddButtonToBatch(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, const Vec4<float>& btnColor = { 1.0f,1.0f,1.0f,1.0f }, const Vec3<float>& txtColor = { 1.0f,1.0f,1.0f });
 //	/*************************************************************************/
-//}
-//
+}
+
