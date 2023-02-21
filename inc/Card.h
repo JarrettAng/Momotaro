@@ -53,29 +53,17 @@ public:
 
 		switch (bData.type) {
 		case BuildingEnum::RESIDENTIAL:
-			color.w = 0.8f;
-			color.x = 0.9f;
-			color.y = 0.55f;
-			color.z = 1.0f;
+			color = COLOR_CARD_R;
 			break;
 		case BuildingEnum::COMMERCIAL:
-			color.w = 0.0f;
-			color.x = 0.65f;
-			color.y = 0.95f;
-			color.z = 1.0f;
+			color = COLOR_CARD_C;
 			break;
 		case BuildingEnum::INDUSTRIAL:
-			color.w = 0.95f;
-			color.x = 0.8f;
-			color.y = 0.35f;
-			color.z = 1.0f;
+			color = COLOR_CARD_I;
 			break;
 		}
 
-		borderColor.w = 0.0f;
-		borderColor.x = 0.0f;
-		borderColor.y = 0.0f;
-		borderColor.z = 1.0f;
+		borderColor = COLOR_CARD_BORDER;
 
 		// Set count to 1 (Cards constructed are the first of its kind
 		count = 1;

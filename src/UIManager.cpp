@@ -353,7 +353,8 @@ namespace UI {
 		}
 		else { // Case 2: Wrap the string around based on the max width
 			while (start < end) {
-				while (charWidth * (float)(cutoff - start + 1) > maxWidth) {
+				// Keep looping until the largest spacing index within the max-width is reached
+				while (charWidth * (float)(cutoff - start + 1) > maxWidth) { 
 					cutoff = text.find_last_of(" \n\t", cutoff - 1);
 					if (cutoff == std::string::npos) break;
 				}

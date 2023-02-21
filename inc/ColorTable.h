@@ -23,6 +23,7 @@
 #define COLOR_CARD_C {0.0f,0.65f, 0.95f, 1.0f}
 #define COLOR_CARD_I {0.95f,0.8f, 0.35f, 1.0f}
 #define COLOR_CARD_BORDER {0.0f, 0.0f, 0.0f, 1.0f}
+#define COLOR_CARD_BORDER_SELECTED {1.0f, 0.0f, 0.0f, 1.0f}
 
 /*!***********************************************************************
 * BASIC COLOR

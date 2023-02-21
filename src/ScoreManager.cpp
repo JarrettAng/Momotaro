@@ -44,7 +44,7 @@ namespace ScoreManger {
 		onScoreUpdate.Invoke();
 	}
 
-	void ScoreManger::Intialize() {
+	void ScoreManger::Initialize() {
 		IntializeLevels();
 	}
 

@@ -36,7 +36,7 @@ namespace BuildingManager {
 			}
 		}
 		// TODO: Error check
-		std::cerr << "BuildingManager ln39: TRIED TO GET INVALID BUILDING DATA OF TYPE " << type << ", SIZE " << size << ", LEVEL " << level << "\n";
+		std::cerr << "Error : " << __FILE__ << " ln" << __LINE__ << " TRIED TO GET INVALID BUILDING DATA OF TYPE " << type << ", SIZE " << size << ", LEVEL " << level << std::endl;
 
 		return buildingsData[0];
 	}
@@ -54,7 +54,7 @@ namespace BuildingManager {
 			}
 		}
 		// TODO: Error check
-		std::cerr << "BuildingManager ln57: TRIED TO GET (RANDOM) INVALID BUILDING DATA OF TYPE " << type << ", SIZE " << randSize << ", LEVEL " << randLevel << "\n";
+		std::cerr << "Error : " << __FILE__ << " ln" << __LINE__ << " TRIED TO GET (RANDOM) INVALID BUILDING DATA OF TYPE " << type << ", SIZE " << randSize << ", LEVEL " << randLevel << std::endl;
 
 		return buildingsData[0];
 	}
@@ -72,7 +72,7 @@ namespace BuildingManager {
 			}
 		}
 		// TODO: Error check
-		std::cerr << "BuildingManager ln75: TRIED TO GET (RANDOM) INVALID BUILDING DATA OF TYPE " << randType << ", SIZE " << randSize << ", LEVEL " << level << "\n";
+		std::cerr << "Error : " << __FILE__ << " ln" << __LINE__ << " TRIED TO GET (RANDOM) INVALID BUILDING DATA OF TYPE " << randType << ", SIZE " << randSize << ", LEVEL " << level << std::endl;
 
 		return buildingsData[0];
 	}

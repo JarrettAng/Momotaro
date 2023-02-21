@@ -94,6 +94,8 @@ namespace CardManager {
 		}
 	}
 
+
+
 	void DrawCard(BuildingEnum::TYPE type, BuildingEnum::LEVEL level) {
 		BuildingData buildingData = BuildingManager::GetBuildingData(type, Vec2<int>{1, 1}, level);
 		AddToHand(buildingData);
@@ -159,7 +161,26 @@ namespace CardManager {
 	}
 
 	void HandleClick() {
+		Vec2<float> mousePos = { (float)InputManager::GetMousePos().x - AEGfxGetWinMaxX(), -((float)InputManager::GetMousePos().y - AEGfxGetWinMaxY())};
+		Vec2<float> cardPos, cardSize;
+
 		// Check if any card clicked
-		Vec2<int> mousePos = InputManager::GetMousePos();
+		for (Card& card : hand) {
+			cardPos = { card.position.pos.x, card.position.pos.y };
+			cardSize = { card.position.size.x, card.position.size.y };
+
+			std::cout << "DEBUG 1: " << mousePos.x << " " << mousePos.y << "\n";
+			std::cout << "DEBUG 2: " << cardPos.x << " " << cardPos.y << "\n";
+			std::cout << "DEBUG 3: " << cardSize.x << " " << cardSize.y << "\n";
+
+			// If a card is clicked, update the selected card and border color
+			if (IsPointWithinRect(mousePos, cardPos, cardSize)) {
+				if (selectedCard) selectedCard->borderColor = COLOR_CARD_BORDER;
+
+				selectedCard = &card; // Selected card becomes the new card
+				selectedCard->borderColor = COLOR_CARD_BORDER_SELECTED;
+			}
+		}
+
 	}
 }

@@ -13,7 +13,6 @@ This header file declares
 #pragma once
 #include <iostream>
 
-
 template<class T>
 struct Vec2 {
 	T x;
@@ -23,6 +22,7 @@ struct Vec2 {
  	Vec2& operator-=(Vec2 const& rhs);
  	Vec2& operator*=(T  rhs);
 };
+
 template<class T>
 struct Vec3 {
 	T x;
@@ -35,6 +35,7 @@ struct Vec3 {
 	Vec3& operator-=(Vec3 const& rhs);
 	Vec3& operator*=(T  rhs);
 };
+
 template<class T>
 struct Vec4
 {
@@ -66,6 +67,7 @@ bool operator==(const Vec4<T>& lhs, const Vec4<T>& rhs)
 	}
 	return false;
 }
+
 /*!***********************************************************************
 \brief
 	Compare the equality of both Vector 3
@@ -77,6 +79,7 @@ bool operator==(const Vec3<T>& lhs, const Vec3<T>& rhs)
 {
 	return (lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z);
 }
+
 /*!***********************************************************************
 \brief
 	Compare the equality of both Vector 2
@@ -93,6 +96,7 @@ bool operator!=(const Vec2<T>& lhs, const Vec2<T>& rhs)
 {
 	return !(lhs.x == rhs.x && lhs.y == rhs.y);
 }
+
 /*============================================================================
 * OPERATOR OVER LOADS FOR VECTOR ADDITION
 */
@@ -144,6 +148,7 @@ Vec4<T> &Vec4<T>::operator+=(Vec4<T> const &rhs) //vec4+=vec4
 	z += rhs.z;
 	return* this;
 }
+
 //BINARY ADDITION
 template<class T>
 Vec2<T> operator+(Vec2<T> const& lhs, Vec2<T>const& rhs){	//vec2+vec2
@@ -199,6 +204,7 @@ Vec4<T> operator+(Vec4<T> const& lhs, Vec4<T>const& rhs){	//vec4+vec4
 	temp+=rhs;
 	return temp;
 } 
+
 /*============================================================================
 * OPERATOR OVER LOADS FOR VECTOR SUBTRACTION
 */
@@ -246,7 +252,6 @@ Vec4<T>& Vec4<T>::operator-=(Vec4<T>const& rhs) { //vec4-=vec4
 	z -= rhs.z;
 	return* this;
 }
-
 
 //BINARY SUBTRACTION
 template<class T>
@@ -332,7 +337,6 @@ Vec4<T> &Vec4<T>::operator*=(T rhs)
 	return *this;
 }
 
-
 template<class T>
 Vec2<T> operator*(Vec2<T> const& lhs, T rhs){
 	Vec2<T> temp{lhs};
@@ -357,7 +361,6 @@ Vec4<T> operator*(Vec4<T> const& lhs, T rhs){
 	temp.w*=rhs;
 	return temp;
 }
-
 
 /*============================================================================
 * OPERATOR OVER LOADS FOR VECTOR TO OUTPUT STREAM
@@ -390,4 +393,8 @@ inline std::ostream &operator<<(std::ostream &os, Vec4<T> const &rhs)
 	return os<<"(" << rhs.x << "," << rhs.y << "," << rhs.z << ","<< rhs.w <<")";
 }
 
-
+inline bool IsPointWithinRect(Vec2<float> point, Vec2<float> pos, Vec2<float> size) {
+	if (point.x < pos.x || point.x > pos.x + size.x ||
+		point.y < pos.y - size.y || point.y > pos.y) return false;
+	return true;
+}

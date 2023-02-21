@@ -25,7 +25,7 @@ namespace InputManager {
 		PRESSED,
 		D_CLICK
 	};
-	void Intialize();
+	void Initialize();
 	void Free();
 	void HandleInput();
 	Vec2<int> GetMousePos();

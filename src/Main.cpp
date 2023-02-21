@@ -34,13 +34,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AESysToggleFullScreen(true);
 
 	// Manager Initialization
-	InputManager::Intialize();
+	InputManager::Initialize();
 	FontManager::Initialize();
 	GridManager::Initialize();
-	ScoreManger::Intialize();
+	ScoreManger::Initialize();
 	TextureManager::Initialize();
 	RenderSystem::Initialize();
-	SceneManager::Initialize(SceneManager::SPLASHSCREEN);				// Game Loop happens in SceneManager
+	SceneManager::Initialize(SceneManager::SPLASHSCREEN);			// Game Loop happens in SceneManager
 
 	// Engine Exit
 	AESysExit();

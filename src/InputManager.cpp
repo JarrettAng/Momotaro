@@ -144,7 +144,7 @@ namespace InputManager {
 		std::cerr << "Error : " << __FILE__ << " ln" << __LINE__ << " KEY NOT FOUND IN DEQUE." << std::endl;
 	}
 
-	void InputManager::Intialize() {
+	void Initialize() {
 		SubscribeToKey(AEVK_LBUTTON, PRESSED, TryToDrag);
 		SubscribeToKey(AEVK_LBUTTON, RELEASED, StopDragging);
 	}
