@@ -36,8 +36,6 @@ void SceneGameLevel::Load() {
 void SceneGameLevel::Initialize() {
 	PauseManager::Initialize();
 	CardManager::Initialize();
-
-	//ADDED
 	//UIManager::Initialize();
 }
 
@@ -60,8 +58,7 @@ void SceneGameLevel::FixedUpdate() {
 void SceneGameLevel::Draw() {
 	AEGfxSetBackgroundColor(WATER);
 
-	//ADDED -causes error
-	//UIManager::Draw();
+	
 
 	//Make the grid
 	GridManager::PrepareTileRenderBatch();
@@ -73,7 +70,8 @@ void SceneGameLevel::Draw() {
 	//printf("MinX %f\nMaxX %f\nMinY %f\nMaxY %f\n", AEGfxGetWinMinX(), AEGfxGetWinMaxX(), AEGfxGetWinMinY(), AEGfxGetWinMaxY);
 	//Add the pause button
 	//UIManager::AddRectToBatch(800.0f, -400.0f, 10.0f, 10.0f, 6 , AEGfxTexture * tex);
-
+	//-causes error
+	//UIManager::Draw();
 
 	for (auto object : objects) {
 		// renderer.AddBatch(object->Render());
