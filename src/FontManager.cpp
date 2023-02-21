@@ -26,6 +26,7 @@ namespace FontManager {
 
 	void InitializeFont() {
 		roboto.type = ROBOTO;
+		roboto.XS = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 10);
 		roboto.S = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 20);
 		roboto.M = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 40);
 		roboto.L = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 60);

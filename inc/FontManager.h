@@ -10,6 +10,7 @@ namespace FontManager {
 
 	struct FONT {
 		FONT_TYPE type;
+		s8 XS;
 		s8 S;
 		s8 M;
 		s8 L;

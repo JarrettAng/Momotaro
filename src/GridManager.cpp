@@ -15,11 +15,11 @@ The functions include:
 
 #include <InputManager.h>
 #include <RenderSystem.h>
-
+#include <FontManager.h>
 #include <IsometricGrid.h>
 #include <iostream>
 #include <MomoMaths.h>
-
+#include <ColorTable.h>
 #include <GridManager.h>
 #include <PauseManager.h>
 
@@ -127,6 +127,7 @@ namespace GridManager {
 				if (((x >= (mapPos + 10)) && (x <= (mapPos + 10 + mapSize))) && (y >= (mapPos + 10) && y <= (mapPos + 10 + mapSize))) {
 					// grid[index].ID = iso::RESIDENTIAL;
 					grid[index].isRenderable = true;
+					
 					// std::cout << "y is " << y << " and iso is " << test.x<<'\n';
 				}
 				grid[index].ID = 0;
@@ -564,6 +565,20 @@ namespace GridManager {
 
 	void UpdateMouseToGrid() {
 		if (PauseManager::IsPaused()) return;
+		for(int y{0}; y< gridY; y++){
+			for(int x{0}; x<gridX; ++x){
+				Vec2<int> ScreenPos = iso::WorldIndexToScreenPos(x, y);
+				ScreenPos.y += (gridY * 50) / 2;		//move the grid up by half its size (20 units / 2 = 10)
+				RenderSystem::AddTextToBatch(
+					RenderSystem::UI_BATCH,
+					FontManager::GetFont(FontManager::ROBOTO).XS,
+					ScreenPos.x/AEGfxGetWinMaxX(),ScreenPos.y/AEGfxGetWinMaxY(),
+					std::to_string(x) + ", " + std::to_string(y),
+					COLOR_BLACK,
+					99
+					);
+			}
+		}
 	}
 
 	void storeClickData() {
