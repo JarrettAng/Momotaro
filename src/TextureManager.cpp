@@ -11,8 +11,7 @@ This source file declares
 **************************************************************************/
 
 #include <TextureManager.h>
-#include <iostream>
-#include <vector>
+
 
 namespace TextureManager {
 	/*!***********************************************************************

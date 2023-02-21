@@ -82,14 +82,14 @@ namespace PauseManager {
 			//"WINDOW"
 			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, -755, 750, 1500, 1500, TextureManager::PAUSE_WINDOW);
 			//TEXT
-			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, FontManager::GetFont(FontManager::ROBOTO).L, -0.1f, 0.0f, "PAUSED", { 0,0,0 });
+			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.1f, 0.0f, FontManager::GetFont(FontManager::ROBOTO), 60, "PAUSED", 0, { 0,0,0 });
 
 			//UNPAUSE
 
-			RenderSystem::AddButtonToBatch(RenderSystem::UI_BATCH, -250.0f, -50.0f, 30.0f, 30.0f, FontManager::GetFont(FontManager::ROBOTO).M, "CONTINUE", 0, { 1,1,1,1 }, { 0,0,0 });
+			RenderSystem::AddButtonToBatch(RenderSystem::UI_BATCH, -250.0f, -50.0f, 30.0f, 30.0f, FontManager::GetFont(FontManager::ROBOTO), 40, "CONTINUE", 0, { 1,1,1,1 }, { 0,0,0 });
 
 			//EXIT
-			RenderSystem::AddButtonToBatch(RenderSystem::UI_BATCH, 50.0f, -50.0f, 80.0f, 30.0f, FontManager::GetFont(FontManager::ROBOTO).M, "EXIT", 0, { 1,1,1,1 }, { 0,0,0 });
+			RenderSystem::AddButtonToBatch(RenderSystem::UI_BATCH, 50.0f, -50.0f, 80.0f, 30.0f, FontManager::GetFont(FontManager::ROBOTO), 40, "EXIT", 0, { 1,1,1,1 }, { 0,0,0 });
 
 			//Check if button is pressed
 			//InputManager::onButtonPressed.Subscribe(Free);

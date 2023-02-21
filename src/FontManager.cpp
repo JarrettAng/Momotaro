@@ -19,29 +19,24 @@ namespace FontManager {
 	* FONTS
 	*************************************************************************/
 	FONT roboto;
+	std::vector<FONT> fonts;
 
 	void FontManager::Initialize() {
 		InitializeFont();
 	}
 
 	void InitializeFont() {
-		roboto.type = ROBOTO;
-		roboto.XS = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 10);
-		roboto.S = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 20);
-		roboto.M = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 40);
-		roboto.L = AEGfxCreateFont("Assets/Roboto-Regular.ttf", 60);
+		fonts.push_back({ ROBOTO,  AEGfxCreateFont("Assets/Roboto-Regular.ttf", DEFAULT_FONT_SIZE) });
 	}
 
-	FONT GetFont(const FONT_TYPE& type) {
-		switch (type)
-		{
-		case ROBOTO:
-			return roboto;
-		default:
-			break;
+	s8 GetFont(const FONT_TYPE& type) {
+		for (const FONT& f : fonts) {
+			if (f.type == type) {
+				return f.font;
+			}
 		}
 		// Default font.
-		std::cout << "FONT TYPE INVALID, RETURN DEFAULT FONT.";
-		return roboto;
+		std::cerr << "Error : " << __FILE__ << " ln" << __LINE__ << " Font type invalid, returning font type roboto." << std::endl;
+		return roboto.font;
 	}
 }
