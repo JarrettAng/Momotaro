@@ -72,6 +72,8 @@ struct BuildingData {
 class Building : public virtual GameObject {
 	public:
 		BuildingData data;
+		std::vector<Vec2<int>> buildingCells;
+		std::vector<Vec2<int>> synergyAreaCells;
 		Building();
 		Building(BuildingData data);
 		Building(
@@ -83,7 +85,8 @@ class Building : public virtual GameObject {
 			std::string name, std::string desc,
 			TextureManager::TEX_TYPE TextureID);
 		void LevelUp();
-		std::vector<Vec2<int>> buildingCells;
+		bool HasCellInVector(std::vector<Vec2<int>> vectorToCheck,Vec2<int> cell);
+		void GetSynergyArea();
 
 };
 bool operator==(Building const& lhs,Building const& rhs);

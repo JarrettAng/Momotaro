@@ -169,14 +169,17 @@ namespace GridManager {
 	void SpawnBigResidential() {
 		//1x2
 		if (PauseManager::IsPaused()) return;
-		// ClearGrid();
+		ClearGrid();
 		Vec2<int> mousePos = InputManager::GetMousePos();
 		Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
-		// ChangeOrientation();
+		ChangeOrientation();
 		SetGridIndex(TestOrientation,BigResidentialLvl1.data,SelectedCell.x,SelectedCell.y);
-
+		grid[index]._building.GetSynergyArea();
+		for(Vec2<int> cell : grid[index]._building.synergyAreaCells){
+			grid[GetIndex(cell)].isRenderable = false;
+		}
 	}
 	void SpawnBigResidential3x1() {
 		//1x2
@@ -201,6 +204,10 @@ namespace GridManager {
 		grid[index].ID = ++buildingID;
 		grid[index]._building = ResidentialLvl1;
 		grid[index]._building.buildingCells.push_back(SelectedCell);
+		grid[index]._building.GetSynergyArea();
+		for(Vec2<int> cell : grid[index]._building.synergyAreaCells){
+			grid[GetIndex(cell)].isRenderable = false;
+		}
 		CheckCellNeighbor(grid, SelectedCell);
 
 		#if testVector
@@ -572,7 +579,7 @@ namespace GridManager {
 				RenderSystem::AddTextToBatch(
 					RenderSystem::UI_BATCH,
 					FontManager::GetFont(FontManager::ROBOTO).XS,
-					ScreenPos.x/AEGfxGetWinMaxX(),ScreenPos.y/AEGfxGetWinMaxY(),
+					(ScreenPos.x+25)/AEGfxGetWinMaxX(),(ScreenPos.y-75)/AEGfxGetWinMaxY(),
 					std::to_string(x) + ", " + std::to_string(y),
 					COLOR_BLACK,
 					99
