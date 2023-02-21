@@ -80,8 +80,8 @@ namespace ScoreManger {
 		// Use currLevel and score to draw.
 		std::string synergy = "SYNGERGY " + std::to_string(score);
 		std::string threshold = "/ " + std::to_string(GetThreshold(currLevel.level + 1));
-		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, FontManager::GetFont(FontManager::ROBOTO).M, -0.9f, 0.9f, synergy);
-		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, FontManager::GetFont(FontManager::ROBOTO).M, -0.6f, 0.9f, threshold);
+		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.9f, 0.9f, FontManager::GetFont(FontManager::ROBOTO), 40, synergy);
+		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.6f, 0.9f, FontManager::GetFont(FontManager::ROBOTO), 40, threshold);
 	}
 
 	Level GetCurrLevel() {

@@ -10,11 +10,7 @@ This source file declares
 
 **************************************************************************/
 
-#include<AEEngine.h>
 #include<RenderSystem.h>
-#include <iostream>
-#include <algorithm>
-#include <FontManager.h>
 
 namespace RenderSystem {
 
@@ -30,9 +26,9 @@ namespace RenderSystem {
 	void UpdateRenderTransformMtx(const int& x, const int& y, const AEVec2& scale, const float& rot = 0);
 
 	void AddRectToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& width, const float& height, const float& rot, const int& layer, const Vec4<float>& color, TextureManager::TEX_TYPE tex);
-	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, const int& layer, TextureManager::TEX_TYPE tex = TextureManager::NONE, const Vec4<float>& btnColor = { 1,1,1,1 }, const Vec3<float>& txtColor = { 1,1,1 });
+	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const int& fontSize, const std::string& text, const int& layer, TextureManager::TEX_TYPE tex = TextureManager::NONE, const Vec4<float>& btnColor = { 1,1,1,1 }, const Vec3<float>& txtColor = { 1,1,1 });
 
-	void RenderText(s8 fontID, std::string text, float x, float y, Vec3<float> color = { 1.0f,1.0f,1.0f });
+	void RenderText(float x, float y, s8 fontID, int fontSize, std::string text, Vec3<float> color = { 1.0f,1.0f,1.0f });
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, TextureManager::TEX_TYPE  tex);
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec4<float> color = { 1.0f,1.0f,1.0f,1.0f });
 
@@ -98,7 +94,7 @@ namespace RenderSystem {
 					break;
 				case TEXT:
 					// RENDER TEXT
-					RenderText(obj.text.fontID, const_cast<char*>(obj.text.text.c_str()), obj.text.pos.x, obj.text.pos.y, obj.text.color);
+					RenderText(obj.text.pos.x, obj.text.pos.y, obj.text.fontID, obj.text.fontSize, const_cast<char*>(obj.text.text.c_str()), obj.text.color);
 					break;
 				default:
 					break;
@@ -113,7 +109,7 @@ namespace RenderSystem {
 	\brief
 		Add text obj to batch.
 	*************************************************************************/
-	void AddTextToBatch(const BATCH_TYPE& id, const s8& font, const float& x, const float& y, std::string text, const Vec3<float>& color, const int& layer)
+	void AddTextToBatch(const BATCH_TYPE& id, const float& x, const float& y, const s8& font, const int& fontSize, std::string text, const int& layer, const Vec3<float>& color)
 	{
 		Renderable obj;
 		obj.type = TEXT;
@@ -124,6 +120,7 @@ namespace RenderSystem {
 
 		obj.text.pos = { x,y };
 		obj.text.color = color;
+		obj.text.fontSize = fontSize;
 
 		// Add to batch.
 		renderBatches[id].push_back(obj);
@@ -169,11 +166,11 @@ namespace RenderSystem {
 	/*!***********************************************************************
 	* OVERLOADED BUTTON FUNCTIONS
 	*************************************************************************/
-	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, TextureManager::TEX_TYPE tex, const int& layer, const Vec3<float>& txtColor) {
-		AddButtonToBatch(id, x, y, xPadding, yPadding, font, text, layer, tex, {}, txtColor);
+	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const int& fontSize, const std::string& text, TextureManager::TEX_TYPE tex, const int& layer, const Vec3<float>& txtColor) {
+		AddButtonToBatch(id, x, y, xPadding, yPadding, font, fontSize, text, layer, tex, {}, txtColor);
 	}
-	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, const int& layer, const Vec4<float>& btnColor, const Vec3<float>& txtColor) {
-		AddButtonToBatch(id, x, y, xPadding, yPadding, font, text, layer, TextureManager::NONE, btnColor, txtColor);
+	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const int& fontSize, const std::string& text, const int& layer, const Vec4<float>& btnColor, const Vec3<float>& txtColor) {
+		AddButtonToBatch(id, x, y, xPadding, yPadding, font, fontSize, text, layer, TextureManager::NONE, btnColor, txtColor);
 	}
 	/************************************************************************/
 
@@ -181,9 +178,9 @@ namespace RenderSystem {
 	\brief
 		Add button obj to batch.
 	*************************************************************************/
-	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, const int& layer, TextureManager::TEX_TYPE tex, const Vec4<float>& btnColor, const Vec3<float>& txtColor) {
+	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const int& fontSize, const std::string& text, const int& layer, TextureManager::TEX_TYPE tex, const Vec4<float>& btnColor, const Vec3<float>& txtColor) {
 		// Get text width and height based on text.
-		AEGfxGetPrintSize(font, const_cast<char*>(text.c_str()), 1, textWidth, textHeight);
+		AEGfxGetPrintSize(font, const_cast<char*>(text.c_str()), fontSize / FontManager::DEFAULT_FONT_SIZE, textWidth, textHeight);
 
 		// Get button width and height.
 		AEVec2 buttonSize = GetButtonSize(xPadding, yPadding);
@@ -201,7 +198,7 @@ namespace RenderSystem {
 		}
 
 		// Add text to batch.
-		AddTextToBatch(id, font, textPos.x, textPos.y, text, txtColor, layer);
+		AddTextToBatch(id, textPos.x, textPos.y, font, fontSize, text, layer, txtColor);
 	}
 
 	/*!***********************************************************************
@@ -226,10 +223,11 @@ namespace RenderSystem {
 	/*!***********************************************************************
 	\brief
 		Render text on screen.
+			- Font start to get blurry after font size 100.
 	*************************************************************************/
-	void RenderText(s8 fontID, std::string text, float x, float y, Vec3<float> color) {
+	void RenderText(float x, float y, s8 fontID, int fontSize, std::string text, Vec3<float> color) {
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		AEGfxPrint(fontID, const_cast<char*>(text.c_str()), x, y, 1, color.x, color.y, color.z);
+		AEGfxPrint(fontID, const_cast<char*>(text.c_str()), x, y, fontSize / FontManager::DEFAULT_FONT_SIZE, color.x, color.y, color.z);
 	}
 
 	/*!***********************************************************************
@@ -339,7 +337,7 @@ namespace RenderSystem {
 		default:
 			break;
 		}
-		std::cout << "UNABLE TO GET PIVOT POS";
+		std::cerr << "Error : " << __FILE__ << " ln" << __LINE__ << " UNABLE TO GET PIVOT POS" << std::endl;
 		return pos;
 	}
 }

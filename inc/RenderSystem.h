@@ -17,6 +17,9 @@ This header file declares
 #include <MomoMaths.h>
 #include <string>
 #include <TextureManager.h>
+#include <iostream>
+#include <algorithm>
+#include <FontManager.h>
 
 namespace RenderSystem {
 
@@ -70,6 +73,7 @@ namespace RenderSystem {
 
 	struct Text {
 		s8 fontID;
+		int fontSize;
 		AEVec2 pos{};
 		std::string text;
 		Vec3<float> color;
@@ -101,7 +105,7 @@ namespace RenderSystem {
 	/*!***********************************************************************
 	* TEXT RENDERING
 	*************************************************************************/
-	void AddTextToBatch(const BATCH_TYPE& id, const s8& font, const float& x, const float& y, std::string text, const Vec3<float>& color = { 1,1,1 }, const int& layer = 0);
+	void AddTextToBatch(const BATCH_TYPE& id, const float& x, const float& y, const s8& font, const int& fontSize, std::string text, const int& layer = 0, const Vec3<float>& color = { 1,1,1 });
 	/*************************************************************************/
 
 	/*!***********************************************************************
@@ -117,9 +121,9 @@ namespace RenderSystem {
 	* BUTTON RENDERING (RECT + TEXT IN MIDDLE OF RECT)
 	*************************************************************************/
 	// Button with TEXTURE + text.
-	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, TextureManager::TEX_TYPE tex, const int& layer = 0, const Vec3<float>& txtColor = { 1.0f,1.0f,1.0f });
+	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const int& fontSize, const std::string& text, TextureManager::TEX_TYPE tex, const int& layer = 0, const Vec3<float>& txtColor = { 1.0f,1.0f,1.0f });
 	// Button with COLOR + text.
-	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const std::string& text, const int& layer = 0, const Vec4<float>& btnColor = { 1.0f,1.0f,1.0f,1.0f }, const Vec3<float>& txtColor = { 1.0f,1.0f,1.0f });
+	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const int& fontSize, const std::string& text, const int& layer = 0, const Vec4<float>& btnColor = { 1.0f,1.0f,1.0f,1.0f }, const Vec3<float>& txtColor = { 1.0f,1.0f,1.0f });
 	/*************************************************************************/
 }
 

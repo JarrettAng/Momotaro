@@ -15,6 +15,7 @@ This header file declares
 #include <MomoMaths.h>
 #include <EventSystem.h>
 #include <AEEngine.h>
+#include <deque>
 
 namespace InputManager {
 

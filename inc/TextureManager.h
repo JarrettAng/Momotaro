@@ -15,6 +15,8 @@ The functions include:
 #pragma once
 
 #include <AEEngine.h>
+#include <iostream>
+#include <vector>
 
 namespace TextureManager {
 	enum TEX_TYPE {
