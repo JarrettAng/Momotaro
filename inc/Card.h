@@ -86,8 +86,8 @@ public:
 
 	void UpdateComponentPositions() {
 		// Load name data based on position
-		Vec2<float> nameTextPos{position.pos.x + position.size.x * 0.05f, position.pos.y - position.size.y * 0.75f};
-		nameText = UI::TextBox(nameTextPos, bData.name, position.size.x * 0.9f);
+		Vec2<float> nameTextPos{position.pos.x + position.size.x * 0.1f, position.pos.y - position.size.y * 0.75f};
+		nameText = UI::TextBox(nameTextPos, bData.name, UI::CENTER_JUSTIFY, position.size.x * 0.8f, 15.0f);
 
 		// Load desc data based on position
 		descTextPos.pos.x = position.pos.x;

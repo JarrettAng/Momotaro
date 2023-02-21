@@ -313,23 +313,43 @@ namespace UI {
 	TextBox::TextBox() {
 		transform = RenderSystem::Transform();
 		maxWidth = 500;
+		fontSize = 20;
+		alignment = LEFT_JUSTIFY;
 	}
 
-	TextBox::TextBox(Vec2<float> screenPos, std::string text, float _maxWidth) {
-		AEGfxGetPrintSize(FontManager::GetFont(FontManager::ROBOTO).S, const_cast<char*>(text.c_str()), 1, transform.size.x, transform.size.y);
-		// Normalize the position
+	TextBox::TextBox(Vec2<float> screenPos, std::string text, TextBoxAlignment _alignment, float _maxWidth, float _fontSize) {
+		// Set the size of the text (normalized already)
+		AEGfxGetPrintSize(FontManager::GetFont(FontManager::ROBOTO), const_cast<char*>(text.c_str()), _fontSize / FontManager::DEFAULT_FONT_SIZE, transform.size.x, transform.size.y);
+
+		// Normalize the positions (0 - 1)
 		transform.pos.x = screenPos.x / AEGfxGetWinMaxX();
 		transform.pos.y = screenPos.y / AEGfxGetWinMaxY();
+		
+		fontSize = _fontSize;								// How big the font should be (XX/100)
+		maxWidth = _maxWidth / AEGfxGetWinMaxX();			// Max width before wrapping the text
+		float charWidth = transform.size.x / text.size();	// The x-length of each character
+		alignment = _alignment;								// Set the current alignment of the texts (Left, center, right)
 
-		// Max width before wrapping the text
-		maxWidth = _maxWidth / AEGfxGetWinMaxX();
-		float charWidth = transform.size.x / text.size();
+		Vec2<float> currPos;								// The render pos of each line of text
 
-		size_t start = 0, end = text.size(), cutoff = text.find_last_of(" \n\t");
+		size_t start = 0, end = text.size(), cutoff = text.find_last_of(" \n\t"); // Pointers to the different parts of the string
 
 		// Case 1: string fits max width, add to texts then finish
 		if (charWidth * (float)(end - start + 1) < maxWidth) {
-			texts.push_back(text);
+			switch (alignment) { // Set the x-pos of the text based on the current alignment
+				case LEFT_JUSTIFY:
+				currPos.x = transform.pos.x;
+				break;
+				case CENTER_JUSTIFY:
+				currPos.x = transform.pos.x + (maxWidth / 2.0f) - (charWidth * (end - start + 1) * 0.5f);
+				break;
+				case RIGHT_JUSTIFY:
+				currPos.x = transform.pos.x + maxWidth - (charWidth * (end - start + 1));
+				break;
+			}
+			currPos.y = transform.pos.y;
+
+			texts.emplace_back(text, currPos);
 		}
 		else { // Case 2: Wrap the string around based on the max width
 			while (start < end) {
@@ -338,7 +358,20 @@ namespace UI {
 					if (cutoff == std::string::npos) break;
 				}
 
-				texts.push_back(text.substr(start, cutoff - start));
+				switch (alignment) { // Set the x-pos of the text based on the current alignment
+				case LEFT_JUSTIFY:
+					currPos.x = transform.pos.x;
+					break;
+				case CENTER_JUSTIFY:
+					currPos.x = transform.pos.x + (maxWidth / 2.0f) - (charWidth * (cutoff - start + 1) * 0.5f);
+					break;
+				case RIGHT_JUSTIFY:
+					currPos.x = transform.pos.x + maxWidth - (charWidth * (cutoff - start + 1));
+					break;
+				}
+				currPos.y = transform.pos.y - texts.size() * transform.size.y * 1.25f;
+
+				texts.emplace_back(text.substr(start, cutoff - start), currPos);
 				start = cutoff == std::string::npos ? cutoff : cutoff + 1;
 				cutoff = end;
 			}
@@ -351,8 +384,8 @@ namespace UI {
 
 	void TextBox::Render() {
 		for (size_t index = 0; index < texts.size(); ++index) {
-			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, FontManager::GetFont(FontManager::ROBOTO).S, 
-						  transform.pos.x, transform.pos.y - transform.size.y * index, texts[index], COLOR_BLACK, 4);
+			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, texts[index].pos.x, texts[index].pos.y,
+										 FontManager::GetFont(FontManager::ROBOTO), fontSize, texts[index].text, 4, COLOR_BLACK);
 		}
 	}
 }

@@ -89,6 +89,8 @@ namespace CardManager {
 			// Drawing of the card count at the top right corner of the card
 			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.countIconPos.pos.x, card.countIconPos.pos.y, card.countIconPos.size.x, card.countIconPos.size.y, { 1,1,1,1 }, 4);
 			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, card.countTextPos.pos.x, card.countTextPos.pos.y, FontManager::GetFont(FontManager::ROBOTO), 20, card.countText, 4, COLOR_BLACK);
+
+			card.nameText.Render();
 		}
 	}
 

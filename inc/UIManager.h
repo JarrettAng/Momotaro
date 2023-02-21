@@ -97,18 +97,35 @@
 
 #include <RenderSystem.h>
 
+namespace {
+	struct TextBoxLineData {
+		std::string text;
+		Vec2<float> pos;
+
+		TextBoxLineData(std::string _text, Vec2<float> _pos) : text(_text), pos(_pos) {}
+	};
+}
+
 namespace UI {
+	enum TextBoxAlignment {
+		LEFT_JUSTIFY,
+		CENTER_JUSTIFY,
+		RIGHT_JUSTIFY
+	};
+
 	class TextBox {
 	public:
 		TextBox();
-		TextBox(Vec2<float> screenPos, std::string text, float maxWidth);
+		TextBox(Vec2<float> screenPos, std::string text, TextBoxAlignment alignment, float maxWidth, float fontSize);
 
 		const RenderSystem::Transform& GetPos() const;
 		void Render();
 
 	private:
 		RenderSystem::Transform transform;
-		std::vector<std::string> texts;
+		std::vector<TextBoxLineData> texts;
+		TextBoxAlignment alignment;
 		float maxWidth;
+		float fontSize;
 	};
 }
