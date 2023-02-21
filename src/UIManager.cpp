@@ -304,5 +304,55 @@
 //	}
 //}
 
+#include <UIManager.h>
+#include <FontManager.h>
+#include <ColorTable.h>
+#include <MomoMaths.h>
 
+namespace UI {
+	TextBox::TextBox() {
+		transform = RenderSystem::Transform();
+		maxWidth = 500;
+	}
 
+	TextBox::TextBox(Vec2<float> screenPos, std::string text, float _maxWidth) {
+		AEGfxGetPrintSize(FontManager::GetFont(FontManager::ROBOTO).S, const_cast<char*>(text.c_str()), 1, transform.size.x, transform.size.y);
+		// Normalize the position
+		transform.pos.x = screenPos.x / AEGfxGetWinMaxX();
+		transform.pos.y = screenPos.y / AEGfxGetWinMaxY();
+
+		// Max width before wrapping the text
+		maxWidth = _maxWidth / AEGfxGetWinMaxX();
+		float charWidth = transform.size.x / text.size();
+
+		size_t start = 0, end = text.size(), cutoff = text.find_last_of(" \n\t");
+
+		// Case 1: string fits max width, add to texts then finish
+		if (charWidth * (float)(end - start + 1) < maxWidth) {
+			texts.push_back(text);
+		}
+		else { // Case 2: Wrap the string around based on the max width
+			while (start < end) {
+				while (charWidth * (float)(cutoff - start + 1) > maxWidth) {
+					cutoff = text.find_last_of(" \n\t", cutoff - 1);
+					if (cutoff == std::string::npos) break;
+				}
+
+				texts.push_back(text.substr(start, cutoff - start));
+				start = cutoff == std::string::npos ? cutoff : cutoff + 1;
+				cutoff = end;
+			}
+		}
+	}
+
+	const RenderSystem::Transform& TextBox::GetPos() const {
+		return transform;
+	}
+
+	void TextBox::Render() {
+		for (size_t index = 0; index < texts.size(); ++index) {
+			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, FontManager::GetFont(FontManager::ROBOTO).S, 
+						  transform.pos.x, transform.pos.y - transform.size.y * index, texts[index], COLOR_BLACK, 4);
+		}
+	}
+}

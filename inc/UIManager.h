@@ -90,3 +90,25 @@
 //	/*************************************************************************/
 //}
 
+#pragma once
+
+#include <string>
+#include <vector>
+
+#include <RenderSystem.h>
+
+namespace UI {
+	class TextBox {
+	public:
+		TextBox();
+		TextBox(Vec2<float> screenPos, std::string text, float maxWidth);
+
+		const RenderSystem::Transform& GetPos() const;
+		void Render();
+
+	private:
+		RenderSystem::Transform transform;
+		std::vector<std::string> texts;
+		float maxWidth;
+	};
+}

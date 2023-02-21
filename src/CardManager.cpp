@@ -17,6 +17,7 @@ The functions include:
 #include <CardManager.h>
 #include <InputManager.h>
 #include <FontManager.h>
+#include <UIManager.h>
 
 #include <ColorTable.h>
 #include <Card.h>
@@ -25,13 +26,13 @@ The functions include:
 
 namespace CardManager {
 	int startingHandSize;
-	std::vector<Card> hand;						// Data on rendering for current cards held
+	std::vector<Card> hand;							// Data on rendering for current cards held
 
 	RenderSystem::Transform cardPositionTemplate;	// Rendering data for a generic card
 	RenderSystem::Transform handBackground;			// Rendering data for the hand background
-	int cardSpacing;							// Spacing between cards in hand
+	int cardSpacing;								// Spacing between cards in hand
 
-	Card* selectedCard;							// Pointer to the current card selected by player
+	Card* selectedCard;								// Pointer to the current card selected by player
 
 #pragma region Forward Declarations
 	void AddToHand(BuildingData cardData);
@@ -83,11 +84,15 @@ namespace CardManager {
 			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.position.pos.x + card.position.size.x * 0.05f, card.position.pos.y - card.position.size.y * 0.035f, card.position.size.x * 0.9f, card.position.size.y * 0.925f, card.color, 2);
 
 			// Drawing the building icon of the card
-			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.iconPos.pos.x, card.iconPos.pos.y, card.iconPos.size.x, card.iconPos.size.y, (TextureManager::TEX_TYPE)(card.bData.type * BuildingEnum::LEVEL_LENGTH + card.bData.level), 3);
+			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.iconPos.pos.x, card.iconPos.pos.y, card.iconPos.size.x, card.iconPos.size.y, card.bData.TextureID, 3);
 
 			// Drawing of the card count at the top right corner of the card
 			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.countIconPos.pos.x, card.countIconPos.pos.y, card.countIconPos.size.x, card.countIconPos.size.y, { 1,1,1,1 }, 4);
 			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, FontManager::GetFont(FontManager::ROBOTO).S, card.countTextPos.pos.x, card.countTextPos.pos.y, card.countText, COLOR_BLACK, 4);
+
+			// Draw the name of the card
+			//RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, FontManager::GetFont(FontManager::ROBOTO).S, card.nameTextPos.pos.x, card.nameTextPos.pos.y, card.bData.name, COLOR_BLACK, 4);
+			card.nameText.Render();
 		}
 	}
 

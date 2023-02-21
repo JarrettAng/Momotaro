@@ -19,6 +19,7 @@ Updates the rendering positions of the card elements, usually when the hand size
 
 #pragma once
 
+#include <UIManager.h>
 #include <CardManager.h>
 #include <Building.h>
 
@@ -34,8 +35,8 @@ public:
 	RenderSystem::Transform countTextPos;
 	RenderSystem::Transform countIconPos;
 
-	RenderSystem::Transform namePos;
-	RenderSystem::Transform descPos;
+	UI::TextBox nameText;
+	RenderSystem::Transform descTextPos;
 
 	BuildingData bData;
 
@@ -85,12 +86,12 @@ public:
 
 	void UpdateComponentPositions() {
 		// Load name data based on position
-		namePos.pos.x = position.pos.x;
-		namePos.pos.y = position.pos.y;
+		Vec2<float> nameTextPos{position.pos.x + position.size.x * 0.05f, position.pos.y - position.size.y * 0.75f};
+		nameText = UI::TextBox(nameTextPos, bData.name, position.size.x * 0.9f);
 
 		// Load desc data based on position
-		descPos.pos.x = position.pos.x;
-		descPos.pos.y = namePos.pos.y + position.size.y * 0.1f;
+		descTextPos.pos.x = position.pos.x;
+		descTextPos.pos.y = nameText.GetPos().pos.y + position.size.y * 0.1f;
 
 		// Load icon data based on position
 		iconPos.size.x = position.size.x * 1.5f;
