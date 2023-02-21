@@ -38,7 +38,7 @@ void SceneGameLevel::Initialize() {
 	CardManager::Initialize();
 
 	//ADDED
-	UIManager::Initialize();
+	//UIManager::Initialize();
 }
 
 void SceneGameLevel::Update() {
@@ -60,8 +60,8 @@ void SceneGameLevel::FixedUpdate() {
 void SceneGameLevel::Draw() {
 	AEGfxSetBackgroundColor(WATER);
 
-	//ADDED
-	UIManager::DrawUI();
+	//ADDED -causes error
+	//UIManager::Draw();
 
 	//Make the grid
 	GridManager::PrepareTileRenderBatch();

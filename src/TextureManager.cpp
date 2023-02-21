@@ -56,6 +56,8 @@ namespace TextureManager {
 	AEGfxTexture* card_Tex;
 	AEGfxTexture* pause_Tex;
 	AEGfxTexture* pauseButton_Tex;
+
+	//IN PROGRESS
 	AEGfxTexture* splash_Tex;
 	AEGfxTexture* synergy_Tex;
 
@@ -93,6 +95,8 @@ namespace TextureManager {
 		card_Tex = AEGfxTextureLoad("Assets/Card.png");
 		pause_Tex = AEGfxTextureLoad("Assets/GameWindow.png");
 		pauseButton_Tex = AEGfxTextureLoad("Assets/Pause_Button.png");
+
+		//IN PROGRESS
 		splash_Tex = AEGfxTextureLoad("Assets/SplashScreen.png");
 		synergy_Tex = AEGfxTextureLoad("Assets/synergyTex.png");
 	}

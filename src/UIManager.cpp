@@ -103,6 +103,18 @@ namespace UIManager {
 		//Debugs--------------------
 		//std::cout << "DRAWING UI\n";
 	}
+
+	void Draw() {
+
+		RenderSystem::AddRectToBatch(
+			RenderSystem::UI_BATCH,
+			10.0f, 10.0f,
+			100.0f, 100.0f, 
+			TextureManager::SYNERGY, 
+			0, 0
+		);
+	}
+
 //	/*!***********************************************************************
 //	* FONTS
 //	*************************************************************************/

@@ -9,6 +9,7 @@ namespace UIManager {
 	void Texture();
 	void MakeMesh();
 	void DrawUI();
+	void Draw();
 
 //	struct Transform {
 //		float x, y;

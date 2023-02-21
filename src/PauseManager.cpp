@@ -80,7 +80,7 @@ namespace PauseManager {
 
 		if (isPaused) {
 			//"WINDOW"
-			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, -780, 750, 1500, 1500, TextureManager::PAUSE_WINDOW);
+			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, -755, 750, 1500, 1500, TextureManager::PAUSE_WINDOW);
 			//TEXT
 			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, FontManager::GetFont(FontManager::ROBOTO).L, -0.1f, 0.0f, "PAUSED", { 0,0,0 });
 
