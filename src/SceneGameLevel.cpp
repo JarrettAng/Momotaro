@@ -43,6 +43,7 @@ void SceneGameLevel::Update() {
 	GridManager::UpdateMouseToGrid();
 	PauseManager::Update();
 	TextureManager::Update();
+	CardManager::Update();
 
 	for (auto object : objects) {
 		object->Update();
@@ -57,8 +58,6 @@ void SceneGameLevel::FixedUpdate() {
 
 void SceneGameLevel::Draw() {
 	AEGfxSetBackgroundColor(WATER);
-
-	
 
 	//Make the grid
 	GridManager::PrepareTileRenderBatch();
@@ -83,7 +82,7 @@ void SceneGameLevel::Draw() {
 void SceneGameLevel::Free() {
 	PauseManager::Free();
 	InputManager::Free();
-	// CardManager::Free();
+	CardManager::Free();
 
 	for (auto object : objects) {
 		object->Destroy();
@@ -93,7 +92,7 @@ void SceneGameLevel::Free() {
 }
 
 void SceneGameLevel::Unload() {
-	// BuildingManager::Clear();
+	BuildingManager::Clear();
 }
 
 void SceneGameLevel::AddObject(GameObject* newObject) {

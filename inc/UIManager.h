@@ -116,7 +116,7 @@ namespace UI {
 	class TextBox {
 	public:
 		TextBox();
-		TextBox(Vec2<float> screenPos, std::string text, TextBoxAlignment alignment, float maxWidth, float fontSize);
+		TextBox(Vec2<float> screenPos, std::string text, TextBoxAlignment alignment, float maxWidth, float fontSize, Vec3<float> color);
 
 		const RenderSystem::Transform& GetPos() const;
 		void Render();
@@ -127,5 +127,6 @@ namespace UI {
 		TextBoxAlignment alignment;
 		float maxWidth;
 		float fontSize;
+		Vec3<float> color;
 	};
 }

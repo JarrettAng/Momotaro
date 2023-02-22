@@ -12,7 +12,7 @@ The functions include:
 -
 **************************************************************************/
 
-#include <vector>
+#include <algorithm>
 
 #include <CardManager.h>
 #include <InputManager.h>
@@ -20,9 +20,88 @@ The functions include:
 #include <UIManager.h>
 
 #include <ColorTable.h>
-#include <Card.h>
 
 #include <iostream>
+
+namespace CardManager {
+	bool ScoreCompare(SynergyInfo lhs, SynergyInfo rhs) {
+		return lhs.score > rhs.score;
+	}
+
+	InfoBox::InfoBox() {
+		arrowPos = transform = RenderSystem::Transform();
+
+		transform.size.x = AEGfxGetWinMaxX() * 0.5f;
+		transform.size.y = AEGfxGetWinMaxY() * 0.5f;
+		arrowPos.size.x = arrowPos.size.y = transform.size.y * 0.1f;
+		headerLine.size.x = transform.size.x * 0.8f;
+		headerLine.size.y = transform.size.y * 0.01f;
+
+		color = COLOR_CARD_BACKGROUND;
+	}
+
+	void InfoBox::Render() {
+		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, transform.pos.x, transform.pos.y, transform.size.x, transform.size.y, color, 0);
+		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, arrowPos.pos.x, arrowPos.pos.y, arrowPos.size.x, arrowPos.size.y, color, 0);
+		name.Render();
+		desc.Render();
+		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, headerLine.pos.x, headerLine.pos.y, headerLine.size.x, headerLine.size.y, COLOR_BOX_HEADERLINE, 0);
+		for (UI::TextBox& sName : sNames) {
+			sName.Render();
+		}
+		for (UI::TextBox& sScore : sScores) {
+			sScore.Render();
+		}
+	}
+
+	void InfoBox::UpdateInfo(Vec2<float> cardPos_TopCenter, const Card *hoveredCard) {
+		// Update background & arrow pos
+		arrowPos.pos.x = cardPos_TopCenter.x - arrowPos.size.x * 0.5f;
+		arrowPos.pos.y = cardPos_TopCenter.y + arrowPos.size.y * 1.2f;
+
+		transform.pos.x = cardPos_TopCenter.x - transform.size.x * 0.5f;
+		transform.pos.y = arrowPos.pos.y + transform.size.y;
+
+		// Update name text and pos
+		Vec2<float> textPos{ transform.pos.x, transform.pos.y - transform.size.y * 0.1f };
+		name = UI::TextBox(textPos, hoveredCard->bData.name, UI::CENTER_JUSTIFY, transform.size.x, 20.0f, COLOR_WHITE);
+
+		// Update desc text and pos
+		textPos.y -= transform.size.y * 0.1f;
+		desc = UI::TextBox(textPos, hoveredCard->bData.desc, UI::CENTER_JUSTIFY, transform.size.x, 15.0f, COLOR_WHITE);
+
+		// Update header divider pos
+		textPos.y -= transform.size.y * 0.03f;
+		headerLine.pos.x = textPos.x + (transform.size.x - headerLine.size.x) * 0.5f;
+		headerLine.pos.y = textPos.y;
+
+		// Update synergy text and pos
+		sNames.clear();
+		sScores.clear();
+		// First order the list based on the synergy points
+		std::vector<SynergyInfo> sData;
+		sData.push_back(SynergyInfo(hoveredCard->bData.SynergyResidential, "Residential: ", COLOR_BOX_R));
+		sData.push_back(SynergyInfo(hoveredCard->bData.SynergyCommercial, "Commerical: ", COLOR_BOX_C));
+		sData.push_back(SynergyInfo(hoveredCard->bData.SynergyIndustrial, "Industrial: ", COLOR_BOX_I));
+		sData.push_back(SynergyInfo(hoveredCard->bData.SynergyNature, "Nature: ", COLOR_BOX_N));
+		std::sort(sData.begin(), sData.end(), ScoreCompare);
+
+		for (SynergyInfo& sDataElement : sData) {
+			textPos.y -= transform.size.y * 0.15f;
+			sNames.push_back(UI::TextBox({ textPos.x + transform.size.x * 0.1f, textPos.y }, sDataElement.name, UI::RIGHT_JUSTIFY, transform.size.x * 0.5f, 20.0f, sDataElement.color));
+			if (sDataElement.score > 0) {
+				sDataElement.color = COLOR_BOX_POSITIVE;
+			}
+			else if (sDataElement.score < 0) {
+				sDataElement.color = COLOR_BOX_NEGATIVE;
+			}
+			else {
+				sDataElement.color = COLOR_BOX_NEUTRAL;
+			}
+			sNames.push_back(UI::TextBox({ textPos.x + transform.size.x * 0.6f, textPos.y }, std::to_string(sDataElement.score), UI::LEFT_JUSTIFY, transform.size.x * 0.4f, 20.0f, sDataElement.color));
+		}
+	}
+}
 
 namespace CardManager {
 	int startingHandSize;
@@ -31,8 +110,14 @@ namespace CardManager {
 	RenderSystem::Transform cardPositionTemplate;	// Rendering data for a generic card
 	RenderSystem::Transform handBackground;			// Rendering data for the hand background
 	int cardSpacing;								// Spacing between cards in hand
+	InfoBox cardInfoBox;							// Displays full card information for the selected card
 
-	Card* selectedCard;								// Pointer to the current card selected by player
+	Card* selectedCard;								// Pointer to the current card selected by the player
+
+	Card* hoveredCard;								// Pointer to the current card hovered over by the player
+	float hoverTimeShowThreshold;					// How long the player needs to hover over a card to trigger the box info
+	float hoverTimeHideThreshold;					// How long the player needs to NOT hover over a card to hide the box info
+	float hoverTimeElapsed;							// How long the player is currently hovering over a card for
 
 #pragma region Forward Declarations
 	void AddToHand(BuildingData cardData);
@@ -58,6 +143,12 @@ namespace CardManager {
 		cardPositionTemplate.size.x = cardPositionTemplate.size.y * 0.75f;
 		cardPositionTemplate.pos.y = handBackground.pos.y - (handBackground.size.y - cardPositionTemplate.size.y) / 2.0f;
 
+		// Initialize card information box
+		cardInfoBox = InfoBox();
+		hoverTimeShowThreshold = 0.55f;
+		hoverTimeHideThreshold = 0.4f;
+		hoverTimeElapsed = 0.0f;
+
 		// Fill hand with 5 starting cards
 		DrawCard(BuildingEnum::RESIDENTIAL, BuildingEnum::L1);
 		DrawCard(BuildingEnum::RESIDENTIAL, BuildingEnum::L1);
@@ -68,9 +159,38 @@ namespace CardManager {
 		InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
 	}
 
-	void Free() {
-		hand.clear();
-		InputManager::UnsubscribeKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
+	void Update() {
+		// If mouse hovers over any card long enough, show its information
+		Vec2<float> mousePos = { (float)InputManager::GetMousePos().x - AEGfxGetWinMaxX(), -((float)InputManager::GetMousePos().y - AEGfxGetWinMaxY()) };
+		Vec2<float> cardPos, cardSize;
+
+		for (Card& card : hand) {
+			cardPos = { card.position.pos.x, card.position.pos.y };
+			cardSize = { card.position.size.x, card.position.size.y };
+
+			// Player is hovering over a card!
+			if (IsPointWithinRect(mousePos, cardPos, cardSize)) {
+				hoverTimeElapsed += AEFrameRateControllerGetFrameTime(); // Add to hover time
+
+				if (hoverTimeElapsed >= hoverTimeShowThreshold) { // If the player hovers long enough, show the box
+					if (hoveredCard != &card) {
+						hoveredCard = &card;
+						cardInfoBox.UpdateInfo(Vec2<float>{hoveredCard->position.pos.x + hoveredCard->position.size.x * 0.5f, hoveredCard->position.pos.y}, hoveredCard);
+					}
+					hoverTimeElapsed = hoverTimeShowThreshold; // Cap the hover time
+				}
+				return; // Then exit this function
+			}
+		}
+
+		// If the player is not hovering over any card
+		if (hoverTimeElapsed > 0.0f) {
+			hoverTimeElapsed -= AEFrameRateControllerGetFrameTime(); // Reduce the hover time elapsed if needed
+			if (hoverTimeElapsed <= hoverTimeHideThreshold) { // If hover time is lesser than hide time, remove the hovered card status
+				hoveredCard = nullptr;
+				hoverTimeElapsed = 0.0f;
+			}
+		}
 	}
 
 	void PrepareUIRenderBatch() {
@@ -91,6 +211,11 @@ namespace CardManager {
 			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, card.countTextPos.pos.x, card.countTextPos.pos.y, FontManager::GetFont(FontManager::ROBOTO), 20, card.countText, 4, COLOR_BLACK);
 
 			card.nameText.Render();
+		}
+
+		// Render the info box if needed
+		if (hoveredCard) {
+			cardInfoBox.Render();
 		}
 	}
 
@@ -179,8 +304,14 @@ namespace CardManager {
 
 				selectedCard = &card; // Selected card becomes the new card
 				selectedCard->borderColor = COLOR_CARD_BORDER_SELECTED;
+				break;
 			}
 		}
 
+	}
+
+	void Free() {
+		hand.clear();
+		InputManager::UnsubscribeKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
 	}
 }

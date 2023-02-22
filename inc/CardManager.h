@@ -23,10 +23,51 @@ Draws a random draw into the player's hand
 #pragma once
 
 #include <string>
+#include <vector>
+
+#include <Card.h>
 #include <BuildingManager.h>
 
 namespace CardManager {
+	class InfoBox {
+	public:
+		InfoBox();
+		void Render();
+		void UpdateInfo(Vec2<float> cardPos_TopCenter, const Card* hoveredCard);
+
+	private:
+		// Positions of the background
+		RenderSystem::Transform transform; 
+		RenderSystem::Transform arrowPos;
+		RenderSystem::Transform headerLine; // White line seperating header from stats
+
+		// Texts
+		UI::TextBox name;
+		UI::TextBox desc;
+		std::vector<UI::TextBox> sNames;
+		std::vector<UI::TextBox> sScores;
+
+		Vec4<float> color;
+	};
+
+	struct SynergyInfo {
+		int score;
+		std::string name;
+		Vec3<float> color;
+
+		SynergyInfo(int _score, std::string _name, Vec3<float> _color) {
+			score = _score;
+			name = _name;
+			color = _color;
+		}
+	};
+}
+
+namespace CardManager {
+
+	
 	void Initialize();
+	void Update();
 
 	void PrepareUIRenderBatch();
 

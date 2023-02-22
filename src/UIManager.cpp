@@ -315,9 +315,10 @@ namespace UI {
 		maxWidth = 500;
 		fontSize = 20;
 		alignment = LEFT_JUSTIFY;
+		color = COLOR_BLACK;
 	}
 
-	TextBox::TextBox(Vec2<float> screenPos, std::string text, TextBoxAlignment _alignment, float _maxWidth, float _fontSize) {
+	TextBox::TextBox(Vec2<float> screenPos, std::string text, TextBoxAlignment _alignment, float _maxWidth, float _fontSize, Vec3<float> _color) {
 		// Set the size of the text (normalized already)
 		AEGfxGetPrintSize(FontManager::GetFont(FontManager::ROBOTO), const_cast<char*>(text.c_str()), _fontSize / FontManager::DEFAULT_FONT_SIZE, transform.size.x, transform.size.y);
 
@@ -329,6 +330,7 @@ namespace UI {
 		maxWidth = _maxWidth / AEGfxGetWinMaxX();			// Max width before wrapping the text
 		float charWidth = transform.size.x / text.size();	// The x-length of each character
 		alignment = _alignment;								// Set the current alignment of the texts (Left, center, right)
+		color = _color;										// Set the color of the text box
 
 		Vec2<float> currPos;								// The render pos of each line of text
 
@@ -386,7 +388,7 @@ namespace UI {
 	void TextBox::Render() {
 		for (size_t index = 0; index < texts.size(); ++index) {
 			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, texts[index].pos.x, texts[index].pos.y,
-										 FontManager::GetFont(FontManager::ROBOTO), fontSize, texts[index].text, 4, COLOR_BLACK);
+										 FontManager::GetFont(FontManager::ROBOTO), fontSize, texts[index].text, 4, color);
 		}
 	}
 }
