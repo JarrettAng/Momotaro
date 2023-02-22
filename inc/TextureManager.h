@@ -33,6 +33,7 @@ namespace TextureManager {
 		INDUSTRIAL_1X1_L1 = 10,
 		INDUSTRIAL_1X1_L2,
 		INDUSTRIAL_1X1_L3,
+		BUILDING_TEXTURE_COUNT,
 		TILE_TEX,
 		NATURE_TREE,
 		NATURE_ROCK,
@@ -42,6 +43,8 @@ namespace TextureManager {
 		SPLASH_SCREEN,
 		SYNERGY,
 	};
+	TEX_TYPE operator++(TEX_TYPE&, int);
+
 
 	struct TextureSheet {
 		TEX_TYPE tex;

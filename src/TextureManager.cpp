@@ -60,13 +60,25 @@ namespace TextureManager {
 	AEGfxTexture* splash_Tex;
 	AEGfxTexture* synergy_Tex;
 
-	void Initialize() {
-		LoadTextures();
+    TEX_TYPE operator++(TEX_TYPE& _texture, int)
+    {
+		if(_texture==BUILDING_TEXTURE_COUNT){
+			std::cerr << "WARNING : " << __FILE__ << ": Texture values wrapped!! Reached max building texture count!" <<__LINE__ <<'\n';
+		}
+		_texture = (_texture == BUILDING_TEXTURE_COUNT) ? 
+		RESIDENTIAL_1X1_L1 : 
+		TEX_TYPE(static_cast<int>(_texture+1));
+		return _texture;
+    }
+
+    void Initialize()
+    {
+        LoadTextures();
 		InitializeTextures();
 		GenerateMesh();
-	}
+    }
 
-	/*!***********************************************************************
+    /*!***********************************************************************
 	\brief
 		Load textures from file.
 	*************************************************************************/

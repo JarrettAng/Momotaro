@@ -361,6 +361,17 @@ Vec4<T> operator*(Vec4<T> const& lhs, T rhs){
 	temp.w*=rhs;
 	return temp;
 }
+/*============================================================================
+* OPERATOR OVERLOADS FOR VECTOR COMPARISONS
+*/
+template<class T>
+bool operator<(Vec2<T> const& lhs, Vec2<T> const& rhs){
+	if(lhs.x < rhs.x) return true;
+	if(lhs.x == rhs.x){
+		return (lhs.y < rhs.y);
+	}
+	return false;
+}
 
 /*============================================================================
 * OPERATOR OVER LOADS FOR VECTOR TO OUTPUT STREAM

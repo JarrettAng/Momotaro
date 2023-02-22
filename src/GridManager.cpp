@@ -577,7 +577,7 @@ namespace GridManager {
 				Vec2<int> ScreenPos = iso::WorldIndexToScreenPos(x, y);
 				ScreenPos.y += (gridY * 50) / 2;		//move the grid up by half its size (20 units / 2 = 10)
 				RenderSystem::AddTextToBatch(
-					RenderSystem::UI_BATCH,
+					RenderSystem::GAME_PIECES_BATCH,
 					(ScreenPos.x + 25) / AEGfxGetWinMaxX(), (ScreenPos.y - 75) / AEGfxGetWinMaxY(),
 					FontManager::GetFont(FontManager::ROBOTO),
 					10,

@@ -13,6 +13,8 @@ The functions include:
 **************************************************************************/
 
 #include <Building.h>
+#include <algorithm>
+#include <GridManager.h>
 
 Building::Building() : data{} {}	//Empty by design
 Building::Building(BuildingData _data)
@@ -45,15 +47,17 @@ void Building::LevelUp()
 	{
 	case BuildingEnum::L1:
 		data.level = BuildingEnum::L2;
-		data.TextureID = static_cast<TextureManager::TEX_TYPE>(data.TextureID + 1);
+		data.TextureID++;
+		// data.TextureID = static_cast<TextureManager::TEX_TYPE>(data.TextureID + 1);
 		break;
 	case BuildingEnum::L2:
 		data.level = BuildingEnum::L3;
 		std::cout << data.TextureID << '\n';
-		data.TextureID = static_cast<TextureManager::TEX_TYPE>(data.TextureID + 1);
+		data.TextureID++;
+		// data.TextureID = static_cast<TextureManager::TEX_TYPE>(data.TextureID + 1);
 		break;
 	case BuildingEnum::L3:
-		std::cerr << "Error : Building cannot be leveled up anymore! Building.cpp\n";
+		std::cerr << "Error " <<__FILE__ << ": Building cannot be leveled up anymore!" << __LINE__ <<'\n';
 		break;
 	default:
 		break;
@@ -78,24 +82,38 @@ void Building::GetSynergyArea(){
 	//Then for every building cell, we get the diagonal AND adjacent cells.
 	for(Vec2<int> cell : buildingCells){
 		for(int x{-1}; x<2; ++x){
-			if(!HasCellInVector(tempVec,cell+Vec2<int>{0,x*2}))tempVec.push_back(cell+Vec2<int>{0,x*2});
-			if(!HasCellInVector(tempVec,cell+Vec2<int>{x*2,0}))tempVec.push_back(cell+Vec2<int>{x*2,0});
+			tempVec.push_back(cell+Vec2<int>{0,x*2});
+			tempVec.push_back(cell+Vec2<int>{x*2,0});
 			for(int y{-1}; y<2; ++y){
-				if(HasCellInVector(buildingCells,cell+Vec2<int>{x,y})) continue;
-				if(HasCellInVector(tempVec,cell+Vec2<int>{x,y})) continue;
 				tempVec.push_back(cell+Vec2<int>{x,y});
 			}
 		}
 	}
+	//Small hack to make a compare operator then sort the vector of vectors
+	std::sort(tempVec.begin(),tempVec.end(),[](Vec2<int> a, Vec2<int> b){return a < b;});	//once we sort it we prune
+	auto last = std::unique(tempVec.begin(),tempVec.end());
+	tempVec.erase(last,tempVec.end());
+	//Performance increase from doing it this way is actually significant compared to previous code
+
+	#pragma region unoptimisedcode
+	// for(Vec2<int> cell : buildingCells){
+	// 	for(int x{-1}; x<2; ++x){
+	// 		if(!HasCellInVector(tempVec,cell+Vec2<int>{0,x*2}))tempVec.push_back(cell+Vec2<int>{0,x*2});
+	// 		if(!HasCellInVector(tempVec,cell+Vec2<int>{x*2,0}))tempVec.push_back(cell+Vec2<int>{x*2,0});
+	// 		for(int y{-1}; y<2; ++y){
+	// 			if(HasCellInVector(buildingCells,cell+Vec2<int>{x,y})) continue;
+	// 			if(HasCellInVector(tempVec,cell+Vec2<int>{x,y})) continue;
+	// 			tempVec.push_back(cell+Vec2<int>{x,y});
+	// 		}
+	// 	}
+	// }
+	#pragma endregion
 	synergyAreaCells = tempVec;
 	for(Vec2<int>cell : synergyAreaCells){
 		std::cout << "SYNERGY AREA : " << cell << '\n';
 	}
-
-
 }
 
-bool operator==(Building const &lhs, Building const &rhs)
-{
+bool operator==(Building const &lhs, Building const &rhs){
     return ((lhs.data.type == rhs.data.type)&&(lhs.data.level == rhs.data.level)&&(lhs.data.size==rhs.data.size));
 }

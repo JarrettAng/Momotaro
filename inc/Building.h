@@ -17,6 +17,7 @@ building class.
 #include <GameObject.h>
 #include <TextureManager.h>
 
+
 namespace BuildingEnum {
 	enum TYPE {
 		NONE,
