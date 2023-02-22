@@ -495,25 +495,25 @@ namespace GridManager {
 				{
 				case BuildingEnum::RIGHT:
 					if (!isCellSafe(Vec2<int>{_x + x, y + _y})) {
-						std::cout << "Invalid position!\n";
+						std::cout << "Error " <<__FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
 						return;
 					}
 					break;
 				case BuildingEnum::TOP:
 					if (!isCellSafe(Vec2<int>{_x + x, _y - y})) {
-						std::cout << "Invalid position!\n";
+						std::cout<< "Error " <<__FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
 						return;
 					}
 					break;
 				case BuildingEnum::LEFT:
 					if (!isCellSafe(Vec2<int>{_x - x, _y - y})) {
-						std::cout << "Invalid position!\n";
+						std::cout << "Error " <<__FILE__ << "ln" << __LINE__ <<  ": Invalid position!\n";
 						return;
 					}
 					break;
 				case BuildingEnum::DOWN:
 					if (!isCellSafe(Vec2<int>{_x - x, y + _y})) {
-						std::cout << "Invalid position!\n";
+						std::cout << "Error " <<__FILE__ << "ln" << __LINE__ <<  ": Invalid position!\n";
 						return;
 					}
 					break;
@@ -827,7 +827,7 @@ namespace GridManager {
 		for (int i{ 0 }; i < (gridX * gridY); ++i) {
 			if (grid[i].ID == ID) return i;
 		}
-		std::cerr << "GridManager.cpp ln800 : UNABLE TO FIND INDEX FROM ID!\n";
+		std::cerr << "Error " <<__FILE__ << "ln" << __LINE__ << ": UNABLE TO FIND INDEX FROM ID!\n";
 		return 0;
 	}
 }

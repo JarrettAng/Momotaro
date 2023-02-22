@@ -22,7 +22,7 @@ namespace FileIOManager {
 	void ReadBuildingsData(std::vector<BuildingData>& buildingsData) {
 		std::ifstream dataFile{ "Assets/JSON_Data/buildingsData.json" };
 		if (!dataFile) {
-			std::cerr << "Unable to read buildings data JSON file!\n";
+			std::cerr << "Error " <<__FILE__ << "ln" << __LINE__ << ": Unable to read buildings data JSON file!\n";
 		}
 
 		// Implementation here

@@ -63,7 +63,7 @@ namespace TextureManager {
     TEX_TYPE operator++(TEX_TYPE& _texture, int)
     {
 		if(_texture==BUILDING_TEXTURE_COUNT){
-			std::cerr << "WARNING : " << __FILE__ << ": Texture values wrapped!! Reached max building texture count!" <<__LINE__ <<'\n';
+			std::cerr << "WARNING " <<__FILE__ << "ln" << __LINE__ << ": Texture values wrapped!! Reached max building texture count!\n";
 		}
 		_texture = (_texture == BUILDING_TEXTURE_COUNT) ? 
 		RESIDENTIAL_1X1_L1 : 

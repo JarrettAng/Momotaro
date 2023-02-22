@@ -57,7 +57,7 @@ void Building::LevelUp()
 		// data.TextureID = static_cast<TextureManager::TEX_TYPE>(data.TextureID + 1);
 		break;
 	case BuildingEnum::L3:
-		std::cerr << "Error " <<__FILE__ << ": Building cannot be leveled up anymore!" << __LINE__ <<'\n';
+		std::cerr << "Error " <<__FILE__ << "ln" << __LINE__ << " : Building cannot be leveled up anymore!\n";
 		break;
 	default:
 		break;
@@ -76,7 +76,7 @@ bool Building::HasCellInVector(std::vector<Vec2<int>> vectorToCheck,Vec2<int> ce
 
 void Building::GetSynergyArea(){
 	//We assume that the building cells are NOT null!
-	if(buildingCells.empty()) std::cerr << "Error : Building.cpp ln65 NO BUILDING CELLS TO GET AREA!\n";
+	if(buildingCells.empty()) std::cerr << "Error " <<__FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n" ;
 	//First we get all the building cells
 	std::vector<Vec2<int>> tempVec;
 	//Then for every building cell, we get the diagonal AND adjacent cells.
