@@ -43,7 +43,7 @@ namespace BuildingManager {
 
 	BuildingData GetRandomBuildingData(BuildingEnum::TYPE type) {
 		Vec2<int> randSize = Vec2<int>{1,1};
-		BuildingEnum::LEVEL randLevel = (BuildingEnum::LEVEL)((rand() % BuildingEnum::LEVEL_LENGTH-1)+1);
+		BuildingEnum::LEVEL randLevel = (BuildingEnum::LEVEL)((rand() % (BuildingEnum::LEVEL_LENGTH - 1))+1);
 
 		// TODO: Remove after prototype
 		// randSize = BuildingEnum::_1X1;
@@ -60,7 +60,7 @@ namespace BuildingManager {
 	}
 
 	BuildingData GetRandomBuildingData(BuildingEnum::LEVEL level) {
-		BuildingEnum::TYPE randType = (BuildingEnum::TYPE)((rand() % BuildingEnum::LEVEL_LENGTH-1)+1);
+		BuildingEnum::TYPE randType = (BuildingEnum::TYPE)((rand() % (BuildingEnum::TYPE_LENGTH - 2))+1);
 		Vec2<int> randSize = Vec2<int>{1,1};
 
 		// TODO: Remove after prototype

@@ -18,7 +18,6 @@ The functions include:
 #include <InputManager.h>
 #include <FontManager.h>
 #include <UIManager.h>
-
 #include <ColorTable.h>
 
 #include <iostream>
@@ -104,6 +103,8 @@ namespace CardManager {
 }
 
 namespace CardManager {
+	EventSystem::Event<const BuildingData*> onNewCardSelected;	// Event that gets called when player selects/deselects a card
+
 	int startingHandSize;
 	std::vector<Card> hand;							// Data on rendering for current cards held
 
@@ -124,6 +125,7 @@ namespace CardManager {
 	void RemoveFromHand(Card* cardToRemove);
 	void HandleClick();
 	void UpdateHandPositions();
+	void DebugSpawnCard();
 #pragma endregion
 
 	void Initialize() {
@@ -157,6 +159,7 @@ namespace CardManager {
 		DrawCard(BuildingEnum::INDUSTRIAL, BuildingEnum::L1);
 
 		InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
+		InputManager::SubscribeToKey(AEVK_F, InputManager::TRIGGERED, DebugSpawnCard);
 	}
 
 	void Update() {
@@ -208,7 +211,7 @@ namespace CardManager {
 
 			// Drawing of the card count at the top right corner of the card
 			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.countIconPos.pos.x, card.countIconPos.pos.y, card.countIconPos.size.x, card.countIconPos.size.y, { 1,1,1,1 }, 4);
-			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, card.countTextPos.pos.x, card.countTextPos.pos.y, FontManager::GetFont(FontManager::ROBOTO), 20, card.countText, 4, COLOR_BLACK);
+			card.countText.Render();
 
 			card.nameText.Render();
 		}
@@ -219,7 +222,9 @@ namespace CardManager {
 		}
 	}
 
-
+	void DebugSpawnCard() {
+		DrawRandomCard(BuildingEnum::L1);
+	}
 
 	void DrawCard(BuildingEnum::TYPE type, BuildingEnum::LEVEL level) {
 		BuildingData buildingData = BuildingManager::GetBuildingData(type, Vec2<int>{1, 1}, level);
@@ -242,7 +247,7 @@ namespace CardManager {
 				// If the data for it already exists, add to the count
 				if (card.bData.type == buildingData.type && card.bData.size == buildingData.size && card.bData.level == buildingData.level) {
 					++card.count;
-					card.countText = std::to_string(card.count);
+					card.UpdateCountText();
 					return;
 				}
 			}
@@ -273,15 +278,24 @@ namespace CardManager {
 
 	void PlayCard() {
 		--selectedCard->count;
+		selectedCard->UpdateCountText();
+
 		if (selectedCard->count <= 0) {
 			RemoveFromHand(selectedCard);
+
 			selectedCard = nullptr;
+			onNewCardSelected.Invoke(nullptr); // Invoke the card deselected event
 		}
 	}
 
 	void RemoveFromHand(Card* cardToRemove) {
-		// hand.remove(*cardToRemove);
-
+		size_t index = 0; // Max size
+		for (; index < hand.size(); ++index) {
+			if (cardToRemove ==  &hand[index]) {
+				break;
+			}
+		}
+		hand.erase(hand.begin() + index);
 		UpdateHandPositions();
 	}
 
@@ -294,24 +308,36 @@ namespace CardManager {
 			cardPos = { card.position.pos.x, card.position.pos.y };
 			cardSize = { card.position.size.x, card.position.size.y };
 
-			std::cout << "DEBUG 1: " << mousePos.x << " " << mousePos.y << "\n";
-			std::cout << "DEBUG 2: " << cardPos.x << " " << cardPos.y << "\n";
-			std::cout << "DEBUG 3: " << cardSize.x << " " << cardSize.y << "\n";
-
 			// If a card is clicked, update the selected card and border color
 			if (IsPointWithinRect(mousePos, cardPos, cardSize)) {
-				if (selectedCard) selectedCard->borderColor = COLOR_CARD_BORDER;
+				if (selectedCard) {
+					selectedCard->borderColor = COLOR_CARD_BORDER;
+
+					// Check if card clicked is the same card (deselecting)
+					if (selectedCard == &card) {
+						selectedCard = nullptr;
+						onNewCardSelected.Invoke(nullptr); // Invoke the card deselected event
+						return;
+					}
+				}
 
 				selectedCard = &card; // Selected card becomes the new card
 				selectedCard->borderColor = COLOR_CARD_BORDER_SELECTED;
-				break;
+
+				onNewCardSelected.Invoke(&selectedCard->bData); // Invoke the card selected event
+				return;
 			}
 		}
 
+		// Otherwise check if the player has played the card on the grid
+		if (selectedCard) {
+			PlayCard();
+		}
 	}
 
 	void Free() {
 		hand.clear();
 		InputManager::UnsubscribeKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
+		InputManager::UnsubscribeKey(AEVK_F, InputManager::TRIGGERED, DebugSpawnCard);
 	}
 }

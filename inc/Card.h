@@ -31,8 +31,7 @@ public:
 	RenderSystem::Transform iconPos;
 
 	int count;
-	std::string countText;
-	RenderSystem::Transform countTextPos;
+	UI::TextBox countText;
 	RenderSystem::Transform countIconPos;
 
 	UI::TextBox nameText;
@@ -65,9 +64,8 @@ public:
 
 		borderColor = COLOR_CARD_BORDER;
 
-		// Set count to 1 (Cards constructed are the first of its kind
+		// Set count to 1 (Cards constructed are the first of its kind)
 		count = 1;
-		countText = "1";
 
 		UpdateComponentPositions();
 	}
@@ -91,7 +89,12 @@ public:
 		countIconPos.size.y = countIconPos.size.x = position.size.x * 0.35f;
 		countIconPos.pos.x = position.pos.x + position.size.x * 0.8f;
 		countIconPos.pos.y = position.pos.y + position.size.y * 0.075f;
-		countTextPos.pos.x = (countIconPos.pos.x + position.size.x * 0.1f) / AEGfxGetWinMaxX();
-		countTextPos.pos.y = (countIconPos.pos.y - position.size.y * 0.2f) / AEGfxGetWinMaxY();
+
+		UpdateCountText();
+	}
+
+	void UpdateCountText() {
+		Vec2<float> countTextPos{ countIconPos.pos.x - countIconPos.size.x * 0.1f, countIconPos.pos.y - countIconPos.size.y * 0.65f };
+		countText = UI::TextBox(countTextPos, std::to_string(count), UI::CENTER_JUSTIFY, countIconPos.size.x * 1.5f, 18.0f, COLOR_BLACK);
 	}
 };

@@ -27,6 +27,7 @@ Draws a random draw into the player's hand
 
 #include <Card.h>
 #include <BuildingManager.h>
+#include <EventSystem.h>
 
 namespace CardManager {
 	class InfoBox {
@@ -64,7 +65,7 @@ namespace CardManager {
 }
 
 namespace CardManager {
-
+	extern EventSystem::Event<const BuildingData*> onNewCardSelected;
 	
 	void Initialize();
 	void Update();
