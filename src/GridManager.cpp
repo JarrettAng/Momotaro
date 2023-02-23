@@ -22,6 +22,7 @@ The functions include:
 #include <ColorTable.h>
 #include <GridManager.h>
 #include <PauseManager.h>
+#include <CardManager.h>
 
 namespace GridManager {
 	namespace iso = IsometricGrid;
@@ -40,8 +41,15 @@ namespace GridManager {
 
 	int buildingID{ 0 };			//THIS ID IS FOR TRACKING BUILDINGS!
 
+	std::vector<Vec2<int>> SynergyArea{};
+
+	static int previousIndex{-1};
+	static int currentIndex{-2};
+
+
 	//Test enum
 	BuildingEnum::ORIENTATION TestOrientation{ BuildingEnum::RIGHT };
+	BuildingData selectedBuilding{};
 
 #pragma region BuildingStuff
 	//Temporary stuff for buildings
@@ -149,6 +157,8 @@ namespace GridManager {
 		InputManager::SubscribeToKey(AEVK_E, InputManager::TRIGGERED, SpawnBigResidential);
 		InputManager::SubscribeToKey(AEVK_S, InputManager::TRIGGERED, SpawnBigResidential);
 		InputManager::SubscribeToKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
+
+		CardManager::onNewCardSelected.Subscribe(GetBuildingCard);
 	}
 
 
@@ -303,6 +313,7 @@ namespace GridManager {
 		grid[index].ID = ++buildingID;
 	}
 #pragma region TerrainStuff
+
 	void RandomiseTerrain() {
 		if (PauseManager::IsPaused()) return;
 
@@ -478,43 +489,45 @@ namespace GridManager {
 	}
 #pragma endregion
 
-	void SetGridIndex(BuildingEnum::ORIENTATION _orientation, BuildingData _data, int _x, int _y)
-	{
-		int index = GetIndex(_x, _y);
+	void GetBuildingCard(const BuildingData* _data){
+		if(_data!=nullptr)
+		selectedBuilding = *_data;
+	}
+	
+	std::vector<Vec2<int>> GetBuildingCells(BuildingData _data, int _x, int _y){
+		int index = GetIndex(_x,_y);
 		Vec2<int> _size = _data.size;
-		// TextureManager::TEX_TYPE test{TextureManager::RESIDENTIAL_1X2_L1};
-		Vec2<int> _SelectedCell{ 0,0 };
+		Vec2<int> _SelectedCell{0,0};
 		std::vector<Vec2<int>> AllCells;
-		//if the orientation is right or left, we have to swap the 2x1 into 1x2
-		if (_orientation == BuildingEnum::RIGHT || _orientation == BuildingEnum::LEFT) {
+		if(_data.orientation == BuildingEnum::RIGHT || _data.orientation == BuildingEnum::LEFT){
 			_size = Vec2<int>{ _size.y,_size.x };
 		}
 		for (int y{ 0 }; y < _size.y; ++y) {
 			for (int x{ 0 }; x < _size.x; ++x) {
-				switch (_orientation)
+				switch (_data.orientation)
 				{
 				case BuildingEnum::RIGHT:
 					if (!isCellSafe(Vec2<int>{_x + x, y + _y})) {
 						std::cout << "Error " <<__FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
-						return;
+						return AllCells;
 					}
 					break;
 				case BuildingEnum::TOP:
 					if (!isCellSafe(Vec2<int>{_x + x, _y - y})) {
 						std::cout<< "Error " <<__FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
-						return;
+						return AllCells;
 					}
 					break;
 				case BuildingEnum::LEFT:
 					if (!isCellSafe(Vec2<int>{_x - x, _y - y})) {
 						std::cout << "Error " <<__FILE__ << "ln" << __LINE__ <<  ": Invalid position!\n";
-						return;
+						return AllCells;
 					}
 					break;
 				case BuildingEnum::DOWN:
 					if (!isCellSafe(Vec2<int>{_x - x, y + _y})) {
 						std::cout << "Error " <<__FILE__ << "ln" << __LINE__ <<  ": Invalid position!\n";
-						return;
+						return AllCells;
 					}
 					break;
 				}
@@ -525,7 +538,7 @@ namespace GridManager {
 		for (int y{ 0 }; y < _size.y; ++y) {
 			for (int x{ 0 }; x < _size.x; ++x) {
 				int otherIndex{ 0 };
-				switch (_orientation)
+				switch (_data.orientation)
 				{
 				case BuildingEnum::RIGHT:
 					// std::cout<<"RIGHT\n";
@@ -549,21 +562,102 @@ namespace GridManager {
 					break;
 				}
 				grid[otherIndex].ID = buildingID;
-				// std::cout <<"INDEX ID : "<< grid[index].ID << '\n';
-				// std::cout <<"OTHER INDEX : " <<otherIndex << '\n';
-				// std::cout << "SELECTED CELL : " << _SelectedCell << '\n';
-				// grid[otherIndex]._building.data.TextureID = test;
 				grid[otherIndex]._building.data = _data;
 				AllCells.push_back(_SelectedCell);
-				// grid[otherIndex]._building.data.TextureID = TextureManager::NATURE_ROCK;
-				// std::cout << grid[otherIndex]._building.data.type << '\n';
 			}
 		}
 		for (Vec2<int> cell : AllCells) {
 			grid[GetIndex(cell.x, cell.y)]._building.buildingCells.assign(AllCells.begin(), AllCells.end());
-			// std::cout << "Cell to check : " << cell << '\n';
 		}
-		CheckCellNeighbor(grid, _SelectedCell);
+		return AllCells;
+	}
+
+	void SetGridIndex(BuildingEnum::ORIENTATION _orientation, BuildingData _data, int _x, int _y)
+	{
+		// int index = GetIndex(_x, _y);
+		// Vec2<int> _size = _data.size;
+		// // TextureManager::TEX_TYPE test{TextureManager::RESIDENTIAL_1X2_L1};
+		// Vec2<int> _SelectedCell{ 0,0 };
+		// std::vector<Vec2<int>> AllCells;
+		// //if the orientation is right or left, we have to swap the 2x1 into 1x2
+		// if (_orientation == BuildingEnum::RIGHT || _orientation == BuildingEnum::LEFT) {
+		// 	_size = Vec2<int>{ _size.y,_size.x };
+		// }
+		// for (int y{ 0 }; y < _size.y; ++y) {
+		// 	for (int x{ 0 }; x < _size.x; ++x) {
+		// 		switch (_orientation)
+		// 		{
+		// 		case BuildingEnum::RIGHT:
+		// 			if (!isCellSafe(Vec2<int>{_x + x, y + _y})) {
+		// 				std::cout << "Error " <<__FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
+		// 				return;
+		// 			}
+		// 			break;
+		// 		case BuildingEnum::TOP:
+		// 			if (!isCellSafe(Vec2<int>{_x + x, _y - y})) {
+		// 				std::cout<< "Error " <<__FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
+		// 				return;
+		// 			}
+		// 			break;
+		// 		case BuildingEnum::LEFT:
+		// 			if (!isCellSafe(Vec2<int>{_x - x, _y - y})) {
+		// 				std::cout << "Error " <<__FILE__ << "ln" << __LINE__ <<  ": Invalid position!\n";
+		// 				return;
+		// 			}
+		// 			break;
+		// 		case BuildingEnum::DOWN:
+		// 			if (!isCellSafe(Vec2<int>{_x - x, y + _y})) {
+		// 				std::cout << "Error " <<__FILE__ << "ln" << __LINE__ <<  ": Invalid position!\n";
+		// 				return;
+		// 			}
+		// 			break;
+		// 		}
+		// 	}
+		// }
+		// std::cout << "Cell Pos : " << _x << ", " << _y << '\n';
+		// grid[index].ID = ++buildingID;
+		// for (int y{ 0 }; y < _size.y; ++y) {
+		// 	for (int x{ 0 }; x < _size.x; ++x) {
+		// 		int otherIndex{ 0 };
+		// 		switch (_orientation)
+		// 		{
+		// 		case BuildingEnum::RIGHT:
+		// 			// std::cout<<"RIGHT\n";
+		// 			otherIndex = GetIndex(_x + x, y + _y);
+		// 			_SelectedCell = { _x + x,_y + y };
+		// 			break;
+		// 		case BuildingEnum::TOP:
+		// 			// std::cout<<"TOP\n";
+		// 			otherIndex = GetIndex(_x + x, _y - y);
+		// 			_SelectedCell = { _x + x,_y - y };
+		// 			break;
+		// 		case BuildingEnum::LEFT:
+		// 			// std::cout<<"LEFT\n";
+		// 			otherIndex = GetIndex(_x - x, _y - y);
+		// 			_SelectedCell = { _x - x,_y - y };
+		// 			break;
+		// 		case BuildingEnum::DOWN:
+		// 			// std::cout << "DOWN\n";
+		// 			otherIndex = GetIndex(_x - x, y + _y);
+		// 			_SelectedCell = { _x - x,y + _y };
+		// 			break;
+		// 		}
+		// 		grid[otherIndex].ID = buildingID;
+		// 		// std::cout <<"INDEX ID : "<< grid[index].ID << '\n';
+		// 		// std::cout <<"OTHER INDEX : " <<otherIndex << '\n';
+		// 		// std::cout << "SELECTED CELL : " << _SelectedCell << '\n';
+		// 		// grid[otherIndex]._building.data.TextureID = test;
+		// 		grid[otherIndex]._building.data = _data;
+		// 		AllCells.push_back(_SelectedCell);
+		// 		// grid[otherIndex]._building.data.TextureID = TextureManager::NATURE_ROCK;
+		// 		// std::cout << grid[otherIndex]._building.data.type << '\n';
+		// 	}
+		// }
+		// for (Vec2<int> cell : AllCells) {
+		// 	grid[GetIndex(cell.x, cell.y)]._building.buildingCells.assign(AllCells.begin(), AllCells.end());
+		// 	// std::cout << "Cell to check : " << cell << '\n';
+		// }
+		//CheckCellNeighbor(grid, _SelectedCell);
 		// std::cout <<"ALL CELLS SIZE : "<< AllCells.size() << '\n'; 
 		// std::cout << "INDEX : " << index <<'\n';
 		// std::cout <<"SIZE : "<< grid[index]._building.buildingCells.size() << '\n'; 
@@ -572,21 +666,50 @@ namespace GridManager {
 
 	void UpdateMouseToGrid() {
 		if (PauseManager::IsPaused()) return;
-		for (int y{ 0 }; y < gridY; y++) {
-			for (int x{ 0 }; x < gridX; ++x) {
-				Vec2<int> ScreenPos = iso::WorldIndexToScreenPos(x, y);
-				ScreenPos.y += (gridY * 50) / 2;		//move the grid up by half its size (20 units / 2 = 10)
+		Vec2<int> mousePos{InputManager::GetMousePos()};
+		Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
+		//First we check if the mouse has moved
+		if(InputManager::HasMouseMoved()){
+			//Then we check if the index is different
+			currentIndex = GetIndex(SelectedCell);
+			//If the mouse has moved out of the previous index, we need to update the synergy cells
+			if(currentIndex != previousIndex){
+				//First we clear out the vector
+				SynergyArea.clear();
+				//DRAWING DEBUG TEXT
+				//Then we set the grid index
+				// SetGridIndex(TestOrientation,BigResidentialLvl1.data,SelectedCell.x,SelectedCell.y);
+				if(selectedBuilding.type != BuildingEnum::NONE){
 				RenderSystem::AddTextToBatch(
 					RenderSystem::GAME_PIECES_BATCH,
-					(ScreenPos.x + 25) / AEGfxGetWinMaxX(), (ScreenPos.y - 75) / AEGfxGetWinMaxY(),
+					((float)InputManager::GetMousePos().x/AEGetWindowWidth()*2)-1,
+					(((float)InputManager::GetMousePos().y/AEGetWindowHeight()*2)-1)*-1,
 					FontManager::GetFont(FontManager::ROBOTO),
-					10,
-					std::to_string(x) + ", " + std::to_string(y),
+					20,
+					std::to_string(InputManager::GetMousePosDelta().x) + " , " + std::to_string(InputManager::GetMousePosDelta().y), 
 					99,
 					COLOR_BLACK
 				);
+
+				}
 			}
 		}
+		previousIndex = currentIndex;
+		// for (int y{ 0 }; y < gridY; y++) {
+		// 	for (int x{ 0 }; x < gridX; ++x) {
+		// 		Vec2<int> ScreenPos = iso::WorldIndexToScreenPos(x, y);
+		// 		ScreenPos.y += (gridY * 50) / 2;		//move the grid up by half its size (20 units / 2 = 10)
+		// 		RenderSystem::AddTextToBatch(
+		// 			RenderSystem::GAME_PIECES_BATCH,
+		// 			(ScreenPos.x + 25) / AEGfxGetWinMaxX(), (ScreenPos.y - 75) / AEGfxGetWinMaxY(),
+		// 			FontManager::GetFont(FontManager::ROBOTO),
+		// 			10,
+		// 			std::to_string(x) + ", " + std::to_string(y),
+		// 			99,
+		// 			COLOR_BLACK
+		// 		);
+		// 	}
+		// }
 	}
 
 	void storeClickData() {
@@ -602,37 +725,6 @@ namespace GridManager {
 
 		//if the cell is water (means it doesn't need to be rendered) we don't allow placement
 		if (!grid[index].isRenderable) return;
-		// //ROTATES BETWEEN BUILDINGS ON CLICK
-		// switch (grid[index].ID)
-		// {
-		// case iso::NONE:
-		// 	grid[index].ID = iso::RESIDENTIAL;
-		// 	break;
-		// case iso::RESIDENTIAL:
-		// 	grid[index].ID = iso::INDUSTRIAL;
-		// 	break;
-		// case iso::INDUSTRIAL:
-		// 	grid[index].ID = iso::COMMERCIAL;
-		// 	break;
-		// case iso::COMMERCIAL:
-		// 	randomNature = rand() % 2;
-		// 	if (randomNature % 2 == 0)
-		// 		grid[index].ID = iso::TREE;
-		// 	else
-		// 		grid[index].ID = iso::ROCK;
-		// 	break;
-		// case iso::ROCK:
-		// 	grid[index].ID = iso::NONE;
-		// 	break;
-		// case iso::TREE:
-		// 	grid[index].ID = iso::NONE;
-		// 	break;
-		// }
-
-		//This is where it gets messy sorry
-		//MERGE LOGIC
-		// CheckCellNeighbor(grid, SelectedCell);
-
 	}
 
 	void ClearGrid() {
@@ -822,6 +914,9 @@ namespace GridManager {
 			}
 		}
 		return false;
+	}
+	BuildingEnum::TYPE GetTypeFromIndex(Vec2<int> cell){
+		return grid[GetIndex(cell)]._building.data.type;
 	}
 	int GetIndexFromID(int ID) {
 		for (int i{ 0 }; i < (gridX * gridY); ++i) {

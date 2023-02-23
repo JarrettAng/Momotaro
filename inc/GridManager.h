@@ -95,6 +95,8 @@ namespace GridManager {
 
     bool HasID(int* array, int count, int ID);
 
+    BuildingEnum::TYPE GetTypeFromIndex(Vec2<int> cell);
+
     int GetIndexFromID(int ID);
 
     /**
@@ -109,8 +111,12 @@ namespace GridManager {
 	 */
 	void RandomiseTerrain();
 
-	void SetGridIndex(BuildingEnum::ORIENTATION, BuildingData data,int x,int y);
-	void ChangeOrientation();
+    void GetBuildingCard(const BuildingData *_data);
+
+    std::vector<Vec2<int>> GetBuildingCells(BuildingData _data);
+
+    void SetGridIndex(BuildingEnum::ORIENTATION, BuildingData data, int x, int y);
+    void ChangeOrientation();
 
 	// iso::cell& GetNeighbor(iso::cell* &grid,iso::vec2i indexToCheck, iso::vec2i startingIndex);
 }

@@ -21,12 +21,13 @@ namespace InputManager {
 		EventSystem::Event<void> onKeyDoubleClick;
 	};
 
+
 	/*!***********************************************************************
 	* FORWARD DECLARATIONS
 	*************************************************************************/
 	void TryToDrag();
 	void StopDragging();
-
+	void HandleKeyEvents();
 	/*!***********************************************************************
 	* CONST VARIABLES
 	*************************************************************************/
@@ -36,6 +37,7 @@ namespace InputManager {
 	* MOUSE RELATED VARIABLES
 	*************************************************************************/
 	Vec2<int> mousePos{};
+	Vec2<int> mousePosDelta{};
 	bool isDragging = false;
 
 	std::deque<std::pair<u8, KeyEvent>> keys;
@@ -152,9 +154,15 @@ namespace InputManager {
 	void HandleInput() {
 		// Update mouse position.
 		AEInputGetCursorPosition(&mousePos.x, &mousePos.y);
+		AEInputGetCursorPositionDelta(&mousePosDelta.x, &mousePosDelta.y);
+
 
 		// Check and invoke any key events.
 		HandleKeyEvents();
+	}
+
+	bool HasMouseMoved(){
+		return (mousePosDelta.x != 0 && mousePosDelta.y !=0);
 	}
 
 	void Free() {
@@ -167,6 +175,9 @@ namespace InputManager {
 		}
 	}
 
+	Vec2<int> GetMousePosDelta() {
+		return mousePosDelta;
+	}
 	Vec2<int> GetMousePos() {
 		return mousePos;
 	}

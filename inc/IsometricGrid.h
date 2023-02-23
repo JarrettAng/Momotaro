@@ -66,8 +66,9 @@ namespace IsometricGrid
     Vec2<int> WorldIndexToScreenPos(int x, int y);
     Vec2<int> ToScreen(int x, int y);
     Vec2<int> ScreenPosToIso(int x, int y);
+    Vec2<int> ScreenPosToIso(Vec2<int> cellPos);    //overload to take in vec2 int
 
-    
+
     Vec2<int> MouseToCell(int mouseX, int mouseY);
 
 } // namespace IsometricGrid

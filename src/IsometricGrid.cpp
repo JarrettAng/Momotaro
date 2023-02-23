@@ -72,6 +72,9 @@ namespace IsometricGrid
 			static_cast<int>((x + y) * (-25.f)+25.f)		//offset for the correct pos because of the height diff
 		};
 	}
+	Vec2<int> ScreenPosToIso(Vec2<int> cellPos){
+		return ScreenPosToIso(cellPos.x,cellPos.y);
+	}
 	Vec2<int> ScreenPosToIso(int xPos, int yPos) {
 		//MOUSE INPUTS (Tile width = 100, tile height = 50)
 		int cellX = xPos / 100;

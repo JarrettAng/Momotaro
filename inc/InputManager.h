@@ -29,7 +29,10 @@ namespace InputManager {
 	void Free();
 	void HandleInput();
 	Vec2<int> GetMousePos();
+	Vec2<int> GetMousePosDelta();
 	bool IsDragging();
+	bool HasMouseMoved();
+	void OnMouseMove(void(*func)());
 	void SubscribeToKey(u8 key, KEY_EVENT_TYPE type, void (*func)());
 	void UnsubscribeKey(u8 key, KEY_EVENT_TYPE type, void (*func)());
 }
