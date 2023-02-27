@@ -83,33 +83,33 @@ namespace TextureManager {
 		Load textures from file.
 	*************************************************************************/
 	void LoadTextures() {
-		residential_S_Tex = AEGfxTextureLoad("Assets/residential_s_test.png");
-		residential_M_Tex = AEGfxTextureLoad("Assets/residential_m_test.png");
-		residential_L_Tex = AEGfxTextureLoad("Assets/residential_l_test.png");
+		residential_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L1.png");
+		residential_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/residential_m_test.png");
+		residential_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/residential_l_test.png");
 
-		residential_1x2_S_Tex = AEGfxTextureLoad("Assets/residential_1x2_test.png");
-		residential_1x2_M_Tex = AEGfxTextureLoad("Assets/BlueRect.png");
-		residential_1x2_L_Tex = AEGfxTextureLoad("Assets/BlueRect.png");
+		residential_1x2_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/residential_1x2_test.png");
+		residential_1x2_M_Tex = AEGfxTextureLoad("Assets/Textures/UI/BlueRect.png");
+		residential_1x2_L_Tex = AEGfxTextureLoad("Assets/Textures/UI/BlueRect.png");
 
-		commercial_S_Tex = AEGfxTextureLoad("Assets/commercial_s_test.png");
-		commercial_M_Tex = AEGfxTextureLoad("Assets/commercial_m_test.png");
-		commercial_L_Tex = AEGfxTextureLoad("Assets/commercial_l_test.png");
+		commercial_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/commercial_s_test.png");
+		commercial_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/commercial_m_test.png");
+		commercial_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/commercial_l_test.png");
 
-		industrial_S_Tex = AEGfxTextureLoad("Assets/industrial_s_test.png");
-		industrial_M_Tex = AEGfxTextureLoad("Assets/industrial_m_test.png");
-		industrial_L_Tex = AEGfxTextureLoad("Assets/industrial_l_test.png");
+		industrial_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/industrial_s_test.png");
+		industrial_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/industrial_m_test.png");
+		industrial_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/industrial_l_test.png");
 
-		tile_Tex = AEGfxTextureLoad("Assets/Tile.png");
-		nature_Tex = AEGfxTextureLoad("Assets/tree_test.png");
-		rock_Tex = AEGfxTextureLoad("Assets/rock_test.png");
+		tile_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Tile.png");
+		nature_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/tree_test.png");
+		rock_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/rock_test.png");
 
-		card_Tex = AEGfxTextureLoad("Assets/Card.png");
-		pause_Tex = AEGfxTextureLoad("Assets/GameWindow.png");
-		pauseButton_Tex = AEGfxTextureLoad("Assets/Pause_Button.png");
+		card_Tex = AEGfxTextureLoad("Assets/Textures/UI/Card.png");
+		pause_Tex = AEGfxTextureLoad("Assets/Textures/UI/GameWindow.png");
+		pauseButton_Tex = AEGfxTextureLoad("Assets/Textures/UI/Pause_Button.png");
 
 		//IN PROGRESS
-		splash_Tex = AEGfxTextureLoad("Assets/SplashScreen.png");
-		synergy_Tex = AEGfxTextureLoad("Assets/synergyTex.png");
+		splash_Tex = AEGfxTextureLoad("Assets/Textures/UI/SplashScreen.png");
+		synergy_Tex = AEGfxTextureLoad("Assets/Textures/UI/synergyTex.png");
 	}
 
 	/*!***********************************************************************
@@ -136,7 +136,7 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L2, 1, 1, -1 });
 		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L3, 1, 1, -1 });
 
-		textures.push_back(TextureSheet{ TILE_TEX, 1, 1,.5 });
+		textures.push_back(TextureSheet{ TILE_TEX, 1, 1,1 });
 		textures.push_back(TextureSheet{ NATURE_TREE, 1, 1, -1 });
 		textures.push_back(TextureSheet{ NATURE_ROCK, 1, 1, -1 });
 
