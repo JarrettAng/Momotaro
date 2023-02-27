@@ -43,8 +43,8 @@ namespace GridManager {
 
 	std::vector<Vec2<int>> SynergyArea{};
 
-	static int previousIndex{-1};
-	static int currentIndex{-2};
+	static int previousIndex{ -1 };
+	static int currentIndex{ -2 };
 
 
 	//Test enum
@@ -489,17 +489,17 @@ namespace GridManager {
 	}
 #pragma endregion
 
-	void GetBuildingCard(const BuildingData* _data){
-		if(_data!=nullptr)
-		selectedBuilding = *_data;
+	void GetBuildingCard(const BuildingData* _data) {
+		if (_data != nullptr)
+			selectedBuilding = *_data;
 	}
-	
-	std::vector<Vec2<int>> GetBuildingCells(BuildingData _data, int _x, int _y){
-		int index = GetIndex(_x,_y);
+
+	std::vector<Vec2<int>> GetBuildingCells(BuildingData _data, int _x, int _y) {
+		int index = GetIndex(_x, _y);
 		Vec2<int> _size = _data.size;
-		Vec2<int> _SelectedCell{0,0};
+		Vec2<int> _SelectedCell{ 0,0 };
 		std::vector<Vec2<int>> AllCells;
-		if(_data.orientation == BuildingEnum::RIGHT || _data.orientation == BuildingEnum::LEFT){
+		if (_data.orientation == BuildingEnum::RIGHT || _data.orientation == BuildingEnum::LEFT) {
 			_size = Vec2<int>{ _size.y,_size.x };
 		}
 		for (int y{ 0 }; y < _size.y; ++y) {
@@ -508,25 +508,25 @@ namespace GridManager {
 				{
 				case BuildingEnum::RIGHT:
 					if (!isCellSafe(Vec2<int>{_x + x, y + _y})) {
-						std::cout << "Error " <<__FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
+						std::cout << "Error " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
 						return AllCells;
 					}
 					break;
 				case BuildingEnum::TOP:
 					if (!isCellSafe(Vec2<int>{_x + x, _y - y})) {
-						std::cout<< "Error " <<__FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
+						std::cout << "Error " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
 						return AllCells;
 					}
 					break;
 				case BuildingEnum::LEFT:
 					if (!isCellSafe(Vec2<int>{_x - x, _y - y})) {
-						std::cout << "Error " <<__FILE__ << "ln" << __LINE__ <<  ": Invalid position!\n";
+						std::cout << "Error " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
 						return AllCells;
 					}
 					break;
 				case BuildingEnum::DOWN:
 					if (!isCellSafe(Vec2<int>{_x - x, y + _y})) {
-						std::cout << "Error " <<__FILE__ << "ln" << __LINE__ <<  ": Invalid position!\n";
+						std::cout << "Error " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
 						return AllCells;
 					}
 					break;
@@ -666,30 +666,30 @@ namespace GridManager {
 
 	void UpdateMouseToGrid() {
 		if (PauseManager::IsPaused()) return;
-		Vec2<int> mousePos{InputManager::GetMousePos()};
+		Vec2<int> mousePos{ InputManager::GetMousePos() };
 		Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
 		//First we check if the mouse has moved
-		if(InputManager::HasMouseMoved()){
+		if (InputManager::HasMouseMoved()) {
 			//Then we check if the index is different
 			currentIndex = GetIndex(SelectedCell);
 			//If the mouse has moved out of the previous index, we need to update the synergy cells
-			if(currentIndex != previousIndex){
+			if (currentIndex != previousIndex) {
 				//First we clear out the vector
 				SynergyArea.clear();
 				//DRAWING DEBUG TEXT
 				//Then we set the grid index
 				// SetGridIndex(TestOrientation,BigResidentialLvl1.data,SelectedCell.x,SelectedCell.y);
-				if(selectedBuilding.type != BuildingEnum::NONE){
-				RenderSystem::AddTextToBatch(
-					RenderSystem::GAME_PIECES_BATCH,
-					((float)InputManager::GetMousePos().x/AEGetWindowWidth()*2)-1,
-					(((float)InputManager::GetMousePos().y/AEGetWindowHeight()*2)-1)*-1,
-					FontManager::GetFont(FontManager::ROBOTO),
-					20,
-					std::to_string(InputManager::GetMousePosDelta().x) + " , " + std::to_string(InputManager::GetMousePosDelta().y), 
-					99,
-					COLOR_BLACK
-				);
+				if (selectedBuilding.type != BuildingEnum::NONE) {
+					RenderSystem::AddTextToBatch(
+						RenderSystem::GAME_PIECES_BATCH,
+						((float)InputManager::GetMousePos().x / AEGetWindowWidth() * 2) - 1,
+						(((float)InputManager::GetMousePos().y / AEGetWindowHeight() * 2) - 1) * -1,
+						FontManager::GetFont(FontManager::ROBOTO),
+						20,
+						std::to_string(InputManager::GetMousePosDelta().x) + " , " + std::to_string(InputManager::GetMousePosDelta().y),
+						99,
+						COLOR_BLACK
+					);
 
 				}
 			}
@@ -915,14 +915,14 @@ namespace GridManager {
 		}
 		return false;
 	}
-	BuildingEnum::TYPE GetTypeFromIndex(Vec2<int> cell){
+	BuildingEnum::TYPE GetTypeFromIndex(Vec2<int> cell) {
 		return grid[GetIndex(cell)]._building.data.type;
 	}
 	int GetIndexFromID(int ID) {
 		for (int i{ 0 }; i < (gridX * gridY); ++i) {
 			if (grid[i].ID == ID) return i;
 		}
-		std::cerr << "Error " <<__FILE__ << "ln" << __LINE__ << ": UNABLE TO FIND INDEX FROM ID!\n";
+		std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << ": UNABLE TO FIND INDEX FROM ID!\n";
 		return 0;
 	}
 }

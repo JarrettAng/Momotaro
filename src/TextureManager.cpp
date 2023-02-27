@@ -60,25 +60,25 @@ namespace TextureManager {
 	AEGfxTexture* splash_Tex;
 	AEGfxTexture* synergy_Tex;
 
-    TEX_TYPE operator++(TEX_TYPE& _texture, int)
-    {
-		if(_texture==BUILDING_TEXTURE_COUNT){
-			std::cerr << "WARNING " <<__FILE__ << "ln" << __LINE__ << ": Texture values wrapped!! Reached max building texture count!\n";
+	TEX_TYPE operator++(TEX_TYPE& _texture, int)
+	{
+		if (_texture == BUILDING_TEXTURE_COUNT) {
+			std::cerr << "WARNING " << __FILE__ << "ln" << __LINE__ << ": Texture values wrapped!! Reached max building texture count!\n";
 		}
-		_texture = (_texture == BUILDING_TEXTURE_COUNT) ? 
-		RESIDENTIAL_1X1_L1 : 
-		TEX_TYPE(static_cast<int>(_texture+1));
+		_texture = (_texture == BUILDING_TEXTURE_COUNT) ?
+			RESIDENTIAL_1X1_L1 :
+			TEX_TYPE(static_cast<int>(_texture + 1));
 		return _texture;
-    }
+	}
 
-    void Initialize()
-    {
-        LoadTextures();
+	void Initialize()
+	{
+		LoadTextures();
 		InitializeTextures();
 		GenerateMesh();
-    }
+	}
 
-    /*!***********************************************************************
+	/*!***********************************************************************
 	\brief
 		Load textures from file.
 	*************************************************************************/
@@ -136,7 +136,7 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L2, 1, 1, -1 });
 		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L3, 1, 1, -1 });
 
-		textures.push_back(TextureSheet{ TILE_TEX, 1, 2,.5 });
+		textures.push_back(TextureSheet{ TILE_TEX, 1, 1,.5 });
 		textures.push_back(TextureSheet{ NATURE_TREE, 1, 1, -1 });
 		textures.push_back(TextureSheet{ NATURE_ROCK, 1, 1, -1 });
 
