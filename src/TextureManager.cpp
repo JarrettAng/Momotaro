@@ -136,7 +136,7 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L2, 1, 1, -1 });
 		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L3, 1, 1, -1 });
 
-		textures.push_back(TextureSheet{ TILE_TEX, 1, 1, 1 });
+		textures.push_back(TextureSheet{ TILE_TEX, 1, 2, .7 });
 		textures.push_back(TextureSheet{ NATURE_TREE, 1, 1, -1 });
 		textures.push_back(TextureSheet{ NATURE_ROCK, 1, 1, -1 });
 
