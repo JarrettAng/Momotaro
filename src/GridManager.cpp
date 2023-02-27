@@ -41,7 +41,8 @@ namespace GridManager {
 
 	int buildingID{ 0 };			//THIS ID IS FOR TRACKING BUILDINGS!
 
-	std::vector<Vec2<int>> SynergyArea{};
+	std::vector<Vec2<int>> CurrentSynergyArea{};
+	std::vector<Vec2<int>> CurrentBuildingCells{};
 
 	static int previousIndex{ -1 };
 	static int currentIndex{ -2 };
@@ -49,7 +50,7 @@ namespace GridManager {
 
 	//Test enum
 	BuildingEnum::ORIENTATION TestOrientation{ BuildingEnum::RIGHT };
-	BuildingData selectedBuilding{};
+	const BuildingData* selectedBuilding{};
 
 #pragma region BuildingStuff
 	//Temporary stuff for buildings
@@ -185,7 +186,7 @@ namespace GridManager {
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
 		ChangeOrientation();
-		SetGridIndex(TestOrientation, BigResidentialLvl1.data, SelectedCell.x, SelectedCell.y);
+		// SetGridIndex(TestOrientation, BigResidentialLvl1.data, SelectedCell.x, SelectedCell.y);
 		grid[index]._building.GetSynergyArea();
 		for (Vec2<int> cell : grid[index]._building.synergyAreaCells) {
 			grid[GetIndex(cell)].isRenderable = false;
@@ -200,7 +201,7 @@ namespace GridManager {
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
 		// ChangeOrientation();
-		SetGridIndex(TestOrientation, BigResidential3x1Lvl1.data, SelectedCell.x, SelectedCell.y);
+		// SetGridIndex(TestOrientation, BigResidential3x1Lvl1.data, SelectedCell.x, SelectedCell.y);
 
 	}
 
@@ -216,7 +217,7 @@ namespace GridManager {
 		grid[index]._building.buildingCells.push_back(SelectedCell);
 		grid[index]._building.GetSynergyArea();
 		for (Vec2<int> cell : grid[index]._building.synergyAreaCells) {
-			grid[GetIndex(cell)].isRenderable = false;
+			// grid[GetIndex(cell)].isRenderable = false;
 		}
 		CheckCellNeighbor(grid, SelectedCell);
 
@@ -489,56 +490,65 @@ namespace GridManager {
 	}
 #pragma endregion
 
-	void GetBuildingCard(const BuildingData* _data) {
-		if (_data != nullptr)
-			selectedBuilding = *_data;
+	
+	//Subscribed to select building card
+	void GetBuildingCard(const BuildingData*  _data) {
+		// if (_data != nullptr)
+			selectedBuilding = _data;
 	}
-
-	std::vector<Vec2<int>> GetBuildingCells(BuildingData _data, int _x, int _y) {
+	bool IsBuildingValid(const BuildingData* _data, int _x, int _y){
 		int index = GetIndex(_x, _y);
-		Vec2<int> _size = _data.size;
+		Vec2<int> _size = _data->size;
 		Vec2<int> _SelectedCell{ 0,0 };
 		std::vector<Vec2<int>> AllCells;
-		if (_data.orientation == BuildingEnum::RIGHT || _data.orientation == BuildingEnum::LEFT) {
+		if (_data->orientation == BuildingEnum::RIGHT || _data->orientation == BuildingEnum::LEFT) {
 			_size = Vec2<int>{ _size.y,_size.x };
 		}
 		for (int y{ 0 }; y < _size.y; ++y) {
 			for (int x{ 0 }; x < _size.x; ++x) {
-				switch (_data.orientation)
+				switch (_data->orientation)
 				{
 				case BuildingEnum::RIGHT:
 					if (!isCellSafe(Vec2<int>{_x + x, y + _y})) {
 						std::cout << "Error " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
-						return AllCells;
+						return false;
 					}
 					break;
 				case BuildingEnum::TOP:
 					if (!isCellSafe(Vec2<int>{_x + x, _y - y})) {
 						std::cout << "Error " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
-						return AllCells;
+						return false;
 					}
 					break;
 				case BuildingEnum::LEFT:
 					if (!isCellSafe(Vec2<int>{_x - x, _y - y})) {
 						std::cout << "Error " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
-						return AllCells;
+						return false;
 					}
 					break;
 				case BuildingEnum::DOWN:
 					if (!isCellSafe(Vec2<int>{_x - x, y + _y})) {
 						std::cout << "Error " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
-						return AllCells;
+						return false;
 					}
 					break;
 				}
 			}
 		}
+		return true;
+	}
+	std::vector<Vec2<int>> GetBuildingCells(const BuildingData* _data, int _x, int _y) {
+		int index = GetIndex(_x, _y);
+		Vec2<int> _size = _data->size;
+		Vec2<int> _SelectedCell{ 0,0 };
+		std::vector<Vec2<int>> AllCells;
+		if(!IsBuildingValid(_data,_x,_y)) assert("");
 		std::cout << "Cell Pos : " << _x << ", " << _y << '\n';
-		grid[index].ID = ++buildingID;
+		// grid[index].ID = ++buildingID;
 		for (int y{ 0 }; y < _size.y; ++y) {
 			for (int x{ 0 }; x < _size.x; ++x) {
 				int otherIndex{ 0 };
-				switch (_data.orientation)
+				switch (_data->orientation)
 				{
 				case BuildingEnum::RIGHT:
 					// std::cout<<"RIGHT\n";
@@ -561,18 +571,44 @@ namespace GridManager {
 					_SelectedCell = { _x - x,y + _y };
 					break;
 				}
-				grid[otherIndex].ID = buildingID;
-				grid[otherIndex]._building.data = _data;
+				// grid[otherIndex].ID = buildingID;
+				// grid[otherIndex]._building.data = _data;
 				AllCells.push_back(_SelectedCell);
 			}
 		}
-		for (Vec2<int> cell : AllCells) {
-			grid[GetIndex(cell.x, cell.y)]._building.buildingCells.assign(AllCells.begin(), AllCells.end());
-		}
+		// for (Vec2<int> cell : AllCells) {
+		// 	grid[GetIndex(cell.x, cell.y)]._building.buildingCells.assign(AllCells.begin(), AllCells.end());
+		// }
 		return AllCells;
 	}
 
-	void SetGridIndex(BuildingEnum::ORIENTATION _orientation, BuildingData _data, int _x, int _y)
+    std::vector<Vec2<int>> GetSynergyArea(std::vector<Vec2<int>> _buildingCells)
+    {
+		if(CurrentBuildingCells.empty()) std::cerr << "Error " <<__FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n" ;
+		//First we get all the building cells
+		std::vector<Vec2<int>> tempVec;
+		//Then for every building cell, we get the diagonal AND adjacent cells.
+		for(Vec2<int> cell : CurrentBuildingCells){
+			for(int x{-1}; x<2; ++x){
+				tempVec.push_back(cell+Vec2<int>{0,x*2});
+				tempVec.push_back(cell+Vec2<int>{x*2,0});
+				for(int y{-1}; y<2; ++y){
+					tempVec.push_back(cell+Vec2<int>{x,y});
+				}
+			}
+		}
+		//Small hack to make a compare operator then sort the vector of vectors
+		std::sort(tempVec.begin(),tempVec.end(),[](Vec2<int> a, Vec2<int> b){return a < b;});	//once we sort it we prune
+		auto last = std::unique(tempVec.begin(),tempVec.end());
+		tempVec.erase(last,tempVec.end());
+		return tempVec;
+		// synergyAreaCells = tempVec;
+		// for(Vec2<int>cell : synergyAreaCells){
+		// 	std::cout << "SYNERGY AREA : " << cell << '\n';
+		// }
+    }
+
+    void SetGridIndex(BuildingEnum::ORIENTATION _orientation,const BuildingData* _data, int _x, int _y)
 	{
 		// int index = GetIndex(_x, _y);
 		// Vec2<int> _size = _data.size;
@@ -666,6 +702,7 @@ namespace GridManager {
 
 	void UpdateMouseToGrid() {
 		if (PauseManager::IsPaused()) return;
+		BuildingData newBuilding{};
 		Vec2<int> mousePos{ InputManager::GetMousePos() };
 		Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
 		//First we check if the mouse has moved
@@ -675,26 +712,57 @@ namespace GridManager {
 			//If the mouse has moved out of the previous index, we need to update the synergy cells
 			if (currentIndex != previousIndex) {
 				//First we clear out the vector
-				SynergyArea.clear();
+				CurrentSynergyArea.clear();
+				CurrentBuildingCells.clear();
 				//DRAWING DEBUG TEXT
 				//Then we set the grid index
-				// SetGridIndex(TestOrientation,BigResidentialLvl1.data,SelectedCell.x,SelectedCell.y);
-				if (selectedBuilding.type != BuildingEnum::NONE) {
-					RenderSystem::AddTextToBatch(
-						RenderSystem::GAME_PIECES_BATCH,
-						((float)InputManager::GetMousePos().x / AEGetWindowWidth() * 2) - 1,
-						(((float)InputManager::GetMousePos().y / AEGetWindowHeight() * 2) - 1) * -1,
-						FontManager::GetFont(FontManager::ROBOTO),
-						20,
-						std::to_string(InputManager::GetMousePosDelta().x) + " , " + std::to_string(InputManager::GetMousePosDelta().y),
-						99,
-						COLOR_BLACK
-					);
+				if (selectedBuilding!=nullptr) {
+					newBuilding = *selectedBuilding;
+					if(IsBuildingValid(selectedBuilding,SelectedCell.x,SelectedCell.y)){
+						CurrentBuildingCells = GetBuildingCells(selectedBuilding,SelectedCell.x,SelectedCell.y);
+						CurrentSynergyArea = GetSynergyArea(CurrentBuildingCells);
+						
+						// if(selectedBuilding == nullptr){
+						// 	std::cout << "KJSHFVKJHFJ\n";
+						// 	if (!isCellSafe(SelectedCell)) return;
+						// 	for(Vec2<int> cell : CurrentBuildingCells){
+						// 		grid[GetIndex(cell)].ID = ++buildingID;
+						// 		grid[GetIndex(cell)]._building.data = newBuilding;
+						// 		grid[GetIndex(cell)]._building.buildingCells.push_back(SelectedCell);
+						// 		CheckCellNeighbor(grid, SelectedCell);
+						// 	}
+						// }
+						RenderSystem::AddTextToBatch(
+							RenderSystem::GAME_PIECES_BATCH,
+							((float)InputManager::GetMousePos().x / AEGetWindowWidth() * 2) - 1,
+							(((float)InputManager::GetMousePos().y / AEGetWindowHeight() * 2) - 1) * -1,
+							FontManager::GetFont(FontManager::ROBOTO),
+							20,
+							std::to_string(InputManager::GetMousePosDelta().x) + " , " + std::to_string(InputManager::GetMousePosDelta().y),
+							99,
+							COLOR_BLACK
+						);
+
+					}
+
 
 				}
 			}
 		}
 		previousIndex = currentIndex;
+		if(!CurrentBuildingCells.empty() && selectedBuilding == nullptr){
+			if (!isCellSafe(SelectedCell)) return;
+			std::cout << "KJSHFVKJHFJ\n";
+			for(Vec2<int> cell : CurrentBuildingCells){
+				grid[GetIndex(cell)].ID = ++buildingID;
+				grid[GetIndex(cell)]._building.data = newBuilding;
+				grid[GetIndex(cell)]._building.buildingCells = CurrentBuildingCells;
+				CheckCellNeighbor(grid, SelectedCell);
+			}
+			newBuilding = BuildingData{};
+			CurrentSynergyArea.clear();
+			CurrentBuildingCells.clear();
+		}
 		// for (int y{ 0 }; y < gridY; y++) {
 		// 	for (int x{ 0 }; x < gridX; ++x) {
 		// 		Vec2<int> ScreenPos = iso::WorldIndexToScreenPos(x, y);
@@ -715,16 +783,16 @@ namespace GridManager {
 	void storeClickData() {
 		if (PauseManager::IsPaused()) return;
 
-		Vec2<int> mousePos = InputManager::GetMousePos();
-		//Convert the mouse position into iso
-		Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
-		//We offset by 10 units x and y because of how iso works. We moved the grid up by 10 units
-		if ((((SelectedCell.x) < 0) || ((SelectedCell.x) > gridX)) || ((SelectedCell.y) < 0 || (SelectedCell.y) > gridY)) return;
-		int index = (SelectedCell.x) + gridX * (SelectedCell.y);
-		index = GetIndex(SelectedCell.x, SelectedCell.y);
+		// Vec2<int> mousePos = InputManager::GetMousePos();
+		// //Convert the mouse position into iso
+		// Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
+		// //We offset by 10 units x and y because of how iso works. We moved the grid up by 10 units
+		// if ((((SelectedCell.x) < 0) || ((SelectedCell.x) > gridX)) || ((SelectedCell.y) < 0 || (SelectedCell.y) > gridY)) return;
+		// int index = (SelectedCell.x) + gridX * (SelectedCell.y);
+		// index = GetIndex(SelectedCell.x, SelectedCell.y);
 
-		//if the cell is water (means it doesn't need to be rendered) we don't allow placement
-		if (!grid[index].isRenderable) return;
+		// //if the cell is water (means it doesn't need to be rendered) we don't allow placement
+		// if (!grid[index].isRenderable) return;
 	}
 
 	void ClearGrid() {
@@ -756,6 +824,28 @@ namespace GridManager {
 				}
 				if (grid[index].isRenderable) RenderSystem::AddRectToBatch(RenderSystem::TILE_BATCH, static_cast<float>(grid[index].pos.x), static_cast<float>(grid[index].pos.y), 100, 100, TextureManager::TILE_TEX);
 			}
+		}
+		if (selectedBuilding != nullptr) {
+			if(!CurrentBuildingCells.empty()){
+				for(Vec2<int> cell : CurrentBuildingCells){
+					RenderSystem::AddRectToBatch(
+							RenderSystem::GAME_PIECES_BATCH,
+							static_cast<float>(grid[GetIndex(cell)].pos.x), static_cast<float>(grid[GetIndex(cell)].pos.y),
+							100, 100,
+							selectedBuilding->TextureID
+						);
+				}
+			}
+			// if(!CurrentSynergyArea.empty()){
+			// 	for(Vec2<int> cell : CurrentSynergyArea){
+			// 		RenderSystem::AddRectToBatch(
+			// 				RenderSystem::GAME_PIECES_BATCH,
+			// 				static_cast<float>(grid[GetIndex(cell)].pos.x), static_cast<float>(grid[GetIndex(cell)].pos.y),
+			// 				100, 100,
+			// 				TextureManager::POSITIVE_SYNERGY
+			// 			);
+			// 	}
+			// }
 		}
 		// UIManager::RenderButton(0, 0, 100, 100, 0, UIManager::GetFont(UIManager::ROBOTO).S, "dawdawdwadwadawdawd", Vec4<float>{1, 1, 0, 1}, Vec3<float>{1, 0, 1});
 	}

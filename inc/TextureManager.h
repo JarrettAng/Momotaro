@@ -42,6 +42,8 @@ namespace TextureManager {
 		PAUSE_BUTTON,
 		SPLASH_SCREEN,
 		SYNERGY,
+		POSITIVE_SYNERGY,
+		NEGATIVE_SYNERGY,
 	};
 	TEX_TYPE operator++(TEX_TYPE&, int);
 

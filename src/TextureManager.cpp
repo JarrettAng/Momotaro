@@ -59,6 +59,8 @@ namespace TextureManager {
 	//IN PROGRESS
 	AEGfxTexture* splash_Tex;
 	AEGfxTexture* synergy_Tex;
+	AEGfxTexture* positiveSynergy_Tex;
+	AEGfxTexture* negativeSynergy_Tex;
 
 	TEX_TYPE operator++(TEX_TYPE& _texture, int)
 	{
@@ -110,6 +112,8 @@ namespace TextureManager {
 		//IN PROGRESS
 		splash_Tex = AEGfxTextureLoad("Assets/Textures/UI/SplashScreen.png");
 		synergy_Tex = AEGfxTextureLoad("Assets/Textures/UI/synergyTex.png");
+		positiveSynergy_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/PositiveSynergy.png");
+		positiveSynergy_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/NegativeSynergy.png");
 	}
 
 	/*!***********************************************************************
@@ -144,6 +148,9 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ PAUSE_WINDOW, 1, 1, -1 });
 		textures.push_back(TextureSheet{ PAUSE_BUTTON, 1, 1, -1 });
 		textures.push_back(TextureSheet{ SPLASH_SCREEN, 1, 1, -1 });
+
+		textures.push_back(TextureSheet{ POSITIVE_SYNERGY, 1, 1, -1 });
+		textures.push_back(TextureSheet{ NEGATIVE_SYNERGY, 1, 1, -1 });
 
 		// Initialize frame UV size based on number of cols and rows.
 		for (TextureSheet& t : textures) {
@@ -297,6 +304,10 @@ namespace TextureManager {
 			return splash_Tex;
 		case SYNERGY:
 			return synergy_Tex;
+		case POSITIVE_SYNERGY:
+			return positiveSynergy_Tex;
+		case NEGATIVE_SYNERGY:
+			return negativeSynergy_Tex;
 		default:
 			break;
 		}

@@ -93,21 +93,6 @@ void Building::GetSynergyArea(){
 	std::sort(tempVec.begin(),tempVec.end(),[](Vec2<int> a, Vec2<int> b){return a < b;});	//once we sort it we prune
 	auto last = std::unique(tempVec.begin(),tempVec.end());
 	tempVec.erase(last,tempVec.end());
-	//Performance increase from doing it this way is actually significant compared to previous code
-
-	#pragma region unoptimisedcode
-	// for(Vec2<int> cell : buildingCells){
-	// 	for(int x{-1}; x<2; ++x){
-	// 		if(!HasCellInVector(tempVec,cell+Vec2<int>{0,x*2}))tempVec.push_back(cell+Vec2<int>{0,x*2});
-	// 		if(!HasCellInVector(tempVec,cell+Vec2<int>{x*2,0}))tempVec.push_back(cell+Vec2<int>{x*2,0});
-	// 		for(int y{-1}; y<2; ++y){
-	// 			if(HasCellInVector(buildingCells,cell+Vec2<int>{x,y})) continue;
-	// 			if(HasCellInVector(tempVec,cell+Vec2<int>{x,y})) continue;
-	// 			tempVec.push_back(cell+Vec2<int>{x,y});
-	// 		}
-	// 	}
-	// }
-	#pragma endregion
 	synergyAreaCells = tempVec;
 	for(Vec2<int>cell : synergyAreaCells){
 		std::cout << "SYNERGY AREA : " << cell << '\n';
