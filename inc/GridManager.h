@@ -33,7 +33,7 @@ namespace GridManager {
 	 * @return true if a building can be placed. (even if there's an existing building)
 	 * @return false if a building cannot be placed.
 	 */
-	bool isCellSafe(Vdec2<int> selectedCell);
+	bool isCellSafe(Vec2<int> selectedCell);
 
 	/**
 	 * @brief Spawns a residential building at mouse pos. Overwrites any existing structure.
