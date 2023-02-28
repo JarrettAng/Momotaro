@@ -97,9 +97,9 @@ namespace TextureManager {
 		commercial_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L2.png");
 		commercial_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L3.png");
 
-		industrial_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/industrial_s_test.png");
-		industrial_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/industrial_m_test.png");
-		industrial_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/industrial_l_test.png");
+		industrial_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Industrial_1x1_L1.png");
+		industrial_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Industrial_1x1_L2.png");
+		industrial_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Industrial_1x1_L3.png");
 
 		tile_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Tile.png");
 		nature_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Tree.png");
@@ -136,9 +136,10 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L1, 1, 6, .2 });
 		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L2, 1, 6, .2 });
 		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L3, 3, 6, .1 });
-		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L1, 1, 1, -1 });
-		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L2, 1, 1, -1 });
-		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L3, 1, 1, -1 });
+
+		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L1, 3, 9, .2 });
+		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L2,	3, 9, .2 });
+		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L3, 3, 9, .2 });
 
 		textures.push_back(TextureSheet{ TILE_TEX, 1, 2, .7 });
 		textures.push_back(TextureSheet{ NATURE_TREE, 1, 1, -1 });
