@@ -35,10 +35,5 @@ namespace BuildingManager {
 	BuildingData GetBuildingData(BuildingEnum::TYPE type, Vec2<int> size, BuildingEnum::LEVEL level);
 	BuildingData GetRandomBuildingData(BuildingEnum::TYPE type);
 	BuildingData GetRandomBuildingData(BuildingEnum::LEVEL level);
-
-	void CreateBuilding(BuildingEnum::TYPE type, Vec2<int> size, BuildingEnum::LEVEL level);
-	void CreateRandomBuilding();
-	/*void CreateRandomBuilding(BuildingEnum::TYPE type);
-	void CreateRandomBuilding(BuildingEnum::SIZE size);
-	void CreateRandomBuilding(BuildingEnum::LEVEL level);*/
+	BuildingData GetRandomBuildingData();
 }

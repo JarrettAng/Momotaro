@@ -358,6 +358,11 @@ namespace UI {
 				// Keep looping until the largest spacing index within the max-width is reached
 				while (charWidth * (float)(cutoff - start + 1) > maxWidth) { 
 					cutoff = text.find_last_of(" \n\t", cutoff - 1);
+
+					if (cutoff < start) {
+						cutoff = end;
+						break;
+					}
 					if (cutoff == std::string::npos) break;
 				}
 
@@ -375,6 +380,7 @@ namespace UI {
 				currPos.y = transform.pos.y - texts.size() * transform.size.y * 1.25f;
 
 				texts.emplace_back(text.substr(start, cutoff - start), currPos);
+
 				start = cutoff == std::string::npos ? cutoff : cutoff + 1;
 				cutoff = end;
 			}

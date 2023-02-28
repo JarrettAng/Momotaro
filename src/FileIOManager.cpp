@@ -81,7 +81,7 @@ namespace FileIOManager {
 			BuildingEnum::RIGHT,
 			3, -1, -1, 1, 
 			"Small Shop", "Lovely shop with lovely goods", 
-			TextureManager::RESIDENTIAL_1X1_L2};
+			TextureManager::COMMERCIAL_1X1_L2};
 		buildingsData.push_back(newBuilding8);
 		BuildingData newBuilding9{ 
 			BuildingEnum::COMMERCIAL, 
@@ -90,7 +90,7 @@ namespace FileIOManager {
 			BuildingEnum::RIGHT,
 			3, -1, -1, 1, 
 			"Big Shophouse", "Big shophouse which sells many goods", 
-			TextureManager::RESIDENTIAL_1X1_L3};
+			TextureManager::COMMERCIAL_1X1_L3};
 		buildingsData.push_back(newBuilding9);
 
 		//BuildingData newBuilding10{ COMMERCIAL, _2X1, L1, 5, 0, -5, 1, "Small house", "Small lovely house", 110, 000 };
@@ -114,7 +114,7 @@ namespace FileIOManager {
 			Vec2<int>{1,1}, 
 			BuildingEnum::L2, 
 			BuildingEnum::RIGHT,
-			1-3, -1, 5, 1, 
+			-3, -1, 5, 1, 
 			"Small Warehouse", "Bigger warehouse to store even more goods", 
 			TextureManager::INDUSTRIAL_1X1_L2};
 		buildingsData.push_back(newBuilding14);

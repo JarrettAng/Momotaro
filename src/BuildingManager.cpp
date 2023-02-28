@@ -22,8 +22,6 @@ The functions include:
 
 namespace BuildingManager {
 	std::vector<BuildingData> buildingsData; // Template for all buildings
-	std::vector<Building> buildings;		 // Array of the actual buildings
-
 
 	void Initialize() {
 		FileIOManager::ReadBuildingsData(buildingsData);
@@ -43,7 +41,7 @@ namespace BuildingManager {
 
 	BuildingData GetRandomBuildingData(BuildingEnum::TYPE type) {
 		Vec2<int> randSize = Vec2<int>{1,1};
-		BuildingEnum::LEVEL randLevel = (BuildingEnum::LEVEL)((rand() % (BuildingEnum::LEVEL_LENGTH - 1))+1);
+		BuildingEnum::LEVEL randLevel = (BuildingEnum::LEVEL)(rand() % (BuildingEnum::LEVEL_LENGTH - 1));
 
 		// TODO: Remove after prototype
 		// randSize = BuildingEnum::_1X1;
@@ -60,7 +58,7 @@ namespace BuildingManager {
 	}
 
 	BuildingData GetRandomBuildingData(BuildingEnum::LEVEL level) {
-		BuildingEnum::TYPE randType = (BuildingEnum::TYPE)((rand() % (BuildingEnum::TYPE_LENGTH - 2))+1);
+		BuildingEnum::TYPE randType = (BuildingEnum::TYPE)((rand() % (BuildingEnum::TYPE_LENGTH - 2)) + 1);
 		Vec2<int> randSize = Vec2<int>{1,1};
 
 		// TODO: Remove after prototype
@@ -77,16 +75,22 @@ namespace BuildingManager {
 		return buildingsData[0];
 	}
 
-	void CreateBuilding(BuildingEnum::TYPE type, Vec2<int> size, BuildingEnum::LEVEL level) {
-		buildings.emplace_back(GetBuildingData(type, size, level));
-	}
+	BuildingData GetRandomBuildingData() {
+		BuildingEnum::TYPE randType = (BuildingEnum::TYPE)((rand() % (BuildingEnum::TYPE_LENGTH - 2)) + 1);
+		BuildingEnum::LEVEL randLevel = (BuildingEnum::LEVEL)(rand() % (BuildingEnum::LEVEL_LENGTH - 1));
+		Vec2<int> randSize = Vec2<int>{ 1,1 };
 
-	void CreateRandomBuilding() {
-		BuildingEnum::TYPE randType = (BuildingEnum::TYPE)(rand() % BuildingEnum::TYPE_LENGTH);
-		Vec2<int> randSize = Vec2<int>{1,1};
-		BuildingEnum::LEVEL randLevel = (BuildingEnum::LEVEL)(rand() % BuildingEnum::LEVEL_LENGTH);
+		std::cerr << "Test : TYPE " << randType << ", SIZE " << randSize << ", LEVEL " << randLevel << std::endl;
 
-		CreateBuilding(randType, randSize, randLevel);
+		for (BuildingData building : buildingsData) {
+			if (building.type == randType && building.size == randSize && building.level == randLevel) {
+				return building;
+			}
+		}
+		// TODO: Error check
+		std::cerr << "Error : " << __FILE__ << " ln" << __LINE__ << " TRIED TO GET (RANDOM) INVALID BUILDING DATA OF TYPE " << randType << ", SIZE " << randSize << ", LEVEL " << randLevel << std::endl;
+
+		return buildingsData[0];
 	}
 
 	void Clear() {

@@ -66,7 +66,8 @@ namespace CardManager {
 
 namespace CardManager {
 	extern EventSystem::Event<const BuildingData*> onNewCardSelected;
-	
+	extern EventSystem::Event<Vec2<int>> onCardPlaced;
+
 	void Initialize();
 	void Update();
 
@@ -76,6 +77,7 @@ namespace CardManager {
 
 	void DrawRandomCard(BuildingEnum::LEVEL level);
 	void DrawRandomCard(BuildingEnum::TYPE type);
+	void DrawRandomCard();
 
 	void Free();
 }

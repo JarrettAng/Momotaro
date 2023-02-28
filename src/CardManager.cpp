@@ -14,6 +14,7 @@ The functions include:
 
 #include <algorithm>
 
+#include <GridManager.h>
 #include <CardManager.h>
 #include <InputManager.h>
 #include <FontManager.h>
@@ -104,6 +105,7 @@ namespace CardManager {
 
 namespace CardManager {
 	EventSystem::Event<const BuildingData*> onNewCardSelected;	// Event that gets called when player selects/deselects a card
+	EventSystem::Event<Vec2<int>> onCardPlaced;					// Event that gets called when player plays a card
 
 	int startingHandSize;
 	std::vector<Card> hand;							// Data on rendering for current cards held
@@ -125,7 +127,8 @@ namespace CardManager {
 	void RemoveFromHand(Card* cardToRemove);
 	void HandleClick();
 	void UpdateHandPositions();
-	void DebugSpawnCard();
+	void GiveRandL1Card();
+	void GiveRandCard();
 #pragma endregion
 
 	void Initialize() {
@@ -159,7 +162,10 @@ namespace CardManager {
 		DrawCard(BuildingEnum::INDUSTRIAL, BuildingEnum::L1);
 
 		InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
-		InputManager::SubscribeToKey(AEVK_F, InputManager::TRIGGERED, DebugSpawnCard);
+
+		// Debugging: Spawn cards
+		InputManager::SubscribeToKey(AEVK_F, InputManager::TRIGGERED, GiveRandL1Card);
+		InputManager::SubscribeToKey(AEVK_G, InputManager::TRIGGERED, GiveRandCard);
 	}
 
 	void Update() {
@@ -222,8 +228,13 @@ namespace CardManager {
 		}
 	}
 
-	void DebugSpawnCard() {
+	void GiveRandL1Card() {
 		DrawRandomCard(BuildingEnum::L1);
+	}
+
+	void GiveRandCard() {
+		DrawRandomCard();
+		//DrawCard(BuildingEnum::INDUSTRIAL, BuildingEnum::L2);
 	}
 
 	void DrawCard(BuildingEnum::TYPE type, BuildingEnum::LEVEL level) {
@@ -238,6 +249,11 @@ namespace CardManager {
 
 	void DrawRandomCard(BuildingEnum::TYPE type) {
 		BuildingData buildingData = BuildingManager::GetRandomBuildingData(type);
+		AddToHand(buildingData);
+	}
+
+	void DrawRandomCard() {
+		BuildingData buildingData = BuildingManager::GetRandomBuildingData();
 		AddToHand(buildingData);
 	}
 
@@ -277,6 +293,13 @@ namespace CardManager {
 	}
 
 	void PlayCard() {
+		Vec2<int> mousePos = InputManager::GetMousePos();
+		if (!GridManager::isCellSafe(IsometricGrid::ScreenPosToIso(mousePos))) {
+			return;
+		}
+
+		onCardPlaced.Invoke(mousePos);
+
 		--selectedCard->count;
 		selectedCard->UpdateCountText();
 
@@ -338,6 +361,7 @@ namespace CardManager {
 	void Free() {
 		hand.clear();
 		InputManager::UnsubscribeKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
-		InputManager::UnsubscribeKey(AEVK_F, InputManager::TRIGGERED, DebugSpawnCard);
+		InputManager::UnsubscribeKey(AEVK_F, InputManager::TRIGGERED, GiveRandL1Card);
+		InputManager::UnsubscribeKey(AEVK_G, InputManager::TRIGGERED, GiveRandCard);
 	}
 }
