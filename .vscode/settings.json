@@ -49,6 +49,7 @@
         "xlocmon": "cpp",
         "xloctime": "cpp",
         "fstream": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "deque": "cpp"
     }
 }
