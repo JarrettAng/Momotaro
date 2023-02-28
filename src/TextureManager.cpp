@@ -102,8 +102,8 @@ namespace TextureManager {
 		industrial_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/industrial_l_test.png");
 
 		tile_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Tile.png");
-		nature_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/tree_test.png");
-		rock_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/rock_test.png");
+		nature_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Tree.png");
+		rock_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Rock.png");
 
 		card_Tex = AEGfxTextureLoad("Assets/Textures/UI/Card.png");
 		pause_Tex = AEGfxTextureLoad("Assets/Textures/UI/GameWindow.png");

@@ -490,13 +490,13 @@ namespace GridManager {
 	}
 #pragma endregion
 
-	
+
 	//Subscribed to select building card
-	void GetBuildingCard(const BuildingData*  _data) {
+	void GetBuildingCard(const BuildingData* _data) {
 		// if (_data != nullptr)
-			selectedBuilding = _data;
+		selectedBuilding = _data;
 	}
-	bool IsBuildingValid(const BuildingData* _data, int _x, int _y){
+	bool IsBuildingValid(const BuildingData* _data, int _x, int _y) {
 		int index = GetIndex(_x, _y);
 		Vec2<int> _size = _data->size;
 		Vec2<int> _SelectedCell{ 0,0 };
@@ -542,7 +542,7 @@ namespace GridManager {
 		Vec2<int> _size = _data->size;
 		Vec2<int> _SelectedCell{ 0,0 };
 		std::vector<Vec2<int>> AllCells;
-		if(!IsBuildingValid(_data,_x,_y)) assert("");
+		if (!IsBuildingValid(_data, _x, _y)) assert("");
 		std::cout << "Cell Pos : " << _x << ", " << _y << '\n';
 		// grid[index].ID = ++buildingID;
 		for (int y{ 0 }; y < _size.y; ++y) {
@@ -582,33 +582,33 @@ namespace GridManager {
 		return AllCells;
 	}
 
-    std::vector<Vec2<int>> GetSynergyArea(std::vector<Vec2<int>> _buildingCells)
-    {
-		if(CurrentBuildingCells.empty()) std::cerr << "Error " <<__FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n" ;
+	std::vector<Vec2<int>> GetSynergyArea(std::vector<Vec2<int>> _buildingCells)
+	{
+		if (CurrentBuildingCells.empty()) std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n";
 		//First we get all the building cells
 		std::vector<Vec2<int>> tempVec;
 		//Then for every building cell, we get the diagonal AND adjacent cells.
-		for(Vec2<int> cell : CurrentBuildingCells){
-			for(int x{-1}; x<2; ++x){
-				tempVec.push_back(cell+Vec2<int>{0,x*2});
-				tempVec.push_back(cell+Vec2<int>{x*2,0});
-				for(int y{-1}; y<2; ++y){
-					tempVec.push_back(cell+Vec2<int>{x,y});
+		for (Vec2<int> cell : CurrentBuildingCells) {
+			for (int x{ -1 }; x < 2; ++x) {
+				tempVec.push_back(cell + Vec2<int>{0, x * 2});
+				tempVec.push_back(cell + Vec2<int>{x * 2, 0});
+				for (int y{ -1 }; y < 2; ++y) {
+					tempVec.push_back(cell + Vec2<int>{x, y});
 				}
 			}
 		}
 		//Small hack to make a compare operator then sort the vector of vectors
-		std::sort(tempVec.begin(),tempVec.end(),[](Vec2<int> a, Vec2<int> b){return a < b;});	//once we sort it we prune
-		auto last = std::unique(tempVec.begin(),tempVec.end());
-		tempVec.erase(last,tempVec.end());
+		std::sort(tempVec.begin(), tempVec.end(), [](Vec2<int> a, Vec2<int> b) {return a < b; });	//once we sort it we prune
+		auto last = std::unique(tempVec.begin(), tempVec.end());
+		tempVec.erase(last, tempVec.end());
 		return tempVec;
 		// synergyAreaCells = tempVec;
 		// for(Vec2<int>cell : synergyAreaCells){
 		// 	std::cout << "SYNERGY AREA : " << cell << '\n';
 		// }
-    }
+	}
 
-    void SetGridIndex(BuildingEnum::ORIENTATION _orientation,const BuildingData* _data, int _x, int _y)
+	void SetGridIndex(BuildingEnum::ORIENTATION _orientation, const BuildingData* _data, int _x, int _y)
 	{
 		// int index = GetIndex(_x, _y);
 		// Vec2<int> _size = _data.size;
@@ -716,12 +716,12 @@ namespace GridManager {
 				CurrentBuildingCells.clear();
 				//DRAWING DEBUG TEXT
 				//Then we set the grid index
-				if (selectedBuilding!=nullptr) {
+				if (selectedBuilding != nullptr) {
 					newBuilding = *selectedBuilding;
-					if(IsBuildingValid(selectedBuilding,SelectedCell.x,SelectedCell.y)){
-						CurrentBuildingCells = GetBuildingCells(selectedBuilding,SelectedCell.x,SelectedCell.y);
+					if (IsBuildingValid(selectedBuilding, SelectedCell.x, SelectedCell.y)) {
+						CurrentBuildingCells = GetBuildingCells(selectedBuilding, SelectedCell.x, SelectedCell.y);
 						CurrentSynergyArea = GetSynergyArea(CurrentBuildingCells);
-						
+
 						// if(selectedBuilding == nullptr){
 						// 	std::cout << "KJSHFVKJHFJ\n";
 						// 	if (!isCellSafe(SelectedCell)) return;
@@ -750,10 +750,10 @@ namespace GridManager {
 			}
 		}
 		previousIndex = currentIndex;
-		if(!CurrentBuildingCells.empty() && selectedBuilding == nullptr){
+		if (!CurrentBuildingCells.empty() && selectedBuilding == nullptr) {
 			if (!isCellSafe(SelectedCell)) return;
 			std::cout << "KJSHFVKJHFJ\n";
-			for(Vec2<int> cell : CurrentBuildingCells){
+			for (Vec2<int> cell : CurrentBuildingCells) {
 				grid[GetIndex(cell)].ID = ++buildingID;
 				grid[GetIndex(cell)]._building.data = newBuilding;
 				grid[GetIndex(cell)]._building.buildingCells = CurrentBuildingCells;
@@ -826,14 +826,14 @@ namespace GridManager {
 			}
 		}
 		if (selectedBuilding != nullptr) {
-			if(!CurrentBuildingCells.empty()){
-				for(Vec2<int> cell : CurrentBuildingCells){
+			if (!CurrentBuildingCells.empty()) {
+				for (Vec2<int> cell : CurrentBuildingCells) {
 					RenderSystem::AddRectToBatch(
-							RenderSystem::GAME_PIECES_BATCH,
-							static_cast<float>(grid[GetIndex(cell)].pos.x), static_cast<float>(grid[GetIndex(cell)].pos.y),
-							100, 100,
-							selectedBuilding->TextureID
-						);
+						RenderSystem::GAME_PIECES_BATCH,
+						static_cast<float>(grid[GetIndex(cell)].pos.x), static_cast<float>(grid[GetIndex(cell)].pos.y),
+						100, 100,
+						selectedBuilding->TextureID
+					);
 				}
 			}
 			// if(!CurrentSynergyArea.empty()){
