@@ -23,6 +23,7 @@ The functions include:
 #include <GridManager.h>
 #include <PauseManager.h>
 #include <CardManager.h>
+#include <UIManager.h>
 
 namespace GridManager {
 	namespace iso = IsometricGrid;
@@ -160,8 +161,20 @@ namespace GridManager {
 		InputManager::SubscribeToKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
 
 		CardManager::onNewCardSelected.Subscribe(GetBuildingCard);
+		CardManager::onCardPlaced.Subscribe(SpawnBuilding);
 	}
-
+	void SpawnBuilding(Vec2<int>mousePos){
+		Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
+		if(!isCellSafe(SelectedCell)){
+			std::cout << "Error " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
+			return;
+		}
+		int index = GetIndex(SelectedCell);
+		grid[index].ID = ++buildingID;
+		grid[index]._building.data = *selectedBuilding;
+		grid[index]._building.buildingCells = CurrentBuildingCells;
+		CheckCellNeighbor(grid, SelectedCell);
+	}
 
 	bool isCellSafe(Vec2<int> selectedCell) {
 		// if ((((selectedCell.x) < 0) || ((selectedCell.x) > gridX)) || ((selectedCell.y) < 0 || (selectedCell.y) > gridY)) return false;
@@ -750,19 +763,18 @@ namespace GridManager {
 			}
 		}
 		previousIndex = currentIndex;
-		if (!CurrentBuildingCells.empty() && selectedBuilding == nullptr) {
-			if (!isCellSafe(SelectedCell)) return;
-			std::cout << "KJSHFVKJHFJ\n";
-			for (Vec2<int> cell : CurrentBuildingCells) {
-				grid[GetIndex(cell)].ID = ++buildingID;
-				grid[GetIndex(cell)]._building.data = newBuilding;
-				grid[GetIndex(cell)]._building.buildingCells = CurrentBuildingCells;
-				CheckCellNeighbor(grid, SelectedCell);
-			}
-			newBuilding = BuildingData{};
-			CurrentSynergyArea.clear();
-			CurrentBuildingCells.clear();
-		}
+		// if(!CurrentBuildingCells.empty() && selectedBuilding == nullptr){
+		// 	if (!isCellSafe(SelectedCell)) return;
+		// 	for(Vec2<int> cell : CurrentBuildingCells){
+		// 		grid[GetIndex(cell)].ID = ++buildingID;
+		// 		grid[GetIndex(cell)]._building.data = newBuilding;
+		// 		grid[GetIndex(cell)]._building.buildingCells = CurrentBuildingCells;
+		// 		CheckCellNeighbor(grid, SelectedCell);
+		// 	}
+		// 	newBuilding = BuildingData{};
+		// 	CurrentSynergyArea.clear();
+		// 	CurrentBuildingCells.clear();
+		// }
 		// for (int y{ 0 }; y < gridY; y++) {
 		// 	for (int x{ 0 }; x < gridX; ++x) {
 		// 		Vec2<int> ScreenPos = iso::WorldIndexToScreenPos(x, y);
@@ -836,18 +848,65 @@ namespace GridManager {
 					);
 				}
 			}
-			// if(!CurrentSynergyArea.empty()){
-			// 	for(Vec2<int> cell : CurrentSynergyArea){
-			// 		RenderSystem::AddRectToBatch(
-			// 				RenderSystem::GAME_PIECES_BATCH,
-			// 				static_cast<float>(grid[GetIndex(cell)].pos.x), static_cast<float>(grid[GetIndex(cell)].pos.y),
-			// 				100, 100,
-			// 				TextureManager::POSITIVE_SYNERGY
-			// 			);
-			// 	}
-			// }
+			if(!CurrentSynergyArea.empty()){
+				UI::TextBox pointText;
+				Vec2<float> pointTextPos;
+				int points;
+				Vec3<float> color;
+				for(Vec2<int> cell : CurrentSynergyArea){
+					pointTextPos.x = static_cast<float>(grid[GetIndex(cell)].pos.x);
+					pointTextPos.y = static_cast<float>(grid[GetIndex(cell)].pos.y) - 62.5;
+					points = GetSynergyText(cell,*selectedBuilding);
+					if(points > 0) {
+						color = COLOR_BOX_POSITIVE;
+					} else if (points < 0) {
+						color = COLOR_BOX_NEGATIVE;
+					} else {
+						color = COLOR_BOX_NEUTRAL;
+					}
+					pointText = UI::TextBox(pointTextPos, std::to_string(points), UI::CENTER_JUSTIFY, 100, 50, color);
+					pointText.Render();
+					// RenderSystem::AddTextToBatch(
+					// 		RenderSystem::GAME_PIECES_BATCH,
+					// 		(static_cast<float>(grid[GetIndex(cell)].pos.x) / AEGetWindowWidth() * 2) - 1,
+					// 		((static_cast<float>(grid[GetIndex(cell)].pos.y) / AEGetWindowHeight() * 2) - 1) * -1,
+					// 		FontManager::GetFont(FontManager::ROBOTO),
+					// 		20,
+					// 		std::to_string(GetSynergyText(cell,*selectedBuilding)),
+					// 		99,
+					// 		COLOR_BLACK
+					// 	);
+					//Draw synergy texture
+					RenderSystem::AddRectToBatch(
+							RenderSystem::GAME_PIECES_BATCH,
+							static_cast<float>(grid[GetIndex(cell)].pos.x), static_cast<float>(grid[GetIndex(cell)].pos.y),
+							100, 100,
+							TextureManager::POSITIVE_SYNERGY
+						);
+				}
+			}
 		}
 		// UIManager::RenderButton(0, 0, 100, 100, 0, UIManager::GetFont(UIManager::ROBOTO).S, "dawdawdwadwadawdawd", Vec4<float>{1, 1, 0, 1}, Vec3<float>{1, 0, 1});
+	}
+
+	int GetSynergyText(Vec2<int> cellToCheck, BuildingData _data){
+
+		switch(grid[GetIndex(cellToCheck)]._building.data.type){
+			case BuildingEnum::NONE:
+			if(!grid[GetIndex(cellToCheck)].isRenderable) return _data.SynergyNature;
+			return 0;
+			break;
+			case BuildingEnum::RESIDENTIAL:
+			return _data.SynergyResidential;
+			case BuildingEnum::COMMERCIAL:
+			return _data.SynergyCommercial;
+			case BuildingEnum::INDUSTRIAL:
+			return _data.SynergyIndustrial;
+			case BuildingEnum::NATURE:
+			return _data.SynergyNature;
+		}
+		std::cerr << "Error " <<__FILE__ << "ln" << __LINE__ << " : UNABLE TO GET SYNERGY POINTS!\n" ;
+		return 0;
 	}
 
 	void GridManager::CheckCellNeighbor(iso::cell* grid, Vec2<int> cellIndex)

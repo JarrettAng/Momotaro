@@ -25,7 +25,9 @@ namespace GridManager {
 	 */
 	void Initialize();
 
-	/**
+    void SpawnBuilding(Vec2<int> mousePos);
+
+    /**
 	 * @brief Helper boolean to check if the cell is safe to be placed on. Checks if it's within bounds and if the cell is renderable.
 	 * Takes in CELL INDEX. DOES NOT CHECK IF THE CELL IS ALREADY OCCUPIED OR NOT!!
 	 * @param x x index of the cell
@@ -74,7 +76,9 @@ namespace GridManager {
 	 */
 	void PrepareTileRenderBatch();
 
-	/**
+    int GetSynergyText(Vec2<int> cellToCheck, BuildingData _data);
+
+    /**
 	 * @brief Checks the cell neighbors and merges them. The order of merge goes clock wise from North (top right)
 	 * The order of merge goes clock wise from North (top right) -> East (bottom right) -> South (bottom left) -> West (top left)
 	 * @param grid the grid to check
