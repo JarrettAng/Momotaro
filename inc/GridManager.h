@@ -16,6 +16,8 @@ The functions include:
 #pragma once
 
 #include <IsometricGrid.h> 
+#include <EventSystem.h>
+
 namespace GridManager {
 	namespace iso = IsometricGrid;
 
@@ -102,6 +104,9 @@ namespace GridManager {
     BuildingEnum::TYPE GetTypeFromIndex(Vec2<int> cell);
 
     int GetIndexFromID(int ID);
+
+	extern EventSystem::Event<void> onMergeBuildings;
+
 
     /**
 	 * @brief Clears the whole grid of any structure

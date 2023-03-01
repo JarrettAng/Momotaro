@@ -24,12 +24,12 @@ The functions include:
 #include <PauseManager.h>
 #include <CardManager.h>
 #include <UIManager.h>
-
+#include <ScoreManager.h>
 namespace GridManager {
 	namespace iso = IsometricGrid;
 
 	int synergyPoints{ 0 };
-	int terrainNum{ 0 };
+	int terrainNum{ 2 };
 
 	iso::cell* grid;
 	const int gridX{ 20 }, gridY{ 20 };		//total grid size
@@ -48,10 +48,12 @@ namespace GridManager {
 	static int previousIndex{ -1 };
 	static int currentIndex{ -2 };
 
+	int totalPoints{};
 
 	//Test enum
 	BuildingEnum::ORIENTATION TestOrientation{ BuildingEnum::RIGHT };
 	const BuildingData* selectedBuilding{};
+	EventSystem::Event<void> onMergeBuildings;
 
 #pragma region BuildingStuff
 	//Temporary stuff for buildings
@@ -146,7 +148,7 @@ namespace GridManager {
 
 		// Hardcoded island parts
 		// Top left
-
+		RandomiseTerrain();
 
 		InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, storeClickData);
 		InputManager::SubscribeToKey(AEVK_C, InputManager::TRIGGERED, ClearGrid);
@@ -174,6 +176,7 @@ namespace GridManager {
 		grid[index]._building.data = *selectedBuilding;
 		grid[index]._building.buildingCells = CurrentBuildingCells;
 		CheckCellNeighbor(grid, SelectedCell);
+		ScoreManger::AddScore(totalPoints);
 	}
 
 	bool isCellSafe(Vec2<int> selectedCell) {
@@ -234,59 +237,6 @@ namespace GridManager {
 		}
 		CheckCellNeighbor(grid, SelectedCell);
 
-#if testVector
-		Vec2<int> test1{ 1,1 };
-		Vec2<int> test11{ 2,2 };
-		Vec3<int> test2{ 1,1,1 };
-		Vec3<int> test22{ 2,2,2 };
-		Vec4<int> test3{ 1,1,1,1 };
-		Vec4<int> test33{ 2,2,2,2 };
-
-		std::cout << "TEST 1 (vec+=vec)\n";
-
-		std::cout << (test11 += test1) << " = (3,3)" << '\n';
-		std::cout << (test22 += test2) << " = (3,3,3)" << '\n';
-		std::cout << (test33 += test3) << " = (3,3,3,3)" << '\n';
-
-		std::cout << "TEST 2 (vec-=vec)\n";
-		std::cout << (test11 -= test1) << " = (2,2)" << '\n';
-		std::cout << (test22 -= test2) << " = (2,2,2)" << '\n';
-		std::cout << (test33 -= test3) << " = (2,2,2,2)" << '\n';
-
-		std::cout << "TEST 3 (vec-vec higher)\n";
-		std::cout << test33 - test1 << " = (1,1,2,2)" << '\n';
-		std::cout << test33 - test2 << " = (1,1,1,2)" << '\n';
-		std::cout << test33 - test3 << " = (1,1,1,1)" << '\n';
-		std::cout << test22 - test1 << " = (1,1,2)" << '\n';
-		std::cout << test22 - test2 << " = (1,1,1)" << '\n';
-
-		// std::cout <<"TEST 4 (vec-vec lower)\n";
-		// std::cout << test1-test33 << " = (1,1,2,2)"<< '\n';
-		// std::cout << test2-test33 << " = (1,1,1,2)"<<'\n';
-		// std::cout << test3-test33 << " = (1,1,1,1)"<< '\n';
-		// std::cout << test1-test22 << " = (1,1,2)"<< '\n';
-		// std::cout << test2-test22 << " = (1,1,1)"<< '\n';
-
-		std::cout << "TEST 5 (vec+vec)\n";
-		std::cout << test1 + test33 << " = (3,3,2,2)" << '\n';
-		std::cout << test2 + test33 << " = (3,3,3,2)" << '\n';
-		std::cout << test3 + test33 << " = (3,3,3,3)" << '\n';
-		std::cout << test1 + test22 << " = (3,3,2)" << '\n';
-		std::cout << test2 + test22 << " = (3,3,3)" << '\n';
-
-		std::cout << "TEST 6 (vec*=vec)\n";
-		test1 *= 4;
-		test2 *= 4;
-		test3 *= 4;
-		std::cout << test1 << " = (4,4)" << '\n';
-		std::cout << test2 << " = (4,4,4)" << '\n';
-		std::cout << test3 << " = (4,4,4,4)" << '\n';
-
-		std::cout << "TEST 7 (vec*T)\n";
-		std::cout << test11 * 2 << " = (4,4)" << '\n';
-		std::cout << test22 * 2 << " = (4,4,4)" << '\n';
-		std::cout << test33 * 2 << " = (4,4,4,4)" << '\n';
-#endif
 
 	}
 	void SpawnCommerical() {
@@ -350,7 +300,7 @@ namespace GridManager {
 		// std::cout << terrainNum << '\n';
 		switch (terrainNum)
 		{
-		case 0:
+		case 1:
 			//Top Left
 			grid[GetIndex(7, 9)].isRenderable = true;
 			grid[GetIndex(7, 10)].isRenderable = true;
@@ -384,7 +334,7 @@ namespace GridManager {
 			grid[GetIndex(12, 6)].isRenderable = true;
 			terrainNum++;
 			break;
-		case 1:
+		case 0:
 			//Top Left
 			grid[GetIndex(7, 9)].isRenderable = true;
 			grid[GetIndex(7, 10)].isRenderable = true;
@@ -721,75 +671,38 @@ namespace GridManager {
 		//First we check if the mouse has moved
 		if (InputManager::HasMouseMoved()) {
 			//Then we check if the index is different
-			currentIndex = GetIndex(SelectedCell);
-			//If the mouse has moved out of the previous index, we need to update the synergy cells
-			if (currentIndex != previousIndex) {
-				//First we clear out the vector
-				CurrentSynergyArea.clear();
-				CurrentBuildingCells.clear();
-				//DRAWING DEBUG TEXT
-				//Then we set the grid index
-				if (selectedBuilding != nullptr) {
-					newBuilding = *selectedBuilding;
-					if (IsBuildingValid(selectedBuilding, SelectedCell.x, SelectedCell.y)) {
-						CurrentBuildingCells = GetBuildingCells(selectedBuilding, SelectedCell.x, SelectedCell.y);
-						CurrentSynergyArea = GetSynergyArea(CurrentBuildingCells);
+		}
+		currentIndex = GetIndex(SelectedCell);
+		//If the mouse has moved out of the previous index, we need to update the synergy cells
+		if (currentIndex != previousIndex) {
+			//First we clear out the vector
+			CurrentSynergyArea.clear();
+			CurrentBuildingCells.clear();
+			//DRAWING DEBUG TEXT
+			//Then we set the grid index
+			if (selectedBuilding != nullptr) {
+				newBuilding = *selectedBuilding;
+				if (IsBuildingValid(selectedBuilding, SelectedCell.x, SelectedCell.y)) {
+					CurrentBuildingCells = GetBuildingCells(selectedBuilding, SelectedCell.x, SelectedCell.y);
+					CurrentSynergyArea = GetSynergyArea(CurrentBuildingCells);
 
-						// if(selectedBuilding == nullptr){
-						// 	std::cout << "KJSHFVKJHFJ\n";
-						// 	if (!isCellSafe(SelectedCell)) return;
-						// 	for(Vec2<int> cell : CurrentBuildingCells){
-						// 		grid[GetIndex(cell)].ID = ++buildingID;
-						// 		grid[GetIndex(cell)]._building.data = newBuilding;
-						// 		grid[GetIndex(cell)]._building.buildingCells.push_back(SelectedCell);
-						// 		CheckCellNeighbor(grid, SelectedCell);
-						// 	}
-						// }
-						RenderSystem::AddTextToBatch(
-							RenderSystem::GAME_PIECES_BATCH,
-							((float)InputManager::GetMousePos().x / AEGetWindowWidth() * 2) - 1,
-							(((float)InputManager::GetMousePos().y / AEGetWindowHeight() * 2) - 1) * -1,
-							FontManager::GetFont(FontManager::ROBOTO),
-							20,
-							std::to_string(InputManager::GetMousePosDelta().x) + " , " + std::to_string(InputManager::GetMousePosDelta().y),
-							99,
-							COLOR_BLACK
-						);
-
-					}
-
+					RenderSystem::AddTextToBatch(
+						RenderSystem::GAME_PIECES_BATCH,
+						((float)InputManager::GetMousePos().x / AEGetWindowWidth() * 2) - 1,
+						(((float)InputManager::GetMousePos().y / AEGetWindowHeight() * 2) - 1) * -1,
+						FontManager::GetFont(FontManager::ROBOTO),
+						20,
+						std::to_string(InputManager::GetMousePosDelta().x) + " , " + std::to_string(InputManager::GetMousePosDelta().y),
+						99,
+						COLOR_BLACK
+					);
 
 				}
+
+
 			}
 		}
 		previousIndex = currentIndex;
-		// if(!CurrentBuildingCells.empty() && selectedBuilding == nullptr){
-		// 	if (!isCellSafe(SelectedCell)) return;
-		// 	for(Vec2<int> cell : CurrentBuildingCells){
-		// 		grid[GetIndex(cell)].ID = ++buildingID;
-		// 		grid[GetIndex(cell)]._building.data = newBuilding;
-		// 		grid[GetIndex(cell)]._building.buildingCells = CurrentBuildingCells;
-		// 		CheckCellNeighbor(grid, SelectedCell);
-		// 	}
-		// 	newBuilding = BuildingData{};
-		// 	CurrentSynergyArea.clear();
-		// 	CurrentBuildingCells.clear();
-		// }
-		// for (int y{ 0 }; y < gridY; y++) {
-		// 	for (int x{ 0 }; x < gridX; ++x) {
-		// 		Vec2<int> ScreenPos = iso::WorldIndexToScreenPos(x, y);
-		// 		ScreenPos.y += (gridY * 50) / 2;		//move the grid up by half its size (20 units / 2 = 10)
-		// 		RenderSystem::AddTextToBatch(
-		// 			RenderSystem::GAME_PIECES_BATCH,
-		// 			(ScreenPos.x + 25) / AEGfxGetWinMaxX(), (ScreenPos.y - 75) / AEGfxGetWinMaxY(),
-		// 			FontManager::GetFont(FontManager::ROBOTO),
-		// 			10,
-		// 			std::to_string(x) + ", " + std::to_string(y),
-		// 			99,
-		// 			COLOR_BLACK
-		// 		);
-		// 	}
-		// }
 	}
 
 	void storeClickData() {
@@ -844,27 +757,36 @@ namespace GridManager {
 						RenderSystem::GAME_PIECES_BATCH,
 						static_cast<float>(grid[GetIndex(cell)].pos.x), static_cast<float>(grid[GetIndex(cell)].pos.y),
 						100, 100,
-						selectedBuilding->TextureID
+						selectedBuilding->TextureID,99,0
 					);
 				}
 			}
 			if(!CurrentSynergyArea.empty()){
 				UI::TextBox pointText;
 				Vec2<float> pointTextPos;
-				int points;
-				Vec3<float> color;
+				int points{};
+				totalPoints = 0;
+				Vec3<float> pointsColor;
+				Vec3<float> totalPointsColor;
+
+				Vec2<int> mousePos = InputManager::GetMousePos();
+				//Convert the mouse position into iso
+				Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
 				for(Vec2<int> cell : CurrentSynergyArea){
 					pointTextPos.x = static_cast<float>(grid[GetIndex(cell)].pos.x);
 					pointTextPos.y = static_cast<float>(grid[GetIndex(cell)].pos.y) - 62.5;
 					points = GetSynergyText(cell,*selectedBuilding);
+					totalPoints+=points;
 					if(points > 0) {
-						color = COLOR_BOX_POSITIVE;
+						pointsColor = COLOR_BOX_POSITIVE;
 					} else if (points < 0) {
-						color = COLOR_BOX_NEGATIVE;
+						pointsColor = COLOR_BOX_NEGATIVE;
 					} else {
-						color = COLOR_BOX_NEUTRAL;
+						pointsColor = COLOR_BOX_NEUTRAL;
 					}
-					pointText = UI::TextBox(pointTextPos, std::to_string(points), UI::CENTER_JUSTIFY, 100, 50, color);
+					if(cell == SelectedCell){
+						continue;
+					}else pointText = UI::TextBox(pointTextPos, std::to_string(points), UI::CENTER_JUSTIFY, 100, 42, pointsColor);
 					pointText.Render();
 					// RenderSystem::AddTextToBatch(
 					// 		RenderSystem::GAME_PIECES_BATCH,
@@ -884,6 +806,17 @@ namespace GridManager {
 							TextureManager::POSITIVE_SYNERGY
 						);
 				}
+				
+				if(totalPoints > 0) {
+					totalPointsColor = COLOR_BOX_POSITIVE;
+				} else if (totalPoints < 0) {
+					totalPointsColor = COLOR_BOX_NEGATIVE;
+				} else {
+					totalPointsColor = COLOR_BOX_NEUTRAL;
+				}
+				Vec2<float> totalPointTexPos{static_cast<float>(grid[GetIndex(SelectedCell)].pos.x),static_cast<float>(grid[GetIndex(SelectedCell)].pos.y) - 62.5};
+				pointText = UI::TextBox(totalPointTexPos, std::to_string(totalPoints), UI::CENTER_JUSTIFY, 120, 69, totalPointsColor);
+				pointText.Render();
 			}
 		}
 		// UIManager::RenderButton(0, 0, 100, 100, 0, UIManager::GetFont(UIManager::ROBOTO).S, "dawdawdwadwadawdawd", Vec4<float>{1, 1, 0, 1}, Vec3<float>{1, 0, 1});
@@ -1026,6 +959,7 @@ namespace GridManager {
 					grid[index]._building = Building{};
 				}
 			}
+			onMergeBuildings.Invoke();
 			//then we recurse and check again till no matches
 			CheckCellNeighbor(grid, cellIndex);
 		}

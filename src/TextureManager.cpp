@@ -93,9 +93,12 @@ namespace TextureManager {
 		residential_1x2_M_Tex = AEGfxTextureLoad("Assets/Textures/UI/BlueRect.png");
 		residential_1x2_L_Tex = AEGfxTextureLoad("Assets/Textures/UI/BlueRect.png");
 
-		commercial_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L1.png");
-		commercial_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L2.png");
-		commercial_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L3.png");
+		commercial_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/commercial_s_test.png");
+		commercial_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/commercial_m_test.png");
+		commercial_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/commercial_l_test.png");
+		// commercial_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L1.png");
+		// commercial_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L2.png");
+		// commercial_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L3.png");
 
 		industrial_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Industrial_1x1_L1.png");
 		industrial_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Industrial_1x1_L2.png");
@@ -113,7 +116,7 @@ namespace TextureManager {
 		splash_Tex = AEGfxTextureLoad("Assets/Textures/UI/SplashScreen.png");
 		synergy_Tex = AEGfxTextureLoad("Assets/Textures/UI/synergyTex.png");
 		positiveSynergy_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/PositiveSynergy.png");
-		positiveSynergy_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/NegativeSynergy.png");
+		negativeSynergy_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/NegativeSynergy.png");
 	}
 
 	/*!***********************************************************************

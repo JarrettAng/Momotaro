@@ -20,7 +20,7 @@ The functions include:
 #include <FontManager.h>
 #include <UIManager.h>
 #include <ColorTable.h>
-
+#include <ScoreManager.h>
 #include <iostream>
 
 namespace CardManager {
@@ -127,6 +127,8 @@ namespace CardManager {
 	void RemoveFromHand(Card* cardToRemove);
 	void HandleClick();
 	void UpdateHandPositions();
+	void GiveCardOnThreshold();
+	void GiveCardOnMerge();
 	void GiveRandL1Card();
 	void GiveRandCard();
 #pragma endregion
@@ -166,6 +168,8 @@ namespace CardManager {
 		// Debugging: Spawn cards
 		InputManager::SubscribeToKey(AEVK_F, InputManager::TRIGGERED, GiveRandL1Card);
 		InputManager::SubscribeToKey(AEVK_G, InputManager::TRIGGERED, GiveRandCard);
+		ScoreManger::onLevelChange.Subscribe(GiveCardOnThreshold);
+		GridManager::onMergeBuildings.Subscribe(GiveCardOnMerge);
 	}
 
 	void Update() {
@@ -228,11 +232,27 @@ namespace CardManager {
 		}
 	}
 
+	void GiveCardOnThreshold(){
+		for(int i{0}; i< 5; ++i){
+			GiveRandL1Card();
+		}
+	}
+
+	void GiveCardOnMerge(){
+		for(int i{0}; i <2; ++i){
+			GiveRandL1Card();
+
+			// DrawRandomCard(BuildingEnum::L2);
+		}
+	}
+
 	void GiveRandL1Card() {
 		DrawRandomCard(BuildingEnum::L1);
 	}
 
 	void GiveRandCard() {
+		// BuildingData buildingData = BuildingManager::GetBuildingData(BuildingEnum::RESIDENTIAL, Vec2<int>{2, 2}, BuildingEnum::L1);
+		// AddToHand(buildingData);
 		DrawRandomCard();
 		//DrawCard(BuildingEnum::INDUSTRIAL, BuildingEnum::L2);
 	}
@@ -256,6 +276,8 @@ namespace CardManager {
 		BuildingData buildingData = BuildingManager::GetRandomBuildingData();
 		AddToHand(buildingData);
 	}
+	
+	
 
 	void AddToHand(BuildingData buildingData) {
 		if (!hand.empty()) {
@@ -363,5 +385,7 @@ namespace CardManager {
 		InputManager::UnsubscribeKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
 		InputManager::UnsubscribeKey(AEVK_F, InputManager::TRIGGERED, GiveRandL1Card);
 		InputManager::UnsubscribeKey(AEVK_G, InputManager::TRIGGERED, GiveRandCard);
+		ScoreManger::onLevelChange.Unsubscribe(GiveCardOnThreshold);
+		GridManager::onMergeBuildings.Unsubscribe(GiveCardOnMerge);
 	}
 }
