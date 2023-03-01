@@ -139,7 +139,7 @@ namespace TextureManager {
 
 		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L1, 3, 9, .2 });
 		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L2,	3, 9, .2 });
-		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L3, 3, 9, .2 });
+		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L3, 1, 27, .2 });
 
 		textures.push_back(TextureSheet{ TILE_TEX, 1, 2, .7 });
 		textures.push_back(TextureSheet{ NATURE_TREE, 1, 1, -1 });
@@ -169,6 +169,19 @@ namespace TextureManager {
 		// Generate mesh for each texture sheet.
 		for (TextureSheet& t : textures) {
 			AEGfxMeshStart();
+			// I'm sorry.
+			if (t.tex == INDUSTRIAL_1X1_L3) {
+				AEGfxTriAdd(0.0f, 0.35f, 0xFFFFFFFF, 0.0f, 0.0f,
+					0.0f, -0.75f, 0xFFFFFFFF, 0.0f, t.texHeight,
+					1.0f, -0.75f, 0xFFFFFFFF, t.texWidth, t.texHeight);
+				AEGfxTriAdd(1.0f, -0.75f, 0xFFFFFFFF, t.texWidth, t.texHeight,
+					1.0f, 0.35f, 0xFFFFFFFF, t.texWidth, 0.0f,
+					0.0f, 0.35f, 0xFFFFFFFF, 0.0f, 0.0f);
+				meshes.push_back({ t.tex,AEGfxMeshEnd() });
+				continue;
+			}
+
+
 			// UVS ARE BASED ON NUMBER OF ROWS AND COLS FOR ANIMATIONS.
 			AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
 				0.0f, -1.0f, 0xFFFFFFFF, 0.0f, t.texHeight,
