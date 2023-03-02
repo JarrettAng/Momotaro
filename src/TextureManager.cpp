@@ -243,6 +243,7 @@ namespace TextureManager {
 		Get texture width offset.
 	*************************************************************************/
 	float GetTexWidth(const TEX_TYPE& type) {
+
 		for (TextureSheet& t : textures) {
 			if (t.tex == type) {
 				return t.currTexWidth;
@@ -257,6 +258,7 @@ namespace TextureManager {
 		Get texture height offset.
 	*************************************************************************/
 	float GetTexHeight(const TEX_TYPE& type) {
+
 		for (TextureSheet& t : textures) {
 			if (t.tex == type) {
 				return t.currTexHeight;

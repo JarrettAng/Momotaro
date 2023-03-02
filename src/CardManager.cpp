@@ -326,10 +326,10 @@ namespace CardManager {
 			return;
 		}
 
-		onCardPlaced.Invoke(mousePos);
-
 		--selectedCard->count;
 		selectedCard->UpdateCountText();
+
+		onCardPlaced.Invoke(mousePos);
 
 		if (selectedCard->count <= 0) {
 			RemoveFromHand(selectedCard);

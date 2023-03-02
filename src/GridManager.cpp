@@ -177,6 +177,8 @@ namespace GridManager {
 		grid[index]._building.buildingCells = CurrentBuildingCells;
 		CheckCellNeighbor(grid, SelectedCell);
 		ScoreManger::AddScore(totalPoints);
+		CurrentSynergyArea.clear();
+		CurrentBuildingCells.clear();
 	}
 
 	bool isCellSafe(Vec2<int> selectedCell) {
@@ -548,6 +550,7 @@ namespace GridManager {
 	std::vector<Vec2<int>> GetSynergyArea(std::vector<Vec2<int>> _buildingCells)
 	{
 		if (CurrentBuildingCells.empty()) std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n";
+		// return std::vector<Vec2<int>>{};
 		//First we get all the building cells
 		std::vector<Vec2<int>> tempVec;
 		//Then for every building cell, we get the diagonal AND adjacent cells.
@@ -665,7 +668,6 @@ namespace GridManager {
 
 	void UpdateMouseToGrid() {
 		if (PauseManager::IsPaused()) return;
-		BuildingData newBuilding{};
 		Vec2<int> mousePos{ InputManager::GetMousePos() };
 		Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
 		//First we check if the mouse has moved
@@ -680,22 +682,23 @@ namespace GridManager {
 			CurrentBuildingCells.clear();
 			//DRAWING DEBUG TEXT
 			//Then we set the grid index
+			// std::cout << "CLEARED VECTORS\n";
 			if (selectedBuilding != nullptr) {
-				newBuilding = *selectedBuilding;
+			// std::cout << "SELECTED BUILDING NOT NULL\n";
 				if (IsBuildingValid(selectedBuilding, SelectedCell.x, SelectedCell.y)) {
 					CurrentBuildingCells = GetBuildingCells(selectedBuilding, SelectedCell.x, SelectedCell.y);
 					CurrentSynergyArea = GetSynergyArea(CurrentBuildingCells);
 
-					RenderSystem::AddTextToBatch(
-						RenderSystem::GAME_PIECES_BATCH,
-						((float)InputManager::GetMousePos().x / AEGetWindowWidth() * 2) - 1,
-						(((float)InputManager::GetMousePos().y / AEGetWindowHeight() * 2) - 1) * -1,
-						FontManager::GetFont(FontManager::ROBOTO),
-						20,
-						std::to_string(InputManager::GetMousePosDelta().x) + " , " + std::to_string(InputManager::GetMousePosDelta().y),
-						99,
-						COLOR_BLACK
-					);
+					// RenderSystem::AddTextToBatch(
+					// 	RenderSystem::GAME_PIECES_BATCH,
+					// 	((float)InputManager::GetMousePos().x / AEGetWindowWidth() * 2) - 1,
+					// 	(((float)InputManager::GetMousePos().y / AEGetWindowHeight() * 2) - 1) * -1,
+					// 	FontManager::GetFont(FontManager::ROBOTO),
+					// 	20,
+					// 	std::to_string(InputManager::GetMousePosDelta().x) + " , " + std::to_string(InputManager::GetMousePosDelta().y),
+					// 	99,
+					// 	COLOR_BLACK
+					// );
 
 				}
 
@@ -830,7 +833,9 @@ namespace GridManager {
 	}
 
 	int GetSynergyText(Vec2<int> cellToCheck, BuildingData _data) {
-
+		// if (!(&_data))
+		// 	std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << " : UNABLE TO GET SYNERGY POINTS!\n";
+		// return 0;
 		switch (grid[GetIndex(cellToCheck)]._building.data.type) {
 		case BuildingEnum::NONE:
 			if (!grid[GetIndex(cellToCheck)].isRenderable) return _data.SynergyNature;
