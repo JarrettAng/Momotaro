@@ -54,7 +54,7 @@ namespace CardManager {
 		}
 	}
 
-	void InfoBox::UpdateInfo(Vec2<float> cardPos_TopCenter, const Card *hoveredCard) {
+	void InfoBox::UpdateInfo(Vec2<float> cardPos_TopCenter, const Card* hoveredCard) {
 		// Update background & arrow pos
 		arrowPos.pos.x = cardPos_TopCenter.x - arrowPos.size.x * 0.5f;
 		arrowPos.pos.y = cardPos_TopCenter.y + arrowPos.size.y * 1.2f;
@@ -234,14 +234,14 @@ namespace CardManager {
 		}
 	}
 
-	void GiveCardOnThreshold(){
-		for(int i{0}; i< 4; ++i){
+	void GiveCardOnThreshold() {
+		for (int i{ 0 }; i < 4; ++i) {
 			GiveRandL1Card();
 		}
 	}
 
-	void GiveCardOnMerge(){
-		GiveRandL2Card();
+	void GiveCardOnMerge() {
+		GiveRandL1Card();
 	}
 
 	void GiveRandL1Card() {
@@ -332,7 +332,7 @@ namespace CardManager {
 
 	void RemoveFromHand(Card* cardToRemove) {
 		size_t index = 0; // Max size
-		
+
 		for (; index < hand.size(); ++index) {
 			if (*cardToRemove == hand[index]) {
 				break;
@@ -348,7 +348,7 @@ namespace CardManager {
 	}
 
 	void HandleClick() {
-		Vec2<float> mousePos = { (float)InputManager::GetMousePos().x - AEGfxGetWinMaxX(), -((float)InputManager::GetMousePos().y - AEGfxGetWinMaxY())};
+		Vec2<float> mousePos = { (float)InputManager::GetMousePos().x - AEGfxGetWinMaxX(), -((float)InputManager::GetMousePos().y - AEGfxGetWinMaxY()) };
 		Vec2<float> cardPos, cardSize;
 
 		// Check if any card clicked
