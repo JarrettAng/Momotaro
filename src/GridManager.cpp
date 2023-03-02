@@ -165,9 +165,9 @@ namespace GridManager {
 		CardManager::onNewCardSelected.Subscribe(GetBuildingCard);
 		CardManager::onCardPlaced.Subscribe(SpawnBuilding);
 	}
-	void SpawnBuilding(Vec2<int>mousePos){
+	void SpawnBuilding(Vec2<int>mousePos) {
 		Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
-		if(!isCellSafe(SelectedCell)){
+		if (!isCellSafe(SelectedCell)) {
 			std::cout << "Error " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
 			return;
 		}
@@ -744,7 +744,7 @@ namespace GridManager {
 						RenderSystem::GAME_PIECES_BATCH,
 						static_cast<float>(grid[index].pos.x), static_cast<float>(grid[index].pos.y),
 						100, 100,
-						grid[index]._building.data.TextureID
+						grid[index]._building.data.TextureID, 99
 					);
 				}
 				if (grid[index].isRenderable) RenderSystem::AddRectToBatch(RenderSystem::TILE_BATCH, static_cast<float>(grid[index].pos.x), static_cast<float>(grid[index].pos.y), 100, 100, TextureManager::TILE_TEX);
@@ -757,11 +757,11 @@ namespace GridManager {
 						RenderSystem::GAME_PIECES_BATCH,
 						static_cast<float>(grid[GetIndex(cell)].pos.x), static_cast<float>(grid[GetIndex(cell)].pos.y),
 						100, 100,
-						selectedBuilding->TextureID,99,0
+						selectedBuilding->TextureID, 99, 0
 					);
 				}
 			}
-			if(!CurrentSynergyArea.empty()){
+			if (!CurrentSynergyArea.empty()) {
 				UI::TextBox pointText;
 				Vec2<float> pointTextPos;
 				int points{};
@@ -772,21 +772,26 @@ namespace GridManager {
 				Vec2<int> mousePos = InputManager::GetMousePos();
 				//Convert the mouse position into iso
 				Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
-				for(Vec2<int> cell : CurrentSynergyArea){
+				for (Vec2<int> cell : CurrentSynergyArea) {
 					pointTextPos.x = static_cast<float>(grid[GetIndex(cell)].pos.x);
 					pointTextPos.y = static_cast<float>(grid[GetIndex(cell)].pos.y) - 62.5;
-					points = GetSynergyText(cell,*selectedBuilding);
-					totalPoints+=points;
-					if(points > 0) {
+					points = GetSynergyText(cell, *selectedBuilding);
+					totalPoints += points;
+					if (points > 0) {
 						pointsColor = COLOR_BOX_POSITIVE;
-					} else if (points < 0) {
+					}
+					else if (points < 0) {
 						pointsColor = COLOR_BOX_NEGATIVE;
-					} else {
+					}
+					else {
 						pointsColor = COLOR_BOX_NEUTRAL;
 					}
-					if(cell == SelectedCell){
+					if (cell == SelectedCell) {
 						continue;
-					}else pointText = UI::TextBox(pointTextPos, std::to_string(points), UI::CENTER_JUSTIFY, 100, 42, pointsColor);
+					}
+					else if (points != 0) {
+						pointText = UI::TextBox(pointTextPos, std::to_string(points), UI::CENTER_JUSTIFY, 100, 42, pointsColor);
+					}
 					pointText.Render();
 					// RenderSystem::AddTextToBatch(
 					// 		RenderSystem::GAME_PIECES_BATCH,
@@ -800,48 +805,47 @@ namespace GridManager {
 					// 	);
 					//Draw synergy texture
 					RenderSystem::AddRectToBatch(
-							RenderSystem::GAME_PIECES_BATCH,
-							static_cast<float>(grid[GetIndex(cell)].pos.x), static_cast<float>(grid[GetIndex(cell)].pos.y+12.5f),
-							100, 100,
-							TextureManager::POSITIVE_SYNERGY
-						);
+						RenderSystem::GAME_PIECES_BATCH,
+						static_cast<float>(grid[GetIndex(cell)].pos.x), static_cast<float>(grid[GetIndex(cell)].pos.y),
+						100, 100,
+						TextureManager::POSITIVE_SYNERGY
+					);
 				}
-				
-				if(totalPoints > 0) {
+
+				if (totalPoints > 0) {
 					totalPointsColor = COLOR_BOX_POSITIVE;
-				} else if (totalPoints < 0) {
+				}
+				else if (totalPoints < 0) {
 					totalPointsColor = COLOR_BOX_NEGATIVE;
-				} else {
+				}
+				else {
 					totalPointsColor = COLOR_BOX_NEUTRAL;
 				}
-				Vec2<float> totalPointTexPos{static_cast<float>(grid[GetIndex(SelectedCell)].pos.x),static_cast<float>(grid[GetIndex(SelectedCell)].pos.y) - 62.5};
-				if(totalPoints!=0){
-					pointText = UI::TextBox(totalPointTexPos, std::to_string(totalPoints), UI::CENTER_JUSTIFY, 120, 69, totalPointsColor);
-					pointText.Render();
-
-				}
+				Vec2<float> totalPointTexPos{ static_cast<float>(grid[GetIndex(SelectedCell)].pos.x),static_cast<float>(grid[GetIndex(SelectedCell)].pos.y) - 62.5 };
+				pointText = UI::TextBox(totalPointTexPos, std::to_string(totalPoints), UI::CENTER_JUSTIFY, 120, 69, totalPointsColor);
+				pointText.Render();
 			}
 		}
 		// UIManager::RenderButton(0, 0, 100, 100, 0, UIManager::GetFont(UIManager::ROBOTO).S, "dawdawdwadwadawdawd", Vec4<float>{1, 1, 0, 1}, Vec3<float>{1, 0, 1});
 	}
 
-	int GetSynergyText(Vec2<int> cellToCheck, BuildingData _data){
+	int GetSynergyText(Vec2<int> cellToCheck, BuildingData _data) {
 
-		switch(grid[GetIndex(cellToCheck)]._building.data.type){
-			case BuildingEnum::NONE:
-			if(!grid[GetIndex(cellToCheck)].isRenderable) return _data.SynergyNature;
+		switch (grid[GetIndex(cellToCheck)]._building.data.type) {
+		case BuildingEnum::NONE:
+			if (!grid[GetIndex(cellToCheck)].isRenderable) return _data.SynergyNature;
 			return 0;
 			break;
-			case BuildingEnum::RESIDENTIAL:
+		case BuildingEnum::RESIDENTIAL:
 			return _data.SynergyResidential;
-			case BuildingEnum::COMMERCIAL:
+		case BuildingEnum::COMMERCIAL:
 			return _data.SynergyCommercial;
-			case BuildingEnum::INDUSTRIAL:
+		case BuildingEnum::INDUSTRIAL:
 			return _data.SynergyIndustrial;
-			case BuildingEnum::NATURE:
+		case BuildingEnum::NATURE:
 			return _data.SynergyNature;
 		}
-		std::cerr << "Error " <<__FILE__ << "ln" << __LINE__ << " : UNABLE TO GET SYNERGY POINTS!\n" ;
+		std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << " : UNABLE TO GET SYNERGY POINTS!\n";
 		return 0;
 	}
 

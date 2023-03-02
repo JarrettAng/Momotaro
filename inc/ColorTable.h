@@ -34,7 +34,7 @@
 #define COLOR_BOX_I {0.95f, 0.8f, 0.35f}
 #define COLOR_BOX_N {0.4f, 0.9f, 0.35f}
 #define COLOR_BOX_POSITIVE {0.0f, 1.0f, 0.0f}
-#define COLOR_BOX_NEUTRAL {0.5f, 0.5f, 0.5f}
+#define COLOR_BOX_NEUTRAL {1.0f, 1.0f, 1.0f}
 #define COLOR_BOX_NEGATIVE {1.0f,0.0f, 0.0f}
 
 /*!***********************************************************************
