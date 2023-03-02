@@ -93,9 +93,9 @@ namespace TextureManager {
 		residential_1x2_M_Tex = AEGfxTextureLoad("Assets/Textures/UI/BlueRect.png");
 		residential_1x2_L_Tex = AEGfxTextureLoad("Assets/Textures/UI/BlueRect.png");
 
-		commercial_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/commercial_s_test.png");
-		commercial_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/commercial_m_test.png");
-		commercial_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/commercial_l_test.png");
+		commercial_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Commercial_1x1_L1.png");
+		commercial_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Commercial_1x1_L2.png");
+		commercial_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Commercial_1x1_L3.png");
 		// commercial_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L1.png");
 		// commercial_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L2.png");
 		// commercial_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L3.png");
@@ -136,9 +136,9 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L2, 1, 1, -1 });
 		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L3, 1, 1, -1 });
 
-		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L1, 1, 6, .2 });
-		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L2, 1, 6, .2 });
-		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L3, 3, 6, .1 });
+		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L1, 1, 1, -1 });
+		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L2, 1, 1, -1 });
+		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L3, 1, 1, -1 });
 
 		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L1, 3, 9, .2 });
 		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L2,	3, 9, .2 });
