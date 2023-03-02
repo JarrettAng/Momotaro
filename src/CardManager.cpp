@@ -130,7 +130,8 @@ namespace CardManager {
 	void GiveCardOnThreshold();
 	void GiveCardOnMerge();
 	void GiveRandL1Card();
-	void GiveRandCard();
+	void GiveRandL2Card();
+	void GiveRandL3Card();
 #pragma endregion
 
 	void Initialize() {
@@ -167,7 +168,8 @@ namespace CardManager {
 
 		// Debugging: Spawn cards
 		InputManager::SubscribeToKey(AEVK_F, InputManager::TRIGGERED, GiveRandL1Card);
-		InputManager::SubscribeToKey(AEVK_G, InputManager::TRIGGERED, GiveRandCard);
+		InputManager::SubscribeToKey(AEVK_G, InputManager::TRIGGERED, GiveRandL2Card);
+		InputManager::SubscribeToKey(AEVK_H, InputManager::TRIGGERED, GiveRandL3Card);
 		ScoreManger::onLevelChange.Subscribe(GiveCardOnThreshold);
 		GridManager::onMergeBuildings.Subscribe(GiveCardOnMerge);
 	}
@@ -233,28 +235,25 @@ namespace CardManager {
 	}
 
 	void GiveCardOnThreshold(){
-		for(int i{0}; i< 5; ++i){
+		for(int i{0}; i< 4; ++i){
 			GiveRandL1Card();
 		}
 	}
 
 	void GiveCardOnMerge(){
-		for(int i{0}; i <2; ++i){
-			GiveRandL1Card();
-
-			// DrawRandomCard(BuildingEnum::L2);
-		}
+		GiveRandL2Card();
 	}
 
 	void GiveRandL1Card() {
 		DrawRandomCard(BuildingEnum::L1);
 	}
 
-	void GiveRandCard() {
-		// BuildingData buildingData = BuildingManager::GetBuildingData(BuildingEnum::RESIDENTIAL, Vec2<int>{2, 2}, BuildingEnum::L1);
-		// AddToHand(buildingData);
-		DrawRandomCard();
-		//DrawCard(BuildingEnum::INDUSTRIAL, BuildingEnum::L2);
+	void GiveRandL2Card() {
+		DrawRandomCard(BuildingEnum::L2);
+	}
+
+	void GiveRandL3Card() {
+		DrawRandomCard(BuildingEnum::L3);
 	}
 
 	void DrawCard(BuildingEnum::TYPE type, BuildingEnum::LEVEL level) {
@@ -276,14 +275,12 @@ namespace CardManager {
 		BuildingData buildingData = BuildingManager::GetRandomBuildingData();
 		AddToHand(buildingData);
 	}
-	
-	
 
 	void AddToHand(BuildingData buildingData) {
 		if (!hand.empty()) {
 			for (Card& card : hand) {
 				// If the data for it already exists, add to the count
-				if (card.bData.type == buildingData.type && card.bData.size == buildingData.size && card.bData.level == buildingData.level) {
+				if (card == buildingData) {
 					++card.count;
 					card.UpdateCountText();
 					return;
@@ -335,11 +332,17 @@ namespace CardManager {
 
 	void RemoveFromHand(Card* cardToRemove) {
 		size_t index = 0; // Max size
+		
 		for (; index < hand.size(); ++index) {
-			if (cardToRemove ==  &hand[index]) {
+			if (*cardToRemove == hand[index]) {
 				break;
 			}
 		}
+
+		if (index >= hand.size()) {
+			return;
+		}
+
 		hand.erase(hand.begin() + index);
 		UpdateHandPositions();
 	}
@@ -384,7 +387,8 @@ namespace CardManager {
 		hand.clear();
 		InputManager::UnsubscribeKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
 		InputManager::UnsubscribeKey(AEVK_F, InputManager::TRIGGERED, GiveRandL1Card);
-		InputManager::UnsubscribeKey(AEVK_G, InputManager::TRIGGERED, GiveRandCard);
+		InputManager::UnsubscribeKey(AEVK_G, InputManager::TRIGGERED, GiveRandL2Card);
+		InputManager::UnsubscribeKey(AEVK_H, InputManager::TRIGGERED, GiveRandL3Card);
 		ScoreManger::onLevelChange.Unsubscribe(GiveCardOnThreshold);
 		GridManager::onMergeBuildings.Unsubscribe(GiveCardOnMerge);
 	}

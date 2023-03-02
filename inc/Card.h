@@ -42,6 +42,17 @@ public:
 	Vec4<float> color;
 	Vec4<float> borderColor;
 
+	bool operator==(Card const& rhs) {
+		if (this->bData == rhs.bData) return true;
+		return false;
+	}
+	bool operator==(BuildingData const& rhs) {
+		if (this->bData.level == rhs.level &&
+			this->bData.size == rhs.size &&
+			this->bData.type == rhs.type) return true;
+		return false;
+	}
+
 	//bool operator == (const Card card) const { return deckCardData == card.deckCardData; }
 	//bool operator != (const Card card) const { return !operator==(card); }
 
@@ -94,7 +105,7 @@ public:
 	}
 
 	void UpdateCountText() {
-		Vec2<float> countTextPos{ countIconPos.pos.x - countIconPos.size.x * 0.1f, countIconPos.pos.y - countIconPos.size.y * 0.65f };
-		countText = UI::TextBox(countTextPos, std::to_string(count), UI::CENTER_JUSTIFY, countIconPos.size.x * 1.5f, 18.0f, COLOR_BLACK);
+		Vec2<float> countTextPos{ countIconPos.pos.x - countIconPos.size.x * 0.25f, countIconPos.pos.y - countIconPos.size.y * 0.65f };
+		countText = UI::TextBox(countTextPos, std::to_string(count), UI::CENTER_JUSTIFY, countIconPos.size.x * 2.0f, 18.0f, COLOR_BLACK);
 	}
 };

@@ -35,8 +35,8 @@ namespace FileIOManager {
 			Vec2<int>{1,1},
 			BuildingEnum::L1, 
 			BuildingEnum::RIGHT,
-			1, 3, -3, 1,
-			"Small house", "Small lovely house",
+			1, 3, -5, 1,
+			"Small house", "Starter red house with an actual working chimney!",
 			TextureManager::RESIDENTIAL_1X1_L1};
 		buildingsData.push_back(newBuilding);
 		BuildingData newBuilding2{
@@ -44,9 +44,8 @@ namespace FileIOManager {
 			 Vec2<int>{1,1}, 
 			 BuildingEnum::L2,
 			 BuildingEnum::RIGHT,
-			 1, 3, -3, 1, 
-			"Small house", "Small lovely house",
-			//  "Terrace house", "Bigger lovelier house",
+			 1, 3, -5, 1, 
+			 "Terrace house", "Bigger blue house with some lovely flowers.",
 			 TextureManager::RESIDENTIAL_1X1_L2};
 		buildingsData.push_back(newBuilding2);
 		BuildingData newBuilding3{ 
@@ -54,8 +53,8 @@ namespace FileIOManager {
 			Vec2<int>{1,1},
 			BuildingEnum::L3,
 			BuildingEnum::RIGHT,
-			1, 3, -3, 1, 
-			"Big house", "Biggest loveliest house",
+			1, 3, -5, 1, 
+			"Shiny house", "For the rich people, we made your roof shine too.",
 			TextureManager::RESIDENTIAL_1X1_L3};
 		buildingsData.push_back(newBuilding3);
 
@@ -71,7 +70,7 @@ namespace FileIOManager {
 			Vec2<int>{1,1}, 
 			BuildingEnum::L1, 
 			BuildingEnum::RIGHT,
-			3, -2, -1, 1, 
+			3, -3, 1, 1, 
 			"Street Stall","Can use your CDC vouchers here",
 			TextureManager::COMMERCIAL_1X1_L1};
 		buildingsData.push_back(newBuilding7);
@@ -80,10 +79,8 @@ namespace FileIOManager {
 			Vec2<int>{1,1}, 
 			BuildingEnum::L2, 
 			BuildingEnum::RIGHT,
-			3, -2, -1, 1, 
-			"Small house", "Small lovely house",
-
-			// "Small Shop", "Lovely shop with lovely goods", 
+			3, -3, 1, 1, 
+			"Small Shop", "Lovely shop with lovely goods", 
 			TextureManager::COMMERCIAL_1X1_L2};
 		buildingsData.push_back(newBuilding8);
 		BuildingData newBuilding9{ 
@@ -91,7 +88,7 @@ namespace FileIOManager {
 			Vec2<int>{1,1},
 			BuildingEnum::L3, 
 			BuildingEnum::RIGHT,
-			3, -2, -1, 1, 
+			3, -3, 1, 1, 
 			"Big Shophouse", "Big shophouse which sells many goods", 
 			TextureManager::COMMERCIAL_1X1_L3};
 		buildingsData.push_back(newBuilding9);
@@ -108,8 +105,8 @@ namespace FileIOManager {
 			Vec2<int>{1,1}, 
 			BuildingEnum::L1, 
 			BuildingEnum::RIGHT,
-			-3, 1, 5, 0, 
-			"Storage Lot", "Small lot to store some goods",
+			-5, 1, 5, 0, 
+			"Storage Box", "A small boxy building to store boxes.",
 			TextureManager::INDUSTRIAL_1X1_L1};
 		buildingsData.push_back(newBuilding13);
 		BuildingData newBuilding14{ 
@@ -117,10 +114,8 @@ namespace FileIOManager {
 			Vec2<int>{1,1}, 
 			BuildingEnum::L2, 
 			BuildingEnum::RIGHT,
-			-3, 1, 5, 0, 
-			"Small house", "Small lovely house",
-
-			// "Small Warehouse", "Bigger warehouse to store even more goods", 
+			-5, 1, 5, 0, 
+			"Big Lab", "Discover the secrets of life here. Hint: It's ligma.", 
 			TextureManager::INDUSTRIAL_1X1_L2};
 		buildingsData.push_back(newBuilding14);
 		BuildingData newBuilding15{ 
@@ -128,8 +123,8 @@ namespace FileIOManager {
 			Vec2<int>{1,1}, 
 			BuildingEnum::L3, 
 			BuildingEnum::RIGHT,
-			-3, 1, 5, 0, 
-			"Big Warehouse", "Big enough to fit 2 IKEAs inside", 
+			-5, 1, 5, 0, 
+			"Power Plant", "Powered by the dead.", 
 			TextureManager::INDUSTRIAL_1X1_L3};
 		buildingsData.push_back(newBuilding15);
 

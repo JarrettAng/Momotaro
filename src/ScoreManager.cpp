@@ -10,8 +10,8 @@ namespace ScoreManger {
 		bool receivedReward = false;	// Has player received reward for this level?
 	};
 
-	const float EXP_MOD = 0.3f;				// Affects amount of exp. Lower values = more XP required per level
-	const float EXP_INCREASE_MOD = 2.0f;	// Affects how quicky required exp per level. Higher values = larger gaps between levels
+	const float EXP_MOD = 0.27f;				// Affects amount of exp. Lower values = more XP required per level
+	const float EXP_INCREASE_MOD = 2.0f;		// Affects how quicky required exp per level. Higher values = larger gaps between levels
 
 	EventSystem::Event<void> onScoreUpdate;
 	EventSystem::Event<void> onLevelChange;
@@ -39,7 +39,7 @@ namespace ScoreManger {
 
 	void AddScore(int modifier) {
 		score += modifier;
-		if (score < 0) score = 0;
+		//if (score < 0) score = 0;
 
 		onScoreUpdate.Invoke();
 	}
@@ -68,20 +68,20 @@ namespace ScoreManger {
 		}
 
 		// Level down.
-		if (score < GetThreshold(currLevel.level)) {
-			currLevel = GetLevel(currLevel.level);
-			onLevelChange.Invoke();
-			return;
-		}
+		//if (score < GetThreshold(currLevel.level)) {
+		//	currLevel = GetLevel(currLevel.level);
+		//	onLevelChange.Invoke();
+		//	return;
+		//}
 	}
 
 	void ScoreManger::Draw() {
 		// Tell ui manager to draw score ui.
 		// Use currLevel and score to draw.
-		std::string synergy = "SYNGERGY " + std::to_string(score);
-		std::string threshold = "/ " + std::to_string(GetThreshold(currLevel.level + 1));
+		std::string synergy = "SYNGERGY " + std::to_string(score) + "/ " + std::to_string(GetThreshold(currLevel.level + 1));
+		//std::string threshold = "/ " + std::to_string(GetThreshold(currLevel.level + 1));
 		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.9f, 0.9f, FontManager::GetFont(FontManager::ROBOTO), 40, synergy);
-		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.6f, 0.9f, FontManager::GetFont(FontManager::ROBOTO), 40, threshold);
+		//RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.6f, 0.9f, FontManager::GetFont(FontManager::ROBOTO), 40, threshold);
 	}
 
 	Level GetCurrLevel() {
