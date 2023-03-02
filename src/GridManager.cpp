@@ -755,7 +755,7 @@ namespace GridManager {
 				for (Vec2<int> cell : CurrentBuildingCells) {
 					RenderSystem::AddRectToBatch(
 						RenderSystem::GAME_PIECES_BATCH,
-						static_cast<float>(grid[GetIndex(cell)].pos.x), static_cast<float>(grid[GetIndex(cell)].pos.y),
+						static_cast<float>(grid[GetIndex(cell)].pos.x), static_cast<float>(grid[GetIndex(cell)].pos.y+12.5f),
 						100, 100,
 						selectedBuilding->TextureID, 99, 0
 					);
