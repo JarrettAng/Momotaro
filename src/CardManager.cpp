@@ -160,6 +160,7 @@ namespace CardManager {
 		hoverTimeElapsed = 0.0f;
 
 		// Fill hand with 5 starting cards
+		hand.reserve(32);
 		DrawCard(BuildingEnum::RESIDENTIAL, BuildingEnum::L1);
 		DrawCard(BuildingEnum::RESIDENTIAL, BuildingEnum::L1);
 		DrawCard(BuildingEnum::RESIDENTIAL, BuildingEnum::L1);
@@ -333,22 +334,23 @@ namespace CardManager {
 
 		if (selectedCard->count <= 0) {
 			RemoveFromHand(selectedCard);
-
 			selectedCard = nullptr;
 			onNewCardSelected.Invoke(nullptr); // Invoke the card deselected event
+
 		}
 	}
 
 	void RemoveFromHand(Card* cardToRemove) {
-		size_t index = 0; // Max size
+		size_t index = 0;
 
-		for (; index < hand.size(); ++index) {
+		for (; index < hand.size(); ++index) { // Find the card to remove
 			if (*cardToRemove == hand[index]) {
 				break;
 			}
 		}
 
 		hand.erase(hand.begin() + index);
+
 		UpdateHandPositions();
 	}
 
