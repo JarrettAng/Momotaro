@@ -31,10 +31,10 @@ public:
 	RenderSystem::Transform iconPos;
 
 	int count;
-	UI::TextBox countText;
+	UI::TextBox countText{};
 	RenderSystem::Transform countIconPos;
 
-	UI::TextBox nameText;
+	UI::TextBox nameText{};
 	RenderSystem::Transform descTextPos;
 
 	BuildingData bData;
@@ -42,14 +42,14 @@ public:
 	Vec4<float> color;
 	Vec4<float> borderColor;
 
-	bool operator==(Card const& rhs) {
-		if (this->bData == rhs.bData) return true;
-		return false;
-	}
 	bool operator==(BuildingData const& rhs) {
 		if (this->bData.level == rhs.level &&
 			this->bData.size == rhs.size &&
 			this->bData.type == rhs.type) return true;
+		return false;
+	}
+	bool operator==(Card const& rhs) {
+		if (this->bData == rhs.bData) return true;
 		return false;
 	}
 

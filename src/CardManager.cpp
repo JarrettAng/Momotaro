@@ -122,6 +122,8 @@ namespace CardManager {
 	float hoverTimeHideThreshold;					// How long the player needs to NOT hover over a card to hide the box info
 	float hoverTimeElapsed;							// How long the player is currently hovering over a card for
 
+	bool spawnMergeBuilding;
+
 #pragma region Forward Declarations
 	void AddToHand(BuildingData cardData);
 	void RemoveFromHand(Card* cardToRemove);
@@ -172,9 +174,16 @@ namespace CardManager {
 		InputManager::SubscribeToKey(AEVK_H, InputManager::TRIGGERED, GiveRandL3Card);
 		ScoreManger::onLevelChange.Subscribe(GiveCardOnThreshold);
 		GridManager::onMergeBuildings.Subscribe(GiveCardOnMerge);
+
+		spawnMergeBuilding = false;
 	}
 
 	void Update() {
+		if (spawnMergeBuilding) {
+			GiveRandL2Card();
+			spawnMergeBuilding = false;
+		}
+
 		// If mouse hovers over any card long enough, show its information
 		Vec2<float> mousePos = { (float)InputManager::GetMousePos().x - AEGfxGetWinMaxX(), -((float)InputManager::GetMousePos().y - AEGfxGetWinMaxY()) };
 		Vec2<float> cardPos, cardSize;
@@ -241,7 +250,8 @@ namespace CardManager {
 	}
 
 	void GiveCardOnMerge(){
-		GiveRandL2Card();
+		spawnMergeBuilding = true;
+		//GiveRandL2Card();
 	}
 
 	void GiveRandL1Card() {
@@ -289,8 +299,7 @@ namespace CardManager {
 		}
 
 		// Otherwise, add the new card to the deck
-		Card newCard = { cardPositionTemplate, buildingData };
-		hand.push_back(newCard);
+		hand.emplace_back(cardPositionTemplate, buildingData);
 
 		UpdateHandPositions();
 	}
@@ -337,10 +346,6 @@ namespace CardManager {
 			if (*cardToRemove == hand[index]) {
 				break;
 			}
-		}
-
-		if (index >= hand.size()) {
-			return;
 		}
 
 		hand.erase(hand.begin() + index);

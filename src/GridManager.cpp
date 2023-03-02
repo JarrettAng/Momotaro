@@ -801,7 +801,7 @@ namespace GridManager {
 					//Draw synergy texture
 					RenderSystem::AddRectToBatch(
 							RenderSystem::GAME_PIECES_BATCH,
-							static_cast<float>(grid[GetIndex(cell)].pos.x), static_cast<float>(grid[GetIndex(cell)].pos.y),
+							static_cast<float>(grid[GetIndex(cell)].pos.x), static_cast<float>(grid[GetIndex(cell)].pos.y+12.5f),
 							100, 100,
 							TextureManager::POSITIVE_SYNERGY
 						);
@@ -815,8 +815,11 @@ namespace GridManager {
 					totalPointsColor = COLOR_BOX_NEUTRAL;
 				}
 				Vec2<float> totalPointTexPos{static_cast<float>(grid[GetIndex(SelectedCell)].pos.x),static_cast<float>(grid[GetIndex(SelectedCell)].pos.y) - 62.5};
-				pointText = UI::TextBox(totalPointTexPos, std::to_string(totalPoints), UI::CENTER_JUSTIFY, 120, 69, totalPointsColor);
-				pointText.Render();
+				if(totalPoints!=0){
+					pointText = UI::TextBox(totalPointTexPos, std::to_string(totalPoints), UI::CENTER_JUSTIFY, 120, 69, totalPointsColor);
+					pointText.Render();
+
+				}
 			}
 		}
 		// UIManager::RenderButton(0, 0, 100, 100, 0, UIManager::GetFont(UIManager::ROBOTO).S, "dawdawdwadwadawdawd", Vec4<float>{1, 1, 0, 1}, Vec3<float>{1, 0, 1});

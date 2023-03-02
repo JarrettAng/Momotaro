@@ -248,6 +248,8 @@ namespace TextureManager {
 				return t.currTexWidth;
 			}
 		}
+		std::cerr << "ERROR " << __FILE__ << "ln" << __LINE__ << ": WRONG TEXTURE WIDTH DUMMY!!\n";
+		return 0;
 	}
 
 	/*!***********************************************************************
@@ -260,6 +262,8 @@ namespace TextureManager {
 				return t.currTexHeight;
 			}
 		}
+		std::cerr << "ERROR " << __FILE__ << "ln" << __LINE__ << ": WRONG TEXTURE TYPE DUMMY!!\n";
+		return 0;
 	}
 
 	/*!***********************************************************************
@@ -272,6 +276,8 @@ namespace TextureManager {
 				return t.mesh;
 			}
 		}
+		std::cerr << "ERROR " << __FILE__ << "ln" << __LINE__ << ": WRONG TEXTURE MESH DUMMY!!\n";
+		return nullptr;
 	}
 
 	/*!***********************************************************************

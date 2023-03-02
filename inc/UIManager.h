@@ -118,6 +118,8 @@ namespace UI {
 		TextBox();
 		TextBox(Vec2<float> screenPos, std::string text, TextBoxAlignment alignment, float maxWidth, float fontSize, Vec3<float> color);
 
+		TextBox& operator=(TextBox const& rhs);
+
 		const RenderSystem::Transform& GetPos() const;
 		void Render();
 

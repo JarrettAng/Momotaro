@@ -390,6 +390,21 @@ namespace UI {
 		}
 	}
 
+	TextBox& TextBox::operator=(TextBox const& rhs) {
+		this->alignment = rhs.alignment;
+		this->color = rhs.color;
+		this->fontSize = rhs.fontSize;
+		this->maxWidth = rhs.maxWidth;
+		this->transform = rhs.transform;
+
+		this->texts.clear();
+		for (auto text : rhs.texts) {
+			texts.push_back(text);
+		}
+		return *this;
+	}
+
+
 	const RenderSystem::Transform& TextBox::GetPos() const {
 		return transform;
 	}
