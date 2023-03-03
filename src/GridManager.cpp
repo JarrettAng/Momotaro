@@ -796,16 +796,6 @@ namespace GridManager {
 						pointText = UI::TextBox(pointTextPos, std::to_string(points), UI::CENTER_JUSTIFY, 100, 42, pointsColor);
 					}
 					pointText.Render();
-					// RenderSystem::AddTextToBatch(
-					// 		RenderSystem::GAME_PIECES_BATCH,
-					// 		(static_cast<float>(grid[GetIndex(cell)].pos.x) / AEGetWindowWidth() * 2) - 1,
-					// 		((static_cast<float>(grid[GetIndex(cell)].pos.y) / AEGetWindowHeight() * 2) - 1) * -1,
-					// 		FontManager::GetFont(FontManager::ROBOTO),
-					// 		20,
-					// 		std::to_string(GetSynergyText(cell,*selectedBuilding)),
-					// 		99,
-					// 		COLOR_BLACK
-					// 	);
 					//Draw synergy texture
 					RenderSystem::AddRectToBatch(
 						RenderSystem::GAME_PIECES_BATCH,
@@ -829,7 +819,7 @@ namespace GridManager {
 				pointText.Render();
 			}
 		}
-		// UIManager::RenderButton(0, 0, 100, 100, 0, UIManager::GetFont(UIManager::ROBOTO).S, "dawdawdwadwadawdawd", Vec4<float>{1, 1, 0, 1}, Vec3<float>{1, 0, 1});
+
 	}
 
 	int GetSynergyText(Vec2<int> cellToCheck, BuildingData _data) {

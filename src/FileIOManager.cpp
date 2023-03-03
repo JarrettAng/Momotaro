@@ -70,7 +70,7 @@ namespace FileIOManager {
 			Vec2<int>{1,1}, 
 			BuildingEnum::L1, 
 			BuildingEnum::RIGHT,
-			3, -3, 1, 1, 
+			3, -1, 1, 1, 
 			"Street Stall","Can use your CDC vouchers here",
 			TextureManager::COMMERCIAL_1X1_L1};
 		buildingsData.push_back(newBuilding7);
@@ -79,7 +79,7 @@ namespace FileIOManager {
 			Vec2<int>{1,1}, 
 			BuildingEnum::L2, 
 			BuildingEnum::RIGHT,
-			3, -3, 1, 1, 
+			3, -1, 1, 1, 
 			"Small Shop", "Lovely shop with lovely goods", 
 			TextureManager::COMMERCIAL_1X1_L2};
 		buildingsData.push_back(newBuilding8);
@@ -88,7 +88,7 @@ namespace FileIOManager {
 			Vec2<int>{1,1},
 			BuildingEnum::L3, 
 			BuildingEnum::RIGHT,
-			3, -3, 1, 1, 
+			3, -1, 1, 1, 
 			"Big Shophouse", "Big shophouse which sells many goods", 
 			TextureManager::COMMERCIAL_1X1_L3};
 		buildingsData.push_back(newBuilding9);
