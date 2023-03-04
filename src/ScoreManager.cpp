@@ -10,7 +10,7 @@ namespace ScoreManger {
 		bool receivedReward = false;	// Has player received reward for this level?
 	};
 
-	const float EXP_MOD = 0.27f;				// Affects amount of exp. Lower values = more XP required per level
+	const float EXP_MOD = 0.25f;				// Affects amount of exp. Lower values = more XP required per level
 	const float EXP_INCREASE_MOD = 2.0f;		// Affects how quicky required exp per level. Higher values = larger gaps between levels
 
 	EventSystem::Event<void> onScoreUpdate;
