@@ -101,15 +101,26 @@ namespace GridManager {
 		"Industrial Lvl 1","Candice",
 		TextureManager::INDUSTRIAL_1X1_L1 };
 
-	Building NatureTree{
+	Building NaturePond{
 		BuildingEnum::NATURE,
 		Vec2<int>{1,1},
 		BuildingEnum::L1,
 		BuildingEnum::RIGHT,
 		0,0,0,0,
 		"Nature!","Tree",
-		TextureManager::NATURE_TREE
+		TextureManager::NATURE_POND
 	};
+
+	Building NatureMushroom{
+	BuildingEnum::NATURE,
+	Vec2<int>{1,1},
+	BuildingEnum::L1,
+	BuildingEnum::RIGHT,
+	0,0,0,0,
+	"Nature!","Mushroom",
+	TextureManager::NATURE_MUSHROOM
+	};
+
 	Building NatureRock{
 		BuildingEnum::NATURE,
 		Vec2<int>{1,1},
@@ -271,11 +282,19 @@ namespace GridManager {
 		Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
-		randomNature = rand() % 2;
-		if (randomNature % 2 == 0)
+		randomNature = rand() % 3;
+		switch (randomNature)
+		{
+		case 0:
 			grid[index]._building = NatureRock;
-		else
-			grid[index]._building = NatureTree;
+			break;
+		case 1:
+			grid[index]._building = NaturePond;
+			break;
+		case 2:
+			grid[index]._building = NatureMushroom;
+			break;
+		}
 		grid[index].ID = ++buildingID;
 	}
 #pragma region TerrainStuff
@@ -684,7 +703,7 @@ namespace GridManager {
 			//Then we set the grid index
 			// std::cout << "CLEARED VECTORS\n";
 			if (selectedBuilding != nullptr) {
-			// std::cout << "SELECTED BUILDING NOT NULL\n";
+				// std::cout << "SELECTED BUILDING NOT NULL\n";
 				if (IsBuildingValid(selectedBuilding, SelectedCell.x, SelectedCell.y)) {
 					CurrentBuildingCells = GetBuildingCells(selectedBuilding, SelectedCell.x, SelectedCell.y);
 					CurrentSynergyArea = GetSynergyArea(CurrentBuildingCells);
@@ -758,7 +777,7 @@ namespace GridManager {
 				for (Vec2<int> cell : CurrentBuildingCells) {
 					RenderSystem::AddRectToBatch(
 						RenderSystem::GAME_PIECES_BATCH,
-						static_cast<float>(grid[GetIndex(cell)].pos.x), static_cast<float>(grid[GetIndex(cell)].pos.y+12.5f),
+						static_cast<float>(grid[GetIndex(cell)].pos.x), static_cast<float>(grid[GetIndex(cell)].pos.y + 12.5f),
 						100, 100,
 						selectedBuilding->TextureID, 99, 0
 					);

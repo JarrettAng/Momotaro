@@ -49,7 +49,8 @@ namespace TextureManager {
 	AEGfxTexture* industrial_L_Tex;
 
 	AEGfxTexture* tile_Tex;
-	AEGfxTexture* nature_Tex;
+	AEGfxTexture* pond_Tex;
+	AEGfxTexture* mushroom_Tex;
 	AEGfxTexture* rock_Tex;
 
 	AEGfxTexture* card_Tex;
@@ -105,7 +106,8 @@ namespace TextureManager {
 		industrial_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Industrial_1x1_L3.png");
 
 		tile_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Tile.png");
-		nature_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Tree.png");
+		pond_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Pond.png");
+		mushroom_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Mushroom.png");
 		rock_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Rock.png");
 
 		card_Tex = AEGfxTextureLoad("Assets/Textures/UI/Card.png");
@@ -145,7 +147,8 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L3, 1, 27, .2 });
 
 		textures.push_back(TextureSheet{ TILE_TEX, 1, 2, .7 });
-		textures.push_back(TextureSheet{ NATURE_TREE, 1, 1, -1 });
+		textures.push_back(TextureSheet{ NATURE_POND, 1, 2, 1 });
+		textures.push_back(TextureSheet{ NATURE_MUSHROOM, 1, 1, -1 });
 		textures.push_back(TextureSheet{ NATURE_ROCK, 1, 1, -1 });
 
 		textures.push_back(TextureSheet{ CARD_BLUE, 1, 1, -1 });
@@ -291,8 +294,10 @@ namespace TextureManager {
 		{
 		case TILE_TEX:
 			return tile_Tex;
-		case NATURE_TREE:
-			return nature_Tex;
+		case NATURE_POND:
+			return pond_Tex;
+		case NATURE_MUSHROOM:
+			return mushroom_Tex;
 		case NATURE_ROCK:
 			return rock_Tex;
 		case COMMERCIAL_1X1_L1:
