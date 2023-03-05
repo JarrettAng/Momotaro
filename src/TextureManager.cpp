@@ -136,9 +136,9 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L2, 1, 1, -1 });
 		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L3, 1, 1, -1 });
 
-		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L1, 4, 6, .15 });
-		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L2, 4, 6, .15 });
-		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L3, 4, 6, .15 });
+		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L1, 4, 6, .2 });
+		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L2, 4, 6, .2 });
+		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L3, 4, 6, .2 });
 
 		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L1, 3, 9, .2 });
 		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L2,	3, 9, .2 });
