@@ -566,8 +566,8 @@ namespace GridManager {
 	std::vector<Vec2<int>> GetSynergyArea(std::vector<Vec2<int>> _buildingCells)
 	{
 		if (CurrentBuildingCells.empty()) {
-				//std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n";
-				assert("Error " << __FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n");
+				std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n";
+				//assert("Error " << __FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n");
 			}
 		// return std::vector<Vec2<int>>{};
 		//First we get all the building cells
@@ -924,5 +924,23 @@ namespace GridManager {
 		}
 		std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << ": UNABLE TO FIND INDEX FROM ID!\n";
 		return 0;
+	}
+
+	void Free(){
+		delete[] grid;
+		InputManager::UnsubscribeKey(AEVK_C, InputManager::TRIGGERED, ClearGrid);
+		InputManager::UnsubscribeKey(AEVK_R, InputManager::TRIGGERED, RandomiseTerrain);
+		InputManager::UnsubscribeKey(AEVK_1, InputManager::TRIGGERED, SpawnResidential);
+		InputManager::UnsubscribeKey(AEVK_2, InputManager::TRIGGERED, SpawnCommerical);
+		InputManager::UnsubscribeKey(AEVK_3, InputManager::TRIGGERED, SpawnIndustrial);
+		InputManager::UnsubscribeKey(AEVK_Q, InputManager::TRIGGERED, SpawnBigResidential);
+		InputManager::UnsubscribeKey(AEVK_W, InputManager::TRIGGERED, SpawnBigResidential3x1);
+		InputManager::UnsubscribeKey(AEVK_E, InputManager::TRIGGERED, SpawnBigResidential);
+		InputManager::UnsubscribeKey(AEVK_S, InputManager::TRIGGERED, SpawnBigResidential);
+		InputManager::UnsubscribeKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
+
+		CardManager::onNewCardSelected.Unsubscribe(GetBuildingCard);
+		CardManager::onCardPlaced.Unsubscribe(SpawnBuilding);
+		
 	}
 }

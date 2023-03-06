@@ -28,7 +28,7 @@ namespace GridManager {
 	void Initialize();
 
     void SpawnBuilding(Vec2<int> mousePos);
-
+	void Free();
     /**
 	 * @brief Helper boolean to check if the cell is safe to be placed on. Checks if it's within bounds and if the cell is renderable.
 	 * Takes in CELL INDEX. DOES NOT CHECK IF THE CELL IS ALREADY OCCUPIED OR NOT!!

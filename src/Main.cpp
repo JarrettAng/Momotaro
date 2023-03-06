@@ -3,7 +3,7 @@
 
 #include <cstdlib>
 #include <AEEngine.h>
-
+#include <memory>
 #include <RenderSystem.h>
 #include <SceneManager.h>
 #include <GridManager.h>
@@ -26,6 +26,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// Random Seed Initialization
 	srand(11);
 
+	//Memory leak checker 
+		//CODE FOR CHECKING MEMORY LEAKS!
+	#if defined(DEBUG) | defined(_DEBUG)
+		_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+	#endif
+	// int * pi = new int;			//Uncomment this to see if the memory leak check is working
+
 	// Engine Initialization
 	AESysInit(hInstance, nCmdShow, 900, 600, 1, 60, true, NULL);	// Using custom window procedure
 	AESysSetWindowTitle("Momo Town");								// Changing the window title
@@ -41,6 +48,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	TextureManager::Initialize();
 	RenderSystem::Initialize();
 	SceneManager::Initialize(SceneManager::SPLASHSCREEN);			// Game Loop happens in SceneManager
+
+
+
+	//FREE STUFF THAT WAS INITIALISED HERE
+	GridManager::Free();
+
 
 	// Engine Exit
 	AESysExit();
