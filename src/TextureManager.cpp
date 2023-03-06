@@ -130,39 +130,39 @@ namespace TextureManager {
 		// TO GET: ROWS, COLS AND FRAME INTERVAL, 
 		textures.push_back(TextureSheet{ NONE, 1, 1,-1 });
 
-		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L1, 1, 6, .2 });
-		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L2, 1, 6, .2 });
-		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L3, 3, 6, .2 });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L1, 1, 6, .2f });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L2, 1, 6, .2f });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L3, 3, 6, .2f });
 
-		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L1, 1, 1, -1 });
-		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L2, 1, 1, -1 });
-		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L3, 1, 1, -1 });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L1, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L2, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L3, 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L1, 4, 6, .2 });
-		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L2, 4, 6, .2 });
-		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L3, 4, 6, .2 });
+		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L1, 4, 6, .2f });
+		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L2, 4, 6, .2f });
+		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L3, 4, 6, .2f });
 
-		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L1, 3, 9, .2 });
-		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L2,	3, 9, .2 });
-		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L3, 1, 27, .2 });
+		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L1, 3, 9, .2f });
+		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L2,	3, 9, .2f });
+		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L3, 1, 27, .2f });
 
-		textures.push_back(TextureSheet{ TILE_TEX, 1, 2, .7 });
-		textures.push_back(TextureSheet{ NATURE_POND, 1, 2, 1 });
-		textures.push_back(TextureSheet{ NATURE_MUSHROOM, 1, 1, -1 });
-		textures.push_back(TextureSheet{ NATURE_ROCK, 1, 1, -1 });
+		textures.push_back(TextureSheet{ TILE_TEX, 1, 2, .7f });
+		textures.push_back(TextureSheet{ NATURE_POND, 1, 2, 1.f });
+		textures.push_back(TextureSheet{ NATURE_MUSHROOM, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ NATURE_ROCK, 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ CARD_BLUE, 1, 1, -1 });
-		textures.push_back(TextureSheet{ PAUSE_WINDOW, 1, 1, -1 });
-		textures.push_back(TextureSheet{ PAUSE_BUTTON, 1, 1, -1 });
-		textures.push_back(TextureSheet{ SPLASH_SCREEN, 1, 1, -1 });
+		textures.push_back(TextureSheet{ CARD_BLUE, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ PAUSE_WINDOW, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ PAUSE_BUTTON, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ SPLASH_SCREEN, 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ POSITIVE_SYNERGY, 1, 1, -1 });
-		textures.push_back(TextureSheet{ NEGATIVE_SYNERGY, 1, 1, -1 });
+		textures.push_back(TextureSheet{ POSITIVE_SYNERGY, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ NEGATIVE_SYNERGY, 1, 1, -1.f });
 
 		// Initialize frame UV size based on number of cols and rows.
 		for (TextureSheet& t : textures) {
-			t.texWidth = 1.0 / t.cols;
-			t.texHeight = 1.0 / t.rows;
+			t.texWidth = 1.f / t.cols;
+			t.texHeight = 1.f / t.rows;
 			t.currInterval = t.frameInterval;
 		}
 	}
@@ -215,7 +215,7 @@ namespace TextureManager {
 
 			// Tick timer.
 			if (t.currInterval > 0) {
-				t.currInterval -= AEFrameRateControllerGetFrameTime();
+				t.currInterval -= (f32)AEFrameRateControllerGetFrameTime();
 				continue;
 			}
 

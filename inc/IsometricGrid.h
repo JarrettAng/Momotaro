@@ -17,6 +17,8 @@ The functions include:
 
 namespace IsometricGrid
 {
+    extern const int tileWidth;
+    extern const int tileHeight;
     enum TileType{
         NONE = 0,
         RESIDENTIAL = 1,

@@ -36,9 +36,9 @@ void SceneSplashscreen::FixedUpdate() {
 void SceneSplashscreen::Draw() {
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
-	for (auto object : objects) {
-		// renderer.AddBatch(object->Render());
-	}
+	//for (auto object : objects) {
+	//	// renderer.AddBatch(object->Render());
+	//}
 
 	RenderSystem::Render();
 

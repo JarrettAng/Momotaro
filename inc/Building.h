@@ -53,10 +53,10 @@ namespace BuildingEnum {
 }
 
 struct BuildingData {
-	BuildingEnum::TYPE type;
-	Vec2<int> size;
-	BuildingEnum::LEVEL level;
-	BuildingEnum::ORIENTATION orientation;
+	BuildingEnum::TYPE type{};
+	Vec2<int> size{};
+	BuildingEnum::LEVEL level{};
+	BuildingEnum::ORIENTATION orientation{};
 
 	int SynergyResidential = 0;
 	int SynergyCommercial = 0;
@@ -66,7 +66,7 @@ struct BuildingData {
 	std::string name = "Building";
 	std::string desc = "You're not suppose to see this!";
 
-	TextureManager::TEX_TYPE TextureID;
+	TextureManager::TEX_TYPE TextureID{};
 	//RenderSystem::SPRITE_TYPE MeshID;
 };
 

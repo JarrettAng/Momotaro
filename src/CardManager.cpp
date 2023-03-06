@@ -112,7 +112,7 @@ namespace CardManager {
 
 	RenderSystem::Transform cardPositionTemplate;	// Rendering data for a generic card
 	RenderSystem::Transform handBackground;			// Rendering data for the hand background
-	int cardSpacing;								// Spacing between cards in hand
+	float cardSpacing;								// Spacing between cards in hand
 	InfoBox cardInfoBox;							// Displays full card information for the selected card
 
 	Card* selectedCard;								// Pointer to the current card selected by the player
@@ -195,7 +195,7 @@ namespace CardManager {
 
 			// Player is hovering over a card!
 			if (IsPointWithinRect(mousePos, cardPos, cardSize)) {
-				hoverTimeElapsed += AEFrameRateControllerGetFrameTime(); // Add to hover time
+				hoverTimeElapsed += (f32)AEFrameRateControllerGetFrameTime(); // Add to hover time
 
 				if (hoverTimeElapsed >= hoverTimeShowThreshold) { // If the player hovers long enough, show the box
 					if (hoveredCard != &card) {
@@ -210,7 +210,7 @@ namespace CardManager {
 
 		// If the player is not hovering over any card
 		if (hoverTimeElapsed > 0.0f) {
-			hoverTimeElapsed -= AEFrameRateControllerGetFrameTime(); // Reduce the hover time elapsed if needed
+			hoverTimeElapsed -= (f32)AEFrameRateControllerGetFrameTime(); // Reduce the hover time elapsed if needed
 			if (hoverTimeElapsed <= hoverTimeHideThreshold) { // If hover time is lesser than hide time, remove the hovered card status
 				hoveredCard = nullptr;
 				hoverTimeElapsed = 0.0f;

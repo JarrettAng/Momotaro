@@ -72,9 +72,9 @@ void SceneGameLevel::Draw() {
 	//-causes error
 	//UIManager::Draw();
 
-	for (auto object : objects) {
-		// renderer.AddBatch(object->Render());
-	}
+	//for (auto object : objects) {
+	//	// renderer.AddBatch(object->Render());
+	//}
 
 	RenderSystem::Render();
 }

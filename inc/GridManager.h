@@ -127,7 +127,6 @@ namespace GridManager {
     // std::vector<Vec2<int>> GetBuildingCells(BuildingData _data, int _x, int _y);
 
 
-    void SetGridIndex(BuildingEnum::ORIENTATION,const BuildingData* data, int x, int y);
     void ChangeOrientation();
 
 	// iso::cell& GetNeighbor(iso::cell* &grid,iso::vec2i indexToCheck, iso::vec2i startingIndex);

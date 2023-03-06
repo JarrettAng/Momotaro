@@ -58,8 +58,8 @@ namespace IsometricGrid
 		return (A == (B + C + D));
 	}
 	Vec2<int> ToScreen(int x, int y){
-		int originX = AEGetWindowWidth() / 2 / 100;
-		int originY = AEGetWindowHeight() / 2 / 50;
+		int originX = AEGetWindowWidth() / 2 / tileWidth;
+		int originY = AEGetWindowHeight() / 2 / tileHeight;
 		return Vec2<int>{
 			(originX*tileWidth) + (x-y)*(tileWidth/2),
 			(originY*tileHeight)+(x+y)*(tileHeight/2)
@@ -68,8 +68,8 @@ namespace IsometricGrid
 
 	Vec2<int> WorldIndexToScreenPos(int x, int y) {
 		return Vec2<int>{   //we need to keep the tile height and width a float here!
-			static_cast<int>((x - y) * (50.f)),
-			static_cast<int>((x + y) * (-25.f)+25.f)		//offset for the correct pos because of the height diff
+			static_cast<int>((x - y) * (tileWidth/2.f) - (tileWidth/2.f)),
+			static_cast<int>((x + y) * -(tileHeight/2.f) + (tileHeight/2.f))		//offset for the correct pos because of the height diff
 		};
 	}
 	Vec2<int> ScreenPosToIso(Vec2<int> cellPos){
@@ -77,31 +77,31 @@ namespace IsometricGrid
 	}
 	Vec2<int> ScreenPosToIso(int xPos, int yPos) {
 		//MOUSE INPUTS (Tile width = 100, tile height = 50)
-		int cellX = xPos / 100;
-		int cellY = yPos / 50;
-		int index = cellX + 20 * cellY;
+		int cellX = xPos / tileWidth;
+		int cellY = yPos / tileHeight;
+		//int index = cellX + 30 * cellY;
 
-		int xOffset = xPos % 100;
-		int yOffset = yPos % 50;
+		int xOffset = xPos % tileWidth;
+		int yOffset = yPos % tileHeight;
 		//Origin -> screen/tile. For now I use numbers
-		int originX = AEGetWindowWidth() / 2 / 100;
-		int originY = AEGetWindowHeight() / 2 / 50;
+		int originX = AEGetWindowWidth() / 2 / tileWidth;
+		int originY = AEGetWindowHeight() / 2 / tileHeight;
 
 		// int selectX = (cellX - originX) + (cellY - originY);
 		// int selectY = (cellY - originY) - (cellX - originX);
 
 		Vec2<int> SelectedCell{
-			(cellX - originX) + (cellY - originY)+10,		//x
-			(cellY - originY) - (cellX - originX)+10		//y
+			(cellX - originX) + (cellY - originY)+15,		//x
+			(cellY - originY) - (cellX - originX)+15		//y
 		};
 		//TOP LEFT
-		if (isInside(xOffset, yOffset, 0, 0, 0, 25, 50, 0))SelectedCell.x--;
+		if (isInside(xOffset, yOffset, 0, 0, 0, tileHeight/2, tileWidth/2, 0))SelectedCell.x--;
 		//BOTTOM LEFT
-		if (isInside(xOffset, yOffset, 0, 25, 0, 50, 50, 50))SelectedCell.y++;
+		if (isInside(xOffset, yOffset, 0, tileHeight/2, 0, tileWidth/2, tileWidth/2, tileHeight))SelectedCell.y++;
 		//TOP RIGHT
-		if (isInside(xOffset, yOffset, 50, 0, 100, 0, 100, 25))SelectedCell.y--;
+		if (isInside(xOffset, yOffset, tileWidth/2, 0, tileWidth, 0, tileWidth, tileHeight/2))SelectedCell.y--;
 		//BOTTOM RIGHT
-		if (isInside(xOffset, yOffset, 50, 50, 100, 50, 100, 25))SelectedCell.x++;
+		if (isInside(xOffset, yOffset, tileWidth/2, tileHeight, tileWidth, tileHeight, tileWidth, tileHeight/2))SelectedCell.x++;
 
 		return SelectedCell;
 		// //MOUSE INPUTS (Tile width = 100, tile height = 50)

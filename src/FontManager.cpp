@@ -26,7 +26,7 @@ namespace FontManager {
 	}
 
 	void InitializeFont() {
-		fonts.push_back({ ROBOTO,  AEGfxCreateFont("Assets/Fonts/Roboto-Regular.ttf", DEFAULT_FONT_SIZE) });
+		fonts.push_back({ ROBOTO,  AEGfxCreateFont("Assets/Fonts/Roboto-Regular.ttf", (int)DEFAULT_FONT_SIZE) });
 	}
 
 	s8 GetFont(const FONT_TYPE& type) {

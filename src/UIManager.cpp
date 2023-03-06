@@ -412,7 +412,7 @@ namespace UI {
 	void TextBox::Render() {
 		for (size_t index = 0; index < texts.size(); ++index) {
 			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, texts[index].pos.x, texts[index].pos.y,
-										 FontManager::GetFont(FontManager::ROBOTO), fontSize, texts[index].text, 5, color);
+										 FontManager::GetFont(FontManager::ROBOTO), (int)fontSize, texts[index].text, 5, color);
 		}
 	}
 }
