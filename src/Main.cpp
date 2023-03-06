@@ -34,11 +34,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// int * pi = new int;			//Uncomment this to see if the memory leak check is working
 
 	// Engine Initialization
-	AESysInit(hInstance, nCmdShow, 900, 600, 1, 60, true, NULL);	// Using custom window procedure
+	AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, true, NULL);	// Using custom window procedure
 	AESysSetWindowTitle("Momo Town");								// Changing the window title
 	AESysReset();													// Reset the system modules
 	AEFrameRateControllerInit(60);
-	AESysToggleFullScreen(true);
+	//AESysToggleFullScreen(true);
 
 	// Manager Initialization
 	InputManager::Initialize();

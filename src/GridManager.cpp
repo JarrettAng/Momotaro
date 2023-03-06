@@ -176,7 +176,7 @@ namespace GridManager {
 	void SpawnBuilding(Vec2<int>mousePos) {
 		Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
 		if (!isCellSafe(SelectedCell)) {
-			std::cout << "Error " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
+			std::cout << "Debug " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
 			return;
 		}
 		int index = GetIndex(SelectedCell);
@@ -567,6 +567,8 @@ namespace GridManager {
 	{
 		if (CurrentBuildingCells.empty()) {
 				std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n";
+				//AE_ASSERT(CurrentBuildingCells.size());
+				assert(CurrentBuildingCells.size());
 				//assert("Error " << __FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n");
 			}
 		// return std::vector<Vec2<int>>{};

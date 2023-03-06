@@ -68,7 +68,7 @@ namespace IsometricGrid
 
 	Vec2<int> WorldIndexToScreenPos(int x, int y) {
 		return Vec2<int>{   //we need to keep the tile height and width a float here!
-			static_cast<int>((x - y) * (tileWidth/2.f) - (tileWidth/2.f)),
+			static_cast<int>((x - y) * (tileWidth/2.f)),
 			static_cast<int>((x + y) * -(tileHeight/2.f) + (tileHeight/2.f))		//offset for the correct pos because of the height diff
 		};
 	}

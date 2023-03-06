@@ -99,6 +99,22 @@ void Building::GetSynergyArea(){
 	}
 }
 
-bool operator==(Building const &lhs, Building const &rhs){
+std::ostream &operator<<(std::ostream &os, BuildingData const &_data)
+{
+	os << "Building type : " << _data.type <<'\n';
+	os << "Size : " << _data.size <<'\n';
+	os << "Level : " << _data.level << '\n';
+	os << "Synergy Residential : " << _data.SynergyResidential << '\n';
+	os << "Synergy Commercial : " << _data.SynergyCommercial << '\n';
+	os << "Synergy Industrial : " << _data.SynergyIndustrial << '\n';
+	os << "Synergy Nature : " << _data.SynergyNature;
+	os << "Name : " << _data.name << '\n';
+	os << "Desc : " << _data.desc  << '\n';
+	os << "Texture ID : " << _data.TextureID  << '\n';
+    return os;
+}
+
+bool operator==(Building const &lhs, Building const &rhs)
+{
     return ((lhs.data.type == rhs.data.type)&&(lhs.data.level == rhs.data.level)&&(lhs.data.size==rhs.data.size));
 }
