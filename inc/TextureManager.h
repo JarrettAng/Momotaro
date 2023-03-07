@@ -48,7 +48,8 @@ namespace TextureManager {
 
 
 	struct TextureSheet {
-		TEX_TYPE tex;
+		TEX_TYPE type;
+		AEGfxTexture* tex;
 
 		int	rows;
 		int cols;
@@ -70,7 +71,7 @@ namespace TextureManager {
 
 	void Initialize();
 	void Update();
-	void Free();
+	void Unload();
 	float GetTexWidth(const TEX_TYPE& type);
 	float GetTexHeight(const TEX_TYPE& type);
 	AEGfxVertexList* GetMesh(const TEX_TYPE& type);

@@ -17,6 +17,6 @@ namespace FontManager {
 	};
 
 	void Initialize();
-	void Free();
+	void Unload();
 	s8 GetFont(const FONT_TYPE& type);
 }

@@ -130,35 +130,35 @@ namespace TextureManager {
 	void InitializeTextures() {
 		// TODO: READ FROM JSON
 		// TO GET: ROWS, COLS AND FRAME INTERVAL, 
-		textures.push_back(TextureSheet{ NONE, 1, 1,-1 });
+		textures.push_back(TextureSheet{ NONE,nullptr, 1, 1,-1 });
 
-		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L1,  1, 6, .2f });
-		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L2, 1, 6, .2f });
-		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L3, 3, 6, .2f });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L1,residential_S_Tex,  1, 6, .2f });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L2,residential_M_Tex, 1, 6, .2f });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L3,residential_L_Tex, 3, 6, .2f });
 
-		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L1, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L2, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L3, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L1,residential_1x2_S_Tex, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L2,residential_1x2_M_Tex, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L3,residential_1x2_L_Tex, 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L1, 4, 6, .2f });
-		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L2, 4, 6, .2f });
-		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L3, 4, 6, .2f });
+		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L1,commercial_S_Tex, 4, 6, .2f });
+		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L2,commercial_M_Tex, 4, 6, .2f });
+		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L3,commercial_L_Tex, 4, 6, .2f });
 
-		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L1, 3, 9, .2f });
-		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L2,	3, 9, .2f });
-		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L3, 1, 27, .2f });
+		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L1,industrial_S_Tex, 3, 9, .2f });
+		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L2,industrial_M_Tex,	3, 9, .2f });
+		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L3,industrial_L_Tex, 1, 27, .2f });
 
-		textures.push_back(TextureSheet{ TILE_TEX, 1, 2, .7f });
-		textures.push_back(TextureSheet{ NATURE_POND, 1, 2, 1.f });
-		textures.push_back(TextureSheet{ NATURE_MUSHROOM, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ NATURE_ROCK, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ TILE_TEX,tile_Tex, 1, 2, .7f });
+		textures.push_back(TextureSheet{ NATURE_POND, pond_Tex,1, 2, 1.f });
+		textures.push_back(TextureSheet{ NATURE_MUSHROOM,mushroom_Tex, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ NATURE_ROCK, rock_Tex,1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ CARD_BLUE, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ PAUSE_WINDOW, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ PAUSE_BUTTON, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ DIGIPEN_LOGO, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ CARD_BLUE,card_Tex, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ PAUSE_WINDOW,pause_Tex, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ PAUSE_BUTTON,pauseButton_Tex, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ DIGIPEN_LOGO,digipen_Logo_Tex, 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ SYNERGY, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ SYNERGY,synergy_Tex, 1, 1, -1.f });
 
 		// Initialize frame UV size based on number of cols and rows.
 		for (TextureSheet& t : textures) {
@@ -177,14 +177,14 @@ namespace TextureManager {
 		for (TextureSheet& t : textures) {
 			AEGfxMeshStart();
 			// I'm sorry.
-			if (t.tex == INDUSTRIAL_1X1_L3) {
+			if (t.type == INDUSTRIAL_1X1_L3) {
 				AEGfxTriAdd(0.0f, 0.35f, 0xFFFFFFFF, 0.0f, 0.0f,
 					0.0f, -0.75f, 0xFFFFFFFF, 0.0f, t.texHeight,
 					1.0f, -0.75f, 0xFFFFFFFF, t.texWidth, t.texHeight);
 				AEGfxTriAdd(1.0f, -0.75f, 0xFFFFFFFF, t.texWidth, t.texHeight,
 					1.0f, 0.35f, 0xFFFFFFFF, t.texWidth, 0.0f,
 					0.0f, 0.35f, 0xFFFFFFFF, 0.0f, 0.0f);
-				meshes.push_back({ t.tex,AEGfxMeshEnd() });
+				meshes.push_back({ t.type,AEGfxMeshEnd() });
 				continue;
 			}
 
@@ -195,7 +195,7 @@ namespace TextureManager {
 			AEGfxTriAdd(1.0f, -1.0f, 0xFFFFFFFF, t.texWidth, t.texHeight,
 				1.0f, 0.0f, 0xFFFFFFFF, t.texWidth, 0.0f,
 				0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f);
-			meshes.push_back({ t.tex,AEGfxMeshEnd() });
+			meshes.push_back({ t.type,AEGfxMeshEnd() });
 		}
 	}
 
@@ -248,7 +248,7 @@ namespace TextureManager {
 	float GetTexWidth(const TEX_TYPE& type) {
 
 		for (TextureSheet& t : textures) {
-			if (t.tex == type) {
+			if (t.type == type) {
 				return t.currTexWidth;
 			}
 		}
@@ -263,7 +263,7 @@ namespace TextureManager {
 	float GetTexHeight(const TEX_TYPE& type) {
 
 		for (TextureSheet& t : textures) {
-			if (t.tex == type) {
+			if (t.type == type) {
 				return t.currTexHeight;
 			}
 		}
@@ -290,60 +290,52 @@ namespace TextureManager {
 		Get texture from texture type.
 	*************************************************************************/
 	AEGfxTexture* GetTexture(const TEX_TYPE& type) {
-		switch (type)
-		{
-		case TILE_TEX:
-			return tile_Tex;
-		case NATURE_POND:
-			return pond_Tex;
-		case NATURE_MUSHROOM:
-			return mushroom_Tex;
-		case NATURE_ROCK:
-			return rock_Tex;
-		case COMMERCIAL_1X1_L1:
-			return commercial_S_Tex;
-		case COMMERCIAL_1X1_L2:
-			return commercial_M_Tex;
-		case COMMERCIAL_1X1_L3:
-			return commercial_L_Tex;
-		case INDUSTRIAL_1X1_L1:
-			return industrial_S_Tex;
-		case INDUSTRIAL_1X1_L2:
-			return industrial_M_Tex;
-		case INDUSTRIAL_1X1_L3:
-			return industrial_L_Tex;
-		case RESIDENTIAL_1X1_L1:
-			return residential_S_Tex;
-		case RESIDENTIAL_1X1_L2:
-			return residential_M_Tex;
-		case RESIDENTIAL_1X1_L3:
-			return residential_L_Tex;
-		case RESIDENTIAL_1X2_L1:
-			return residential_1x2_S_Tex;
-		case RESIDENTIAL_1X2_L2:
-			return residential_1x2_M_Tex;
-		case RESIDENTIAL_1X2_L3:
-			return residential_1x2_L_Tex;
-		case CARD_BLUE:
-			return card_Tex;
-		case PAUSE_WINDOW:
-			return pause_Tex;
-		case PAUSE_BUTTON:
-			return pauseButton_Tex;
-		case DIGIPEN_LOGO:
-			return digipen_Logo_Tex;
-		case SYNERGY:
-			return synergy_Tex;
-		default:
-			break;
+		for (TextureSheet& t : textures) {
+			if (t.type == type) {
+				return t.tex;
+			}
 		}
+
 		std::cout << "INVALID SPRITE TYPE ( " << type << " ) WHEN CALLING GetTexture()\n";
 		return nullptr;
 	}
 
-	void TextureManager::Free() {
-		for (Mesh& t : meshes) {
-			AEGfxMeshFree(t.mesh);
+	void TextureManager::Unload() {
+		for (Mesh& m : meshes) {
+			AEGfxMeshFree(m.mesh);
 		}
+
+		// Access violation error?
+		//for (TextureSheet& t : textures) {
+		//	AEGfxTextureUnload(t.tex);
+		//}
+
+		AEGfxTextureUnload(residential_S_Tex);
+		AEGfxTextureUnload(residential_M_Tex);
+		AEGfxTextureUnload(residential_L_Tex);
+
+		AEGfxTextureUnload(residential_1x2_S_Tex);
+		AEGfxTextureUnload(residential_1x2_M_Tex);
+		AEGfxTextureUnload(residential_1x2_L_Tex);
+
+		AEGfxTextureUnload(commercial_S_Tex);
+		AEGfxTextureUnload(commercial_M_Tex);
+		AEGfxTextureUnload(commercial_L_Tex);
+
+		AEGfxTextureUnload(industrial_S_Tex);
+		AEGfxTextureUnload(industrial_M_Tex);
+		AEGfxTextureUnload(industrial_L_Tex);
+
+		AEGfxTextureUnload(tile_Tex);
+		AEGfxTextureUnload(pond_Tex);
+		AEGfxTextureUnload(mushroom_Tex);
+		AEGfxTextureUnload(rock_Tex);
+
+		AEGfxTextureUnload(synergy_Tex);
+		AEGfxTextureUnload(card_Tex);
+		AEGfxTextureUnload(pause_Tex);
+		AEGfxTextureUnload(pauseButton_Tex);
+
+		AEGfxTextureUnload(digipen_Logo_Tex);
 	}
 }

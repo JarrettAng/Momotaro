@@ -40,7 +40,7 @@ namespace FontManager {
 		return roboto.font;
 	}
 
-	void FontManager::Free() {
+	void FontManager::Unload() {
 		for (FONT f : fonts) {
 			AEGfxDestroyFont(f.font);
 		}
