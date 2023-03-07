@@ -23,99 +23,99 @@ The functions include:
 ///////////////////////////////////////////////////////////////////////////
 
 namespace SceneManager {
-    // Scene states
-    SCENES_ENUM previous, current, next;
+	// Scene states
+	SCENES_ENUM previous, current, next;
 
-    // All scenes
-    Scene* currentScene;
+	// All scenes
+	Scene* currentScene;
 
-    //SceneGameLevel splash;
-    SceneGameLevel   gameLevel;
-    // SceneMainMenu mainMenu;
-    // SceneSettings settings;
-    // SceneCredits  credits;
-    // SceneEditor   editor;
-    // 
-    ///////////////////////////////////////////////////////////////////////
-    // Forward Declarations
-    void UpdatePausedState(bool newPausedState);
-    ///////////////////////////////////////////////////////////////////////
+	SceneGameLevel splashScreen;
+	SceneGameLevel gameLevel;
+	// SceneMainMenu mainMenu;
+	// SceneSettings settings;
+	// SceneCredits  credits;
+	// SceneEditor   editor;
+	// 
+	///////////////////////////////////////////////////////////////////////
+	// Forward Declarations
+	void UpdatePausedState(bool newPausedState);
+	///////////////////////////////////////////////////////////////////////
 
-    bool isPaused;
+	bool isPaused;
 
-    // Change the current scene (Public; used by other files)
-    void LoadScene(SCENES_ENUM nextScene) {
-        next = nextScene;
-    }
+	// Change the current scene (Public; used by other files)
+	void LoadScene(SCENES_ENUM nextScene) {
+		next = nextScene;
+	}
 
-    // Loads the funcs to call in the loop below based on "current"
-    void SwitchScene() {
-        switch (current) {
-        case SPLASHSCREEN:
-            //currentScene = &splashLevel;
-            break;
-        case GAME_LEVEL:
-            currentScene = &gameLevel;
-            break;
-        }
-    }
+	// Loads the funcs to call in the loop below based on "current"
+	void SwitchScene() {
+		switch (current) {
+		case SPLASHSCREEN:
+			currentScene = &splashScreen;
+			break;
+		case GAME_LEVEL:
+			currentScene = &gameLevel;
+			break;
+		}
+	}
 
-    // Main game loop
-    void SceneManagerLoop() {
-        while (current != QUIT) {
-            if (current == RESTART) {
-                next = current = previous;
-            }
-            else {
-                SwitchScene();
-                currentScene->Load();
-            }
+	// Main game loop
+	void SceneManagerLoop() {
+		while (current != QUIT) {
+			if (current == RESTART) {
+				next = current = previous;
+			}
+			else {
+				SwitchScene();
+				currentScene->Load();
+			}
 
-            currentScene->Initialize();
+			currentScene->Initialize();
 
-            // Game update loop
-            while (current == next) {
-                AESysFrameStart();
+			// Game update loop
+			while (current == next) {
+				AESysFrameStart();
 
-                AEInputUpdate();
-                InputManager::HandleInput();
+				AEInputUpdate();
+				InputManager::HandleInput();
 
-                currentScene->Update();
+				currentScene->Update();
 
-                currentScene->Draw();
+				currentScene->Draw();
 
-                AESysFrameEnd();
-            }
+				AESysFrameEnd();
+			}
 
-            currentScene->Free();
+			currentScene->Free();
 
-            if (next != RESTART) {
-                currentScene->Unload();
-            }
+			if (next != RESTART) {
+				currentScene->Unload();
+			}
 
-            previous = current;
-            current = next;
-        }
+			previous = current;
+			current = next;
+		}
 
-        Free();
-    }
+		Free();
+	}
 
-    // Which scene to load at the very beginning of the game
-    void Initialize(SCENES_ENUM startingScene) {
-        current = previous = next = startingScene;
+	// Which scene to load at the very beginning of the game
+	void Initialize(SCENES_ENUM startingScene) {
+		current = previous = next = startingScene;
 
-        PauseManager::onTogglePause.Subscribe(UpdatePausedState);
+		PauseManager::onTogglePause.Subscribe(UpdatePausedState);
 
-        SwitchScene();
-        SceneManagerLoop();
-    }
+		SwitchScene();
+		SceneManagerLoop();
+	}
 
-    // Things to do at the very end of the game
-    void Free() {
-        PauseManager::onTogglePause.UnsubscribeAll();
-    }
+	// Things to do at the very end of the game
+	void Free() {
+		PauseManager::onTogglePause.UnsubscribeAll();
+	}
 
-    void UpdatePausedState(bool newPausedState) {
-        isPaused = newPausedState;
-    }
+	void UpdatePausedState(bool newPausedState) {
+		isPaused = newPausedState;
+	}
 }

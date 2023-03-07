@@ -26,11 +26,12 @@ void SceneSplashscreen::Update() {
 }
 
 void SceneSplashscreen::Draw() {
-	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
-	RenderSystem::Render();
+	AEGfxSetBackgroundColor(1.0f, 1.0f, 1.0f);
 
 	//Display the splash screen
-	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, 0, 0, 1500, 1500, TextureManager::SPLASH_SCREEN);
+	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, 0, 0, 1525, 445, TextureManager::DIGIPEN_LOGO);
+
+	RenderSystem::Render();
 
 }
 

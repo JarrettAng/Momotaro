@@ -73,6 +73,8 @@ void SceneGameLevel::Free() {
 	PauseManager::Free();
 	InputManager::Free();
 	CardManager::Free();
+	TextureManager::Free();
+	FontManager::Free();
 }
 
 void SceneGameLevel::Unload() {

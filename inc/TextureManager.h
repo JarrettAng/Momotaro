@@ -41,16 +41,15 @@ namespace TextureManager {
 		CARD_BLUE,
 		PAUSE_WINDOW,
 		PAUSE_BUTTON,
-		SPLASH_SCREEN,
+		DIGIPEN_LOGO,
 		SYNERGY,
-		POSITIVE_SYNERGY,
-		NEGATIVE_SYNERGY,
 	};
 	TEX_TYPE operator++(TEX_TYPE&, int);
 
 
 	struct TextureSheet {
 		TEX_TYPE tex;
+
 		int	rows;
 		int cols;
 
@@ -71,6 +70,7 @@ namespace TextureManager {
 
 	void Initialize();
 	void Update();
+	void Free();
 	float GetTexWidth(const TEX_TYPE& type);
 	float GetTexHeight(const TEX_TYPE& type);
 	AEGfxVertexList* GetMesh(const TEX_TYPE& type);

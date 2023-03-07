@@ -25,9 +25,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	srand(11);
 
 	//Memory leak checker (for debug mode)
-	#if defined(DEBUG) | defined(_DEBUG)
-		_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
-	#endif
+#if defined(DEBUG) | defined(_DEBUG)
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
 
 	// Engine Initialization
 	AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, true, NULL);	// Using custom window procedure
@@ -44,7 +44,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	TextureManager::Initialize();
 	RenderSystem::Initialize();
 
-	SceneManager::Initialize(SceneManager::GAME_LEVEL);				// Game Loop happens in SceneManager
+	SceneManager::Initialize(SceneManager::SPLASHSCREEN);				// Game Loop happens in SceneManager
 
 	///////////////////////////////////////////////////////////////////////
 	// Free the things that were initialized here

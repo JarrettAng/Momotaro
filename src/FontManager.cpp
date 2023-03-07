@@ -39,4 +39,10 @@ namespace FontManager {
 		std::cerr << "Error : " << __FILE__ << " ln" << __LINE__ << " Font type invalid, returning font type roboto." << std::endl;
 		return roboto.font;
 	}
+
+	void FontManager::Free() {
+		for (FONT f : fonts) {
+			AEGfxDestroyFont(f.font);
+		}
+	}
 }

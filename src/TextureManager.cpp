@@ -32,6 +32,8 @@ namespace TextureManager {
 	/*!***********************************************************************
 	* TEXTURES
 	*************************************************************************/
+
+	// BUILDINGS.
 	AEGfxTexture* residential_S_Tex;
 	AEGfxTexture* residential_M_Tex;
 	AEGfxTexture* residential_L_Tex;
@@ -48,20 +50,24 @@ namespace TextureManager {
 	AEGfxTexture* industrial_M_Tex;
 	AEGfxTexture* industrial_L_Tex;
 
-	AEGfxTexture* tile_Tex;
+	// NATURES.
 	AEGfxTexture* pond_Tex;
 	AEGfxTexture* mushroom_Tex;
 	AEGfxTexture* rock_Tex;
 
+	// NORMAL TILE.
+	AEGfxTexture* tile_Tex;
+
+	// UI.
 	AEGfxTexture* card_Tex;
+	AEGfxTexture* synergy_Tex;
+
 	AEGfxTexture* pause_Tex;
 	AEGfxTexture* pauseButton_Tex;
 
-	//IN PROGRESS
-	AEGfxTexture* splash_Tex;
-	AEGfxTexture* synergy_Tex;
-	AEGfxTexture* positiveSynergy_Tex;
-	AEGfxTexture* negativeSynergy_Tex;
+	// SPLASH SCREEN.
+	AEGfxTexture* digipen_Logo_Tex;
+
 
 	TEX_TYPE operator++(TEX_TYPE& _texture, int)
 	{
@@ -97,9 +103,6 @@ namespace TextureManager {
 		commercial_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Commercial_1x1_L1.png");
 		commercial_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Commercial_1x1_L2.png");
 		commercial_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Commercial_1x1_L3.png");
-		// commercial_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L1.png");
-		// commercial_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L2.png");
-		// commercial_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L3.png");
 
 		industrial_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Industrial_1x1_L1.png");
 		industrial_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Industrial_1x1_L2.png");
@@ -111,14 +114,12 @@ namespace TextureManager {
 		rock_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Rock.png");
 
 		card_Tex = AEGfxTextureLoad("Assets/Textures/UI/Card.png");
+		synergy_Tex = AEGfxTextureLoad("Assets/Textures/UI/Synergy.png");
+
 		pause_Tex = AEGfxTextureLoad("Assets/Textures/UI/GameWindow.png");
 		pauseButton_Tex = AEGfxTextureLoad("Assets/Textures/UI/Pause_Button.png");
 
-		//IN PROGRESS
-		splash_Tex = AEGfxTextureLoad("Assets/Textures/UI/SplashScreen.png");
-		synergy_Tex = AEGfxTextureLoad("Assets/Textures/UI/synergyTex.png");
-		positiveSynergy_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/PositiveSynergy.png");
-		negativeSynergy_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/NegativeSynergy.png");
+		digipen_Logo_Tex = AEGfxTextureLoad("Assets/Textures/UI/Digipen_Logo.png");
 	}
 
 	/*!***********************************************************************
@@ -130,7 +131,7 @@ namespace TextureManager {
 		// TO GET: ROWS, COLS AND FRAME INTERVAL, 
 		textures.push_back(TextureSheet{ NONE, 1, 1,-1 });
 
-		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L1, 1, 6, .2f });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L1,  1, 6, .2f });
 		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L2, 1, 6, .2f });
 		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L3, 3, 6, .2f });
 
@@ -154,10 +155,9 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ CARD_BLUE, 1, 1, -1.f });
 		textures.push_back(TextureSheet{ PAUSE_WINDOW, 1, 1, -1.f });
 		textures.push_back(TextureSheet{ PAUSE_BUTTON, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ SPLASH_SCREEN, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ DIGIPEN_LOGO, 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ POSITIVE_SYNERGY, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ NEGATIVE_SYNERGY, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ SYNERGY, 1, 1, -1.f });
 
 		// Initialize frame UV size based on number of cols and rows.
 		for (TextureSheet& t : textures) {
@@ -186,7 +186,6 @@ namespace TextureManager {
 				meshes.push_back({ t.tex,AEGfxMeshEnd() });
 				continue;
 			}
-
 
 			// UVS ARE BASED ON NUMBER OF ROWS AND COLS FOR ANIMATIONS.
 			AEGfxTriAdd(0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
@@ -330,18 +329,20 @@ namespace TextureManager {
 			return pause_Tex;
 		case PAUSE_BUTTON:
 			return pauseButton_Tex;
-		case SPLASH_SCREEN:
-			return splash_Tex;
+		case DIGIPEN_LOGO:
+			return digipen_Logo_Tex;
 		case SYNERGY:
 			return synergy_Tex;
-		case POSITIVE_SYNERGY:
-			return positiveSynergy_Tex;
-		case NEGATIVE_SYNERGY:
-			return negativeSynergy_Tex;
 		default:
 			break;
 		}
 		std::cout << "INVALID SPRITE TYPE ( " << type << " ) WHEN CALLING GetTexture()\n";
 		return nullptr;
+	}
+
+	void TextureManager::Free() {
+		for (Mesh& t : meshes) {
+			AEGfxMeshFree(t.mesh);
+		}
 	}
 }
