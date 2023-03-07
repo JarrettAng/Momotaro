@@ -74,14 +74,8 @@ struct BuildingData {
 ///////////////////////////////////////////////////////////////////////////
 // This class contains the data and logic of the all the building objects used
 // by the grids and cards in the game.
-class Building : public virtual GameObject {
+class Building {
 	public:
-		///////////////////////////////////////////////////////////////////
-		// Data members
-		BuildingData data;
-		std::vector<Vec2<int>> buildingCells;
-		std::vector<Vec2<int>> synergyAreaCells;
-
 		///////////////////////////////////////////////////////////////////
 		// Constructors
 		Building();						// Default ctor
@@ -110,6 +104,12 @@ class Building : public virtual GameObject {
 
 		// Get the synergy of the surrounding cells and stores it inside the building
 		void GetSynergyArea();
+
+		///////////////////////////////////////////////////////////////////
+		// Data members
+		BuildingData data;
+		std::vector<Vec2<int>> buildingCells;
+		std::vector<Vec2<int>> synergyAreaCells;
 };
 
 ///////////////////////////////////////////////////////////////////

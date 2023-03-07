@@ -28,5 +28,4 @@ public:
 	virtual void Destroy();
 
 	Vec3<int> position;
-	//RenderSystem::SpriteInfo spriteInfo;
 };

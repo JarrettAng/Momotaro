@@ -40,7 +40,6 @@
     <ClInclude Include="inc\EventSystem.h" />
     <ClInclude Include="inc\FileIOManager.h" />
     <ClInclude Include="inc\FontManager.h" />
-    <ClInclude Include="inc\GameObject.h" />
     <ClInclude Include="inc\GridManager.h" />
     <ClInclude Include="inc\InputManager.h" />
     <ClInclude Include="inc\IsometricGrid.h" />

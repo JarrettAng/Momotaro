@@ -96,9 +96,6 @@
     <ClInclude Include="inc\Building.h">
       <Filter>inc\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="inc\GameObject.h">
-      <Filter>inc\GameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="inc\MomoMaths.h">
       <Filter>inc\Systems</Filter>
     </ClInclude>
