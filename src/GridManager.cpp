@@ -777,7 +777,7 @@ namespace GridManager {
 			return _data.SynergyNature;
 		}
 		std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << " : UNABLE TO GET SYNERGY POINTS!\n";
-		assert(0);
+		// assert(0);
 		return 0;
 	}
 
@@ -991,8 +991,8 @@ namespace GridManager {
 		int originY = AEGetWindowHeight() / 2 / tileHeight;
 
 		Vec2<int> SelectedCell{
-			(cellX - originX) + (cellY - originY)+15,		//x
-			(cellY - originY) - (cellX - originX)+15		//y
+			(cellX - originX) + (cellY - originY)+gridX/2,		//x
+			(cellY - originY) - (cellX - originX)+gridY/2		//y
 		};
 		//TOP LEFT
 		if (isInside(xOffset, yOffset, 0, 0, 0, tileHeight/2, tileWidth/2, 0))SelectedCell.x--;

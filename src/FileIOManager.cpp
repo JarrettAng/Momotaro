@@ -14,13 +14,11 @@ The functions include:
 
 #include <iostream>
 #include <fstream>
-#include "nlohmann/json.hpp"
 #include <FileIOManager.h>
 #include <BuildingManager.h>
 #include <GridManager.h>
 
 namespace FileIOManager {
-	using json = nlohmann::json;
 	// Implementation here
 	// void to_json(json& _json, BuildingData const& _building){
 	// }
