@@ -22,12 +22,8 @@ class SceneGameLevel : public Scene {
 		void Initialize();
 
 		void Update();
-		void FixedUpdate();
 		void Draw();
 
 		void Free();
 		void Unload();
-
-		void AddObject(GameObject *newObject);
-		void RemoveObject(GameObject *newObject);
 };

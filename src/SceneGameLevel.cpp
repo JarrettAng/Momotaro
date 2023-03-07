@@ -44,16 +44,6 @@ void SceneGameLevel::Update() {
 	PauseManager::Update();
 	TextureManager::Update();
 	CardManager::Update();
-
-	for (auto object : objects) {
-		object->Update();
-	}
-}
-
-void SceneGameLevel::FixedUpdate() {
-	for (auto object : objects) {
-		object->FixedUpdate();
-	}
 }
 
 void SceneGameLevel::Draw() {
@@ -83,30 +73,8 @@ void SceneGameLevel::Free() {
 	PauseManager::Free();
 	InputManager::Free();
 	CardManager::Free();
-	for (auto object : objects) {
-		object->Destroy();
-	}
-
-	objects.clear();
 }
 
 void SceneGameLevel::Unload() {
 	BuildingManager::Clear();
-}
-
-void SceneGameLevel::AddObject(GameObject* newObject) {
-	objects.push_back(newObject);
-
-	newObject->Start();
-}
-
-void SceneGameLevel::RemoveObject(GameObject* newObject) {
-	for (auto i = objects.begin(); i != objects.end(); ++i) {
-		if ((*i) == newObject) {
-			objects.erase(i);
-			break;
-		}
-	}
-
-	newObject->Destroy();
 }

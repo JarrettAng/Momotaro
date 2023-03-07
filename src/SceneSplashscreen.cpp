@@ -22,24 +22,11 @@ void SceneSplashscreen::Initialize() {
 }
 
 void SceneSplashscreen::Update() {
-	for (auto object : objects) {
-		object->Update();
-	}
-}
 
-void SceneSplashscreen::FixedUpdate() {
-	for (auto object : objects) {
-		object->FixedUpdate();
-	}
 }
 
 void SceneSplashscreen::Draw() {
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
-
-	//for (auto object : objects) {
-	//	// renderer.AddBatch(object->Render());
-	//}
-
 	RenderSystem::Render();
 
 	//Display the splash screen
@@ -48,11 +35,7 @@ void SceneSplashscreen::Draw() {
 }
 
 void SceneSplashscreen::Free() {
-	for (auto object : objects) {
-		object->Destroy();
-	}
 
-	objects.clear();
 }
 
 void SceneSplashscreen::Unload() {

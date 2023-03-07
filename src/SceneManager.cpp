@@ -37,8 +37,6 @@ namespace SceneManager {
     void UpdatePausedState(bool newPausedState);
     #pragma endregion
 
-    double fixedDT = 0.02, elapsedfixedDT = 0;
-
     bool isPaused;
 
     void LoadScene(SCENES_ENUM nextScene) {
@@ -76,14 +74,6 @@ namespace SceneManager {
                 InputManager::HandleInput();
 
                 currentScene->Update();
-
-                if (!isPaused) {
-                    elapsedfixedDT += AEFrameRateControllerGetFrameTime();
-                }
-                if (elapsedfixedDT > fixedDT) {
-                    elapsedfixedDT = 0;
-                    currentScene->FixedUpdate();
-                }
 
                 currentScene->Draw();
 

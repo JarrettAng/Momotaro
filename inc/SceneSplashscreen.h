@@ -22,7 +22,6 @@ public:
 	void Initialize();
 
 	void Update();
-	void FixedUpdate();
 	void Draw();
 
 	void Free();
