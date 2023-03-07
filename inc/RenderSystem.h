@@ -34,6 +34,8 @@ namespace RenderSystem {
 		Vec4<float> blendColor = BLEND_COLOR;
 		Vec4<float> tint = TINT;
 		float transperancy = TRANSPERANCY;
+
+		void setDefault() { blendMode = BLEND_MODE; blendColor = BLEND_COLOR; transperancy = TRANSPERANCY; tint = TINT; }
 		bool isDefault() { return blendMode == BLEND_MODE && blendColor == BLEND_COLOR && transperancy == TRANSPERANCY && tint == TINT; }
 	};
 
@@ -101,6 +103,7 @@ namespace RenderSystem {
 	void Render();
 
 	AEVec2 GetPivotPos(const AEVec2& pos, const float& width, const float& height);
+	RenderSetting* GetRenderSetting();
 
 	/*!***********************************************************************
 	* TEXT RENDERING

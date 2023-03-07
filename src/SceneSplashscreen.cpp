@@ -20,12 +20,13 @@ The functions include:
 #include <TextureManager.h>
 
 float splashScreenTime = 3.0f;
+RenderSystem::RenderSetting fadeSetting;
 
 void SceneSplashscreen::Load() {
 }
 
 void SceneSplashscreen::Initialize() {
-
+	RenderSystem::Initialize();
 }
 
 void SceneSplashscreen::Update() {
@@ -40,6 +41,8 @@ void SceneSplashscreen::Draw() {
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
 	//Display the Digipen logo
+	fadeSetting.tint.z -= 1 / (3 / AEFrameRateControllerGetFrameTime());
+	*RenderSystem::GetRenderSetting() = fadeSetting;
 	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, -300, 85, 600, 171, TextureManager::DIGIPEN_LOGO);
 
 	RenderSystem::Render();

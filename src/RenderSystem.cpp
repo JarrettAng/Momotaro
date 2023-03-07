@@ -20,7 +20,7 @@ namespace RenderSystem {
 	void SetRenderPivot(const RENDER_PIVOT& pivot);
 	AEVec2 GetPivotPos(const AEVec2& pos, const float& width, const float& height);
 
-	void SortBatch(std::vector<Renderable>& batch);
+	void SortBatch(std::vector<std::pair<Renderable, RenderSetting>>& batch);
 
 	void UpdateRenderSetting(RenderSetting setting = {});
 	void UpdateRenderTransformMtx(const int& x, const int& y, const AEVec2& scale, const float& rot = 0);
@@ -38,10 +38,10 @@ namespace RenderSystem {
 	/*!***********************************************************************
 	* RENDER BATCHES
 	*************************************************************************/
-	std::vector<Renderable> tileBatch;
-	std::vector<Renderable> gamePieceBatch;
-	std::vector<Renderable> UIBatch;
-	std::vector<std::vector<Renderable>> renderBatches = { tileBatch, gamePieceBatch, UIBatch };
+	std::vector<std::pair<Renderable, RenderSetting>> tileBatch;
+	std::vector<std::pair<Renderable, RenderSetting>> gamePieceBatch;
+	std::vector<std::pair<Renderable, RenderSetting>> UIBatch;
+	std::vector<std::vector<std::pair<Renderable, RenderSetting>>> renderBatches = { tileBatch, gamePieceBatch, UIBatch };
 
 	/*!***********************************************************************
 	* MATRICES
@@ -58,7 +58,7 @@ namespace RenderSystem {
 	*************************************************************************/
 	f32 textWidth, textHeight;	// Cache text width and height for calculating text position when drawing button.
 	RENDER_PIVOT renderPivot;
-
+	RenderSetting setting;
 
 	/*!***********************************************************************
 	\brief
@@ -66,6 +66,7 @@ namespace RenderSystem {
 	*************************************************************************/
 	void RenderSystem::Initialize() {
 		SetRenderPivot(TOP_LEFT);
+		setting.setDefault();
 	}
 
 	/*!***********************************************************************
@@ -75,30 +76,35 @@ namespace RenderSystem {
 	*************************************************************************/
 	void Render() {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+		// Using default render setting.
 		UpdateRenderSetting();
 		for (auto& batch : renderBatches) {
 			// Sort batch based on layer before drawing.
 			SortBatch(batch);
 			// Render every renderable object.
 			for (auto& obj : batch) {
-				switch (obj.type) {
+				// If render setting is changed, use object render setting.
+				if (!obj.second.isDefault()) UpdateRenderSetting(obj.second);
+				switch (obj.first.type) {
 				case RECT:
-					if (obj.rect.graphics.tex != TextureManager::NONE) {
+					if (obj.first.rect.graphics.tex != TextureManager::NONE) {
 						// RENDER RECT WITH TEXTURE.
-						RenderRect(obj.rect.transform.pos.x, obj.rect.transform.pos.y, obj.rect.transform.size.x, obj.rect.transform.size.y, obj.rect.graphics.tex);
+						RenderRect(obj.first.rect.transform.pos.x, obj.first.rect.transform.pos.y, obj.first.rect.transform.size.x, obj.first.rect.transform.size.y, obj.first.rect.graphics.tex);
 					}
 					else {
 						// RENDER RECT WITH COLOR.
-						RenderRect(obj.rect.transform.pos.x, obj.rect.transform.pos.y, obj.rect.transform.size.x, obj.rect.transform.size.y, obj.rect.graphics.color);
+						RenderRect(obj.first.rect.transform.pos.x, obj.first.rect.transform.pos.y, obj.first.rect.transform.size.x, obj.first.rect.transform.size.y, obj.first.rect.graphics.color);
 					}
 					break;
 				case TEXT:
 					// RENDER TEXT
-					RenderText(obj.text.pos.x, obj.text.pos.y, obj.text.fontID, obj.text.fontSize, const_cast<char*>(obj.text.text.c_str()), obj.text.color);
+					RenderText(obj.first.text.pos.x, obj.first.text.pos.y, obj.first.text.fontID, obj.first.text.fontSize, const_cast<char*>(obj.first.text.text.c_str()), obj.first.text.color);
 					break;
 				default:
 					break;
 				}
+				// If render setting is changed, set render setting back to default for next obj.
+				if (!obj.second.isDefault())UpdateRenderSetting();
 			}
 			// Clear batch.
 			batch.clear();
@@ -123,7 +129,9 @@ namespace RenderSystem {
 		obj.text.fontSize = fontSize;
 
 		// Add to batch.
-		renderBatches[id].push_back(obj);
+		renderBatches[id].push_back({ obj,setting });
+
+		if (!setting.isDefault()) setting.setDefault();
 	}
 
 	/*!***********************************************************************
@@ -159,7 +167,10 @@ namespace RenderSystem {
 		obj.rect.graphics.tex = tex;
 
 		// Add to batch.
-		renderBatches[id].push_back(obj);
+		renderBatches[id].push_back({ obj,setting });
+
+		// Reset setting to default if it is changed.
+		if (!setting.isDefault()) setting.setDefault();
 	}
 
 
@@ -262,8 +273,12 @@ namespace RenderSystem {
 	\brief
 		Sort batch list based on layer value.
 	*************************************************************************/
-	void SortBatch(std::vector<Renderable>& batch) {
-		std::sort(batch.begin(), batch.end(), [](const Renderable& a, const Renderable& b) {  return a.layer < b.layer; });
+	void SortBatch(std::vector<std::pair<Renderable, RenderSetting>>& batch) {
+		std::sort(batch.begin(), batch.end(), [](const std::pair<Renderable, RenderSetting>& a, const std::pair<Renderable, RenderSetting>& b) {  return a.first.layer < b.first.layer; });
+	}
+
+	RenderSetting* GetRenderSetting() {
+		return &setting;
 	}
 
 	/*!***********************************************************************
