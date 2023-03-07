@@ -36,7 +36,6 @@ void SceneGameLevel::Load() {
 void SceneGameLevel::Initialize() {
 	PauseManager::Initialize();
 	CardManager::Initialize();
-	//UIManager::Initialize();
 }
 
 void SceneGameLevel::Update() {
@@ -55,22 +54,10 @@ void SceneGameLevel::Draw() {
 	PauseManager::Draw();
 	ScoreManger::Draw();
 
-	//Debug
-	//printf("MinX %f\nMaxX %f\nMinY %f\nMaxY %f\n", AEGfxGetWinMinX(), AEGfxGetWinMaxX(), AEGfxGetWinMinY(), AEGfxGetWinMaxY);
-	//Add the pause button
-	//UIManager::AddRectToBatch(800.0f, -400.0f, 10.0f, 10.0f, 6 , AEGfxTexture * tex);
-	//-causes error
-	//UIManager::Draw();
-
-	//for (auto object : objects) {
-	//	// renderer.AddBatch(object->Render());
-	//}
-
 	RenderSystem::Render();
 }
 
 void SceneGameLevel::Free() {
-	PauseManager::Free();
 	InputManager::Free();
 	CardManager::Free();
 
@@ -78,6 +65,5 @@ void SceneGameLevel::Free() {
 
 void SceneGameLevel::Unload() {
 	BuildingManager::Clear();
-	FontManager::Unload();
-	TextureManager::Unload();
+
 }

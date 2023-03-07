@@ -29,7 +29,7 @@ namespace SceneManager {
 	// All scenes
 	Scene* currentScene;
 
-	SceneGameLevel splashScreen;
+	SceneSplashscreen splashScreen;
 	SceneGameLevel gameLevel;
 	// SceneMainMenu mainMenu;
 	// SceneSettings settings;
@@ -113,6 +113,8 @@ namespace SceneManager {
 	// Things to do at the very end of the game
 	void Free() {
 		PauseManager::onTogglePause.UnsubscribeAll();
+		FontManager::Unload();
+		TextureManager::Unload();
 	}
 
 	void UpdatePausedState(bool newPausedState) {

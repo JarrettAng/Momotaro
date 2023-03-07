@@ -13,6 +13,13 @@ The functions include:
 **************************************************************************/
 
 #include <SceneSplashscreen.h>
+#include <RenderSystem.h>
+
+#include <SceneManager.h>
+
+#include <TextureManager.h>
+
+float splashScreenTime = 3.0f;
 
 void SceneSplashscreen::Load() {
 }
@@ -22,23 +29,24 @@ void SceneSplashscreen::Initialize() {
 }
 
 void SceneSplashscreen::Update() {
+	splashScreenTime -= AEFrameRateControllerGetFrameTime();
 
+	if (splashScreenTime <= 0) {
+		SceneManager::LoadScene(SceneManager::GAME_LEVEL);
+	}
 }
 
 void SceneSplashscreen::Draw() {
-	AEGfxSetBackgroundColor(1.0f, 1.0f, 1.0f);
+	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
-	//Display the splash screen
-	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, 0, 0, 1525, 445, TextureManager::DIGIPEN_LOGO);
+	//Display the Digipen logo
+	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, -300, 85, 600, 171, TextureManager::DIGIPEN_LOGO);
 
 	RenderSystem::Render();
-
 }
 
 void SceneSplashscreen::Free() {
-
 }
 
 void SceneSplashscreen::Unload() {
-
 }
