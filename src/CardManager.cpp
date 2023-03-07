@@ -323,7 +323,7 @@ namespace CardManager {
 
 	void PlayCard() {
 		Vec2<int> mousePos = InputManager::GetMousePos();
-		if (!GridManager::isCellSafe(IsometricGrid::ScreenPosToIso(mousePos))) {
+		if (!GridManager::isCellSafe(GridManager::ScreenPosToIso(mousePos))) {
 			return;
 		}
 

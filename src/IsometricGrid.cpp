@@ -46,93 +46,93 @@ namespace IsometricGrid
 
 
 
-	float area(int x1, int y1, int x2, int y2, int x3, int y3) {
-		return static_cast<float>(abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0f));
-	}
+	// float area(int x1, int y1, int x2, int y2, int x3, int y3) {
+	// 	return static_cast<float>(abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0f));
+	// }
 
-	bool isInside(int _mouseX, int _mouseY, int x1, int y1, int x2, int y2, int x3, int y3) {
-		float A = area(x1, y1, x2, y2, x3, y3);
-		float B = area(_mouseX, _mouseY, x2, y2, x3, y3);
-		float C = area(x1, y1, _mouseX, _mouseY, x3, y3);
-		float D = area(x1, y1, x2, y2, _mouseX, _mouseY);
-		return (A == (B + C + D));
-	}
-	Vec2<int> ToScreen(int x, int y){
-		int originX = AEGetWindowWidth() / 2 / tileWidth;
-		int originY = AEGetWindowHeight() / 2 / tileHeight;
-		return Vec2<int>{
-			(originX*tileWidth) + (x-y)*(tileWidth/2),
-			(originY*tileHeight)+(x+y)*(tileHeight/2)
-		};
-	}
+	// bool isInside(int _mouseX, int _mouseY, int x1, int y1, int x2, int y2, int x3, int y3) {
+	// 	float A = area(x1, y1, x2, y2, x3, y3);
+	// 	float B = area(_mouseX, _mouseY, x2, y2, x3, y3);
+	// 	float C = area(x1, y1, _mouseX, _mouseY, x3, y3);
+	// 	float D = area(x1, y1, x2, y2, _mouseX, _mouseY);
+	// 	return (A == (B + C + D));
+	// }
+	// Vec2<int> ToScreen(int x, int y){
+	// 	int originX = AEGetWindowWidth() / 2 / tileWidth;
+	// 	int originY = AEGetWindowHeight() / 2 / tileHeight;
+	// 	return Vec2<int>{
+	// 		(originX*tileWidth) + (x-y)*(tileWidth/2),
+	// 		(originY*tileHeight)+(x+y)*(tileHeight/2)
+	// 	};
+	// }
 
-	Vec2<int> WorldIndexToScreenPos(int x, int y) {
-		return Vec2<int>{   //we need to keep the tile height and width a float here!
-			static_cast<int>((x - y) * (tileWidth/2.f)),
-			static_cast<int>((x + y) * -(tileHeight/2.f) + (tileHeight/2.f))		//offset for the correct pos because of the height diff
-		};
-	}
-	Vec2<int> ScreenPosToIso(Vec2<int> cellPos){
-		return ScreenPosToIso(cellPos.x,cellPos.y);
-	}
-	Vec2<int> ScreenPosToIso(int xPos, int yPos) {
-		//MOUSE INPUTS (Tile width = 100, tile height = 50)
-		int cellX = xPos / tileWidth;
-		int cellY = yPos / tileHeight;
-		//int index = cellX + 30 * cellY;
+	// Vec2<int> WorldIndexToScreenPos(int x, int y) {
+	// 	return Vec2<int>{   //we need to keep the tile height and width a float here!
+	// 		static_cast<int>((x - y) * (tileWidth/2.f)),
+	// 		static_cast<int>((x + y) * -(tileHeight/2.f) + (tileHeight/2.f))		//offset for the correct pos because of the height diff
+	// 	};
+	// }
+	// Vec2<int> ScreenPosToIso(Vec2<int> cellPos){
+	// 	return ScreenPosToIso(cellPos.x,cellPos.y);
+	// }
+	// Vec2<int> ScreenPosToIso(int xPos, int yPos) {
+	// 	//MOUSE INPUTS (Tile width = 100, tile height = 50)
+	// 	int cellX = xPos / tileWidth;
+	// 	int cellY = yPos / tileHeight;
+	// 	//int index = cellX + 30 * cellY;
 
-		int xOffset = xPos % tileWidth;
-		int yOffset = yPos % tileHeight;
-		//Origin -> screen/tile. For now I use numbers
-		int originX = AEGetWindowWidth() / 2 / tileWidth;
-		int originY = AEGetWindowHeight() / 2 / tileHeight;
+	// 	int xOffset = xPos % tileWidth;
+	// 	int yOffset = yPos % tileHeight;
+	// 	//Origin -> screen/tile. For now I use numbers
+	// 	int originX = AEGetWindowWidth() / 2 / tileWidth;
+	// 	int originY = AEGetWindowHeight() / 2 / tileHeight;
 
-		// int selectX = (cellX - originX) + (cellY - originY);
-		// int selectY = (cellY - originY) - (cellX - originX);
+	// 	// int selectX = (cellX - originX) + (cellY - originY);
+	// 	// int selectY = (cellY - originY) - (cellX - originX);
 
-		Vec2<int> SelectedCell{
-			(cellX - originX) + (cellY - originY)+15,		//x
-			(cellY - originY) - (cellX - originX)+15		//y
-		};
-		//TOP LEFT
-		if (isInside(xOffset, yOffset, 0, 0, 0, tileHeight/2, tileWidth/2, 0))SelectedCell.x--;
-		//BOTTOM LEFT
-		if (isInside(xOffset, yOffset, 0, tileHeight/2, 0, tileWidth/2, tileWidth/2, tileHeight))SelectedCell.y++;
-		//TOP RIGHT
-		if (isInside(xOffset, yOffset, tileWidth/2, 0, tileWidth, 0, tileWidth, tileHeight/2))SelectedCell.y--;
-		//BOTTOM RIGHT
-		if (isInside(xOffset, yOffset, tileWidth/2, tileHeight, tileWidth, tileHeight, tileWidth, tileHeight/2))SelectedCell.x++;
+	// 	Vec2<int> SelectedCell{
+	// 		(cellX - originX) + (cellY - originY)+15,		//x
+	// 		(cellY - originY) - (cellX - originX)+15		//y
+	// 	};
+	// 	//TOP LEFT
+	// 	if (isInside(xOffset, yOffset, 0, 0, 0, tileHeight/2, tileWidth/2, 0))SelectedCell.x--;
+	// 	//BOTTOM LEFT
+	// 	if (isInside(xOffset, yOffset, 0, tileHeight/2, 0, tileWidth/2, tileWidth/2, tileHeight))SelectedCell.y++;
+	// 	//TOP RIGHT
+	// 	if (isInside(xOffset, yOffset, tileWidth/2, 0, tileWidth, 0, tileWidth, tileHeight/2))SelectedCell.y--;
+	// 	//BOTTOM RIGHT
+	// 	if (isInside(xOffset, yOffset, tileWidth/2, tileHeight, tileWidth, tileHeight, tileWidth, tileHeight/2))SelectedCell.x++;
 
-		return SelectedCell;
-		// //MOUSE INPUTS (Tile width = 100, tile height = 50)
-		// int cellX = x / 100;
-		// int cellY = y / 50;
+	// 	return SelectedCell;
+	// 	// //MOUSE INPUTS (Tile width = 100, tile height = 50)
+	// 	// int cellX = x / 100;
+	// 	// int cellY = y / 50;
 
-		// //Origin -> screen/tile. For now I use numbers
-		// int originX = AEGetWindowWidth()/2 / 100;
-		// int originY = AEGetWindowHeight()/2 / 50;
+	// 	// //Origin -> screen/tile. For now I use numbers
+	// 	// int originX = AEGetWindowWidth()/2 / 100;
+	// 	// int originY = AEGetWindowHeight()/2 / 50;
 
-		// int selectX = (cellX - originX) + (cellY - originY);
-		// int selectY = (cellY - originY) - (cellX - originX);
-		// return vec2i{
-		// 	static_cast<int>((x / (tileWidth / 2)) + (y / (tileHeight / 2))),
-		// 	static_cast<int>((y / (tileHeight / 2)) - (x / (tileWidth / 2)))
-		// };
-	}
-	Vec2<int> MouseToCell(int mouseX, int mouseY) {
-		return Vec2<int>{
-			mouseX / tileWidth,
-			mouseY / tileHeight
-		};
-	}
+	// 	// int selectX = (cellX - originX) + (cellY - originY);
+	// 	// int selectY = (cellY - originY) - (cellX - originX);
+	// 	// return vec2i{
+	// 	// 	static_cast<int>((x / (tileWidth / 2)) + (y / (tileHeight / 2))),
+	// 	// 	static_cast<int>((y / (tileHeight / 2)) - (x / (tileWidth / 2)))
+	// 	// };
+	// }
+	// Vec2<int> MouseToCell(int mouseX, int mouseY) {
+	// 	return Vec2<int>{
+	// 		mouseX / tileWidth,
+	// 		mouseY / tileHeight
+	// 	};
+	// }
    
-    Vec2<int> MouseCellOffset(int mouseX, int mouseY)
-    {
-        return Vec2<int>{
-			mouseX % tileWidth,
-			mouseY % tileHeight
-		};
-    }
+    // Vec2<int> MouseCellOffset(int mouseX, int mouseY)
+    // {
+    //     return Vec2<int>{
+	// 		mouseX % tileWidth,
+	// 		mouseY % tileHeight
+	// 	};
+    // }
 
 #pragma region  old lambda code
 #if 0

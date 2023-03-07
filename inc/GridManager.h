@@ -15,11 +15,66 @@ The functions include:
 
 #pragma once
 
-#include <IsometricGrid.h> 
 #include <EventSystem.h>
+// #include "MomoMaths.h"
+#include <Building.h>
 
 namespace GridManager {
-	namespace iso = IsometricGrid;
+	extern const int tileWidth;
+    extern const int tileHeight;
+    enum TileType{
+        NONE = 0,
+        RESIDENTIAL = 1,
+        INDUSTRIAL = 2,
+        COMMERCIAL = 3,
+        TREE = 999,
+        ROCK = 1999,
+    };
+   
+    struct cell{
+        Vec2<int> pos{0,0};
+        bool isRenderable{false};
+        int ID{0};
+        Building _building;
+        TileType _tileType{};
+	};
+
+    
+
+    /// @brief Returns the area of the triangle
+    /// @param x1 x1 of the 1st point of the triangle
+    /// @param y1 y1 of the 1st point of the triangle
+    /// @param x2 x2 of the 2nd point of the triangle
+    /// @param y2 y2 of the 2nd point of the triangle
+    /// @param x3 x3 of the 3rd point of the triangle
+    /// @param y3 y3 of the 3rd point of the triangle
+    /// @return returns area of triangle as a float
+    float area(int x1, int y1, int x2, int y2, int x3, int y3);
+
+    /// @brief Checks if mouse is in the triangle area specified
+    /// @param _mouseX Mouse X position
+    /// @param _mouseY Mouse Y position
+    /// @param x1 x1 of the 1st point of the triangle
+    /// @param y1 y1 of the 1st point of the triangle
+    /// @param x2 x2 of the 2nd point of the triangle
+    /// @param y2 y2 of the 2nd point of the triangle
+    /// @param x3 x3 of the 3rd point of the triangle
+    /// @param y3 y3 of the 3rd point of the triangle
+    /// @return 
+    bool isInside(int _mouseX, int _mouseY, int x1, int y1, int x2, int y2, int x3, int y3);
+
+
+    /// @brief Converts World Cell Index to Screen Position.
+    /// @param x x index of the world cell
+    /// @param y y index of the world cell
+    /// @return Screen position in the form of vec2i
+    Vec2<int> WorldIndexToScreenPos(int x, int y);
+    Vec2<int> ToScreen(int x, int y);
+    Vec2<int> ScreenPosToIso(int x, int y);
+    Vec2<int> ScreenPosToIso(Vec2<int> cellPos);    //overload to take in vec2 int
+
+
+    Vec2<int> MouseToCell(int mouseX, int mouseY);
 
 	/**
 	 * @brief Initializes the grid and spawns in the tiles. Also sets which tiles are to be rendered
@@ -86,7 +141,7 @@ namespace GridManager {
 	 * @param grid the grid to check
 	 * @param cellIndex the current index to check
 	 */
-	void CheckCellNeighbor(iso::cell* grid, Vec2<int> cellIndex);
+	void CheckCellNeighbor(cell* grid, Vec2<int> cellIndex);
 
 	/**
 	 * @brief Get the Index object using the x + gridX * y conversion

@@ -16,7 +16,6 @@ The functions include:
 #include <InputManager.h>
 #include <RenderSystem.h>
 #include <FontManager.h>
-#include <IsometricGrid.h>
 #include <iostream>
 #include <MomoMaths.h>
 #include <ColorTable.h>
@@ -26,32 +25,33 @@ The functions include:
 #include <UIManager.h>
 #include <ScoreManager.h>
 namespace GridManager {
-	namespace iso = IsometricGrid;
-
-	int synergyPoints{ 0 };
-	int terrainNum{ 2 };
-
-	iso::cell* grid;
+///////////////////////////////////////////////////////////////////////////
+//GRID CONSTANTS
+	const int tileWidth{ 100 };
+	const int tileHeight{ 50 };
 	const int gridX{ 30 }, gridY{ 30 };		//total grid size
-	const int mapSize{ 5 };				//total playing area size
-	const int mapPos{ -2 };		//Playable area position
-
-	int randomNature{ 0 };
-
-	int buildingID{ 0 };			//THIS ID IS FOR TRACKING BUILDINGS!
-
-	std::vector<Vec2<int>> CurrentSynergyArea{};
-	std::vector<Vec2<int>> CurrentBuildingCells{};
-
-	static int previousIndex{ -1 };
+	const int mapSize{ 5 };					//total playing area size
+	const int mapPos{ -2 };					//Playable area position
+///////////////////////////////////////////////////////////////////////////
+//GRID VARIABLES
+	cell* grid;								//The main grid array
+	int buildingID{ 0 };					//THIS ID IS FOR TRACKING BUILDINGS!
+	int totalPoints{};						//Synergy point tabulation
+	std::vector<Vec2<int>> CurrentBuildingCells{};		//For calculating synergy area
+	std::vector<Vec2<int>> CurrentSynergyArea{};		//For displaying synergy area
+//CACHED GRID INDEX
+	static int previousIndex{ -1 };						
 	static int currentIndex{ -2 };
+///////////////////////////////////////////////////////////////////////////
+//EVENT RELATED VARIABLES
+	const BuildingData* selectedBuilding{};			//Selected building from cardmanager event
+	EventSystem::Event<void> onMergeBuildings;		//Event on merge
 
-	int totalPoints{};
-
-	//Test enum
+//DEBUG VARIABLES
+	int terrainNum{ 2 };
+	int randomNature{ 0 };
 	BuildingEnum::ORIENTATION TestOrientation{ BuildingEnum::RIGHT };
-	const BuildingData* selectedBuilding{};
-	EventSystem::Event<void> onMergeBuildings;
+///////////////////////////////////////////////////////////////////////////
 
 #pragma region BuildingStuff
 	//Temporary stuff for buildings
@@ -131,33 +131,31 @@ namespace GridManager {
 #pragma endregion
 
 
+///////////////////////////////////////////////////////////////////////////
+//INITIALISE GRID 								
+///////////////////////////////////////////////////////////////////////////
 	void Initialize() {
-		grid = { new iso::cell[gridX * gridY]{} };
+		grid = { new cell[gridX * gridY]{} };
 		//GRID SET UP
 		//Init a grid with 0 tiles
 		for (int y{ 0 }; y < gridY; ++y) {
 			for (int x{ 0 }; x < gridX; ++x) {
 				int index = GetIndex(x, y);
-				Vec2<int> ScreenPos = iso::WorldIndexToScreenPos(x, y);
-				// //*! SET THE POSITION OF THE MESH HERE!!!!
+				Vec2<int> ScreenPos = WorldIndexToScreenPos(x, y);
 				//This is 10 units up so we need to move x index and y index up by 10 units
-				ScreenPos.y += (gridY * iso::tileHeight) / 2;		//move the grid up by half its size (20 units / 2 = 10)
+				ScreenPos.y += (gridY * tileHeight) / 2;		//move the grid up by half its size (20 units / 2 = 10)
 				grid[index].pos = ScreenPos;
 
 				//basically we want the grid to be from -2 to 2, but since there's a 10 unit offset, we add 10
 				if (((x >= (mapPos + gridX/2)) && (x <= (mapPos + gridX/2 + mapSize))) && (y >= (mapPos + gridY/2) && y <= (mapPos + gridY/2 + mapSize))) {
-					// grid[index].ID = iso::RESIDENTIAL;
 					grid[index].isRenderable = true;
-
-					// std::cout << "y is " << y << " and iso is " << test.x<<'\n';
 				}
 				grid[index].ID = 0;
 			}
 		}
-
-		// Hardcoded island parts
-		// Top left
-	//	RandomiseTerrain();
+		//////////////////////////////////////////////////////////////////////
+		//					SUBSCRIBE EVENTS 								//
+		//////////////////////////////////////////////////////////////////////
 
 		InputManager::SubscribeToKey(AEVK_C, InputManager::TRIGGERED, ClearGrid);
 		InputManager::SubscribeToKey(AEVK_R, InputManager::TRIGGERED, RandomiseTerrain);
@@ -173,8 +171,12 @@ namespace GridManager {
 		CardManager::onNewCardSelected.Subscribe(GetBuildingCard);
 		CardManager::onCardPlaced.Subscribe(SpawnBuilding);
 	}
+
+///////////////////////////////////////////////////////////////////////////
+//Spawns buildings at mouse position
+///////////////////////////////////////////////////////////////////////////
 	void SpawnBuilding(Vec2<int>mousePos) {
-		Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
+		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		if (!isCellSafe(SelectedCell)) {
 			std::cout << "Debug " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
 			return;
@@ -189,13 +191,24 @@ namespace GridManager {
 		CurrentBuildingCells.clear();
 	}
 
+
+
+///////////////////////////////////////////////////////////////////////////
+//Checks if the selected cell is safe to place a building on
+///////////////////////////////////////////////////////////////////////////
 	bool isCellSafe(Vec2<int> selectedCell) {
 		// if ((((selectedCell.x) < 0) || ((selectedCell.x) > gridX)) || ((selectedCell.y) < 0 || (selectedCell.y) > gridY)) return false;
-		if (grid[GetIndex(selectedCell.x, selectedCell.y)].ID > 0) return false;
+		//If the tile is not even renderable, we cannot place
 		if (!grid[GetIndex(selectedCell.x, selectedCell.y)].isRenderable) return false;
+		//If there already is a building on that tile, we cannot place.
+		if (grid[GetIndex(selectedCell.x, selectedCell.y)].ID > 0) return false;
 		return true;
 	}
 
+
+///////////////////////////////////////////////////////////////////////////
+//Changes the building orientation (debugging)
+///////////////////////////////////////////////////////////////////////////
 	void ChangeOrientation() {
 		TestOrientation = static_cast<BuildingEnum::ORIENTATION>(TestOrientation + 1);
 		if (TestOrientation == BuildingEnum::ORIENTATION_LENGTH) {
@@ -203,12 +216,14 @@ namespace GridManager {
 		}
 	}
 
+#pragma region DEBUG_SPAWN_FUNCTIONS
+
 	void SpawnBigResidential() {
 		//1x2
 		if (PauseManager::IsPaused()) return;
 		ClearGrid();
 		Vec2<int> mousePos = InputManager::GetMousePos();
-		Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
+		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
 		ChangeOrientation();
@@ -223,7 +238,7 @@ namespace GridManager {
 		if (PauseManager::IsPaused()) return;
 		// ClearGrid();
 		Vec2<int> mousePos = InputManager::GetMousePos();
-		Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
+		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		//int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
 		// ChangeOrientation();
@@ -234,7 +249,7 @@ namespace GridManager {
 	void SpawnResidential() {
 		if (PauseManager::IsPaused()) return;
 		Vec2<int> mousePos = InputManager::GetMousePos();
-		Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
+		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
 
@@ -252,7 +267,7 @@ namespace GridManager {
 	void SpawnCommerical() {
 		if (PauseManager::IsPaused()) return;
 		Vec2<int> mousePos = InputManager::GetMousePos();
-		Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
+		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
 
@@ -264,7 +279,7 @@ namespace GridManager {
 	void SpawnIndustrial() {
 		if (PauseManager::IsPaused()) return;
 		Vec2<int> mousePos = InputManager::GetMousePos();
-		Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
+		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
 
@@ -276,7 +291,7 @@ namespace GridManager {
 	void SpawnNature() {
 		if (PauseManager::IsPaused()) return;
 		Vec2<int> mousePos = InputManager::GetMousePos();
-		Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
+		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
 		randomNature = rand() % 3;
@@ -294,6 +309,8 @@ namespace GridManager {
 		}
 		grid[index].ID = ++buildingID;
 	}
+	#pragma endregion
+
 #pragma region TerrainStuff
 
 	void RandomiseTerrain() {
@@ -471,20 +488,26 @@ namespace GridManager {
 	}
 #pragma endregion
 
-
-	//Subscribed to select building card
+///////////////////////////////////////////////////////////////////////////
+//Gets building from cardmanager event
+///////////////////////////////////////////////////////////////////////////
 	void GetBuildingCard(const BuildingData* _data) {
 		// if (_data != nullptr)
-		selectedBuilding = _data;
+		selectedBuilding = _data;		//we're caching it 
 	}
+
+///////////////////////////////////////////////////////////////////////////
+//Checks if the current building orientation/position is valid to be placed
+///////////////////////////////////////////////////////////////////////////
 	bool IsBuildingValid(const BuildingData* _data, int _x, int _y) {
-		//int index = GetIndex(_x, _y);
 		Vec2<int> _size = _data->size;
 		Vec2<int> _SelectedCell{ 0,0 };
-		std::vector<Vec2<int>> AllCells;
+		//We need to check the orientation and rotate it accordingly
 		if (_data->orientation == BuildingEnum::RIGHT || _data->orientation == BuildingEnum::LEFT) {
 			_size = Vec2<int>{ _size.y,_size.x };
 		}
+
+		//We have to check the grid and see if the current orientation can be placed on the grid
 		for (int y{ 0 }; y < _size.y; ++y) {
 			for (int x{ 0 }; x < _size.x; ++x) {
 				switch (_data->orientation)
@@ -518,8 +541,11 @@ namespace GridManager {
 		}
 		return true;
 	}
+
+///////////////////////////////////////////////////////////////////////////
+//Gets all the current building cell positions from the selected building
+///////////////////////////////////////////////////////////////////////////
 	std::vector<Vec2<int>> GetBuildingCells(const BuildingData* _data, int _x, int _y) {
-		//int index = GetIndex(_x, _y);
 		Vec2<int> _size = _data->size;
 		Vec2<int> _SelectedCell{ 0,0 };
 		std::vector<Vec2<int>> AllCells;
@@ -552,19 +578,18 @@ namespace GridManager {
 					_SelectedCell = { _x - x,y + _y };
 					break;
 				}
-				// grid[otherIndex].ID = buildingID;
-				// grid[otherIndex]._building.data = _data;
 				AllCells.push_back(_SelectedCell);
 			}
 		}
-		// for (Vec2<int> cell : AllCells) {
-		// 	grid[GetIndex(cell.x, cell.y)]._building.buildingCells.assign(AllCells.begin(), AllCells.end());
-		// }
 		return AllCells;
 	}
 
+///////////////////////////////////////////////////////////////////////////
+//Gets the synergy area cells from the building cells
+///////////////////////////////////////////////////////////////////////////
 	std::vector<Vec2<int>> GetSynergyArea(std::vector<Vec2<int>> _buildingCells)
 	{
+		//If for some reason the building cells are empty, we need to throw an error
 		if (CurrentBuildingCells.empty()) {
 				std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n";
 				//AE_ASSERT(CurrentBuildingCells.size());
@@ -585,25 +610,18 @@ namespace GridManager {
 			}
 		}
 		//Small hack to make a compare operator then sort the vector of vectors
+		//This is because we do not want to include duplicate cells
 		std::sort(tempVec.begin(), tempVec.end(), [](Vec2<int> a, Vec2<int> b) {return a < b; });	//once we sort it we prune
 		auto last = std::unique(tempVec.begin(), tempVec.end());
 		tempVec.erase(last, tempVec.end());
 		return tempVec;
-		// synergyAreaCells = tempVec;
-		// for(Vec2<int>cell : synergyAreaCells){
-		// 	std::cout << "SYNERGY AREA : " << cell << '\n';
-		// }
 	}
 
 	
 	void UpdateMouseToGrid() {
 		if (PauseManager::IsPaused()) return;
 		Vec2<int> mousePos{ InputManager::GetMousePos() };
-		Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
-		//First we check if the mouse has moved
-		if (InputManager::HasMouseMoved()) {
-			//Then we check if the index is different
-		}
+		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		currentIndex = GetIndex(SelectedCell);
 		//If the mouse has moved out of the previous index, we need to update the synergy cells
 		if (currentIndex != previousIndex) {
@@ -612,9 +630,7 @@ namespace GridManager {
 			CurrentBuildingCells.clear();
 			//DRAWING DEBUG TEXT
 			//Then we set the grid index
-			// std::cout << "CLEARED VECTORS\n";
 			if (selectedBuilding != nullptr) {
-				// std::cout << "SELECTED BUILDING NOT NULL\n";
 				if (IsBuildingValid(selectedBuilding, SelectedCell.x, SelectedCell.y)) {
 					CurrentBuildingCells = GetBuildingCells(selectedBuilding, SelectedCell.x, SelectedCell.y);
 					CurrentSynergyArea = GetSynergyArea(CurrentBuildingCells);
@@ -646,7 +662,7 @@ namespace GridManager {
 		for (int y{ 0 }; y < gridY; ++y) {
 			for (int x{ 0 }; x < gridX; ++x) {
 				int index = GetIndex(x, y);
-				grid[index].ID = iso::NONE;
+				grid[index].ID = NONE;
 				grid[index]._building = Building{};
 			}
 		}
@@ -691,7 +707,7 @@ namespace GridManager {
 
 				Vec2<int> mousePos = InputManager::GetMousePos();
 				//Convert the mouse position into iso
-				Vec2<int> SelectedCell{ iso::ScreenPosToIso(mousePos.x,mousePos.y) };
+				Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 				for (Vec2<int> cell : CurrentSynergyArea) {
 					pointTextPos.x = static_cast<float>(grid[GetIndex(cell)].pos.x);
 					pointTextPos.y = static_cast<float>(grid[GetIndex(cell)].pos.y) - 62.5f;
@@ -740,9 +756,6 @@ namespace GridManager {
 	}
 
 	int GetSynergyText(Vec2<int> cellToCheck, BuildingData _data) {
-		// if (!(&_data))
-		// 	std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << " : UNABLE TO GET SYNERGY POINTS!\n";
-		// return 0;
 		switch (grid[GetIndex(cellToCheck)]._building.data.type) {
 		case BuildingEnum::NONE:
 			if (!grid[GetIndex(cellToCheck)].isRenderable) return _data.SynergyNature;
@@ -758,10 +771,11 @@ namespace GridManager {
 			return _data.SynergyNature;
 		}
 		std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << " : UNABLE TO GET SYNERGY POINTS!\n";
+		assert(0);
 		return 0;
 	}
 
-	void GridManager::CheckCellNeighbor(iso::cell* _grid, Vec2<int> cellIndex)
+	void CheckCellNeighbor(cell* _grid, Vec2<int> cellIndex)
 	{
 		int gridIndex = GetIndex(cellIndex.x, cellIndex.y);
 		int matchCount{ 1 };
@@ -927,6 +941,77 @@ namespace GridManager {
 		std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << ": UNABLE TO FIND INDEX FROM ID!\n";
 		return 0;
 	}
+
+	float area(int x1, int y1, int x2, int y2, int x3, int y3) {
+		return static_cast<float>(abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0f));
+	}
+
+	bool isInside(int _mouseX, int _mouseY, int x1, int y1, int x2, int y2, int x3, int y3) {
+		float A = area(x1, y1, x2, y2, x3, y3);
+		float B = area(_mouseX, _mouseY, x2, y2, x3, y3);
+		float C = area(x1, y1, _mouseX, _mouseY, x3, y3);
+		float D = area(x1, y1, x2, y2, _mouseX, _mouseY);
+		return (A == (B + C + D));
+	}
+	
+	Vec2<int> ToScreen(int x, int y){
+		int originX = AEGetWindowWidth() / 2 / tileWidth;
+		int originY = AEGetWindowHeight() / 2 / tileHeight;
+		return Vec2<int>{
+			(originX*tileWidth) + (x-y)*(tileWidth/2),
+			(originY*tileHeight)+(x+y)*(tileHeight/2)
+		};
+	}
+
+	Vec2<int> WorldIndexToScreenPos(int x, int y) {
+		return Vec2<int>{   //we need to keep the tile height and width a float here!
+			static_cast<int>((x - y) * (tileWidth/2.f)),
+			static_cast<int>((x + y) * -(tileHeight/2.f) + (tileHeight/2.f))		//offset for the correct pos because of the height diff
+		};
+	}
+	Vec2<int> ScreenPosToIso(Vec2<int> cellPos){
+		return ScreenPosToIso(cellPos.x,cellPos.y);
+	}
+	Vec2<int> ScreenPosToIso(int xPos, int yPos) {
+		//MOUSE INPUTS (Tile width = 100, tile height = 50)
+		int cellX = xPos / tileWidth;
+		int cellY = yPos / tileHeight;
+		//int index = cellX + 30 * cellY;
+
+		int xOffset = xPos % tileWidth;
+		int yOffset = yPos % tileHeight;
+		//Origin -> screen/tile. For now I use numbers
+		int originX = AEGetWindowWidth() / 2 / tileWidth;
+		int originY = AEGetWindowHeight() / 2 / tileHeight;
+
+		Vec2<int> SelectedCell{
+			(cellX - originX) + (cellY - originY)+15,		//x
+			(cellY - originY) - (cellX - originX)+15		//y
+		};
+		//TOP LEFT
+		if (isInside(xOffset, yOffset, 0, 0, 0, tileHeight/2, tileWidth/2, 0))SelectedCell.x--;
+		//BOTTOM LEFT
+		if (isInside(xOffset, yOffset, 0, tileHeight/2, 0, tileWidth/2, tileWidth/2, tileHeight))SelectedCell.y++;
+		//TOP RIGHT
+		if (isInside(xOffset, yOffset, tileWidth/2, 0, tileWidth, 0, tileWidth, tileHeight/2))SelectedCell.y--;
+		//BOTTOM RIGHT
+		if (isInside(xOffset, yOffset, tileWidth/2, tileHeight, tileWidth, tileHeight, tileWidth, tileHeight/2))SelectedCell.x++;
+		return SelectedCell;
+	}
+	Vec2<int> MouseToCell(int mouseX, int mouseY) {
+		return Vec2<int>{
+			mouseX / tileWidth,
+			mouseY / tileHeight
+		};
+	}
+   
+    Vec2<int> MouseCellOffset(int mouseX, int mouseY)
+    {
+        return Vec2<int>{
+			mouseX % tileWidth,
+			mouseY % tileHeight
+		};
+    }
 
 	void Free(){
 		delete[] grid;
