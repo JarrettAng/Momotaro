@@ -18,22 +18,21 @@ Resets the data read on game scene exit
 Returns the building information of the given type, size, level
 - GetRandomBuildingData
 Returns a random building information, can be controlled by parameters
-- CreateBuilding
-
-- CreateRandomBuilding
-
 **************************************************************************/
 
 #pragma once
-
+///////////////////////////////////////////////////////////////////////////
 #include <Building.h>
+///////////////////////////////////////////////////////////////////////////
 
 namespace BuildingManager {
-	void Initialize();
-	void Clear();
+	void Initialize();	// Loads all the building data from File IO at the start of the level
+	void Clear();		// At the end of the level, clear the buildingsData vector
 
+	// Get all the information of a specific building (type, size, and level)
 	BuildingData GetBuildingData(BuildingEnum::TYPE type, Vec2<int> size, BuildingEnum::LEVEL level);
-	BuildingData GetRandomBuildingData(BuildingEnum::TYPE type);
-	BuildingData GetRandomBuildingData(BuildingEnum::LEVEL level);
-	BuildingData GetRandomBuildingData();
+	
+	BuildingData GetRandomBuildingData(BuildingEnum::TYPE type);	// Get a random building that matches the type (e.g. residential)
+	BuildingData GetRandomBuildingData(BuildingEnum::LEVEL level);	// Get a random building that matches the level (e.g. L1 or L2)
+	BuildingData GetRandomBuildingData();							// Get any random building
 }

@@ -40,9 +40,6 @@
     <ClCompile Include="src\Building.cpp">
       <Filter>src\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameObject.cpp">
-      <Filter>src\GameObjects</Filter>
-    </ClCompile>
     <ClCompile Include="src\IsometricGrid.cpp">
       <Filter>src\Systems</Filter>
     </ClCompile>
