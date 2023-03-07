@@ -26,33 +26,33 @@ The functions include:
 #include <ScoreManager.h>
 #include <FileIOManager.h>
 namespace GridManager {
-///////////////////////////////////////////////////////////////////////////
-//GRID CONSTANTS
+	///////////////////////////////////////////////////////////////////////////
+	//GRID CONSTANTS
 	const int tileWidth{ 100 };
 	const int tileHeight{ 50 };
 	const int gridX{ 20 }, gridY{ 20 };		//total grid size
 	const int mapSize{ 5 };					//total playing area size
 	const int mapPos{ -2 };					//Playable area position
-///////////////////////////////////////////////////////////////////////////
-//GRID VARIABLES
+	///////////////////////////////////////////////////////////////////////////
+	//GRID VARIABLES
 	cell* grid;								//The main grid array
 	int buildingID{ 0 };					//THIS ID IS FOR TRACKING BUILDINGS!
 	int totalPoints{};						//Synergy point tabulation
 	std::vector<Vec2<int>> CurrentBuildingCells{};		//For calculating synergy area
 	std::vector<Vec2<int>> CurrentSynergyArea{};		//For displaying synergy area
-//CACHED GRID INDEX
-	static int previousIndex{ -1 };						
+	//CACHED GRID INDEX
+	static int previousIndex{ -1 };
 	static int currentIndex{ -2 };
-///////////////////////////////////////////////////////////////////////////
-//EVENT RELATED VARIABLES
+	///////////////////////////////////////////////////////////////////////////
+	//EVENT RELATED VARIABLES
 	const BuildingData* selectedBuilding{};			//Selected building from cardmanager event
 	EventSystem::Event<void> onMergeBuildings;		//Event on merge
 
-//DEBUG VARIABLES
+	//DEBUG VARIABLES
 	int terrainNum{ 2 };
 	int randomNature{ 0 };
 	BuildingEnum::ORIENTATION TestOrientation{ BuildingEnum::RIGHT };
-///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
 
 #pragma region BuildingStuff
 	//Temporary stuff for buildings
@@ -132,9 +132,9 @@ namespace GridManager {
 #pragma endregion
 
 
-///////////////////////////////////////////////////////////////////////////
-//INITIALISE GRID 								
-///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
+	//INITIALISE GRID 								
+	///////////////////////////////////////////////////////////////////////////
 	void Initialize() {
 		grid = { new cell[gridX * gridY]{} };
 		//GRID SET UP
@@ -148,7 +148,7 @@ namespace GridManager {
 				grid[index].pos = ScreenPos;
 
 				//basically we want the grid to be from -2 to 2, but since there's a 10 unit offset, we add 10
-				if (((x >= (mapPos + gridX/2)) && (x <= (mapPos + gridX/2 + mapSize))) && (y >= (mapPos + gridY/2) && y <= (mapPos + gridY/2 + mapSize))) {
+				if (((x >= (mapPos + gridX / 2)) && (x <= (mapPos + gridX / 2 + mapSize))) && (y >= (mapPos + gridY / 2) && y <= (mapPos + gridY / 2 + mapSize))) {
 					grid[index].isRenderable = true;
 				}
 				grid[index].ID = 0;
@@ -173,9 +173,9 @@ namespace GridManager {
 		CardManager::onCardPlaced.Subscribe(SpawnBuilding);
 	}
 
-///////////////////////////////////////////////////////////////////////////
-//Spawns buildings at mouse position
-///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
+	//Spawns buildings at mouse position
+	///////////////////////////////////////////////////////////////////////////
 	void SpawnBuilding(Vec2<int>mousePos) {
 		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		if (!isCellSafe(SelectedCell)) {
@@ -192,15 +192,15 @@ namespace GridManager {
 		CurrentBuildingCells.clear();
 	}
 
-	const cell* GetGrid(){
+	const cell* GetGrid() {
 		return grid;
 	}
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//Checks if the selected cell is safe to place a building on
-///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
+	//Checks if the selected cell is safe to place a building on
+	///////////////////////////////////////////////////////////////////////////
 	bool isCellSafe(Vec2<int> selectedCell) {
 		// if ((((selectedCell.x) < 0) || ((selectedCell.x) > gridX)) || ((selectedCell.y) < 0 || (selectedCell.y) > gridY)) return false;
 		//If the tile is not even renderable, we cannot place
@@ -211,9 +211,9 @@ namespace GridManager {
 	}
 
 
-///////////////////////////////////////////////////////////////////////////
-//Changes the building orientation (debugging)
-///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
+	//Changes the building orientation (debugging)
+	///////////////////////////////////////////////////////////////////////////
 	void ChangeOrientation() {
 		TestOrientation = static_cast<BuildingEnum::ORIENTATION>(TestOrientation + 1);
 		if (TestOrientation == BuildingEnum::ORIENTATION_LENGTH) {
@@ -315,7 +315,7 @@ namespace GridManager {
 		// }
 		// grid[index].ID = ++buildingID;
 	}
-	#pragma endregion
+#pragma endregion
 
 #pragma region TerrainStuff
 
@@ -494,17 +494,17 @@ namespace GridManager {
 	}
 #pragma endregion
 
-///////////////////////////////////////////////////////////////////////////
-//Gets building from cardmanager event
-///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
+	//Gets building from cardmanager event
+	///////////////////////////////////////////////////////////////////////////
 	void GetBuildingCard(const BuildingData* _data) {
 		// if (_data != nullptr)
 		selectedBuilding = _data;		//we're caching it 
 	}
 
-///////////////////////////////////////////////////////////////////////////
-//Checks if the current building orientation/position is valid to be placed
-///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
+	//Checks if the current building orientation/position is valid to be placed
+	///////////////////////////////////////////////////////////////////////////
 	bool IsBuildingValid(const BuildingData* _data, int _x, int _y) {
 		Vec2<int> _size = _data->size;
 		Vec2<int> _SelectedCell{ 0,0 };
@@ -548,9 +548,9 @@ namespace GridManager {
 		return true;
 	}
 
-///////////////////////////////////////////////////////////////////////////
-//Gets all the current building cell positions from the selected building
-///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
+	//Gets all the current building cell positions from the selected building
+	///////////////////////////////////////////////////////////////////////////
 	std::vector<Vec2<int>> GetBuildingCells(const BuildingData* _data, int _x, int _y) {
 		Vec2<int> _size = _data->size;
 		Vec2<int> _SelectedCell{ 0,0 };
@@ -590,18 +590,18 @@ namespace GridManager {
 		return AllCells;
 	}
 
-///////////////////////////////////////////////////////////////////////////
-//Gets the synergy area cells from the building cells
-///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
+	//Gets the synergy area cells from the building cells
+	///////////////////////////////////////////////////////////////////////////
 	std::vector<Vec2<int>> GetSynergyArea(std::vector<Vec2<int>> _buildingCells)
 	{
 		//If for some reason the building cells are empty, we need to throw an error
 		if (CurrentBuildingCells.empty()) {
-				std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n";
-				//AE_ASSERT(CurrentBuildingCells.size());
-				assert(CurrentBuildingCells.size());
-				//assert("Error " << __FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n");
-			}
+			std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n";
+			//AE_ASSERT(CurrentBuildingCells.size());
+			assert(CurrentBuildingCells.size());
+			//assert("Error " << __FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n");
+		}
 		// return std::vector<Vec2<int>>{};
 		//First we get all the building cells
 		std::vector<Vec2<int>> tempVec;
@@ -623,7 +623,7 @@ namespace GridManager {
 		return tempVec;
 	}
 
-	
+
 	void UpdateMouseToGrid() {
 		if (PauseManager::IsPaused()) return;
 		Vec2<int> mousePos{ InputManager::GetMousePos() };
@@ -641,7 +641,7 @@ namespace GridManager {
 					CurrentBuildingCells = GetBuildingCells(selectedBuilding, SelectedCell.x, SelectedCell.y);
 					CurrentSynergyArea = GetSynergyArea(CurrentBuildingCells);
 
-					#if DEBUG_TEXT
+#if DEBUG_TEXT
 					RenderSystem::AddTextToBatch(
 						RenderSystem::GAME_PIECES_BATCH,
 						((float)InputManager::GetMousePos().x / AEGetWindowWidth() * 2) - 1,
@@ -652,7 +652,7 @@ namespace GridManager {
 						99,
 						COLOR_BLACK
 					);
-					#endif
+#endif
 
 				}
 
@@ -740,7 +740,7 @@ namespace GridManager {
 						RenderSystem::GAME_PIECES_BATCH,
 						static_cast<float>(grid[GetIndex(cell)].pos.x), static_cast<float>(grid[GetIndex(cell)].pos.y),
 						100, 100,
-						TextureManager::POSITIVE_SYNERGY
+						TextureManager::SYNERGY
 					);
 				}
 
@@ -959,24 +959,24 @@ namespace GridManager {
 		float D = area(x1, y1, x2, y2, _mouseX, _mouseY);
 		return (A == (B + C + D));
 	}
-	
-	Vec2<int> ToScreen(int x, int y){
+
+	Vec2<int> ToScreen(int x, int y) {
 		int originX = AEGetWindowWidth() / 2 / tileWidth;
 		int originY = AEGetWindowHeight() / 2 / tileHeight;
 		return Vec2<int>{
-			(originX*tileWidth) + (x-y)*(tileWidth/2),
-			(originY*tileHeight)+(x+y)*(tileHeight/2)
+			(originX* tileWidth) + (x - y) * (tileWidth / 2),
+				(originY* tileHeight) + (x + y) * (tileHeight / 2)
 		};
 	}
 
 	Vec2<int> WorldIndexToScreenPos(int x, int y) {
 		return Vec2<int>{   //we need to keep the tile height and width a float here!
-			static_cast<int>((x - y) * (tileWidth/2.f)),
-			static_cast<int>((x + y) * -(tileHeight/2.f) + (tileHeight/2.f))		//offset for the correct pos because of the height diff
+			static_cast<int>((x - y)* (tileWidth / 2.f)),
+				static_cast<int>((x + y) * -(tileHeight / 2.f) + (tileHeight / 2.f))		//offset for the correct pos because of the height diff
 		};
 	}
-	Vec2<int> ScreenPosToIso(Vec2<int> cellPos){
-		return ScreenPosToIso(cellPos.x,cellPos.y);
+	Vec2<int> ScreenPosToIso(Vec2<int> cellPos) {
+		return ScreenPosToIso(cellPos.x, cellPos.y);
 	}
 	Vec2<int> ScreenPosToIso(int xPos, int yPos) {
 		//MOUSE INPUTS (Tile width = 100, tile height = 50)
@@ -991,35 +991,35 @@ namespace GridManager {
 		int originY = AEGetWindowHeight() / 2 / tileHeight;
 
 		Vec2<int> SelectedCell{
-			(cellX - originX) + (cellY - originY)+gridX/2,		//x
-			(cellY - originY) - (cellX - originX)+gridY/2		//y
+			(cellX - originX) + (cellY - originY) + gridX / 2,		//x
+			(cellY - originY) - (cellX - originX) + gridY / 2		//y
 		};
 		//TOP LEFT
-		if (isInside(xOffset, yOffset, 0, 0, 0, tileHeight/2, tileWidth/2, 0))SelectedCell.x--;
+		if (isInside(xOffset, yOffset, 0, 0, 0, tileHeight / 2, tileWidth / 2, 0))SelectedCell.x--;
 		//BOTTOM LEFT
-		if (isInside(xOffset, yOffset, 0, tileHeight/2, 0, tileWidth/2, tileWidth/2, tileHeight))SelectedCell.y++;
+		if (isInside(xOffset, yOffset, 0, tileHeight / 2, 0, tileWidth / 2, tileWidth / 2, tileHeight))SelectedCell.y++;
 		//TOP RIGHT
-		if (isInside(xOffset, yOffset, tileWidth/2, 0, tileWidth, 0, tileWidth, tileHeight/2))SelectedCell.y--;
+		if (isInside(xOffset, yOffset, tileWidth / 2, 0, tileWidth, 0, tileWidth, tileHeight / 2))SelectedCell.y--;
 		//BOTTOM RIGHT
-		if (isInside(xOffset, yOffset, tileWidth/2, tileHeight, tileWidth, tileHeight, tileWidth, tileHeight/2))SelectedCell.x++;
+		if (isInside(xOffset, yOffset, tileWidth / 2, tileHeight, tileWidth, tileHeight, tileWidth, tileHeight / 2))SelectedCell.x++;
 		return SelectedCell;
 	}
 	Vec2<int> MouseToCell(int mouseX, int mouseY) {
 		return Vec2<int>{
 			mouseX / tileWidth,
-			mouseY / tileHeight
+				mouseY / tileHeight
 		};
 	}
-   
-    Vec2<int> MouseCellOffset(int mouseX, int mouseY)
-    {
-        return Vec2<int>{
-			mouseX % tileWidth,
-			mouseY % tileHeight
-		};
-    }
 
-	void Free(){
+	Vec2<int> MouseCellOffset(int mouseX, int mouseY)
+	{
+		return Vec2<int>{
+			mouseX% tileWidth,
+				mouseY% tileHeight
+		};
+	}
+
+	void Free() {
 		delete[] grid;
 		InputManager::UnsubscribeKey(AEVK_C, InputManager::TRIGGERED, ClearGrid);
 		InputManager::UnsubscribeKey(AEVK_R, InputManager::TRIGGERED, RandomiseTerrain);
@@ -1034,6 +1034,6 @@ namespace GridManager {
 
 		CardManager::onNewCardSelected.Unsubscribe(GetBuildingCard);
 		CardManager::onCardPlaced.Unsubscribe(SpawnBuilding);
-		
+
 	}
 }

@@ -113,8 +113,9 @@ namespace TextureManager {
 		mushroom_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Mushroom.png");
 		rock_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Rock.png");
 
+		synergy_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Synergy.png");
+
 		card_Tex = AEGfxTextureLoad("Assets/Textures/UI/Card.png");
-		synergy_Tex = AEGfxTextureLoad("Assets/Textures/UI/Synergy.png");
 
 		pause_Tex = AEGfxTextureLoad("Assets/Textures/UI/GameWindow.png");
 		pauseButton_Tex = AEGfxTextureLoad("Assets/Textures/UI/Pause_Button.png");
