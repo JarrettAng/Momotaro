@@ -24,12 +24,13 @@ The functions include:
 #include <CardManager.h>
 #include <UIManager.h>
 #include <ScoreManager.h>
+#include <FileIOManager.h>
 namespace GridManager {
 ///////////////////////////////////////////////////////////////////////////
 //GRID CONSTANTS
 	const int tileWidth{ 100 };
 	const int tileHeight{ 50 };
-	const int gridX{ 30 }, gridY{ 30 };		//total grid size
+	const int gridX{ 20 }, gridY{ 20 };		//total grid size
 	const int mapSize{ 5 };					//total playing area size
 	const int mapPos{ -2 };					//Playable area position
 ///////////////////////////////////////////////////////////////////////////
@@ -191,6 +192,10 @@ namespace GridManager {
 		CurrentBuildingCells.clear();
 	}
 
+	const cell* GetGrid(){
+		return grid;
+	}
+
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -290,24 +295,25 @@ namespace GridManager {
 	}
 	void SpawnNature() {
 		if (PauseManager::IsPaused()) return;
-		Vec2<int> mousePos = InputManager::GetMousePos();
-		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
-		int index = GetIndex(SelectedCell.x, SelectedCell.y);
-		if (!isCellSafe(SelectedCell)) return;
-		randomNature = rand() % 3;
-		switch (randomNature)
-		{
-		case 0:
-			grid[index]._building = NatureRock;
-			break;
-		case 1:
-			grid[index]._building = NaturePond;
-			break;
-		case 2:
-			grid[index]._building = NatureMushroom;
-			break;
-		}
-		grid[index].ID = ++buildingID;
+		FileIOManager::SaveGridToFile();
+		// Vec2<int> mousePos = InputManager::GetMousePos();
+		// Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
+		// int index = GetIndex(SelectedCell.x, SelectedCell.y);
+		// if (!isCellSafe(SelectedCell)) return;
+		// randomNature = rand() % 3;
+		// switch (randomNature)
+		// {
+		// case 0:
+		// 	grid[index]._building = NatureRock;
+		// 	break;
+		// case 1:
+		// 	grid[index]._building = NaturePond;
+		// 	break;
+		// case 2:
+		// 	grid[index]._building = NatureMushroom;
+		// 	break;
+		// }
+		// grid[index].ID = ++buildingID;
 	}
 	#pragma endregion
 

@@ -50,6 +50,9 @@
         "xloctime": "cpp",
         "fstream": "cpp",
         "string": "cpp",
-        "deque": "cpp"
+        "deque": "cpp",
+        "array": "cpp",
+        "ranges": "cpp",
+        "span": "cpp"
     }
 }

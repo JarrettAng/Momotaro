@@ -22,6 +22,8 @@ The functions include:
 namespace GridManager {
 	extern const int tileWidth;
     extern const int tileHeight;
+	extern const int gridX;
+	extern const int gridY;
     enum TileType{
         NONE = 0,
         RESIDENTIAL = 1,
@@ -39,7 +41,7 @@ namespace GridManager {
         TileType _tileType{};
 	};
 
-    
+    const cell* GetGrid();
 
     /// @brief Returns the area of the triangle
     /// @param x1 x1 of the 1st point of the triangle

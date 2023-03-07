@@ -14,19 +14,47 @@ The functions include:
 
 #include <iostream>
 #include <fstream>
-
+#include "nlohmann/json.hpp"
 #include <FileIOManager.h>
 #include <BuildingManager.h>
+#include <GridManager.h>
 
 namespace FileIOManager {
+	using json = nlohmann::json;
+	// Implementation here
+	// void to_json(json& _json, BuildingData const& _building){
+	// }
+	void SaveGridToFile(){
+		std::ofstream mapFile("Assets/JSON_Data/Maps/map.momomaps");
+		if(!mapFile.is_open()){
+			std::cerr << "Unable to write to file!\n";
+			assert(0);
+		}
+		mapFile << "Width " << GridManager::gridX <<'\n';
+		mapFile << "Height " << GridManager::gridY <<'\n';
+		for(int y{0}; y < GridManager::gridY; ++y){
+			for(int x{0}; x < GridManager::gridX; ++x){
+				mapFile << static_cast<int>((GridManager::GetGrid()+GridManager::GetIndex(Vec2<int>{x,y}))->isRenderable);
+				if(x < GridManager::gridX-1) mapFile << ' ';
+			}
+			mapFile<<'\n';
+		}
+	}
+
 	void ReadBuildingsData(std::vector<BuildingData>& buildingsData) {
 		std::ifstream dataFile{ "Assets/JSON_Data/buildingsData.json" };
+		// json data = json::parse(dataFile);
 		if (!dataFile) {
 			std::cerr << "Error " <<__FILE__ << "ln" << __LINE__ << ": Unable to read buildings data JSON file!\n";
 		}
 
-		// Implementation here
+		// BuildingData testBuilding{};
+		// from_json(data,testBuilding);
+		// std::cout << "=====TEST BUILDING=====\n";
+		// std::cout << testBuilding << '\n';
+		// dataFile.close();
 
+// return;
 
 		// Store data in the buildingsData vector (array)
 		// Temp only!! To be replaced with actual reading of the JSON file on top ^^

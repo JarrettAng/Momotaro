@@ -19,7 +19,7 @@ The functions include:
 
 namespace FileIOManager {
 	void ReadBuildingsData(std::vector<BuildingData>& buildingsData);
-	
+	void SaveGridToFile();
 
 }
 
