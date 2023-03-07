@@ -59,7 +59,4 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AESysExit();
 
 	return 0;
-
-	int gGameRunning = 1;
-
 }
