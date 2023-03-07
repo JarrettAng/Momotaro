@@ -1,110 +1,24 @@
-//#pragma once
-//#include <AEEngine.h>
-//#include <MomoMaths.h>
-//#include <string>
-//
-//namespace UIManager {
-//
-//	void Initialize();
-//	void Texture();
-//	void MakeMesh();
-//	void DrawUI();
-//	void Draw();
+/*!************************************************************************
+\file:          UIManager.h
+\author:		Jarrett Ang
+\par DP email:	a.jiaweijarrett@digipen.edu
+\par Course:    CSD1171B
+\par Software Engineering Project
+\date:          30-01-2023
+\brief
 
-//	struct Transform {
-//		float x, y;
-//		float width, height;
-//	};
-//
-//	struct GraphicsData {
-//		bool hasGraphics = false;
-//		Vec4<float> color;
-//		AEGfxTexture* tex = nullptr;
-//	};
-//
-//	struct TextData {
-//		bool hasText = false;
-//		s8 fontID;
-//		float x;
-//		float y;
-//		std::string text;
-//		float scale;
-//		Vec3<float> color;
-//	};
-//
-//	struct UIData {
-//		bool isActive;
-//		Transform transform;
-//		GraphicsData graphics;
-//		TextData text;
-//		int layer;
-//		void(*func)(void);
-//	};
-//
-//	//enum FONT_SIZE {
-//	//	SMALL,
-//	//	MIDIUM,
-//	//	LARGE
-//	//};
-//
-//	//enum FONT_TYPE {
-//	//	NONE,
-//	//	ROBOTO
-//	//};
-//
-//	//struct FONT {
-//	//	FONT_TYPE type;
-//	//	s8 S;
-//	//	s8 M;
-//	//	s8 L;
-//	//};
-//
-//	void Initialize();
-//	/*FONT GetFont(const FONT_TYPE& type);*/
-//	void TransformDataToUIData(UIData& data, const float& x, const float& y, const float& width, const float& height);
-//	void GraphicsDataToUIData(UIData& data, const float& x, const float& y, const float& width, const float& height);
-//	/*!***********************************************************************
-//	* TEXT
-//	*************************************************************************/
-//	void AddTextToBatch(const s8& font, const float& x, const float& y, const int& layer, std::string text, const Vec3<float>& color = { 1.0f,1.0f,1.0f });
-//	/*************************************************************************/
-//
-//
-//	/*!***********************************************************************
-//	* RECT
-//	*************************************************************************/
-//	// Button with TEXTURE + NO text.
-//	void AddRectToBatch(const float& x, const float& y, const float& width, const float& height, const int& layer, AEGfxTexture* tex);
-//	// Button with COLOR + NO text.
-//	void AddRectToBatch(const float& x, const float& y, const float& width, const float& height, const int& layer, const Vec4<float>& btnColor = { 1.0f,1.0f,1.0f,1.0f });
-//	/*************************************************************************/
-//
-//
-//	/*!***********************************************************************
-//	* BUTTON
-//	*************************************************************************/
-//	// Button with TEXTURE + text.
-//	void AddButtonToBatch(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, AEGfxTexture* tex, const Vec3<float>& txtColor = { 1.0f,1.0f,1.0f });
-//	// Button with COLOR + text.
-//	void AddButtonToBatch(const float& x, const float& y, const float& xPadding, const float& yPadding, const int& layer, const s8& font, const std::string& text, const Vec4<float>& btnColor = { 1.0f,1.0f,1.0f,1.0f }, const Vec3<float>& txtColor = { 1.0f,1.0f,1.0f });
-//	/*************************************************************************/
-//}
+
+The functions include:
+-
+**************************************************************************/
 
 #pragma once
-
+///////////////////////////////////////////////////////////////////////////
 #include <string>
 #include <vector>
 
 #include <RenderSystem.h>
-
-namespace {
-	struct TextBoxLineData {
-		std::string text;
-		Vec2<float> pos;
-
-		TextBoxLineData(std::string _text, Vec2<float> _pos) : text(_text), pos(_pos) {}
-	};
-}
+///////////////////////////////////////////////////////////////////////////
 
 namespace UI {
 	enum TextBoxAlignment {
@@ -113,22 +27,40 @@ namespace UI {
 		RIGHT_JUSTIFY
 	};
 
+	// Holds the information for each text line in the text box class below
+	struct TextBoxLineData {
+		std::string text;
+		Vec2<float> pos;
+
+		TextBoxLineData(std::string _text, Vec2<float> _pos) : text(_text), pos(_pos) {}
+	};
+
+	// This class handles the text box object which splits a string into multiple lines to fit within a box
 	class TextBox {
 	public:
+		///////////////////////////////////////////////////////////////////
+		// Constructors
 		TextBox();
 		TextBox(Vec2<float> screenPos, std::string text, TextBoxAlignment alignment, float maxWidth, float fontSize, Vec3<float> color);
 
+		// Copy assignment overload
 		TextBox& operator=(TextBox const& rhs);
 
+		///////////////////////////////////////////////////////////////////
+		// Member functions
 		const RenderSystem::Transform& GetPos() const;
 		void Render();
 
 	private:
-		RenderSystem::Transform transform;
+		///////////////////////////////////////////////////////////////////
+		// Data members
+		RenderSystem::Transform		 transform;
 		std::vector<TextBoxLineData> texts;
-		TextBoxAlignment alignment;
+		TextBoxAlignment			 alignment;
+
 		float maxWidth;
 		float fontSize;
+
 		Vec3<float> color;
 	};
 }

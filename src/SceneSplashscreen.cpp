@@ -1,5 +1,5 @@
 /*!************************************************************************
-\file:          IsometricGrid.cpp
+\file:          SceneSplashscreen.cpp
 \author:
 \par DP email:
 \par Course:    CSD1171B

@@ -14,30 +14,16 @@ The functions include:
 
 #include <Scene.h>
 
-void Scene::Load() {
+// Empty by design \/
 
-}
+void Scene::Load() { }
 
-void Scene::Initialize() {
+void Scene::Initialize() { }
 
-}
+void Scene::Update() { }
 
-void Scene::Update() {
+void Scene::Draw() { }
 
-}
+void Scene::Free() { }
 
-void Scene::Draw() {
-	//for (auto object : objects) {
-	//	// renderer.AddBatch(object->Render());
-	//}
-
-	// renderer.Render();
-}
-
-void Scene::Free() {
-
-}
-
-void Scene::Unload() {
-
-}
+void Scene::Unload() { }

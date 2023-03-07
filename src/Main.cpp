@@ -1,9 +1,8 @@
-// ---------------------------------------------------------------------------
-// includes
-
+///////////////////////////////////////////////////////////////////////////
 #include <cstdlib>
-#include <AEEngine.h>
 #include <memory>
+
+#include <AEEngine.h>
 #include <RenderSystem.h>
 #include <SceneManager.h>
 #include <GridManager.h>
@@ -11,9 +10,7 @@
 #include <InputManager.h>
 #include <ScoreManager.h>
 #include <FontManager.h>
-
-// ---------------------------------------------------------------------------
-// main
+///////////////////////////////////////////////////////////////////////////
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -23,15 +20,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
+	///////////////////////////////////////////////////////////////////////
 	// Random Seed Initialization
 	srand(11);
 
-	//Memory leak checker 
-		//CODE FOR CHECKING MEMORY LEAKS!
+	//Memory leak checker (for debug mode)
 	#if defined(DEBUG) | defined(_DEBUG)
 		_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 	#endif
-	// int * pi = new int;			//Uncomment this to see if the memory leak check is working
 
 	// Engine Initialization
 	AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, true, NULL);	// Using custom window procedure
@@ -47,13 +43,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	ScoreManger::Initialize();
 	TextureManager::Initialize();
 	RenderSystem::Initialize();
-	SceneManager::Initialize(SceneManager::SPLASHSCREEN);			// Game Loop happens in SceneManager
 
+	SceneManager::Initialize(SceneManager::GAME_LEVEL);				// Game Loop happens in SceneManager
 
-
-	//FREE STUFF THAT WAS INITIALISED HERE
+	///////////////////////////////////////////////////////////////////////
+	// Free the things that were initialized here
 	GridManager::Free();
-
 
 	// Engine Exit
 	AESysExit();

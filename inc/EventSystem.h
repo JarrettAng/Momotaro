@@ -8,7 +8,6 @@
 \brief
 This header file declares a generic event system that allows functions with
 no parameters/ 1 parameter of any type.  
-Below are 2 usage examples of these events.
 
 ======== Example 1: Printing score to cout whenever it updates ========
 
@@ -27,129 +26,118 @@ void addScore() {
     ...
     onScoreUpdate.Invoke(score);
 }
-
-Step 4: All functions subscribed to the event will be called in order of priority
-[console] new score: 100
-
-======== Example 2: Have fireworks play once on the first building placed ========
-
-Step 1: Define the event wherever the building placing is handled
-EventSystem::Event<void> onBuildingPlaced;
-
-Step 2: In the file that plays fireworks, subscribe to event (You can expose it in a header file or something)
-void start() {
-    onBuildingPlaced.Subscribe(launchFireworks);
-    -or-
-    onBuildingPlaced.Subscribe(launchFireworks, -50); // Optional: second parameter for priority
-}
-
-Step 3: Whoever is handling the building placement will invoke/call the event
-void placeBuilding() {
-    ...
-    onBuildingPlaced.Invoke();
-}
-
-Step 4: In the function subscribed to the event, unsubscribe itself
-void launchFireworks() {
-    ...
-    onBuildingPlaced.Unsubscribe(launchFireworks);
-}
 **************************************************************************/
-#pragma once
 
+#pragma once
+///////////////////////////////////////////////////////////////////////////
 #include <list>
+///////////////////////////////////////////////////////////////////////////
 
 namespace EventSystem {
+	///////////////////////////////////////////////////////////////////////
+	// Struct for each element in the event queue
 	template<class T>
 	struct EventData {
 		void (*fun_ptr)(T);
 		int priority;
 	};
 
+	// Void specialization (functions with no parameters)
 	template<>
 	struct EventData<void> {
 		void (*fun_ptr)();
 		int priority;
 	};
 
+	///////////////////////////////////////////////////////////////////////
+	// Handles a list of events for a type
 	template<class T>
 	class Event {
-		private:
-			std::list<EventData<T>> subscribers;
+	private:
+		std::list<EventData<T>> subscribers; // All the functions subscribed to *this* event
 
-		public:
-			void Invoke(T var) {
-				for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
-					(i->fun_ptr)(var);
-				}
+	public:
+		// Call each function subscribe with the parameter (var) passed here
+		void Invoke(T var) {
+			for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
+				(i->fun_ptr)(var);
 			}
+		}
 
-			void Subscribe(void (*fun_ptr)(T), int priority = 0) {
-				EventData<T> new_sub = { fun_ptr, priority };
+		// Add or "subscribe" a function to this event list
+		void Subscribe(void (*fun_ptr)(T), int priority = 0) {
+			EventData<T> new_sub = { fun_ptr, priority };
 
-				if (subscribers.size() >= 1) {
-					for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
-						if (i->priority <= priority) {
-							subscribers.insert(i, new_sub);
-							return;
-						}
-					}
-				}
-				subscribers.push_back(new_sub);
-			}
-
-			void Unsubscribe(void (*fun_ptr)(T)) {
+			if (subscribers.size() >= 1) {
 				for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
-					if (i->fun_ptr == fun_ptr) {
-						subscribers.erase(i);
-						break;
+					if (i->priority <= priority) {
+						subscribers.insert(i, new_sub);
+						return;
 					}
 				}
 			}
+			subscribers.push_back(new_sub);
+		}
 
-			void UnsubscribeAll() {
-				subscribers.clear();
+		// Remove or "unsubscribe" a function from this event list
+		void Unsubscribe(void (*fun_ptr)(T)) {
+			for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
+				if (i->fun_ptr == fun_ptr) {
+					subscribers.erase(i);
+					break;
+				}
 			}
+		}
+
+		// Remove all functions from this event list
+		void UnsubscribeAll() {
+			subscribers.clear();
+		}
 	};
 
+	// Void specialization (functions with no parameters)
 	template<>
 	class Event<void> {
-		private:
-			std::list<EventData<void>> subscribers;
+	private:
+		std::list<EventData<void>> subscribers; // All the functions subscribed to *this* event
 
-		public:
-			void Invoke() {
-				for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
-					(i->fun_ptr)();
-				}
+	public:
+		// Call each function subscribe with the parameter (var) passed here
+		void Invoke() {
+			for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
+				(i->fun_ptr)();
 			}
+		}
 
-			void Subscribe(void (*fun_ptr)(), int priority = 0) {
-				EventData<void> new_sub = { fun_ptr, priority };
+		// Add or "subscribe" a function to this event list
+		void Subscribe(void (*fun_ptr)(), int priority = 0) {
+			EventData<void> new_sub = { fun_ptr, priority };
 
-				if (subscribers.size() >= 1) {
-					for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
-						if (i->priority <= priority) {
-							subscribers.insert(i, new_sub);
-							return;
-						}
-					}
-				}
-
-				subscribers.push_back(new_sub);
-			}
-
-			void Unsubscribe(void (*fun_ptr)()) {
+			if (subscribers.size() >= 1) {
 				for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
-					if (i->fun_ptr == fun_ptr) {
-						subscribers.erase(i);
-						break;
+					if (i->priority <= priority) {
+						subscribers.insert(i, new_sub);
+						return;
 					}
 				}
 			}
 
-			void UnsubscribeAll() {
-				subscribers.clear();
+			subscribers.push_back(new_sub);
+		}
+
+		// Remove or "unsubscribe" a function from this event list
+		void Unsubscribe(void (*fun_ptr)()) {
+			for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
+				if (i->fun_ptr == fun_ptr) {
+					subscribers.erase(i);
+					break;
+				}
 			}
+		}
+
+		// Remove all functions from this event list
+		void UnsubscribeAll() {
+			subscribers.clear();
+		}
 	};
 }

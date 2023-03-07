@@ -1,7 +1,7 @@
 /*!************************************************************************
 \file:          SceneManager.cpp
-\author:
-\par DP email:
+\author:        Jarrett Ang
+\par DP email:  a.jiaweijarrett@digipen.edu
 \par Course:    CSD1171B
 \par Software Engineering Project
 \date:          30-01-2023
@@ -12,6 +12,7 @@ The functions include:
 -
 **************************************************************************/
 
+///////////////////////////////////////////////////////////////////////////
 #include <AEEngine.h>
 #include <SceneManager.h>
 #include <InputManager.h>
@@ -19,34 +20,39 @@ The functions include:
 
 #include <SceneGameLevel.h>
 #include <SceneSplashscreen.h>
+///////////////////////////////////////////////////////////////////////////
 
 namespace SceneManager {
-
     // Scene states
     SCENES_ENUM previous, current, next;
 
-    // Scenes
+    // All scenes
     Scene* currentScene;
 
-    SceneGameLevel gameLevel;
-    SceneGameLevel splashLevel;
+    //SceneGameLevel splash;
+    SceneGameLevel   gameLevel;
     // SceneMainMenu mainMenu;
     // SceneSettings settings;
-    
-    #pragma region Forward Declarations
+    // SceneCredits  credits;
+    // SceneEditor   editor;
+    // 
+    ///////////////////////////////////////////////////////////////////////
+    // Forward Declarations
     void UpdatePausedState(bool newPausedState);
-    #pragma endregion
+    ///////////////////////////////////////////////////////////////////////
 
     bool isPaused;
 
+    // Change the current scene (Public; used by other files)
     void LoadScene(SCENES_ENUM nextScene) {
         next = nextScene;
     }
 
+    // Loads the funcs to call in the loop below based on "current"
     void SwitchScene() {
         switch (current) {
         case SPLASHSCREEN:
-            currentScene = &splashLevel;
+            //currentScene = &splashLevel;
             break;
         case GAME_LEVEL:
             currentScene = &gameLevel;
@@ -54,6 +60,7 @@ namespace SceneManager {
         }
     }
 
+    // Main game loop
     void SceneManagerLoop() {
         while (current != QUIT) {
             if (current == RESTART) {
@@ -66,7 +73,7 @@ namespace SceneManager {
 
             currentScene->Initialize();
 
-            //Game loop
+            // Game update loop
             while (current == next) {
                 AESysFrameStart();
 
@@ -93,6 +100,7 @@ namespace SceneManager {
         Free();
     }
 
+    // Which scene to load at the very beginning of the game
     void Initialize(SCENES_ENUM startingScene) {
         current = previous = next = startingScene;
 
@@ -102,6 +110,7 @@ namespace SceneManager {
         SceneManagerLoop();
     }
 
+    // Things to do at the very end of the game
     void Free() {
         PauseManager::onTogglePause.UnsubscribeAll();
     }

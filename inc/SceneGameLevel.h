@@ -14,16 +14,16 @@ The functions include:
 
 #pragma once
 
-#include<Scene.h>
+#include <Scene.h>
 
 class SceneGameLevel : public Scene {
-	public:
-		void Load();
-		void Initialize();
+public:
+	void Load();
+	void Initialize();
 
-		void Update();
-		void Draw();
+	void Update();
+	void Draw();
 
-		void Free();
-		void Unload();
+	void Free();
+	void Unload();
 };
