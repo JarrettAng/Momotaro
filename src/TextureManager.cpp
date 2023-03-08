@@ -182,7 +182,7 @@ namespace TextureManager {
 
 		textures.push_back(TextureSheet{ DIGIPEN_LOGO,digipen_Logo_Tex, 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ MENU_BG,background_Tex, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ MENU_BG,background_Tex, 1, 13, .1f });
 		textures.push_back(TextureSheet{ POINTER,pointer_Tex, 1, 1, -1.f });
 
 		textures.push_back(TextureSheet{ STARTGAME_BTN,startGame_Tex, 1, 1, -1.f });

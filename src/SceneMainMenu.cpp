@@ -28,6 +28,10 @@ const float POINTER_OFFSET = 80.0f;
 const float TRANSITION_TIME = 1.0f;
 const float BLINK_INTERVAL = 0.07f;
 
+// Menu animation.
+float ANIMATION_FRAMES;
+const float ANIMATION_INTERVAL = 4.0f;
+
 /*!***********************************************************************
 * FORWARD DECLARATIONS
 *************************************************************************/
@@ -69,6 +73,9 @@ bool isBlinking = false;					// Use to toggle opacity of pointer to mimic blinki
 float currBlinkInterval = BLINK_INTERVAL;
 float currTransitionTime = TRANSITION_TIME;
 
+// Menu animation.
+float currAnimFrame = 0;
+float currAnimInterval = 0.0f;
 
 void SceneMainMenu::Load() {
 	return;
@@ -77,11 +84,28 @@ void SceneMainMenu::Load() {
 void SceneMainMenu::Initialize() {
 	InitializeButtons();
 	InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleBtnClick);
+	// Hardcoding
+	ANIMATION_FRAMES = 13 * AEFrameRateControllerGetFrameTime() + 1.3;
 }
 
 void SceneMainMenu::Update() {
 	// Check for button presses.
 	InputManager::HandleInput();
+
+	// Play menu animation.
+	if (currAnimFrame < ANIMATION_FRAMES) {
+		currAnimFrame += AEFrameRateControllerGetFrameTime();
+		TextureManager::Update();
+	}
+	else {
+		if (currAnimInterval < ANIMATION_INTERVAL) {
+			currAnimInterval += AEFrameRateControllerGetFrameTime();
+		}
+		else {
+			currAnimFrame = 0;
+			currAnimInterval = 0;
+		}
+	}
 }
 
 void SceneMainMenu::Draw() {
