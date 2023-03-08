@@ -76,6 +76,8 @@ namespace RenderSystem {
 	*************************************************************************/
 	void Render() {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+		// Affects global transparency for drawn mesh.
+		AEGfxSetTransparency(1.0f);
 		// Using default render setting.
 		UpdateRenderSetting();
 		for (auto& batch : renderBatches) {
@@ -83,7 +85,7 @@ namespace RenderSystem {
 			SortBatch(batch);
 			// Render every renderable object.
 			for (auto& obj : batch) {
-				// If render setting is changed, use object render setting.
+				// Use object render setting if required.
 				if (!obj.second.isDefault()) UpdateRenderSetting(obj.second);
 				switch (obj.first.type) {
 				case RECT:
@@ -103,8 +105,8 @@ namespace RenderSystem {
 				default:
 					break;
 				}
-				// If render setting is changed, set render setting back to default for next obj.
-				if (!obj.second.isDefault())UpdateRenderSetting();
+				// Switch back to default render setting if changed.
+				if (!obj.second.isDefault()) UpdateRenderSetting();
 			}
 			// Clear batch.
 			batch.clear();
@@ -277,8 +279,10 @@ namespace RenderSystem {
 		std::sort(batch.begin(), batch.end(), [](const std::pair<Renderable, RenderSetting>& a, const std::pair<Renderable, RenderSetting>& b) {  return a.first.layer < b.first.layer; });
 	}
 
-	RenderSetting* GetRenderSetting() {
-		return &setting;
+	void SetRenderSetting(Vec4<float> tint, Vec4<float> blendColor, AEGfxBlendMode blendMode) {
+		setting.tint = tint;
+		setting.blendColor = blendColor;
+		setting.blendMode = blendMode;
 	}
 
 	/*!***********************************************************************
@@ -292,8 +296,6 @@ namespace RenderSystem {
 		AEGfxSetBlendColor(setting.blendColor.w, setting.blendColor.x, setting.blendColor.y, setting.blendColor.z);
 		// Add tint color on top of texture/mesh.
 		AEGfxSetTintColor(setting.tint.w, setting.tint.x, setting.tint.y, setting.tint.z);
-		// Affects global transparency for drawn mesh.
-		AEGfxSetTransparency(setting.transperancy);
 	}
 
 	/*!***********************************************************************

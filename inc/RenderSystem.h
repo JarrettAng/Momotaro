@@ -28,15 +28,13 @@ namespace RenderSystem {
 		static const AEGfxBlendMode BLEND_MODE{ AE_GFX_BM_BLEND };
 		static constexpr Vec4<float> BLEND_COLOR{ 0,0,0,0 };
 		static constexpr Vec4<float> TINT{ 1.0f,1.0f,1.0f,1.0f };
-		static constexpr float TRANSPERANCY = 1.0f;
 
 		AEGfxBlendMode blendMode = BLEND_MODE;
 		Vec4<float> blendColor = BLEND_COLOR;
 		Vec4<float> tint = TINT;
-		float transperancy = TRANSPERANCY;
 
-		void setDefault() { blendMode = BLEND_MODE; blendColor = BLEND_COLOR; transperancy = TRANSPERANCY; tint = TINT; }
-		bool isDefault() { return blendMode == BLEND_MODE && blendColor == BLEND_COLOR && transperancy == TRANSPERANCY && tint == TINT; }
+		void setDefault() { blendMode = BLEND_MODE; blendColor = BLEND_COLOR; tint = TINT; }
+		bool isDefault() { return blendMode == BLEND_MODE && blendColor == BLEND_COLOR && tint == TINT; }
 	};
 
 	enum BATCH_TYPE {
@@ -103,7 +101,7 @@ namespace RenderSystem {
 	void Render();
 
 	AEVec2 GetPivotPos(const AEVec2& pos, const float& width, const float& height);
-	RenderSetting* GetRenderSetting();
+	void SetRenderSetting(Vec4<float> tint, Vec4<float> blendColor = {}, AEGfxBlendMode blendMode = AE_GFX_BM_BLEND);
 
 	/*!***********************************************************************
 	* TEXT RENDERING
