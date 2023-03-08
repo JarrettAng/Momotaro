@@ -404,7 +404,8 @@ inline std::ostream& operator<<(std::ostream& os, Vec4<T> const& rhs)
 	return os << "(" << rhs.x << "," << rhs.y << "," << rhs.z << "," << rhs.w << ")";
 }
 
-inline bool IsPointWithinRect(Vec2<float> point, Vec2<float> pos, Vec2<float> size) {
+template <typename T>
+inline bool IsPointWithinRect(Vec2<T> point, Vec2<T> pos, Vec2<T> size) {
 	if (point.x < pos.x || point.x > pos.x + size.x ||
 		point.y < pos.y - size.y || point.y > pos.y) return false;
 	return true;

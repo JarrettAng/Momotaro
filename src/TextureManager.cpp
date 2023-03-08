@@ -70,12 +70,15 @@ namespace TextureManager {
 
 	// MAIN MENU
 	AEGfxTexture* background_Tex;
+	AEGfxTexture* pointer_Tex;
+
 	AEGfxTexture* startGame_Tex;
 	AEGfxTexture* controls_Tex;
 	AEGfxTexture* options_Tex;
 	AEGfxTexture* editor_Tex;
 	AEGfxTexture* credits_Tex;
 	AEGfxTexture* quit_Tex;
+
 
 	TEX_TYPE operator++(TEX_TYPE& _texture, int)
 	{
@@ -131,6 +134,7 @@ namespace TextureManager {
 		digipen_Logo_Tex = AEGfxTextureLoad("Assets/Textures/UI/Digipen_Logo.png");
 
 		background_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Background.png");
+		pointer_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Pointer.png");
 
 		startGame_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/StartGame.png");
 		editor_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Editor.png");
@@ -179,6 +183,7 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ DIGIPEN_LOGO,digipen_Logo_Tex, 1, 1, -1.f });
 
 		textures.push_back(TextureSheet{ MENU_BG,background_Tex, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ POINTER,pointer_Tex, 1, 1, -1.f });
 
 		textures.push_back(TextureSheet{ STARTGAME_BTN,startGame_Tex, 1, 1, -1.f });
 		textures.push_back(TextureSheet{ EDITOR_BTN,editor_Tex, 1, 1, -1.f });
@@ -367,6 +372,7 @@ namespace TextureManager {
 		AEGfxTextureUnload(digipen_Logo_Tex);
 
 		AEGfxTextureUnload(background_Tex);
+		AEGfxTextureUnload(pointer_Tex);
 
 		AEGfxTextureUnload(startGame_Tex);
 		AEGfxTextureUnload(editor_Tex);

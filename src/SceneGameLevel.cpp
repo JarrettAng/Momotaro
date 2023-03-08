@@ -30,7 +30,9 @@ The functions include:
 
 
 void SceneGameLevel::Load() {
+	GridManager::Initialize();
 	BuildingManager::Initialize();
+	ScoreManger::Initialize();
 }
 
 void SceneGameLevel::Initialize() {

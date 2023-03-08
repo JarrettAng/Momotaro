@@ -44,6 +44,7 @@ namespace TextureManager {
 		DIGIPEN_LOGO,
 		SYNERGY,
 		MENU_BG,
+		POINTER,
 		STARTGAME_BTN,
 		EDITOR_BTN,
 		OPTIONS_BTN,

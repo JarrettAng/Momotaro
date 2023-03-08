@@ -22,34 +22,61 @@ The functions include:
 #include <SceneMainMenu.h>
 
 /*!***********************************************************************
+* CONST VARIABLES
+*************************************************************************/
+const float POINTER_OFFSET = 80.0f;
+const float TRANSITION_TIME = 1.0f;
+const float BLINK_INTERVAL = 0.07f;
+
+/*!***********************************************************************
 * FORWARD DECLARATIONS
 *************************************************************************/
-void loadStart();
-void loadEditor();
-void loadOptions();
-void loadControls();
-void loadCredits();
-void loadQuit();
+void LoadStart();
+void LoadEditor();
+void LoadOptions();
+void LoadControls();
+void LoadCredits();
+void LoadQuit();
 
-void handleBtnClick();
+void HandleBtnClick();
+
+void DrawButtons();
+void DrawPointer();
 
 void InitializeButtons();
+bool MouseInsideButton(Vec2<int> mousePos, Vec2<float> btnPos, Vec2<float> btnSize);
 
+/*!***********************************************************************
+* MENU BUTTONS
+*************************************************************************/
 RenderSystem::Interactable startBtn{};
 RenderSystem::Interactable editorBtn{};
-RenderSystem::Interactable optionBtn{};
+RenderSystem::Interactable optionsBtn{};
 RenderSystem::Interactable controlsBtn{};
 RenderSystem::Interactable creditsBtn{};
 RenderSystem::Interactable quitBtn{};
 
 std::vector<RenderSystem::Interactable> buttons;
 
+/*!***********************************************************************
+* SCENE TRANSITION
+*************************************************************************/
+RenderSystem::Interactable clickedBtn{};	// Button player clicked on. To get position and callback func.
+
+bool isTransitioning = false;
+bool isBlinking = false;					// Use to toggle opacity of pointer to mimic blinking.
+
+float currBlinkInterval = BLINK_INTERVAL;
+float currTransitionTime = TRANSITION_TIME;
+
+
 void SceneMainMenu::Load() {
+	return;
 }
 
 void SceneMainMenu::Initialize() {
 	InitializeButtons();
-	InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, handleBtnClick);
+	InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleBtnClick);
 }
 
 void SceneMainMenu::Update() {
@@ -58,13 +85,11 @@ void SceneMainMenu::Update() {
 }
 
 void SceneMainMenu::Draw() {
-	// Draw menu
+	// Draw background to fit to screen.
 	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, AEGfxGetWinMinX(), -AEGfxGetWinMinY(), AEGetWindowWidth(), AEGetWindowHeight(), TextureManager::MENU_BG, -1);
 
-	// Draw buttons.
-	for (RenderSystem::Interactable& btn : buttons) {
-		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, btn.render.rect.transform.pos.x, btn.render.rect.transform.pos.y, btn.render.rect.transform.size.x, btn.render.rect.transform.size.y, btn.render.rect.graphics.tex);
-	}
+	DrawButtons();
+	DrawPointer();
 
 	RenderSystem::Render();
 }
@@ -74,24 +99,89 @@ void SceneMainMenu::Free() {
 }
 
 void SceneMainMenu::Unload() {
+	return;
 }
 
-void handleBtnClick() {
+void DrawButtons() {
+	// Loop through all buttons and draw them.
+	for (RenderSystem::Interactable& btn : buttons) {
+		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, btn.render.rect.transform.pos.x, btn.render.rect.transform.pos.y, btn.render.rect.transform.size.x, btn.render.rect.transform.size.y, btn.render.rect.graphics.tex);
+	}
+}
+
+void HandleBtnClick() {
+	if (isTransitioning) return;
+
+	// Cache mouse position.
 	Vec2<int> mousePos = InputManager::GetMousePos();
 
-	std::cout << "mousePos.x: " << mousePos.x - AEGetWindowWidth() / 2 << " mousePos.y: " << mousePos.y - AEGetWindowHeight() / 2 << std::endl << std::endl;
-	std::cout << "minX: " << buttons[0].render.rect.transform.pos.x << " minY: " << buttons[0].render.rect.transform.pos.y << std::endl;
-	std::cout << "maxX: " << buttons[0].render.rect.transform.pos.x + buttons[0].render.rect.transform.size.x << " maxY: " << buttons[0].render.rect.transform.pos.y + buttons[0].render.rect.transform.size.y << std::endl << std::endl;
+	// Convert to world space position.
+	mousePos.x -= AEGfxGetWinMaxX();
+	mousePos.y -= AEGfxGetWinMaxY();
 
+	// Loop through all buttons.
 	for (RenderSystem::Interactable& btn : buttons) {
-		// LEFT / RIGHT BOUNDS
-		if ((mousePos.x - AEGetWindowWidth() / 2 > btn.render.rect.transform.pos.x &&
-			mousePos.x - AEGetWindowWidth() / 2 < btn.render.rect.transform.pos.x + btn.render.rect.transform.size.x) &&
+		// Check if mouse is hovering button.
+		if (MouseInsideButton(mousePos, btn.render.rect.transform.pos, btn.render.rect.transform.size)) {
+			// Cache button.
+			clickedBtn = btn;
+			// Start transitioning.
+			isTransitioning = true;
+			break;
+		}
+	}
+}
 
-			// TOP / BOTTOM BOUNDS
-			(mousePos.y - AEGetWindowHeight() / 2 > -btn.render.rect.transform.pos.y &&
-				mousePos.y - AEGetWindowHeight() / 2 < -btn.render.rect.transform.pos.y + btn.render.rect.transform.size.y)) {
-			btn.func();
+void DrawPointer() {
+	// Handle pointer blinking when transitioning to a different scene.
+	if (isTransitioning) {
+		// Immediate transition for credits and quit button.
+		if (clickedBtn.render.rect.graphics.tex == TextureManager::CREDITS_BTN || clickedBtn.render.rect.graphics.tex == TextureManager::QUIT_BTN) clickedBtn.func();
+
+		// Transition timer.
+		if (currTransitionTime > 0) {
+			// Tick timer to transition to next scene.
+			currTransitionTime -= AEFrameRateControllerGetFrameTime();
+		}
+		else {
+			// Transition to next scene.
+			clickedBtn.func();
+		}
+
+		// Blink timer.
+		if (currBlinkInterval > 0) {
+			// Tick timer to blink.
+			currBlinkInterval -= AEFrameRateControllerGetFrameTime();
+		}
+		else {
+			// Toggle blink.
+			isBlinking = !isBlinking;
+			currBlinkInterval = BLINK_INTERVAL;
+		}
+
+		// Change opacity of render setting to mimic blinking.
+		RenderSystem::SetRenderSetting(Vec4<float>{1, 1, 1, static_cast<float>(isBlinking)});
+		// Draw pointer blinking.
+		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, clickedBtn.render.rect.transform.pos.x - POINTER_OFFSET, clickedBtn.render.rect.transform.pos.y, 60, 90, TextureManager::POINTER);
+		return;
+	}
+
+	// Cache mouse position.
+	Vec2<int> mousePos = InputManager::GetMousePos();
+
+	// Convert to world space position.
+	mousePos.x -= AEGfxGetWinMaxX();
+	mousePos.y -= AEGfxGetWinMaxY();
+
+	// Loop through all buttons.
+	for (RenderSystem::Interactable& btn : buttons) {
+		// Dont draw pointer for credits and quit buttons.
+		if (btn.render.rect.graphics.tex == TextureManager::CREDITS_BTN || btn.render.rect.graphics.tex == TextureManager::QUIT_BTN) continue;
+
+		// Check if mouse is hovering button.
+		if (MouseInsideButton(mousePos, btn.render.rect.transform.pos, btn.render.rect.transform.size)) {
+			// Draw pointer.
+			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, btn.render.rect.transform.pos.x - POINTER_OFFSET, btn.render.rect.transform.pos.y, 60, 90, TextureManager::POINTER);
 			break;
 		}
 	}
@@ -99,10 +189,11 @@ void handleBtnClick() {
 
 void InitializeButtons() {
 	// Position button based on window width / height.
-	// Width and height of button is based on png size.
+	// Width and height of button are based on png size.
 
+	// START GAME BUTTON
 	startBtn.render.rect.graphics.tex = TextureManager::STARTGAME_BTN;
-	startBtn.func = loadStart;
+	startBtn.func = LoadStart;
 
 	startBtn.render.rect.transform.pos.x = AEGfxGetWinMinX() * 0.525;
 	startBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.222;
@@ -112,8 +203,9 @@ void InitializeButtons() {
 
 	buttons.push_back(startBtn);
 
+	// EDITOR BUTTON
 	editorBtn.render.rect.graphics.tex = TextureManager::EDITOR_BTN;
-	editorBtn.func = loadEditor;
+	editorBtn.func = LoadEditor;
 
 	editorBtn.render.rect.transform.pos.x = AEGfxGetWinMaxX() * 0.237;
 	editorBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.222;
@@ -122,18 +214,20 @@ void InitializeButtons() {
 	editorBtn.render.rect.transform.size.y = 100;
 	buttons.push_back(editorBtn);
 
-	optionBtn.render.rect.graphics.tex = TextureManager::OPTIONS_BTN;
-	optionBtn.func = loadOptions;
+	// OPTION BUTTON
+	optionsBtn.render.rect.graphics.tex = TextureManager::OPTIONS_BTN;
+	optionsBtn.func = LoadOptions;
 
-	optionBtn.render.rect.transform.pos.x = AEGfxGetWinMinX() * 0.525;
-	optionBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.488;
+	optionsBtn.render.rect.transform.pos.x = AEGfxGetWinMinX() * 0.525;
+	optionsBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.488;
 
-	optionBtn.render.rect.transform.size.x = 300;
-	optionBtn.render.rect.transform.size.y = 100;
-	buttons.push_back(optionBtn);
+	optionsBtn.render.rect.transform.size.x = 300;
+	optionsBtn.render.rect.transform.size.y = 100;
+	buttons.push_back(optionsBtn);
 
+	// CONTROLS BUTTON
 	controlsBtn.render.rect.graphics.tex = TextureManager::CONTROLS_BTN;
-	controlsBtn.func = loadControls;
+	controlsBtn.func = LoadControls;
 
 	controlsBtn.render.rect.transform.pos.x = AEGfxGetWinMaxX() * 0.112;
 	controlsBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.488;
@@ -142,8 +236,9 @@ void InitializeButtons() {
 	controlsBtn.render.rect.transform.size.y = 100;
 	buttons.push_back(controlsBtn);
 
+	// CREDITS BUTTON
 	creditsBtn.render.rect.graphics.tex = TextureManager::CREDITS_BTN;
-	creditsBtn.func = loadCredits;
+	creditsBtn.func = LoadCredits;
 
 	creditsBtn.render.rect.transform.pos.x = AEGfxGetWinMinX() * 0.975;
 	creditsBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.733;
@@ -152,8 +247,9 @@ void InitializeButtons() {
 	creditsBtn.render.rect.transform.size.y = 100;
 	buttons.push_back(creditsBtn);
 
+	// QUIT BUTTON
 	quitBtn.render.rect.graphics.tex = TextureManager::QUIT_BTN;
-	quitBtn.func = loadQuit;
+	quitBtn.func = LoadQuit;
 
 	quitBtn.render.rect.transform.pos.x = AEGfxGetWinMaxX() * 0.762;
 	quitBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.733;
@@ -163,27 +259,40 @@ void InitializeButtons() {
 	buttons.push_back(quitBtn);
 }
 
-void loadStart() {
+void LoadStart() {
 	SceneManager::LoadScene(SceneManager::GAME_LEVEL);
 }
 
-void loadEditor() {
+void LoadEditor() {
 	SceneManager::LoadScene(SceneManager::EDITOR);
 }
 
-void loadOptions() {
+void LoadOptions() {
 	SceneManager::LoadScene(SceneManager::OPTIONS);
 }
 
-void loadControls() {
+void LoadControls() {
 	SceneManager::LoadScene(SceneManager::CONTROLS);
 }
 
-void loadCredits() {
+void LoadCredits() {
 	SceneManager::LoadScene(SceneManager::CREDITS);
 }
 
-void loadQuit() {
+void LoadQuit() {
 	SceneManager::LoadScene(SceneManager::QUIT);
 }
 
+bool MouseInsideButton(Vec2<int> mousePos, Vec2<float> btnPos, Vec2<float> btnSize) {
+	// LEFT / RIGHT BOUNDS
+	if ((mousePos.x > btnPos.x &&
+		mousePos.x < btnPos.x + btnSize.x) &&
+
+		// TOP / BOTTOM BOUNDS
+		(mousePos.y > -btnPos.y &&
+			mousePos.y < -btnPos.y + btnSize.y)) {
+
+		return true;
+	}
+	return false;
+}

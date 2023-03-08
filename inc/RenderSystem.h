@@ -26,12 +26,12 @@ namespace RenderSystem {
 	struct RenderSetting {
 		// Default: Opaque + Allow transperancy. (PNG images)
 		static const AEGfxBlendMode BLEND_MODE{ AE_GFX_BM_BLEND };
-		static constexpr Vec4<float> BLEND_COLOR{ 0,0,0,0 };
 		static constexpr Vec4<float> TINT{ 1.0f,1.0f,1.0f,1.0f };
+		static constexpr Vec4<float> BLEND_COLOR{ 0,0,0,0 };
 
 		AEGfxBlendMode blendMode = BLEND_MODE;
-		Vec4<float> blendColor = BLEND_COLOR;
 		Vec4<float> tint = TINT;
+		Vec4<float> blendColor = BLEND_COLOR;
 
 		void setDefault() { blendMode = BLEND_MODE; blendColor = BLEND_COLOR; tint = TINT; }
 		bool isDefault() { return blendMode == BLEND_MODE && blendColor == BLEND_COLOR && tint == TINT; }

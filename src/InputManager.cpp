@@ -161,8 +161,8 @@ namespace InputManager {
 		HandleKeyEvents();
 	}
 
-	bool HasMouseMoved(){
-		return (mousePosDelta.x != 0 && mousePosDelta.y !=0);
+	bool HasMouseMoved() {
+		return (mousePosDelta.x != 0 && mousePosDelta.y != 0);
 	}
 
 	void Free() {

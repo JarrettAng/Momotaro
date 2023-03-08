@@ -23,7 +23,7 @@ namespace RenderSystem {
 	void SortBatch(std::vector<std::pair<Renderable, RenderSetting>>& batch);
 
 	void UpdateRenderSetting(RenderSetting setting = {});
-	void UpdateRenderTransformMtx(const int& x, const int& y, const AEVec2& scale, const float& rot = 0);
+	void UpdateRenderTransformMtx(const int& x, const int& y, const Vec2<float>& scale, const float& rot = 0);
 
 	void AddRectToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& width, const float& height, const float& rot, const int& layer, const Vec4<float>& color, TextureManager::TEX_TYPE tex);
 	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const int& fontSize, const std::string& text, const int& layer, TextureManager::TEX_TYPE tex = TextureManager::NONE, const Vec4<float>& btnColor = { 1,1,1,1 }, const Vec3<float>& txtColor = { 1,1,1 });
@@ -249,7 +249,7 @@ namespace RenderSystem {
 		// Get texture + offset UVS for animations.
 		AEGfxTextureSet(TextureManager::GetTexture(tex), TextureManager::GetTexWidth(tex), TextureManager::GetTexHeight(tex));
 		// Position rect.
-		UpdateRenderTransformMtx(x, y, AEVec2{ width,height });
+		UpdateRenderTransformMtx(x, y, Vec2<float>{ width, height });
 		// Draw rect.
 		AEGfxMeshDraw(TextureManager::GetMesh(tex), AE_GFX_MDM_TRIANGLES);
 	}
@@ -263,7 +263,7 @@ namespace RenderSystem {
 		// Set color.
 		AEGfxSetTintColor(color.w, color.x, color.y, color.z);
 		// Position rect.
-		UpdateRenderTransformMtx(x, y, AEVec2{ width,height });
+		UpdateRenderTransformMtx(x, y, Vec2<float>{ width, height });
 		// Draw rect.
 		AEGfxMeshDraw(TextureManager::GetMesh(TextureManager::NONE), AE_GFX_MDM_TRIANGLES);
 	}
@@ -303,7 +303,7 @@ namespace RenderSystem {
 	\brief
 		Update global transform mtx for subsequent sprites to be drawn.
 	*************************************************************************/
-	void UpdateRenderTransformMtx(const int& x, const int& y, const AEVec2& scale, const float& rot) {
+	void UpdateRenderTransformMtx(const int& x, const int& y, const Vec2<float>& scale, const float& rot) {
 		// Set scaling
 		AEMtx33Scale(&scaleMtx, scale.x, scale.y);
 		// Set rotation.

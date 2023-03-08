@@ -23,9 +23,11 @@ const float SPLASH_SCREEN_TIME = 1.0f;
 float fade = 0;
 
 void SceneSplashscreen::Load() {
+	return;
 }
 
 void SceneSplashscreen::Initialize() {
+	return;
 }
 
 void SceneSplashscreen::Update() {
@@ -47,7 +49,9 @@ void SceneSplashscreen::Draw() {
 }
 
 void SceneSplashscreen::Free() {
+	return;
 }
 
 void SceneSplashscreen::Unload() {
+	return;
 }
