@@ -131,9 +131,7 @@ namespace RenderSystem {
 		obj.text.fontSize = fontSize;
 
 		// Add to batch.
-		renderBatches[id].push_back({ obj,setting });
-
-		if (!setting.isDefault()) setting.setDefault();
+		renderBatches[id].push_back({ obj,{} });
 	}
 
 	/*!***********************************************************************
@@ -279,6 +277,10 @@ namespace RenderSystem {
 		std::sort(batch.begin(), batch.end(), [](const std::pair<Renderable, RenderSetting>& a, const std::pair<Renderable, RenderSetting>& b) {  return a.first.layer < b.first.layer; });
 	}
 
+	/*!***********************************************************************
+	\brief
+		Update current render setting to use for subsequent object when adding to batch.
+	*************************************************************************/
 	void SetRenderSetting(Vec4<float> tint, Vec4<float> blendColor, AEGfxBlendMode blendMode) {
 		setting.tint = tint;
 		setting.blendColor = blendColor;

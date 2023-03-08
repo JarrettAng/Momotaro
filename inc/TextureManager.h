@@ -43,6 +43,13 @@ namespace TextureManager {
 		PAUSE_BUTTON,
 		DIGIPEN_LOGO,
 		SYNERGY,
+		MENU_BG,
+		STARTGAME_BTN,
+		CONTROLS_BTN,
+		OPTIONS_BTN,
+		EDITOR_BTN,
+		CREDITS_BTN,
+		QUIT_BTN,
 	};
 	TEX_TYPE operator++(TEX_TYPE&, int);
 

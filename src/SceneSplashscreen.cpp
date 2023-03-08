@@ -12,14 +12,14 @@ The functions include:
 -
 **************************************************************************/
 
-#include <SceneSplashscreen.h>
 #include <RenderSystem.h>
 
 #include <SceneManager.h>
 
 #include <TextureManager.h>
+#include <SceneSplashscreen.h>
 
-const float SPLASH_SCREEN_TIME = 3.0f;
+const float SPLASH_SCREEN_TIME = 1.0f;
 float fade = 0;
 
 void SceneSplashscreen::Load() {
@@ -31,7 +31,7 @@ void SceneSplashscreen::Initialize() {
 
 void SceneSplashscreen::Update() {
 	if (fade >= SPLASH_SCREEN_TIME) {
-		SceneManager::LoadScene(SceneManager::GAME_LEVEL);
+		SceneManager::LoadScene(SceneManager::MAIN_MENU);
 	}
 }
 
@@ -40,7 +40,7 @@ void SceneSplashscreen::Draw() {
 
 	//Display the Digipen logo
 	RenderSystem::SetRenderSetting(Vec4<float>{1.0f, 1.0f, 1.0f, fade});
-	fade += 1.0f / (3.0f / AEFrameRateControllerGetFrameTime());
+	fade += 1.0f / (SPLASH_SCREEN_TIME / AEFrameRateControllerGetFrameTime());
 
 	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, -300, 85, 600, 171, TextureManager::DIGIPEN_LOGO);
 

@@ -18,8 +18,10 @@ The functions include:
 #include <InputManager.h>
 #include <PauseManager.h>
 
+
 #include <SceneGameLevel.h>
 #include <SceneSplashscreen.h>
+#include <SceneMainMenu.h>
 ///////////////////////////////////////////////////////////////////////////
 
 namespace SceneManager {
@@ -31,7 +33,7 @@ namespace SceneManager {
 
 	SceneSplashscreen splashScreen;
 	SceneGameLevel gameLevel;
-	// SceneMainMenu mainMenu;
+	SceneMainMenu mainMenu;
 	// SceneSettings settings;
 	// SceneCredits  credits;
 	// SceneEditor   editor;
@@ -53,6 +55,9 @@ namespace SceneManager {
 		switch (current) {
 		case SPLASHSCREEN:
 			currentScene = &splashScreen;
+			break;
+		case MAIN_MENU:
+			currentScene = &mainMenu;
 			break;
 		case GAME_LEVEL:
 			currentScene = &gameLevel;
