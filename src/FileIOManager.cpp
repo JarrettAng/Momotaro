@@ -11,15 +11,19 @@
 The functions include:
 -
 **************************************************************************/
-
+///////////////////////////////////////////////////////////////////////////
 #include <iostream>
 #include <fstream>
 #include <FileIOManager.h>
 #include <BuildingManager.h>
+///////////////////////////////////////////////////////////////////////////
 
 namespace FileIOManager {
-namespace GM = GridManager;
+
+	namespace GM = GridManager;
 	
+///////////////////////////////////////////////////////////////////////////
+//Saves the map to a custom file (used by gridmanager)
 	void SaveGridToFile(){
 		std::ofstream mapFile("Assets/JSON_Data/Maps/map.momomaps");
 		if(!mapFile.is_open()){
@@ -38,6 +42,8 @@ namespace GM = GridManager;
 		mapFile.close();
 	}
 
+///////////////////////////////////////////////////////////////////////////
+//Loads a map from the specified filename (used in gridmanager)
     GM::cell* LoadGridFromFile(std::string fileName)
     {
 		GM::cell* newMap{};
@@ -78,6 +84,8 @@ namespace GM = GridManager;
 	return newMap;
     }
 
+///////////////////////////////////////////////////////////////////////////
+//*TODO : SERIALISATION FOR BUILDINGS WITH CUSTOM FILETYPES!
     void ReadBuildingsData(std::vector<BuildingData>& buildingsData) {
 		std::ifstream dataFile{ "Assets/JSON_Data/buildingsData.json" };
 		// json data = json::parse(dataFile);

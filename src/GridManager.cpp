@@ -318,32 +318,6 @@ namespace GridManager {
 	}
 #pragma endregion
 
-#pragma region TerrainStuff
-
-	void RandomiseTerrain() {
-		if (PauseManager::IsPaused()) return;
-
-		/*
-		TOP LEFT = x--;
-		TOP RIGHT = y--;
-		BOTTOM LEFT = y++;
-		BOTTOM RIGHT = x++;
-		*/
-		ClearGrid();
-		for (int y{ 0 }; y < gridY; ++y) {
-			for (int x{ 0 }; x < gridX; ++x) {
-				int index = GetIndex(x, y);
-				if ((x >= 8 && x <= 13) && (y >= 8 && y <= 13)) {
-					grid[index].isRenderable = true;
-				}
-				else grid[index].isRenderable = false;
-			}
-		}
-		// std::cout << terrainNum << '\n';
-		
-	}
-#pragma endregion
-
 	///////////////////////////////////////////////////////////////////////////
 	//Gets building from cardmanager event
 	///////////////////////////////////////////////////////////////////////////
