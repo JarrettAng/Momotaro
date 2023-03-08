@@ -56,8 +56,8 @@ namespace RenderSystem {
 	};
 
 	struct Transform {
-		AEVec2 pos{};
-		AEVec2 size = { 1,1 };
+		Vec2<float> pos{};
+		Vec2<float> size = { 1,1 };
 		float rot = 0;
 	};
 
@@ -74,7 +74,7 @@ namespace RenderSystem {
 	struct Text {
 		s8 fontID;
 		int fontSize;
-		AEVec2 pos{};
+		Vec2<float> pos{};
 		std::string text;
 		Vec3<float> color;
 	};
@@ -100,7 +100,7 @@ namespace RenderSystem {
 	void Initialize();
 	void Render();
 
-	AEVec2 GetPivotPos(const AEVec2& pos, const float& width, const float& height);
+	Vec2<float> GetPivotPos(const Vec2<float>& pos, const float& width, const float& height);
 	void SetRenderSetting(Vec4<float> tint, Vec4<float> blendColor = {}, AEGfxBlendMode blendMode = AE_GFX_BM_BLEND);
 
 	/*!***********************************************************************

@@ -45,9 +45,9 @@ namespace TextureManager {
 		SYNERGY,
 		MENU_BG,
 		STARTGAME_BTN,
-		CONTROLS_BTN,
-		OPTIONS_BTN,
 		EDITOR_BTN,
+		OPTIONS_BTN,
+		CONTROLS_BTN,
 		CREDITS_BTN,
 		QUIT_BTN,
 	};

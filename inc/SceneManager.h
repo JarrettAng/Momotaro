@@ -21,7 +21,11 @@ namespace SceneManager {
 	enum SCENES_ENUM { // Enum for all scenes in the game
 		SPLASHSCREEN,
 		MAIN_MENU,
+		EDITOR,
+		OPTIONS,
+		CONTROLS,
 		GAME_LEVEL,
+		CREDITS,
 
 		RESTART,
 		QUIT

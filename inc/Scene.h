@@ -37,13 +37,13 @@ The functions include:
 #include <GameObject.h>
 
 class Scene {
-	public:
-		virtual void Load();
-		virtual void Initialize();
+public:
+	virtual void Load();
+	virtual void Initialize();
 
-		virtual void Update();
-		virtual void Draw();
+	virtual void Update();
+	virtual void Draw();
 
-		virtual void Free();
-		virtual void Unload();
+	virtual void Free();
+	virtual void Unload();
 };

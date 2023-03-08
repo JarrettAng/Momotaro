@@ -131,10 +131,11 @@ namespace TextureManager {
 		digipen_Logo_Tex = AEGfxTextureLoad("Assets/Textures/UI/Digipen_Logo.png");
 
 		background_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Background.png");
+
 		startGame_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/StartGame.png");
-		controls_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Controls.png");
-		options_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Options.png");
 		editor_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Editor.png");
+		options_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Options.png");
+		controls_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Controls.png");
 		credits_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Credits.png");
 		quit_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Quit.png");
 	}
@@ -178,10 +179,11 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ DIGIPEN_LOGO,digipen_Logo_Tex, 1, 1, -1.f });
 
 		textures.push_back(TextureSheet{ MENU_BG,background_Tex, 1, 1, -1.f });
+
 		textures.push_back(TextureSheet{ STARTGAME_BTN,startGame_Tex, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ CONTROLS_BTN,controls_Tex, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ OPTIONS_BTN,options_Tex, 1, 1, -1.f });
 		textures.push_back(TextureSheet{ EDITOR_BTN,editor_Tex, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ OPTIONS_BTN,options_Tex, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ CONTROLS_BTN,controls_Tex, 1, 1, -1.f });
 		textures.push_back(TextureSheet{ CREDITS_BTN,credits_Tex, 1, 1, -1.f });
 		textures.push_back(TextureSheet{ QUIT_BTN,quit_Tex, 1, 1, -1.f });
 
@@ -363,12 +365,14 @@ namespace TextureManager {
 		AEGfxTextureUnload(pauseButton_Tex);
 
 		AEGfxTextureUnload(digipen_Logo_Tex);
+
 		AEGfxTextureUnload(background_Tex);
+
 		AEGfxTextureUnload(startGame_Tex);
-		AEGfxTextureUnload(controls_Tex);
-		AEGfxTextureUnload(options_Tex);
-		AEGfxTextureUnload(credits_Tex);
 		AEGfxTextureUnload(editor_Tex);
+		AEGfxTextureUnload(options_Tex);
+		AEGfxTextureUnload(controls_Tex);
+		AEGfxTextureUnload(credits_Tex);
 		AEGfxTextureUnload(quit_Tex);
 	}
 }

@@ -18,7 +18,7 @@ namespace RenderSystem {
 	* FORWARD DECLARATIONS
 	*************************************************************************/
 	void SetRenderPivot(const RENDER_PIVOT& pivot);
-	AEVec2 GetPivotPos(const AEVec2& pos, const float& width, const float& height);
+	Vec2<float> GetPivotPos(const Vec2<float>& pos, const float& width, const float& height);
 
 	void SortBatch(std::vector<std::pair<Renderable, RenderSetting>>& batch);
 
@@ -32,8 +32,8 @@ namespace RenderSystem {
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, TextureManager::TEX_TYPE  tex);
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec4<float> color = { 1.0f,1.0f,1.0f,1.0f });
 
-	AEVec2 GetButtonSize(const float& xPadding, const float& yPadding);
-	AEVec2 GetCenteredTextPos(const float& x, const float& y, const float& width, const float& height, const float& textWidth, const float& textHeight);
+	Vec2<float> GetButtonSize(const float& xPadding, const float& yPadding);
+	Vec2<float> GetCenteredTextPos(const float& x, const float& y, const float& width, const float& height, const float& textWidth, const float& textHeight);
 
 	/*!***********************************************************************
 	* RENDER BATCHES
@@ -58,15 +58,14 @@ namespace RenderSystem {
 	*************************************************************************/
 	f32 textWidth, textHeight;	// Cache text width and height for calculating text position when drawing button.
 	RENDER_PIVOT renderPivot;
-	RenderSetting setting;
+	RenderSetting setting{};
 
 	/*!***********************************************************************
 	\brief
 		Initialize render system.
 	*************************************************************************/
 	void RenderSystem::Initialize() {
-		SetRenderPivot(TOP_LEFT);
-		setting.setDefault();
+
 	}
 
 	/*!***********************************************************************
@@ -194,10 +193,10 @@ namespace RenderSystem {
 		AEGfxGetPrintSize(font, const_cast<char*>(text.c_str()), fontSize / FontManager::DEFAULT_FONT_SIZE, textWidth, textHeight);
 
 		// Get button width and height.
-		AEVec2 buttonSize = GetButtonSize(xPadding, yPadding);
+		Vec2<float> buttonSize = GetButtonSize(xPadding, yPadding);
 
 		// Get centereed text position based on button size.
-		AEVec2 textPos = RenderSystem::GetPivotPos(GetCenteredTextPos(x, y, buttonSize.x, buttonSize.y, textWidth, textHeight), buttonSize.x / AEGetWindowWidth() * 2, buttonSize.y / AEGetWindowHeight() * 2);
+		Vec2<float> textPos = RenderSystem::GetPivotPos(GetCenteredTextPos(x, y, buttonSize.x, buttonSize.y, textWidth, textHeight), buttonSize.x / AEGetWindowWidth() * 2, buttonSize.y / AEGetWindowHeight() * 2);
 
 		if (tex == TextureManager::NONE) {
 			// Add rect with TEXTURE to batch.
@@ -216,9 +215,9 @@ namespace RenderSystem {
 	\brief
 		Get button width and height based on pos and padding.
 	*************************************************************************/
-	AEVec2 GetButtonSize(const float& xPadding, const float& yPadding) {
+	Vec2<float> GetButtonSize(const float& xPadding, const float& yPadding) {
 		// Get button's width and height by adding text width/height with padding given.
-		return AEVec2{ textWidth * AEGetWindowWidth() / 2 + xPadding * 2 , textHeight * AEGetWindowHeight() / 2 + yPadding * 2 };
+		return Vec2<float>{ textWidth* AEGetWindowWidth() / 2 + xPadding * 2, textHeight* AEGetWindowHeight() / 2 + yPadding * 2 };
 	}
 
 	/*!***********************************************************************
@@ -226,9 +225,9 @@ namespace RenderSystem {
 		Calculate centered text position based on rect width and height.
 			- Assuming rect is drawn with TOP-LEFT pivot.
 	*************************************************************************/
-	AEVec2 GetCenteredTextPos(const float& x, const float& y, const float& width, const float& height, const float& textWidth, const float& textHeight) {
+	Vec2<float> GetCenteredTextPos(const float& x, const float& y, const float& width, const float& height, const float& textWidth, const float& textHeight) {
 		// It just works
-		return AEVec2{ ((x / AEGetWindowWidth()) * 2) + ((((width / AEGetWindowWidth()) * 2) - textWidth) / 2) , ((y / AEGetWindowHeight()) * 2) - ((height / 2) / AEGetWindowHeight()) * 2 - (textHeight / 2) };
+		return Vec2<float>{ ((x / AEGetWindowWidth()) * 2) + ((((width / AEGetWindowWidth()) * 2) - textWidth) / 2), ((y / AEGetWindowHeight()) * 2) - ((height / 2) / AEGetWindowHeight()) * 2 - (textHeight / 2) };
 	}
 
 	/*!***********************************************************************
@@ -332,27 +331,27 @@ namespace RenderSystem {
 	\brief
 		Convert position based on current pivot position.
 	*************************************************************************/
-	AEVec2 GetPivotPos(const AEVec2& pos, const float& width, const float& height) {
+	Vec2<float> GetPivotPos(const Vec2<float>& pos, const float& width, const float& height) {
 		switch (renderPivot)
 		{
 		case RenderSystem::TOP_LEFT:
 			return pos;
 		case RenderSystem::TOP_MID:
-			return AEVec2{ pos.x - width / 2, pos.y };
+			return Vec2<float>{ pos.x - width / 2, pos.y };
 		case RenderSystem::TOP_RIGHT:
-			return AEVec2{ pos.x - width, pos.y };
+			return Vec2<float>{ pos.x - width, pos.y };
 		case RenderSystem::MID_LEFT:
-			return AEVec2{ pos.x, pos.y + height / 2 };
+			return Vec2<float>{ pos.x, pos.y + height / 2 };
 		case RenderSystem::MID:
-			return AEVec2{ pos.x - width / 2, pos.y + height / 2 };
+			return Vec2<float>{ pos.x - width / 2, pos.y + height / 2 };
 		case RenderSystem::MID_RIGHT:
-			return AEVec2{ pos.x - width, pos.y + height / 2 };
+			return Vec2<float>{ pos.x - width, pos.y + height / 2 };
 		case RenderSystem::BOT_LEFT:
-			return AEVec2{ pos.x, pos.y + height };
+			return Vec2<float>{ pos.x, pos.y + height };
 		case RenderSystem::BOT_MID:
-			return AEVec2{ pos.x - width / 2, pos.y + height };
+			return Vec2<float>{ pos.x - width / 2, pos.y + height };
 		case RenderSystem::BOT_RIGHT:
-			return AEVec2{ pos.x - width , pos.y + height };
+			return Vec2<float>{ pos.x - width, pos.y + height };
 		default:
 			break;
 		}

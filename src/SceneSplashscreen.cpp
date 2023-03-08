@@ -26,7 +26,6 @@ void SceneSplashscreen::Load() {
 }
 
 void SceneSplashscreen::Initialize() {
-	RenderSystem::Initialize();
 }
 
 void SceneSplashscreen::Update() {

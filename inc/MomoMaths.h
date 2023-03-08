@@ -18,9 +18,9 @@ struct Vec2 {
 	T x;
 	T y;
 
- 	Vec2& operator+=(Vec2 const& rhs);
- 	Vec2& operator-=(Vec2 const& rhs);
- 	Vec2& operator*=(T  rhs);
+	Vec2& operator+=(Vec2 const& rhs);
+	Vec2& operator-=(Vec2 const& rhs);
+	Vec2& operator*=(T  rhs);
 };
 
 template<class T>
@@ -104,35 +104,35 @@ template<class T>
 Vec2<T>& Vec2<T>::operator+=(Vec2<T>const& rhs) {	//vec2+=vec2
 	x += rhs.x;
 	y += rhs.y;
-	return* this;
+	return*this;
 
 }
 template <class T>
-Vec3<T> &Vec3<T>::operator+=(Vec2<T> const &rhs)	//vec3+=vec2
+Vec3<T>& Vec3<T>::operator+=(Vec2<T> const& rhs)	//vec3+=vec2
 {
-    x += rhs.x;
+	x += rhs.x;
 	y += rhs.y;
-	return* this;
+	return*this;
 }
 
 template <class T>
-Vec3<T> &Vec3<T>::operator+=(Vec3<T> const &rhs) //vec3+=vec3
+Vec3<T>& Vec3<T>::operator+=(Vec3<T> const& rhs) //vec3+=vec3
 {
-    x += rhs.x;
+	x += rhs.x;
 	y += rhs.y;
 	z += rhs.z;
-	return* this;
+	return*this;
 }
 
 template <class T>
-Vec4<T> &Vec4<T>::operator+=(Vec2<T> const &rhs) //vec4+=vec2
+Vec4<T>& Vec4<T>::operator+=(Vec2<T> const& rhs) //vec4+=vec2
 {
 	x += rhs.x;
 	y += rhs.y;
 	return *this;
 }
 template <class T>
-Vec4<T> &Vec4<T>::operator+=(Vec3<T> const &rhs) //vec4+=vec3
+Vec4<T>& Vec4<T>::operator+=(Vec3<T> const& rhs) //vec4+=vec3
 {
 	x += rhs.x;
 	y += rhs.y;
@@ -140,70 +140,70 @@ Vec4<T> &Vec4<T>::operator+=(Vec3<T> const &rhs) //vec4+=vec3
 	return *this;
 }
 template <class T>
-Vec4<T> &Vec4<T>::operator+=(Vec4<T> const &rhs) //vec4+=vec4
+Vec4<T>& Vec4<T>::operator+=(Vec4<T> const& rhs) //vec4+=vec4
 {
-    w += rhs.w;
+	w += rhs.w;
 	x += rhs.x;
 	y += rhs.y;
 	z += rhs.z;
-	return* this;
+	return*this;
 }
 
 //BINARY ADDITION
 template<class T>
-Vec2<T> operator+(Vec2<T> const& lhs, Vec2<T>const& rhs){	//vec2+vec2
-	Vec2<T> temp{lhs};
-	temp+=rhs;
-	return temp;
-} 
-template<class T>
-Vec3<T> operator+(Vec3<T> const& lhs, Vec3<T>const& rhs){	//vec3+vec3
-	Vec3<T> temp{lhs};
-	temp+=rhs;
+Vec2<T> operator+(Vec2<T> const& lhs, Vec2<T>const& rhs) {	//vec2+vec2
+	Vec2<T> temp{ lhs };
+	temp += rhs;
 	return temp;
 }
 template<class T>
-Vec3<T> operator+(Vec3<T> const& lhs, Vec2<T>const& rhs){	//vec3+vec2
-	Vec3<T> temp{lhs};
-	temp+=rhs;
+Vec3<T> operator+(Vec3<T> const& lhs, Vec3<T>const& rhs) {	//vec3+vec3
+	Vec3<T> temp{ lhs };
+	temp += rhs;
 	return temp;
 }
 template<class T>
-Vec3<T> operator+(Vec2<T> const& lhs, Vec3<T>const& rhs){	//vec2+vec3
-	Vec3<T> temp{rhs};
-	temp+=lhs;
+Vec3<T> operator+(Vec3<T> const& lhs, Vec2<T>const& rhs) {	//vec3+vec2
+	Vec3<T> temp{ lhs };
+	temp += rhs;
 	return temp;
 }
 template<class T>
-Vec4<T> operator+(Vec3<T> const& lhs, Vec4<T>const& rhs){	//vec3+vec4
-	Vec4<T> temp{rhs};
-	temp+=lhs;
+Vec3<T> operator+(Vec2<T> const& lhs, Vec3<T>const& rhs) {	//vec2+vec3
+	Vec3<T> temp{ rhs };
+	temp += lhs;
 	return temp;
 }
 template<class T>
-Vec4<T> operator+(Vec2<T> const& lhs, Vec4<T>const& rhs){	//vec2+vec4
-	Vec4<T> temp{rhs};
-	temp+=lhs;
-	return temp;
-}  
-template<class T>
-Vec4<T> operator+(Vec4<T> const& lhs, Vec2<T>const& rhs){	//vec4+vec2
-	Vec4<T> temp{lhs};
-	temp+=rhs;
+Vec4<T> operator+(Vec3<T> const& lhs, Vec4<T>const& rhs) {	//vec3+vec4
+	Vec4<T> temp{ rhs };
+	temp += lhs;
 	return temp;
 }
 template<class T>
-Vec4<T> operator+(Vec4<T> const& lhs, Vec3<T>const& rhs){	//vec4+vec3
-	Vec4<T> temp{lhs};
-	temp+=rhs;
+Vec4<T> operator+(Vec2<T> const& lhs, Vec4<T>const& rhs) {	//vec2+vec4
+	Vec4<T> temp{ rhs };
+	temp += lhs;
 	return temp;
-}   
+}
 template<class T>
-Vec4<T> operator+(Vec4<T> const& lhs, Vec4<T>const& rhs){	//vec4+vec4
-	Vec4<T> temp{lhs};
-	temp+=rhs;
+Vec4<T> operator+(Vec4<T> const& lhs, Vec2<T>const& rhs) {	//vec4+vec2
+	Vec4<T> temp{ lhs };
+	temp += rhs;
 	return temp;
-} 
+}
+template<class T>
+Vec4<T> operator+(Vec4<T> const& lhs, Vec3<T>const& rhs) {	//vec4+vec3
+	Vec4<T> temp{ lhs };
+	temp += rhs;
+	return temp;
+}
+template<class T>
+Vec4<T> operator+(Vec4<T> const& lhs, Vec4<T>const& rhs) {	//vec4+vec4
+	Vec4<T> temp{ lhs };
+	temp += rhs;
+	return temp;
+}
 
 /*============================================================================
 * OPERATOR OVER LOADS FOR VECTOR SUBTRACTION
@@ -212,36 +212,36 @@ template<class T>
 Vec2<T>& Vec2<T>::operator-=(Vec2<T>const& rhs) {	//vec2-=vec2
 	x -= rhs.x;
 	y -= rhs.y;
-	return* this;
+	return*this;
 }
 
 template <class T>
-Vec3<T> &Vec3<T>::operator-=(Vec2<T> const &rhs) // vec3-=vec2
+Vec3<T>& Vec3<T>::operator-=(Vec2<T> const& rhs) // vec3-=vec2
 {
-	x-=rhs.x;
-	y-=rhs.y;
-	return *this;	
+	x -= rhs.x;
+	y -= rhs.y;
+	return *this;
 }
 template<class T>
 Vec3<T>& Vec3<T>::operator-=(Vec3<T>const& rhs) { //vec3-=vec3
 	x -= rhs.x;
 	y -= rhs.y;
 	z -= rhs.z;
-	return* this;
+	return*this;
 }
 template <class T>
-Vec4<T> &Vec4<T>::operator-=(Vec2<T> const &rhs) //vec4-=vec2
+Vec4<T>& Vec4<T>::operator-=(Vec2<T> const& rhs) //vec4-=vec2
 {
-	x-=rhs.x;
-	y-=rhs.y;
+	x -= rhs.x;
+	y -= rhs.y;
 	return *this;
 }
 template <class T>
-Vec4<T> &Vec4<T>::operator-=(Vec3<T> const &rhs) //vec4-=vec3
+Vec4<T>& Vec4<T>::operator-=(Vec3<T> const& rhs) //vec4-=vec3
 {
-	x-=rhs.x;
-	y-=rhs.y;
-	z-=rhs.z;
+	x -= rhs.x;
+	y -= rhs.y;
+	z -= rhs.z;
 	return *this;
 }
 template<class T>
@@ -250,22 +250,22 @@ Vec4<T>& Vec4<T>::operator-=(Vec4<T>const& rhs) { //vec4-=vec4
 	x -= rhs.x;
 	y -= rhs.y;
 	z -= rhs.z;
-	return* this;
+	return*this;
 }
 
 //BINARY SUBTRACTION
 template<class T>
-Vec2<T> operator-(Vec2<T> const& lhs, Vec2<T>const& rhs){	//vec2-vec2
-	Vec2<T> temp{lhs};
-	temp-=rhs;
+Vec2<T> operator-(Vec2<T> const& lhs, Vec2<T>const& rhs) {	//vec2-vec2
+	Vec2<T> temp{ lhs };
+	temp -= rhs;
 	return temp;
 }
 template<class T>
-Vec3<T> operator-(Vec3<T> const& lhs, Vec2<T>const& rhs){	//vec3-vec2
-	Vec3<T> temp{lhs};
-	temp-=rhs;
+Vec3<T> operator-(Vec3<T> const& lhs, Vec2<T>const& rhs) {	//vec3-vec2
+	Vec3<T> temp{ lhs };
+	temp -= rhs;
 	return temp;
-}  
+}
 // template<class T>
 // Vec3<T> operator-(Vec2<T> const& lhs, Vec3<T>const& rhs){	//vec2-vec3
 // 	Vec3<T> temp;
@@ -273,9 +273,9 @@ Vec3<T> operator-(Vec3<T> const& lhs, Vec2<T>const& rhs){	//vec3-vec2
 // 	return temp;
 // } 
 template<class T>
-Vec3<T> operator-(Vec3<T> const& lhs, Vec3<T>const& rhs){	//vec3-vec3
-	Vec3<T> temp{lhs};
-	temp-=rhs;
+Vec3<T> operator-(Vec3<T> const& lhs, Vec3<T>const& rhs) {	//vec3-vec3
+	Vec3<T> temp{ lhs };
+	temp -= rhs;
 	return temp;
 }
 // template<class T>
@@ -291,83 +291,83 @@ Vec3<T> operator-(Vec3<T> const& lhs, Vec3<T>const& rhs){	//vec3-vec3
 // 	return temp;
 // } 
 template<class T>
-Vec4<T> operator-(Vec4<T> const& lhs, Vec2<T>const& rhs){	//vec4-vec2
-	Vec4<T> temp{lhs};
-	temp-=rhs;
+Vec4<T> operator-(Vec4<T> const& lhs, Vec2<T>const& rhs) {	//vec4-vec2
+	Vec4<T> temp{ lhs };
+	temp -= rhs;
 	return temp;
-} 
+}
 template<class T>
-Vec4<T> operator-(Vec4<T> const& lhs, Vec3<T>const& rhs){	//vec4-vec3
-	Vec4<T> temp{lhs};
-	temp-=rhs;
+Vec4<T> operator-(Vec4<T> const& lhs, Vec3<T>const& rhs) {	//vec4-vec3
+	Vec4<T> temp{ lhs };
+	temp -= rhs;
 	return temp;
-}  
+}
 template<class T>
-Vec4<T> operator-(Vec4<T> const& lhs, Vec4<T>const& rhs){	//vec4-vec4
-	Vec4<T> temp{lhs};
-	temp-=rhs;
+Vec4<T> operator-(Vec4<T> const& lhs, Vec4<T>const& rhs) {	//vec4-vec4
+	Vec4<T> temp{ lhs };
+	temp -= rhs;
 	return temp;
-} 
+}
 
 /*============================================================================
 * OPERATOR OVER LOADS FOR VECTOR MULTIPLICATION
 */
 template <class T>
-Vec2<T> &Vec2<T>::operator*=(T rhs)
+Vec2<T>& Vec2<T>::operator*=(T rhs)
 {
-	x*=rhs;
-	y*=rhs;
+	x *= rhs;
+	y *= rhs;
 	return *this;
 }
 template <class T>
-Vec3<T> &Vec3<T>::operator*=(T rhs)
+Vec3<T>& Vec3<T>::operator*=(T rhs)
 {
-	x*=rhs;
-	y*=rhs;
-	z*=rhs;
+	x *= rhs;
+	y *= rhs;
+	z *= rhs;
 	return *this;
 }
 template <class T>
-Vec4<T> &Vec4<T>::operator*=(T rhs)
+Vec4<T>& Vec4<T>::operator*=(T rhs)
 {
-	x*=rhs;
-	y*=rhs;
-	z*=rhs;
-	w*=rhs;
+	x *= rhs;
+	y *= rhs;
+	z *= rhs;
+	w *= rhs;
 	return *this;
 }
 
 template<class T>
-Vec2<T> operator*(Vec2<T> const& lhs, T rhs){
-	Vec2<T> temp{lhs};
-	temp.x*=rhs;
-	temp.y*=rhs;
+Vec2<T> operator*(Vec2<T> const& lhs, T rhs) {
+	Vec2<T> temp{ lhs };
+	temp.x *= rhs;
+	temp.y *= rhs;
 	return temp;
 }
 template<class T>
-Vec3<T> operator*(Vec3<T> const& lhs, T rhs){
-	Vec3<T> temp{lhs};
-	temp.x*=rhs;
-	temp.y*=rhs;
-	temp.z*=rhs;
+Vec3<T> operator*(Vec3<T> const& lhs, T rhs) {
+	Vec3<T> temp{ lhs };
+	temp.x *= rhs;
+	temp.y *= rhs;
+	temp.z *= rhs;
 	return temp;
 }
 template<class T>
-Vec4<T> operator*(Vec4<T> const& lhs, T rhs){
-	Vec4<T> temp{lhs};
-	temp.x*=rhs;
-	temp.y*=rhs;
-	temp.z*=rhs;
-	temp.w*=rhs;
+Vec4<T> operator*(Vec4<T> const& lhs, T rhs) {
+	Vec4<T> temp{ lhs };
+	temp.x *= rhs;
+	temp.y *= rhs;
+	temp.z *= rhs;
+	temp.w *= rhs;
 	return temp;
 }
 /*============================================================================
 * OPERATOR OVERLOADS FOR VECTOR COMPARISONS
 */
 template<class T>
-bool operator<(Vec2<T> const& lhs, Vec2<T> const& rhs){
-	if(lhs.x < rhs.x) return true;
-	if(lhs.x == rhs.x){
+bool operator<(Vec2<T> const& lhs, Vec2<T> const& rhs) {
+	if (lhs.x < rhs.x) return true;
+	if (lhs.x == rhs.x) {
 		return (lhs.y < rhs.y);
 	}
 	return false;
@@ -384,24 +384,24 @@ bool operator<(Vec2<T> const& lhs, Vec2<T> const& rhs){
 // std::ostream& operator<<(std::ostream& os, Vec4<T> const&);
 
 template <class T>
-inline std::ostream &operator<<(std::ostream &os, Vec2<T> const & rhs)
+inline std::ostream& operator<<(std::ostream& os, Vec2<T> const& rhs)
 {
-	os<< "(x,y) : ";
-	return os<<"(" << rhs.x << "," << rhs.y << ")";
+	os << "(x,y) : ";
+	return os << "(" << rhs.x << "," << rhs.y << ")";
 }
 
 template <class T>
-inline std::ostream &operator<<(std::ostream &os, Vec3<T> const &rhs)
+inline std::ostream& operator<<(std::ostream& os, Vec3<T> const& rhs)
 {
-	os<< "(x,y,z) : ";
-	return os<<"(" << rhs.x << "," << rhs.y << "," << rhs.z<< ")";
+	os << "(x,y,z) : ";
+	return os << "(" << rhs.x << "," << rhs.y << "," << rhs.z << ")";
 }
 
 template <class T>
-inline std::ostream &operator<<(std::ostream &os, Vec4<T> const &rhs)
+inline std::ostream& operator<<(std::ostream& os, Vec4<T> const& rhs)
 {
-	os<< "(x,y,z,w) : ";
-	return os<<"(" << rhs.x << "," << rhs.y << "," << rhs.z << ","<< rhs.w <<")";
+	os << "(x,y,z,w) : ";
+	return os << "(" << rhs.x << "," << rhs.y << "," << rhs.z << "," << rhs.w << ")";
 }
 
 inline bool IsPointWithinRect(Vec2<float> point, Vec2<float> pos, Vec2<float> size) {
