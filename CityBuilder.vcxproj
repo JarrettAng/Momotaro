@@ -19,7 +19,6 @@
     <ClCompile Include="src\FontManager.cpp" />
     <ClCompile Include="src\GridManager.cpp" />
     <ClCompile Include="src\InputManager.cpp" />
-    <ClCompile Include="src\IsometricGrid.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\PauseManager.cpp" />
     <ClCompile Include="src\RenderSystem.cpp" />
@@ -43,7 +42,6 @@
     <ClInclude Include="inc\FontManager.h" />
     <ClInclude Include="inc\GridManager.h" />
     <ClInclude Include="inc\InputManager.h" />
-    <ClInclude Include="inc\IsometricGrid.h" />
     <ClInclude Include="inc\MomoMaths.h" />
     <ClInclude Include="inc\PauseManager.h" />
     <ClInclude Include="inc\RenderSystem.h" />

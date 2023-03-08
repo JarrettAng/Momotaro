@@ -16,10 +16,10 @@ The functions include:
 #include <InputManager.h>
 #include <RenderSystem.h>
 
+#include <SceneMainMenu.h>
 #include <SceneManager.h>
 
 #include <TextureManager.h>
-#include <SceneMainMenu.h>
 
 /*!***********************************************************************
 * CONST VARIABLES

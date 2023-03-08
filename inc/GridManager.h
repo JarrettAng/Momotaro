@@ -22,8 +22,8 @@ The functions include:
 namespace GridManager {
 	extern const int tileWidth;
     extern const int tileHeight;
-	extern const int gridX;
-	extern const int gridY;
+	extern int gridX;
+	extern int gridY;
     enum TileType{
         NONE = 0,
         RESIDENTIAL = 1,
@@ -38,7 +38,7 @@ namespace GridManager {
         bool isRenderable{false};
         int ID{0};
         Building _building;
-        TileType _tileType{};
+        // TileType _tileType{};
 	};
 
     const cell* GetGrid();

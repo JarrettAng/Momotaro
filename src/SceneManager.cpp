@@ -18,10 +18,9 @@ The functions include:
 #include <InputManager.h>
 #include <PauseManager.h>
 
-
 #include <SceneGameLevel.h>
-#include <SceneSplashscreen.h>
 #include <SceneMainMenu.h>
+#include <SceneSplashscreen.h>
 ///////////////////////////////////////////////////////////////////////////
 
 namespace SceneManager {
@@ -41,6 +40,9 @@ namespace SceneManager {
 	///////////////////////////////////////////////////////////////////////
 	// Forward Declarations
 	void UpdatePausedState(bool newPausedState);
+	void SceneManagerLoop();
+	void SwitchScene();
+	void SwitchScene();
 	///////////////////////////////////////////////////////////////////////
 
 	bool isPaused;

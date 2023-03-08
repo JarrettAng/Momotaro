@@ -30,7 +30,7 @@ namespace GridManager {
 	//GRID CONSTANTS
 	const int tileWidth{ 100 };
 	const int tileHeight{ 50 };
-	const int gridX{ 20 }, gridY{ 20 };		//total grid size
+	int gridX{ 0 }, gridY{ 0 };			//total grid size
 	const int mapSize{ 5 };					//total playing area size
 	const int mapPos{ -2 };					//Playable area position
 	///////////////////////////////////////////////////////////////////////////
@@ -136,7 +136,8 @@ namespace GridManager {
 	//INITIALISE GRID 								
 	///////////////////////////////////////////////////////////////////////////
 	void Initialize() {
-		grid = { new cell[gridX * gridY]{} };
+		// grid = { new cell[gridX * gridY]{} };
+		grid = FileIOManager::LoadGridFromFile("Assets/JSON_Data/Maps/map2.momomaps");
 		//GRID SET UP
 		//Init a grid with 0 tiles
 		for (int y{ 0 }; y < gridY; ++y) {
@@ -339,158 +340,7 @@ namespace GridManager {
 			}
 		}
 		// std::cout << terrainNum << '\n';
-		switch (terrainNum)
-		{
-		case 1:
-			//Top Left
-			grid[GetIndex(7, 9)].isRenderable = true;
-			grid[GetIndex(7, 10)].isRenderable = true;
-			grid[GetIndex(7, 11)].isRenderable = true;
-			grid[GetIndex(7, 12)].isRenderable = true;
-			grid[GetIndex(6, 11)].isRenderable = true;
-			grid[GetIndex(6, 12)].isRenderable = true;
-			// Bottom left
-			grid[GetIndex(9, 16)].isRenderable = true;
-			grid[GetIndex(9, 15)].isRenderable = true;
-			grid[GetIndex(9, 14)].isRenderable = true;
-			grid[GetIndex(10, 14)].isRenderable = true;
-			grid[GetIndex(10, 15)].isRenderable = true;
-			grid[GetIndex(11, 14)].isRenderable = true;
-			grid[GetIndex(12, 14)].isRenderable = true;
-			grid[GetIndex(12, 15)].isRenderable = true;
-			grid[GetIndex(10, 15)].isRenderable = true;
-			grid[GetIndex(11, 15)].isRenderable = true;
-			// Bottom right
-			grid[GetIndex(14, 9)].isRenderable = true;
-			grid[GetIndex(14, 10)].isRenderable = true;
-			grid[GetIndex(14, 11)].isRenderable = true;
-			grid[GetIndex(14, 12)].isRenderable = true;
-			grid[GetIndex(15, 11)].isRenderable = true;
-			grid[GetIndex(15, 12)].isRenderable = true;
-			// Top right
-			grid[GetIndex(10, 7)].isRenderable = true;
-			grid[GetIndex(11, 7)].isRenderable = true;
-			grid[GetIndex(12, 7)].isRenderable = true;
-			grid[GetIndex(11, 6)].isRenderable = true;
-			grid[GetIndex(12, 6)].isRenderable = true;
-			terrainNum++;
-			break;
-		case 0:
-			//Top Left
-			grid[GetIndex(7, 9)].isRenderable = true;
-			grid[GetIndex(7, 10)].isRenderable = true;
-			grid[GetIndex(7, 11)].isRenderable = true;
-			grid[GetIndex(7, 12)].isRenderable = true;
-			grid[GetIndex(6, 11)].isRenderable = true;
-			grid[GetIndex(6, 12)].isRenderable = true;
-			grid[GetIndex(6, 13)].isRenderable = true;
-			grid[GetIndex(6, 14)].isRenderable = true;
-			grid[GetIndex(7, 13)].isRenderable = true;
-			grid[GetIndex(7, 14)].isRenderable = true;
-			grid[GetIndex(8, 14)].isRenderable = true;
-			// Bottom left
-			grid[GetIndex(9, 13)].isRenderable = true;
-			grid[GetIndex(9, 14)].isRenderable = true;
-			grid[GetIndex(11, 14)].isRenderable = true;
-			grid[GetIndex(11, 15)].isRenderable = true;
-			grid[GetIndex(12, 14)].isRenderable = true;
-			grid[GetIndex(12, 15)].isRenderable = true;
-			grid[GetIndex(10, 15)].isRenderable = true;
-			grid[GetIndex(11, 15)].isRenderable = true;
-			grid[GetIndex(11, 16)].isRenderable = true;
-			// Bottom right
-			grid[GetIndex(14, 9)].isRenderable = true;
-			grid[GetIndex(14, 11)].isRenderable = true;
-			grid[GetIndex(14, 12)].isRenderable = true;
-			grid[GetIndex(15, 11)].isRenderable = true;
-			grid[GetIndex(15, 12)].isRenderable = true;
-			grid[GetIndex(15, 9)].isRenderable = true;
-			// Top right
-			grid[GetIndex(11, 8)].isRenderable = true;
-			grid[GetIndex(12, 8)].isRenderable = true;
-			grid[GetIndex(12, 7)].isRenderable = true;
-			grid[GetIndex(11, 6)].isRenderable = true;
-			grid[GetIndex(12, 6)].isRenderable = true;
-			terrainNum++;
-			break;
-		case 2:
-			//mini island
-			grid[GetIndex(16, 3)].isRenderable = true;
-			grid[GetIndex(16, 4)].isRenderable = true;
-			grid[GetIndex(15, 4)].isRenderable = true;
-			grid[GetIndex(15, 5)].isRenderable = true;
-			grid[GetIndex(14, 5)].isRenderable = true;
-			grid[GetIndex(14, 4)].isRenderable = true;
-
-			grid[GetIndex(8, 7)].isRenderable = true;
-			grid[GetIndex(7, 7)].isRenderable = true;
-			grid[GetIndex(6, 7)].isRenderable = true;
-			grid[GetIndex(8, 6)].isRenderable = true;
-			grid[GetIndex(7, 6)].isRenderable = true;
-			grid[GetIndex(6, 5)].isRenderable = true;
-			grid[GetIndex(6, 7)].isRenderable = true;
-			grid[GetIndex(5, 7)].isRenderable = true;
-			grid[GetIndex(5, 8)].isRenderable = true;
-			grid[GetIndex(6, 8)].isRenderable = true;
-			grid[GetIndex(7, 8)].isRenderable = true;
-			grid[GetIndex(4, 8)].isRenderable = true;
-			grid[GetIndex(3, 8)].isRenderable = true;
-			grid[GetIndex(7, 8)].isRenderable = true;
-			grid[GetIndex(7, 9)].isRenderable = true;
-			grid[GetIndex(7, 10)].isRenderable = true;
-			grid[GetIndex(7, 11)].isRenderable = true;
-			grid[GetIndex(7, 12)].isRenderable = true;
-			grid[GetIndex(7, 13)].isRenderable = true;
-			grid[GetIndex(6, 13)].isRenderable = true;
-			grid[GetIndex(6, 12)].isRenderable = true;
-			grid[GetIndex(6, 11)].isRenderable = true;
-			grid[GetIndex(6, 10)].isRenderable = true;
-			grid[GetIndex(6, 9)].isRenderable = true;
-			grid[GetIndex(6, 8)].isRenderable = true;
-			grid[GetIndex(5, 8)].isRenderable = true;
-			grid[GetIndex(5, 9)].isRenderable = true;
-			grid[GetIndex(5, 10)].isRenderable = true;
-			grid[GetIndex(5, 11)].isRenderable = true;
-			grid[GetIndex(5, 12)].isRenderable = true;
-			grid[GetIndex(5, 13)].isRenderable = true;
-			grid[GetIndex(4, 11)].isRenderable = true;
-			grid[GetIndex(4, 10)].isRenderable = true;
-			grid[GetIndex(4, 12)].isRenderable = true;
-			grid[GetIndex(9, 7)].isRenderable = true;
-			grid[GetIndex(10, 7)].isRenderable = true;
-			grid[GetIndex(11, 7)].isRenderable = true;
-			grid[GetIndex(12, 7)].isRenderable = true;
-			grid[GetIndex(13, 14)].isRenderable = true;
-			grid[GetIndex(12, 14)].isRenderable = true;
-			grid[GetIndex(11, 14)].isRenderable = true;
-			grid[GetIndex(10, 14)].isRenderable = true;
-			grid[GetIndex(9, 14)].isRenderable = true;
-			grid[GetIndex(8, 14)].isRenderable = true;
-			grid[GetIndex(7, 14)].isRenderable = true;
-			grid[GetIndex(7, 15)].isRenderable = true;
-			grid[GetIndex(8, 15)].isRenderable = true;
-			grid[GetIndex(9, 15)].isRenderable = true;
-			grid[GetIndex(14, 10)].isRenderable = true;
-			grid[GetIndex(14, 11)].isRenderable = true;
-			grid[GetIndex(14, 12)].isRenderable = true;
-			grid[GetIndex(14, 13)].isRenderable = true;
-			grid[GetIndex(15, 13)].isRenderable = true;
-			grid[GetIndex(15, 12)].isRenderable = true;
-			terrainNum++;
-			break;
-		case 3:
-			for (int y{ 0 }; y < gridY; ++y) {
-				for (int x{ 0 }; x < gridX; ++x) {
-					int index = GetIndex(x, y);
-					if ((x >= 8 && x <= 13) && (y >= 8 && y <= 13)) {
-						grid[index].isRenderable = true;
-					}
-					else grid[index].isRenderable = false;
-				}
-			}
-			terrainNum = 0;
-			break;
-		}
+		
 	}
 #pragma endregion
 
@@ -623,7 +473,9 @@ namespace GridManager {
 		return tempVec;
 	}
 
-
+///////////////////////////////////////////////////////////////////////////
+//Checks if the mouse has changed index (Update loop for gridmanager)
+///////////////////////////////////////////////////////////////////////////
 	void UpdateMouseToGrid() {
 		if (PauseManager::IsPaused()) return;
 		Vec2<int> mousePos{ InputManager::GetMousePos() };
@@ -661,7 +513,9 @@ namespace GridManager {
 		}
 		previousIndex = currentIndex;
 	}
-
+///////////////////////////////////////////////////////////////////////////
+//Clears the grid
+///////////////////////////////////////////////////////////////////////////
 	void ClearGrid() {
 		if (PauseManager::IsPaused()) return;
 
@@ -673,7 +527,9 @@ namespace GridManager {
 			}
 		}
 	}
-
+///////////////////////////////////////////////////////////////////////////
+//Draw function for the grid
+///////////////////////////////////////////////////////////////////////////
 	void PrepareTileRenderBatch() {
 		// Your own rendering logic goes here
 		//Render grid test
@@ -681,6 +537,7 @@ namespace GridManager {
 			for (int x{ 0 }; x < gridX; ++x) {
 				int index = GetIndex(x, y);
 
+			//Draws the normal tiles (if it's water don't draw any)
 				if (grid[index].ID > 0) {
 					RenderSystem::AddRectToBatch(
 						RenderSystem::GAME_PIECES_BATCH,
@@ -693,6 +550,8 @@ namespace GridManager {
 			}
 		}
 		if (selectedBuilding != nullptr) {
+		//If we have a building selected from a card, draw it at the mouse pos 
+		//If the building is bigger than 1x1, draw all of them
 			if (!CurrentBuildingCells.empty()) {
 				for (Vec2<int> cell : CurrentBuildingCells) {
 					RenderSystem::AddRectToBatch(
@@ -703,6 +562,8 @@ namespace GridManager {
 					);
 				}
 			}
+			//loops through the synergy area for the building and draws it
+			//also draws the points 
 			if (!CurrentSynergyArea.empty()) {
 				UI::TextBox pointText;
 				Vec2<float> pointTextPos;
@@ -761,6 +622,9 @@ namespace GridManager {
 
 	}
 
+///////////////////////////////////////////////////////////////////////////
+//Gets the synergy point calculation for the cell
+///////////////////////////////////////////////////////////////////////////	
 	int GetSynergyText(Vec2<int> cellToCheck, BuildingData _data) {
 		switch (grid[GetIndex(cellToCheck)]._building.data.type) {
 		case BuildingEnum::NONE:
@@ -781,6 +645,9 @@ namespace GridManager {
 		return 0;
 	}
 
+///////////////////////////////////////////////////////////////////////////
+//Merge algorithm
+///////////////////////////////////////////////////////////////////////////
 	void CheckCellNeighbor(cell* _grid, Vec2<int> cellIndex)
 	{
 		int gridIndex = GetIndex(cellIndex.x, cellIndex.y);
@@ -919,6 +786,30 @@ namespace GridManager {
 
 	}
 
+
+///////////////////////////////////////////////////////////////////////////
+//Free function for the grid
+///////////////////////////////////////////////////////////////////////////
+	void Free() {
+		delete[] grid;
+		InputManager::UnsubscribeKey(AEVK_C, InputManager::TRIGGERED, ClearGrid);
+		InputManager::UnsubscribeKey(AEVK_R, InputManager::TRIGGERED, RandomiseTerrain);
+		InputManager::UnsubscribeKey(AEVK_1, InputManager::TRIGGERED, SpawnResidential);
+		InputManager::UnsubscribeKey(AEVK_2, InputManager::TRIGGERED, SpawnCommerical);
+		InputManager::UnsubscribeKey(AEVK_3, InputManager::TRIGGERED, SpawnIndustrial);
+		InputManager::UnsubscribeKey(AEVK_Q, InputManager::TRIGGERED, SpawnBigResidential);
+		InputManager::UnsubscribeKey(AEVK_W, InputManager::TRIGGERED, SpawnBigResidential3x1);
+		InputManager::UnsubscribeKey(AEVK_E, InputManager::TRIGGERED, SpawnBigResidential);
+		InputManager::UnsubscribeKey(AEVK_S, InputManager::TRIGGERED, SpawnBigResidential);
+		InputManager::UnsubscribeKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
+
+		CardManager::onNewCardSelected.Unsubscribe(GetBuildingCard);
+		CardManager::onCardPlaced.Unsubscribe(SpawnBuilding);
+
+	}
+///////////////////////////////////////////////////////////////////////////
+//GRID HELPER FUNCTIONS
+///////////////////////////////////////////////////////////////////////////
 	int GetIndex(int x, int y)
 	{
 		return x + gridX * y;
@@ -1019,21 +910,4 @@ namespace GridManager {
 		};
 	}
 
-	void Free() {
-		delete[] grid;
-		InputManager::UnsubscribeKey(AEVK_C, InputManager::TRIGGERED, ClearGrid);
-		InputManager::UnsubscribeKey(AEVK_R, InputManager::TRIGGERED, RandomiseTerrain);
-		InputManager::UnsubscribeKey(AEVK_1, InputManager::TRIGGERED, SpawnResidential);
-		InputManager::UnsubscribeKey(AEVK_2, InputManager::TRIGGERED, SpawnCommerical);
-		InputManager::UnsubscribeKey(AEVK_3, InputManager::TRIGGERED, SpawnIndustrial);
-		InputManager::UnsubscribeKey(AEVK_Q, InputManager::TRIGGERED, SpawnBigResidential);
-		InputManager::UnsubscribeKey(AEVK_W, InputManager::TRIGGERED, SpawnBigResidential3x1);
-		InputManager::UnsubscribeKey(AEVK_E, InputManager::TRIGGERED, SpawnBigResidential);
-		InputManager::UnsubscribeKey(AEVK_S, InputManager::TRIGGERED, SpawnBigResidential);
-		InputManager::UnsubscribeKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
-
-		CardManager::onNewCardSelected.Unsubscribe(GetBuildingCard);
-		CardManager::onCardPlaced.Unsubscribe(SpawnBuilding);
-
-	}
 }

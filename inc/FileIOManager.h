@@ -13,13 +13,15 @@ The functions include:
 **************************************************************************/
 
 #pragma once
-
+#include <string>
 #include <vector>
 #include <Building.h>
+#include <GridManager.h>
 
 namespace FileIOManager {
 	void ReadBuildingsData(std::vector<BuildingData>& buildingsData);
 	void SaveGridToFile();
+	GridManager::cell* LoadGridFromFile(std::string fileName);
 
 }
 

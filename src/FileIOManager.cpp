@@ -16,12 +16,10 @@ The functions include:
 #include <fstream>
 #include <FileIOManager.h>
 #include <BuildingManager.h>
-#include <GridManager.h>
 
 namespace FileIOManager {
-	// Implementation here
-	// void to_json(json& _json, BuildingData const& _building){
-	// }
+namespace GM = GridManager;
+	
 	void SaveGridToFile(){
 		std::ofstream mapFile("Assets/JSON_Data/Maps/map.momomaps");
 		if(!mapFile.is_open()){
@@ -37,9 +35,50 @@ namespace FileIOManager {
 			}
 			mapFile<<'\n';
 		}
+		mapFile.close();
 	}
 
-	void ReadBuildingsData(std::vector<BuildingData>& buildingsData) {
+    GM::cell* LoadGridFromFile(std::string fileName)
+    {
+		GM::cell* newMap{};
+		std::fstream inputFile(fileName);
+		if(!inputFile.is_open()){
+			std::cerr << "Unable to read" << fileName << '\n';
+			assert(0);
+		}
+		std::string buffer; 		//where each line of text will be stored
+		int lineCount{};
+		while (std::getline(inputFile, buffer)) {
+		int xIndex = 0;	//Since each line has a spacing, we only want to count the xIndex when we get a number
+		//First we loop through each line and grab the numbers
+		for (int i{ 0 }; i < static_cast<int>(buffer.length()); ++i) {
+			if (isdigit(buffer[i]))
+			{
+				//The first 2 lines will be the width and the height
+				if (lineCount == 0 && GM::gridX == 0) GM::gridX = std::atoi(&buffer[i]);
+				if (lineCount == 1 && GM::gridY == 0) {
+					GM::gridY = std::atoi(&buffer[i]);
+					//since we got the width and height of the map, we can generate it
+					if (GM::gridY > 0 && GM::gridX > 0) {		//This check is to ensure we do have a width and height
+						//then we create the array
+						newMap = {new GM::cell[GM::gridX*GM::gridY]{}};			
+					}
+				}
+				//Once the line count exceeds 1, meaning we already have the width&height, we can start to add to array
+				if (lineCount > 1) {
+					//If the value in the mapdata is NOT 1, it shall be treated as a 0 (which means it's renderable)
+					newMap[GM::GetIndex(xIndex,lineCount-2)].isRenderable = std::atoi(&buffer[i]);
+					xIndex++;
+				}
+			}
+		}
+		lineCount++;		//Linecount-2 is basically our yIndex
+	}
+	inputFile.close();
+	return newMap;
+    }
+
+    void ReadBuildingsData(std::vector<BuildingData>& buildingsData) {
 		std::ifstream dataFile{ "Assets/JSON_Data/buildingsData.json" };
 		// json data = json::parse(dataFile);
 		if (!dataFile) {

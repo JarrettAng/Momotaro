@@ -40,9 +40,6 @@
     <ClCompile Include="src\Building.cpp">
       <Filter>src\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="src\IsometricGrid.cpp">
-      <Filter>src\Systems</Filter>
-    </ClCompile>
     <ClCompile Include="src\RenderSystem.cpp">
       <Filter>src\Systems</Filter>
     </ClCompile>
@@ -106,9 +103,6 @@
       <Filter>inc\Systems</Filter>
     </ClInclude>
     <ClInclude Include="inc\RenderSystem.h">
-      <Filter>inc\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\IsometricGrid.h">
       <Filter>inc\Systems</Filter>
     </ClInclude>
     <ClInclude Include="inc\ColorTable.h">
