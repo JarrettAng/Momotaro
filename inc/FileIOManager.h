@@ -20,8 +20,10 @@ The functions include:
 
 namespace FileIOManager {
 	void ReadBuildingsData(std::vector<BuildingData>& buildingsData);
-	void SaveGridToFile();
-	GridManager::cell* LoadGridFromFile(std::string fileName);
+    void SaveBuildingDataToFile(std::vector<BuildingData>& buildingData);
+    void LoadBuildingDataFromFile(std::vector<BuildingData> &buildingsData);
+    void SaveGridToFile();
+    GridManager::cell* LoadGridFromFile(std::string fileName);
 
 }
 

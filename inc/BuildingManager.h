@@ -35,4 +35,6 @@ namespace BuildingManager {
 	BuildingData GetRandomBuildingData(BuildingEnum::TYPE type);	// Get a random building that matches the type (e.g. residential)
 	BuildingData GetRandomBuildingData(BuildingEnum::LEVEL level);	// Get a random building that matches the level (e.g. L1 or L2)
 	BuildingData GetRandomBuildingData();							// Get any random building
+
+	std::vector<BuildingData> GetBuildingDataVector();
 }

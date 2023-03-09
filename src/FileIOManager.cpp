@@ -21,7 +21,96 @@ The functions include:
 namespace FileIOManager {
 
 	namespace GM = GridManager;
-	
+///////////////////////////////////////////////////////////////////////////
+//Helper function to save the current building data to file
+	void SaveBuildingDataToFile(std::vector<BuildingData>& buildingData){
+		if(buildingData.empty()){
+		// if(BuildingManager::GetBuildingDataVector().empty()){
+			std::cerr << "No buildings to save from!\n";
+			assert(0);
+			return;
+		}
+		std::ofstream buildingFile("Assets/JSON_Data/buildings2.momodata");
+		if(!buildingFile.is_open()){
+			std::cerr << "Unable to write to file!\n";
+			assert(0);
+		}
+		// buildingFile << "Building Count " << BuildingManager::GetBuildingDataVector().size() <<'\n';
+		buildingFile << '\n';
+		for(BuildingData _data : buildingData){
+		// for(BuildingData _data : BuildingManager::GetBuildingDataVector()){
+			buildingFile << "type " << (int)(_data.type) << '\n';
+			buildingFile << "size " << _data.size.x << ' ' << _data.size.y << '\n';
+			buildingFile << "level " << (int)(_data.level) << '\n';
+			buildingFile << "synergy ";
+			buildingFile << _data.SynergyResidential <<' ';
+			buildingFile << _data.SynergyCommercial <<' ';
+			buildingFile << _data.SynergyIndustrial <<' ';
+			buildingFile << _data.SynergyNature <<'\n';
+			buildingFile << _data.name << '\n';
+			buildingFile << _data.desc << '\n';
+			buildingFile << "texture " <<(int)(_data.TextureID) << '\n';
+			buildingFile << '\n';
+		}
+		buildingFile.close();
+	}
+///////////////////////////////////////////////////////////////////////////
+//
+	void LoadBuildingDataFromFile(std::vector<BuildingData>& buildingsData){
+		std::ifstream buildingFile("Assets/JSON_Data/buildings.momodata");
+		if(!buildingFile.is_open()){
+			std::cerr << "Unable to open Assets/JSON_Data/buildings.momodata!" << '\n';
+			assert(0);
+		}
+		std::string buffer{};
+		int lineCount{0};
+		BuildingData _data{};
+		while(std::getline(buildingFile,buffer)){
+				//Loop through each char 
+				if(lineCount == 5) _data.name = buffer;
+				if(lineCount == 6) _data.desc = buffer;
+				for(int i{ 0 }; i < static_cast<int>(buffer.length()); ++i){
+				if(isdigit(buffer[i])){
+					switch (lineCount)
+					{
+					case 1://TYPE
+					_data.type = (BuildingEnum::TYPE)(std::atoi(&buffer[i]));
+						break;
+					case 2://SIZE
+					if(!_data.size.x)_data.size.x = std::atoi(&buffer[i]);
+					if(_data.size.x)_data.size.y = std::atoi(&buffer[i]);
+						break;
+					case 3://LEVEL
+					_data.level = (BuildingEnum::LEVEL)(std::atoi(&buffer[i]));
+						break;
+					case 4://SYNERGY
+					if(!_data.SynergyResidential){
+						_data.SynergyResidential = std::atoi(&buffer[i-1]);
+						_data.SynergyCommercial = std::atoi(&buffer[i+2]);
+						_data.SynergyIndustrial = std::atoi(&buffer[i+4]);
+						_data.SynergyNature = std::atoi(&buffer[i+6]);
+						break;
+					}
+						break;
+					case 5://NAME	
+					// _data.name = buffer;						
+						break;
+					case 6://DESC							
+					// _data.desc = buffer;						
+						break;
+					case 7://TEXTURE							
+					_data.TextureID = (TextureManager::TEX_TYPE)(std::atoi(&buffer[i]));
+					buildingsData.push_back(_data);
+					_data= BuildingData{};
+					lineCount = -1;
+						break;
+					}
+				}
+			}
+			lineCount++;
+		}
+		buildingFile.close();
+	}
 ///////////////////////////////////////////////////////////////////////////
 //Saves the map to a custom file (used by gridmanager)
 	void SaveGridToFile(){

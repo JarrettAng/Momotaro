@@ -52,6 +52,7 @@ namespace GridManager {
 	int terrainNum{ 2 };
 	int randomNature{ 0 };
 	BuildingEnum::ORIENTATION TestOrientation{ BuildingEnum::RIGHT };
+	std::vector<BuildingData> _testBuildingVector;
 	///////////////////////////////////////////////////////////////////////////
 
 #pragma region BuildingStuff
@@ -295,7 +296,10 @@ namespace GridManager {
 	}
 	void SpawnNature() {
 		if (PauseManager::IsPaused()) return;
-		FileIOManager::SaveGridToFile();
+		FileIOManager::LoadBuildingDataFromFile(_testBuildingVector);
+		FileIOManager::SaveBuildingDataToFile(_testBuildingVector);
+		// FileIOManager::SaveGridToFile();
+		// FileIOManager::SaveBuildingDataToFile();
 		// Vec2<int> mousePos = InputManager::GetMousePos();
 		// Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		// int index = GetIndex(SelectedCell.x, SelectedCell.y);

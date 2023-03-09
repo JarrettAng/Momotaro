@@ -28,7 +28,7 @@ namespace BuildingManager {
 	///////////////////////////////////////////////////////////////////////
 	// Loads all the building data from File IO at the start of the level
 	void Initialize() {
-		FileIOManager::ReadBuildingsData(buildingsData);
+		FileIOManager::LoadBuildingDataFromFile(buildingsData);
 	}
 
 	// At the end of the level, clear the buildingsData vector
@@ -102,4 +102,8 @@ namespace BuildingManager {
 
 		return buildingsData[0];
 	}
+    std::vector<BuildingData> GetBuildingDataVector()
+    {
+        return buildingsData;
+    }
 }
