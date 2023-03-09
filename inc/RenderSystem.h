@@ -93,7 +93,8 @@ namespace RenderSystem {
 
 	struct Interactable {
 		Renderable render;
-		bool isActive;
+		bool isActive = true;
+		bool isClickable = true;
 		void (*func)();
 	};
 

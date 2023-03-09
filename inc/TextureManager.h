@@ -51,6 +51,9 @@ namespace TextureManager {
 		CONTROLS_BTN,
 		CREDITS_BTN,
 		QUIT_BTN,
+		CONFIRM_PROMPT,
+		YES_BTN,
+		NO_BTN
 	};
 	TEX_TYPE operator++(TEX_TYPE&, int);
 

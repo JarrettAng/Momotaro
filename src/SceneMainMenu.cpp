@@ -28,7 +28,7 @@ const float POINTER_OFFSET = 80.0f;
 const float TRANSITION_TIME = 1.0f;
 const float BLINK_INTERVAL = 0.07f;
 
-// Menu animation.
+// Title animation.
 float ANIMATION_FRAMES;
 const float ANIMATION_INTERVAL = 4.0f;
 
@@ -46,9 +46,15 @@ void HandleBtnClick();
 
 void DrawButtons();
 void DrawPointer();
+void DrawQuitPrompt();
 
 void InitializeButtons();
 bool MouseInsideButton(Vec2<int> mousePos, Vec2<float> btnPos, Vec2<float> btnSize);
+
+void ToggleQuitConfirm();
+
+float GetWorldXByPercentage(float percent);
+float GetWorldYByPercentage(float percent);
 
 /*!***********************************************************************
 * MENU BUTTONS
@@ -60,7 +66,12 @@ RenderSystem::Interactable controlsBtn{};
 RenderSystem::Interactable creditsBtn{};
 RenderSystem::Interactable quitBtn{};
 
+RenderSystem::Interactable quitYesBtn{};
+RenderSystem::Interactable quitNoBtn{};
+
 std::vector<RenderSystem::Interactable> buttons;
+
+RenderSystem::Renderable confirmQuitPrompt{};
 
 /*!***********************************************************************
 * SCENE TRANSITION
@@ -73,9 +84,16 @@ bool isBlinking = false;					// Use to toggle opacity of pointer to mimic blinki
 float currBlinkInterval = BLINK_INTERVAL;
 float currTransitionTime = TRANSITION_TIME;
 
-// Menu animation.
+/*!***********************************************************************
+* TITLE ANIMATION
+*************************************************************************/
 float currAnimFrame = 0;
 float currAnimInterval = 0.0f;
+
+/*!***********************************************************************
+* QUIT CONFIRMATION PROMPT
+*************************************************************************/
+bool showQuitConfirm = false;
 
 void SceneMainMenu::Load() {
 	return;
@@ -120,6 +138,7 @@ void SceneMainMenu::Draw() {
 
 	DrawButtons();
 	DrawPointer();
+	DrawQuitPrompt();
 
 	RenderSystem::Render();
 }
@@ -135,11 +154,15 @@ void SceneMainMenu::Unload() {
 void DrawButtons() {
 	// Loop through all buttons and draw them.
 	for (RenderSystem::Interactable& btn : buttons) {
-		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, btn.render.rect.transform.pos.x, btn.render.rect.transform.pos.y, btn.render.rect.transform.size.x, btn.render.rect.transform.size.y, btn.render.rect.graphics.tex);
+		// Skip if button is not visible.
+		if (!btn.isActive) continue;
+
+		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, btn.render.rect.transform.pos.x, btn.render.rect.transform.pos.y, btn.render.rect.transform.size.x, btn.render.rect.transform.size.y, btn.render.rect.graphics.tex, btn.render.layer);
 	}
 }
 
 void HandleBtnClick() {
+	// Prevent any click if transitioning.
 	if (isTransitioning) return;
 
 	// Cache mouse position.
@@ -151,12 +174,28 @@ void HandleBtnClick() {
 
 	// Loop through all buttons.
 	for (RenderSystem::Interactable& btn : buttons) {
+		// Skip if button is not visible or clickable.
+		if (!btn.isActive || !btn.isClickable) continue;
+
 		// Check if mouse is hovering button.
 		if (MouseInsideButton(mousePos, btn.render.rect.transform.pos, btn.render.rect.transform.size)) {
 			// Cache button.
 			clickedBtn = btn;
-			// Start transitioning.
-			isTransitioning = true;
+
+			switch (clickedBtn.render.rect.graphics.tex)
+			{
+			case TextureManager::CREDITS_BTN:
+			case TextureManager::QUIT_BTN:
+			case TextureManager::YES_BTN:
+			case TextureManager::NO_BTN:
+				// Immediate calling of button function when clicking. No transition needed. (For the above buttons)
+				clickedBtn.func();
+				break;
+			default:
+				// Play blinking pointer transition.
+				isTransitioning = true;
+				break;
+			}
 			break;
 		}
 	}
@@ -165,9 +204,6 @@ void HandleBtnClick() {
 void DrawPointer() {
 	// Handle pointer blinking when transitioning to a different scene.
 	if (isTransitioning) {
-		// Immediate transition for credits and quit button.
-		if (clickedBtn.render.rect.graphics.tex == TextureManager::CREDITS_BTN || clickedBtn.render.rect.graphics.tex == TextureManager::QUIT_BTN) clickedBtn.func();
-
 		// Transition timer.
 		if (currTransitionTime > 0) {
 			// Tick timer to transition to next scene.
@@ -205,14 +241,43 @@ void DrawPointer() {
 
 	// Loop through all buttons.
 	for (RenderSystem::Interactable& btn : buttons) {
+		// Skip if button is not visible or clickable.
+		if (!btn.isActive || !btn.isClickable) continue;
+
 		// Dont draw pointer for credits and quit buttons.
-		if (btn.render.rect.graphics.tex == TextureManager::CREDITS_BTN || btn.render.rect.graphics.tex == TextureManager::QUIT_BTN) continue;
+		if (btn.render.rect.graphics.tex == TextureManager::CREDITS_BTN || btn.render.rect.graphics.tex == TextureManager::QUIT_BTN) {
+			continue;
+		}
 
 		// Check if mouse is hovering button.
 		if (MouseInsideButton(mousePos, btn.render.rect.transform.pos, btn.render.rect.transform.size)) {
 			// Draw pointer.
-			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, btn.render.rect.transform.pos.x - POINTER_OFFSET, btn.render.rect.transform.pos.y, 60, 90, TextureManager::POINTER);
+			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, btn.render.rect.transform.pos.x - POINTER_OFFSET, btn.render.rect.transform.pos.y, 60, 90, TextureManager::POINTER, 3);
 			break;
+		}
+	}
+}
+
+void DrawQuitPrompt() {
+	// If player wants to quit, draw quit prompt.
+	if (showQuitConfirm) {
+		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, confirmQuitPrompt.rect.transform.pos.x, confirmQuitPrompt.rect.transform.pos.y, confirmQuitPrompt.rect.transform.size.x, confirmQuitPrompt.rect.transform.size.y, TextureManager::CONFIRM_PROMPT);
+	}
+}
+
+void ToggleQuitConfirm() {
+	// Toggle between quit confirm state.
+	showQuitConfirm = !showQuitConfirm;
+
+	for (RenderSystem::Interactable& btn : buttons) {
+		// Toggle the visibility and clickability of yes and no buttons.
+		if (btn.render.rect.graphics.tex == TextureManager::YES_BTN || btn.render.rect.graphics.tex == TextureManager::NO_BTN) {
+			btn.isActive = showQuitConfirm;
+			btn.isClickable = showQuitConfirm;
+		}
+		else {
+			// Toggle the clickability of other buttons in the menu.
+			btn.isClickable = !showQuitConfirm;
 		}
 	}
 }
@@ -225,8 +290,8 @@ void InitializeButtons() {
 	startBtn.render.rect.graphics.tex = TextureManager::STARTGAME_BTN;
 	startBtn.func = LoadStart;
 
-	startBtn.render.rect.transform.pos.x = AEGfxGetWinMinX() * 0.525f;
-	startBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.222f;
+	startBtn.render.rect.transform.pos.x = GetWorldXByPercentage(21.9);
+	startBtn.render.rect.transform.pos.y = GetWorldYByPercentage(39);
 
 	startBtn.render.rect.transform.size.x = 460.0f;
 	startBtn.render.rect.transform.size.y = 100.0f;
@@ -237,8 +302,8 @@ void InitializeButtons() {
 	editorBtn.render.rect.graphics.tex = TextureManager::EDITOR_BTN;
 	editorBtn.func = LoadEditor;
 
-	editorBtn.render.rect.transform.pos.x = AEGfxGetWinMaxX() * 0.237f;
-	editorBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.222f;
+	editorBtn.render.rect.transform.pos.x = GetWorldXByPercentage(61.9);
+	editorBtn.render.rect.transform.pos.y = GetWorldYByPercentage(39);
 
 	editorBtn.render.rect.transform.size.x = 260.0f;
 	editorBtn.render.rect.transform.size.y = 100.0f;
@@ -248,8 +313,8 @@ void InitializeButtons() {
 	optionsBtn.render.rect.graphics.tex = TextureManager::OPTIONS_BTN;
 	optionsBtn.func = LoadOptions;
 
-	optionsBtn.render.rect.transform.pos.x = AEGfxGetWinMinX() * 0.525f;
-	optionsBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.488f;
+	optionsBtn.render.rect.transform.pos.x = GetWorldXByPercentage(21.9);
+	optionsBtn.render.rect.transform.pos.y = GetWorldYByPercentage(25.5);
 
 	optionsBtn.render.rect.transform.size.x = 300.0f;
 	optionsBtn.render.rect.transform.size.y = 100.0f;
@@ -259,8 +324,8 @@ void InitializeButtons() {
 	controlsBtn.render.rect.graphics.tex = TextureManager::CONTROLS_BTN;
 	controlsBtn.func = LoadControls;
 
-	controlsBtn.render.rect.transform.pos.x = AEGfxGetWinMaxX() * 0.112f;
-	controlsBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.488f;
+	controlsBtn.render.rect.transform.pos.x = GetWorldXByPercentage(55.7);
+	controlsBtn.render.rect.transform.pos.y = GetWorldYByPercentage(25.5);
 
 	controlsBtn.render.rect.transform.size.x = 360.0f;
 	controlsBtn.render.rect.transform.size.y = 100.0f;
@@ -270,8 +335,8 @@ void InitializeButtons() {
 	creditsBtn.render.rect.graphics.tex = TextureManager::CREDITS_BTN;
 	creditsBtn.func = LoadCredits;
 
-	creditsBtn.render.rect.transform.pos.x = AEGfxGetWinMinX() * 0.975f;
-	creditsBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.733f;
+	creditsBtn.render.rect.transform.pos.x = GetWorldXByPercentage(1.2);
+	creditsBtn.render.rect.transform.pos.y = GetWorldYByPercentage(13.5);
 
 	creditsBtn.render.rect.transform.size.x = 300.0f;
 	creditsBtn.render.rect.transform.size.y = 100.0f;
@@ -279,14 +344,48 @@ void InitializeButtons() {
 
 	// QUIT BUTTON
 	quitBtn.render.rect.graphics.tex = TextureManager::QUIT_BTN;
-	quitBtn.func = LoadQuit;
+	quitBtn.func = ToggleQuitConfirm;
 
-	quitBtn.render.rect.transform.pos.x = AEGfxGetWinMaxX() * 0.762f;
-	quitBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.733f;
+	quitBtn.render.rect.transform.pos.x = GetWorldXByPercentage(88);
+	quitBtn.render.rect.transform.pos.y = GetWorldYByPercentage(13.2);
 
 	quitBtn.render.rect.transform.size.x = 170.0f;
 	quitBtn.render.rect.transform.size.y = 110.0f;
 	buttons.push_back(quitBtn);
+
+	// QUIT YES BUTTON
+	quitYesBtn.render.rect.graphics.tex = TextureManager::YES_BTN;
+	quitYesBtn.func = LoadQuit;
+	quitYesBtn.isActive = false;
+
+	quitYesBtn.render.rect.transform.pos.x = GetWorldXByPercentage(35);
+	quitYesBtn.render.rect.transform.pos.y = GetWorldYByPercentage(50);
+
+	quitYesBtn.render.rect.transform.size.x = 130.0f;
+	quitYesBtn.render.rect.transform.size.y = 100.0f;
+	quitYesBtn.render.layer = 2;
+	buttons.push_back(quitYesBtn);
+
+	// QUIT NO BUTTON
+	quitNoBtn.render.rect.graphics.tex = TextureManager::NO_BTN;
+	quitNoBtn.func = ToggleQuitConfirm;
+	quitNoBtn.isActive = false;
+
+	quitNoBtn.render.rect.transform.pos.x = GetWorldXByPercentage(56.7);
+	quitNoBtn.render.rect.transform.pos.y = GetWorldYByPercentage(50);
+
+	quitNoBtn.render.rect.transform.size.x = 100.0f;
+	quitNoBtn.render.rect.transform.size.y = 100.0f;
+	quitNoBtn.render.layer = 2;
+	buttons.push_back(quitNoBtn);
+
+	// CONFIRMATION PROMPT
+	confirmQuitPrompt.rect.transform.pos.x = GetWorldXByPercentage(23.1);
+	confirmQuitPrompt.rect.transform.pos.y = GetWorldYByPercentage(72.3);
+
+	confirmQuitPrompt.rect.transform.size.x = 850.0f;
+	confirmQuitPrompt.rect.transform.size.y = 390.0f;
+	quitYesBtn.render.layer = 1;
 }
 
 void LoadStart() {
@@ -325,4 +424,18 @@ bool MouseInsideButton(Vec2<int> mousePos, Vec2<float> btnPos, Vec2<float> btnSi
 		return true;
 	}
 	return false;
+}
+
+// How many percentage from the left.
+// Left side of world pos is negative.
+// Right side of world pos is positive.
+float GetWorldXByPercentage(float percent) {
+	return AEGfxGetWinMinX() * ((50 - percent) / 50.0f);
+}
+
+// How many percent from the left
+// Top side of world pos is positive.
+// Bottom side of world pos is negative.
+float GetWorldYByPercentage(float percent) {
+	return AEGfxGetWinMinY() * ((50 - percent) / 50.0f);
 }

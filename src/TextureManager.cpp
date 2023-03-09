@@ -78,6 +78,10 @@ namespace TextureManager {
 	AEGfxTexture* credits_Tex;
 	AEGfxTexture* quit_Tex;
 
+	AEGfxTexture* confirm_Prompt_Tex;
+	AEGfxTexture* yes_Tex;
+	AEGfxTexture* no_Tex;
+
 	void Initialize() {
 		LoadTextures();
 		InitializeTextures();
@@ -133,6 +137,10 @@ namespace TextureManager {
 		controls_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Controls.png");
 		credits_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Credits.png");
 		quit_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Quit.png");
+
+		confirm_Prompt_Tex = AEGfxTextureLoad("Assets/Textures/UI/Confirmation_Prompt.png");
+		yes_Tex = AEGfxTextureLoad("Assets/Textures/UI/Yes_Btn.png");
+		no_Tex = AEGfxTextureLoad("Assets/Textures/UI/No_Btn.png");
 	}
 
 	/*!***********************************************************************
@@ -182,6 +190,10 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ CONTROLS_BTN,controls_Tex, 1, 1, -1.f });
 		textures.push_back(TextureSheet{ CREDITS_BTN,credits_Tex, 1, 1, -1.f });
 		textures.push_back(TextureSheet{ QUIT_BTN,quit_Tex, 1, 1, -1.f });
+
+		textures.push_back(TextureSheet{ CONFIRM_PROMPT,confirm_Prompt_Tex, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ YES_BTN,yes_Tex, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ NO_BTN,no_Tex, 1, 1, -1.f });
 
 		// Initialize frame UV size based on number of cols and rows.
 		for (TextureSheet& t : textures) {
@@ -370,6 +382,10 @@ namespace TextureManager {
 		AEGfxTextureUnload(controls_Tex);
 		AEGfxTextureUnload(credits_Tex);
 		AEGfxTextureUnload(quit_Tex);
+
+		AEGfxTextureUnload(confirm_Prompt_Tex);
+		AEGfxTextureUnload(yes_Tex);
+		AEGfxTextureUnload(no_Tex);
 	}
 
 	/*!***********************************************************************
