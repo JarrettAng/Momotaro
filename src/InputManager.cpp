@@ -125,6 +125,8 @@ namespace InputManager {
 	// Unsubscribe func from key event.
 	void UnsubscribeKey(u8 key, KEY_EVENT_TYPE type, void (*func)()) {
 		for (auto& k : keys) {
+			if (k.first != key) continue;
+
 			switch (type) {
 			case InputManager::TRIGGERED:
 				k.second.onKeyTriggered.Unsubscribe(func);

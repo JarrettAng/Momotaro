@@ -23,7 +23,7 @@ namespace RenderSystem {
 	void SortBatch(std::vector<std::pair<Renderable, RenderSetting>>& batch);
 
 	void UpdateRenderSetting(RenderSetting setting = {});
-	void UpdateRenderTransformMtx(const int& x, const int& y, const Vec2<float>& scale, const float& rot = 0);
+	void UpdateRenderTransformMtx(const float& x, const float& y, const Vec2<float>& scale, const float& rot = 0);
 
 	void AddRectToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& width, const float& height, const float& rot, const int& layer, const Vec4<float>& color, TextureManager::TEX_TYPE tex);
 	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const int& fontSize, const std::string& text, const int& layer, TextureManager::TEX_TYPE tex = TextureManager::NONE, const Vec4<float>& btnColor = { 1,1,1,1 }, const Vec3<float>& txtColor = { 1,1,1 });
@@ -225,9 +225,9 @@ namespace RenderSystem {
 		Calculate centered text position based on rect width and height.
 			- Assuming rect is drawn with TOP-LEFT pivot.
 	*************************************************************************/
-	Vec2<float> GetCenteredTextPos(const float& x, const float& y, const float& width, const float& height, const float& textWidth, const float& textHeight) {
+	Vec2<float> GetCenteredTextPos(const float& x, const float& y, const float& width, const float& height, const float& _textWidth, const float& _textHeight) {
 		// It just works
-		return Vec2<float>{ ((x / AEGetWindowWidth()) * 2) + ((((width / AEGetWindowWidth()) * 2) - textWidth) / 2), ((y / AEGetWindowHeight()) * 2) - ((height / 2) / AEGetWindowHeight()) * 2 - (textHeight / 2) };
+		return Vec2<float>{ ((x / AEGetWindowWidth()) * 2) + ((((width / AEGetWindowWidth()) * 2) - _textWidth) / 2), ((y / AEGetWindowHeight()) * 2) - ((height / 2) / AEGetWindowHeight()) * 2 - (_textHeight / 2) };
 	}
 
 	/*!***********************************************************************
@@ -290,26 +290,26 @@ namespace RenderSystem {
 	\brief
 		Update engine render settings.
 	*************************************************************************/
-	void UpdateRenderSetting(RenderSetting setting) {
+	void UpdateRenderSetting(RenderSetting _setting) {
 		// Spcify blend mode. AE_GFX_BM_BLEND to allow transperency.
-		AEGfxSetBlendMode(setting.blendMode);
+		AEGfxSetBlendMode(_setting.blendMode);
 		// Add a color overlay on top of texture/mesh.
-		AEGfxSetBlendColor(setting.blendColor.w, setting.blendColor.x, setting.blendColor.y, setting.blendColor.z);
+		AEGfxSetBlendColor(_setting.blendColor.w, _setting.blendColor.x, _setting.blendColor.y, _setting.blendColor.z);
 		// Add tint color on top of texture/mesh.
-		AEGfxSetTintColor(setting.tint.w, setting.tint.x, setting.tint.y, setting.tint.z);
+		AEGfxSetTintColor(_setting.tint.w, _setting.tint.x, _setting.tint.y, _setting.tint.z);
 	}
 
 	/*!***********************************************************************
 	\brief
 		Update global transform mtx for subsequent sprites to be drawn.
 	*************************************************************************/
-	void UpdateRenderTransformMtx(const int& x, const int& y, const Vec2<float>& scale, const float& rot) {
+	void UpdateRenderTransformMtx(const float& x, const float& y, const Vec2<float>& scale, const float& rot) {
 		// Set scaling
 		AEMtx33Scale(&scaleMtx, scale.x, scale.y);
 		// Set rotation.
 		AEMtx33RotDeg(&rotMtx, rot);
 		// Set translation.
-		AEMtx33Trans(&translateMtx, x, y);
+		AEMtx33Trans(&translateMtx, (f32)x, (f32)y);
 
 		// Apply scaling -> rotatation -> translation to transform matrix.
 		AEMtx33Concat(&transformMtx, &scaleMtx, &rotMtx);

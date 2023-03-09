@@ -41,7 +41,7 @@ void SceneSplashscreen::Draw() {
 
 	//Display the Digipen logo
 	RenderSystem::SetRenderSetting(Vec4<float>{1.0f, 1.0f, 1.0f, fade});
-	fade += 1.0f / (SPLASH_SCREEN_TIME / AEFrameRateControllerGetFrameTime());
+	fade += 1.0f / (SPLASH_SCREEN_TIME / (float)AEFrameRateControllerGetFrameTime());
 
 	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, -300, 85, 600, 171, TextureManager::DIGIPEN_LOGO);
 

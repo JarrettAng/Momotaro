@@ -67,8 +67,8 @@ namespace RenderSystem {
 	};
 
 	struct Rect {
-		Transform transform;
-		Graphics graphics;
+		Transform transform{};
+		Graphics graphics{};
 	};
 
 	struct Text {
@@ -85,7 +85,7 @@ namespace RenderSystem {
 	};
 
 	struct Renderable {
-		RENDER_TYPE type;
+		RENDER_TYPE type{};
 		Rect rect;
 		Text text;
 		int layer = 0;

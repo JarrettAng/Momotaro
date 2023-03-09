@@ -87,7 +87,7 @@ void SceneMainMenu::Initialize() {
 
 	// Hardcoding to animate menu animation.
 	// Num of frames * dt + total delay between frames.
-	ANIMATION_FRAMES = 13 * AEFrameRateControllerGetFrameTime() + 1.3;
+	ANIMATION_FRAMES = 13.0f * (float)AEFrameRateControllerGetFrameTime() + 1.3f;
 }
 
 void SceneMainMenu::Update() {
@@ -97,14 +97,14 @@ void SceneMainMenu::Update() {
 	// Play menu animation.
 	if (currAnimFrame < ANIMATION_FRAMES) {
 		// Tick timer and update texture.
-		currAnimFrame += AEFrameRateControllerGetFrameTime();
+		currAnimFrame += (float)AEFrameRateControllerGetFrameTime();
 		TextureManager::Update();
 	}
 	else {
 		// Handle delay between animation loop.
 		if (currAnimInterval < ANIMATION_INTERVAL) {
 			// Tick timer.
-			currAnimInterval += AEFrameRateControllerGetFrameTime();
+			currAnimInterval += (float)AEFrameRateControllerGetFrameTime();
 		}
 		else {
 			// Reset animation loop.
@@ -116,7 +116,7 @@ void SceneMainMenu::Update() {
 
 void SceneMainMenu::Draw() {
 	// Draw background to fit to screen.
-	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, AEGfxGetWinMinX(), -AEGfxGetWinMinY(), AEGetWindowWidth(), AEGetWindowHeight(), TextureManager::MENU_BG, -1);
+	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, AEGfxGetWinMinX(), -AEGfxGetWinMinY(), (float)AEGetWindowWidth(), (float)AEGetWindowHeight(), TextureManager::MENU_BG, -1);
 
 	DrawButtons();
 	DrawPointer();
@@ -146,8 +146,8 @@ void HandleBtnClick() {
 	Vec2<int> mousePos = InputManager::GetMousePos();
 
 	// Convert to world space position.
-	mousePos.x -= AEGfxGetWinMaxX();
-	mousePos.y -= AEGfxGetWinMaxY();
+	mousePos.x -= (int)AEGfxGetWinMaxX();
+	mousePos.y -= (int)AEGfxGetWinMaxY();
 
 	// Loop through all buttons.
 	for (RenderSystem::Interactable& btn : buttons) {
@@ -171,7 +171,7 @@ void DrawPointer() {
 		// Transition timer.
 		if (currTransitionTime > 0) {
 			// Tick timer to transition to next scene.
-			currTransitionTime -= AEFrameRateControllerGetFrameTime();
+			currTransitionTime -= (float)AEFrameRateControllerGetFrameTime();
 		}
 		else {
 			// Transition to next scene.
@@ -181,7 +181,7 @@ void DrawPointer() {
 		// Blink timer.
 		if (currBlinkInterval > 0) {
 			// Tick timer to blink.
-			currBlinkInterval -= AEFrameRateControllerGetFrameTime();
+			currBlinkInterval -= (float)AEFrameRateControllerGetFrameTime();
 		}
 		else {
 			// Toggle blink.
@@ -200,8 +200,8 @@ void DrawPointer() {
 	Vec2<int> mousePos = InputManager::GetMousePos();
 
 	// Convert to world space position.
-	mousePos.x -= AEGfxGetWinMaxX();
-	mousePos.y -= AEGfxGetWinMaxY();
+	mousePos.x -= (int)AEGfxGetWinMaxX();
+	mousePos.y -= (int)AEGfxGetWinMaxY();
 
 	// Loop through all buttons.
 	for (RenderSystem::Interactable& btn : buttons) {
@@ -225,11 +225,11 @@ void InitializeButtons() {
 	startBtn.render.rect.graphics.tex = TextureManager::STARTGAME_BTN;
 	startBtn.func = LoadStart;
 
-	startBtn.render.rect.transform.pos.x = AEGfxGetWinMinX() * 0.525;
-	startBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.222;
+	startBtn.render.rect.transform.pos.x = AEGfxGetWinMinX() * 0.525f;
+	startBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.222f;
 
-	startBtn.render.rect.transform.size.x = 460;
-	startBtn.render.rect.transform.size.y = 100;
+	startBtn.render.rect.transform.size.x = 460.0f;
+	startBtn.render.rect.transform.size.y = 100.0f;
 
 	buttons.push_back(startBtn);
 
@@ -237,55 +237,55 @@ void InitializeButtons() {
 	editorBtn.render.rect.graphics.tex = TextureManager::EDITOR_BTN;
 	editorBtn.func = LoadEditor;
 
-	editorBtn.render.rect.transform.pos.x = AEGfxGetWinMaxX() * 0.237;
-	editorBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.222;
+	editorBtn.render.rect.transform.pos.x = AEGfxGetWinMaxX() * 0.237f;
+	editorBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.222f;
 
-	editorBtn.render.rect.transform.size.x = 260;
-	editorBtn.render.rect.transform.size.y = 100;
+	editorBtn.render.rect.transform.size.x = 260.0f;
+	editorBtn.render.rect.transform.size.y = 100.0f;
 	buttons.push_back(editorBtn);
 
 	// OPTION BUTTON
 	optionsBtn.render.rect.graphics.tex = TextureManager::OPTIONS_BTN;
 	optionsBtn.func = LoadOptions;
 
-	optionsBtn.render.rect.transform.pos.x = AEGfxGetWinMinX() * 0.525;
-	optionsBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.488;
+	optionsBtn.render.rect.transform.pos.x = AEGfxGetWinMinX() * 0.525f;
+	optionsBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.488f;
 
-	optionsBtn.render.rect.transform.size.x = 300;
-	optionsBtn.render.rect.transform.size.y = 100;
+	optionsBtn.render.rect.transform.size.x = 300.0f;
+	optionsBtn.render.rect.transform.size.y = 100.0f;
 	buttons.push_back(optionsBtn);
 
 	// CONTROLS BUTTON
 	controlsBtn.render.rect.graphics.tex = TextureManager::CONTROLS_BTN;
 	controlsBtn.func = LoadControls;
 
-	controlsBtn.render.rect.transform.pos.x = AEGfxGetWinMaxX() * 0.112;
-	controlsBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.488;
+	controlsBtn.render.rect.transform.pos.x = AEGfxGetWinMaxX() * 0.112f;
+	controlsBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.488f;
 
-	controlsBtn.render.rect.transform.size.x = 360;
-	controlsBtn.render.rect.transform.size.y = 100;
+	controlsBtn.render.rect.transform.size.x = 360.0f;
+	controlsBtn.render.rect.transform.size.y = 100.0f;
 	buttons.push_back(controlsBtn);
 
 	// CREDITS BUTTON
 	creditsBtn.render.rect.graphics.tex = TextureManager::CREDITS_BTN;
 	creditsBtn.func = LoadCredits;
 
-	creditsBtn.render.rect.transform.pos.x = AEGfxGetWinMinX() * 0.975;
-	creditsBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.733;
+	creditsBtn.render.rect.transform.pos.x = AEGfxGetWinMinX() * 0.975f;
+	creditsBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.733f;
 
-	creditsBtn.render.rect.transform.size.x = 300;
-	creditsBtn.render.rect.transform.size.y = 100;
+	creditsBtn.render.rect.transform.size.x = 300.0f;
+	creditsBtn.render.rect.transform.size.y = 100.0f;
 	buttons.push_back(creditsBtn);
 
 	// QUIT BUTTON
 	quitBtn.render.rect.graphics.tex = TextureManager::QUIT_BTN;
 	quitBtn.func = LoadQuit;
 
-	quitBtn.render.rect.transform.pos.x = AEGfxGetWinMaxX() * 0.762;
-	quitBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.733;
+	quitBtn.render.rect.transform.pos.x = AEGfxGetWinMaxX() * 0.762f;
+	quitBtn.render.rect.transform.pos.y = AEGfxGetWinMinY() * 0.733f;
 
-	quitBtn.render.rect.transform.size.x = 170;
-	quitBtn.render.rect.transform.size.y = 110;
+	quitBtn.render.rect.transform.size.x = 170.0f;
+	quitBtn.render.rect.transform.size.y = 110.0f;
 	buttons.push_back(quitBtn);
 }
 
