@@ -160,7 +160,6 @@ namespace GridManager {
 		//////////////////////////////////////////////////////////////////////
 
 		InputManager::SubscribeToKey(AEVK_C, InputManager::TRIGGERED, ClearGrid);
-		InputManager::SubscribeToKey(AEVK_R, InputManager::TRIGGERED, RandomiseTerrain);
 		InputManager::SubscribeToKey(AEVK_1, InputManager::TRIGGERED, SpawnResidential);
 		InputManager::SubscribeToKey(AEVK_2, InputManager::TRIGGERED, SpawnCommerical);
 		InputManager::SubscribeToKey(AEVK_3, InputManager::TRIGGERED, SpawnIndustrial);
@@ -767,7 +766,6 @@ namespace GridManager {
 	void Free() {
 		delete[] grid;
 		InputManager::UnsubscribeKey(AEVK_C, InputManager::TRIGGERED, ClearGrid);
-		InputManager::UnsubscribeKey(AEVK_R, InputManager::TRIGGERED, RandomiseTerrain);
 		InputManager::UnsubscribeKey(AEVK_1, InputManager::TRIGGERED, SpawnResidential);
 		InputManager::UnsubscribeKey(AEVK_2, InputManager::TRIGGERED, SpawnCommerical);
 		InputManager::UnsubscribeKey(AEVK_3, InputManager::TRIGGERED, SpawnIndustrial);

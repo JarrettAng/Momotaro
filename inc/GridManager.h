@@ -171,11 +171,6 @@ namespace GridManager {
 	 */
 	void ClearGrid();
 
-	/**
-	 * @brief Randomises the terrain in the grid. Currently has 3 preset maps
-	 *
-	 */
-	void RandomiseTerrain();
 
     void GetBuildingCard(const BuildingData *_data);
 	bool IsBuildingValid(const BuildingData* _data, int _x, int _y);
