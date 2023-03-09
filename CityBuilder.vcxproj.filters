@@ -55,9 +55,6 @@
     <ClCompile Include="src\SceneMainMenu.cpp">
       <Filter>src\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="inc\SceneMainMenu.h">
-      <Filter>inc\Scene</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\BuildingManager.h">
@@ -120,6 +117,7 @@
     <ClInclude Include="inc\FontManager.h">
       <Filter>inc\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="inc\SceneMainMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
