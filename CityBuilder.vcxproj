@@ -23,9 +23,11 @@
     <ClCompile Include="src\RenderSystem.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\SceneGameLevel.cpp" />
+    <ClCompile Include="src\SceneLevelEditor.cpp" />
     <ClCompile Include="src\SceneMainMenu.cpp" />
     <ClCompile Include="src\SceneManager.cpp" />
     <ClCompile Include="src\SceneSplashscreen.cpp" />
+    <ClCompile Include="src\SceneTutorial.cpp" />
     <ClCompile Include="src\ScoreManager.cpp" />
     <ClCompile Include="src\TextureManager.cpp" />
     <ClCompile Include="src\UIManager.cpp" />
@@ -46,9 +48,11 @@
     <ClInclude Include="inc\RenderSystem.h" />
     <ClInclude Include="inc\Scene.h" />
     <ClInclude Include="inc\SceneGameLevel.h" />
+    <ClInclude Include="inc\SceneLevelEditor.h" />
     <ClInclude Include="inc\SceneMainMenu.h" />
     <ClInclude Include="inc\SceneManager.h" />
     <ClInclude Include="inc\SceneSplashscreen.h" />
+    <ClInclude Include="inc\SceneTutorial.h" />
     <ClInclude Include="inc\ScoreManager.h" />
     <ClInclude Include="inc\TextureManager.h" />
     <ClInclude Include="inc\UIManager.h" />
