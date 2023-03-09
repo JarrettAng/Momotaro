@@ -84,7 +84,9 @@ void SceneMainMenu::Load() {
 void SceneMainMenu::Initialize() {
 	InitializeButtons();
 	InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleBtnClick);
-	// Hardcoding
+
+	// Hardcoding to animate menu animation.
+	// Num of frames * dt + total delay between frames.
 	ANIMATION_FRAMES = 13 * AEFrameRateControllerGetFrameTime() + 1.3;
 }
 
@@ -94,14 +96,18 @@ void SceneMainMenu::Update() {
 
 	// Play menu animation.
 	if (currAnimFrame < ANIMATION_FRAMES) {
+		// Tick timer and update texture.
 		currAnimFrame += AEFrameRateControllerGetFrameTime();
 		TextureManager::Update();
 	}
 	else {
+		// Handle delay between animation loop.
 		if (currAnimInterval < ANIMATION_INTERVAL) {
+			// Tick timer.
 			currAnimInterval += AEFrameRateControllerGetFrameTime();
 		}
 		else {
+			// Reset animation loop.
 			currAnimFrame = 0;
 			currAnimInterval = 0;
 		}

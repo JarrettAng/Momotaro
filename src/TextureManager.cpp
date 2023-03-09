@@ -12,7 +12,6 @@ This source file declares
 
 #include <TextureManager.h>
 
-
 namespace TextureManager {
 	/*!***********************************************************************
 	* FORWARD DECLARATION
@@ -68,7 +67,7 @@ namespace TextureManager {
 	// SPLASH SCREEN.
 	AEGfxTexture* digipen_Logo_Tex;
 
-	// MAIN MENU
+	// MAIN MENU.
 	AEGfxTexture* background_Tex;
 	AEGfxTexture* pointer_Tex;
 
@@ -79,20 +78,7 @@ namespace TextureManager {
 	AEGfxTexture* credits_Tex;
 	AEGfxTexture* quit_Tex;
 
-
-	TEX_TYPE operator++(TEX_TYPE& _texture, int)
-	{
-		if (_texture == BUILDING_TEXTURE_COUNT) {
-			std::cerr << "WARNING " << __FILE__ << "ln" << __LINE__ << ": Texture values wrapped!! Reached max building texture count!\n";
-		}
-		_texture = (_texture == BUILDING_TEXTURE_COUNT) ?
-			RESIDENTIAL_1X1_L1 :
-			TEX_TYPE(static_cast<int>(_texture + 1));
-		return _texture;
-	}
-
-	void Initialize()
-	{
+	void Initialize() {
 		LoadTextures();
 		InitializeTextures();
 		GenerateMesh();
@@ -103,6 +89,7 @@ namespace TextureManager {
 		Load textures from file.
 	*************************************************************************/
 	void LoadTextures() {
+		// BUILDINGS.
 		residential_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L1.png");
 		residential_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L2.png");
 		residential_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L3.png");
@@ -119,20 +106,24 @@ namespace TextureManager {
 		industrial_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Industrial_1x1_L2.png");
 		industrial_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Industrial_1x1_L3.png");
 
+		// NORMAL TILE.
 		tile_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Tile.png");
+
+		// NATURE.
 		pond_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Pond.png");
 		mushroom_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Mushroom.png");
 		rock_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Rock.png");
 
+		// UI.
 		synergy_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Synergy.png");
-
 		card_Tex = AEGfxTextureLoad("Assets/Textures/UI/Card.png");
-
 		pause_Tex = AEGfxTextureLoad("Assets/Textures/UI/GameWindow.png");
 		pauseButton_Tex = AEGfxTextureLoad("Assets/Textures/UI/Pause_Button.png");
 
+		// SPLASH SCREEN.
 		digipen_Logo_Tex = AEGfxTextureLoad("Assets/Textures/UI/Digipen_Logo.png");
 
+		// MAIN MENU.
 		background_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Background.png");
 		pointer_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Pointer.png");
 
@@ -191,7 +182,6 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ CONTROLS_BTN,controls_Tex, 1, 1, -1.f });
 		textures.push_back(TextureSheet{ CREDITS_BTN,credits_Tex, 1, 1, -1.f });
 		textures.push_back(TextureSheet{ QUIT_BTN,quit_Tex, 1, 1, -1.f });
-
 
 		// Initialize frame UV size based on number of cols and rows.
 		for (TextureSheet& t : textures) {
@@ -380,5 +370,20 @@ namespace TextureManager {
 		AEGfxTextureUnload(controls_Tex);
 		AEGfxTextureUnload(credits_Tex);
 		AEGfxTextureUnload(quit_Tex);
+	}
+
+	/*!***********************************************************************
+	\brief
+		Increment operator overload to get next enum.
+	*************************************************************************/
+	TEX_TYPE operator++(TEX_TYPE& _texture, int)
+	{
+		if (_texture == BUILDING_TEXTURE_COUNT) {
+			std::cerr << "WARNING " << __FILE__ << "ln" << __LINE__ << ": Texture values wrapped!! Reached max building texture count!\n";
+		}
+		_texture = (_texture == BUILDING_TEXTURE_COUNT) ?
+			RESIDENTIAL_1X1_L1 :
+			TEX_TYPE(static_cast<int>(_texture + 1));
+		return _texture;
 	}
 }

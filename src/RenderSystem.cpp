@@ -65,7 +65,7 @@ namespace RenderSystem {
 		Initialize render system.
 	*************************************************************************/
 	void RenderSystem::Initialize() {
-
+		return;
 	}
 
 	/*!***********************************************************************

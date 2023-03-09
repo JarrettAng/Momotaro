@@ -19,18 +19,30 @@ namespace FontManager {
 	* FONTS
 	*************************************************************************/
 	FONT roboto;
+
+	// Stores fonts.
 	std::vector<FONT> fonts;
 
 	void FontManager::Initialize() {
 		InitializeFont();
 	}
 
+	/*!***********************************************************************
+	\brief
+		Add fonts to vector.
+	*************************************************************************/
 	void InitializeFont() {
 		fonts.push_back({ ROBOTO,  AEGfxCreateFont("Assets/Fonts/Roboto-Regular.ttf", (int)DEFAULT_FONT_SIZE) });
 	}
 
+	/*!***********************************************************************
+	\brief
+		Get font based on font type.
+	*************************************************************************/
 	s8 GetFont(const FONT_TYPE& type) {
+		// Loop through all fonts.
 		for (const FONT& f : fonts) {
+			// Return font if found.
 			if (f.type == type) {
 				return f.font;
 			}
@@ -40,6 +52,10 @@ namespace FontManager {
 		return roboto.font;
 	}
 
+	/*!***********************************************************************
+	\brief
+		Destory all font that is loaded.
+	*************************************************************************/
 	void FontManager::Unload() {
 		for (FONT f : fonts) {
 			AEGfxDestroyFont(f.font);

@@ -24,14 +24,15 @@ namespace ScoreManger {
 	/*!***********************************************************************
 	* FORWARD DECLARATIONS
 	*************************************************************************/
+	Level GetLevel(int level);	// Get level data from vector.
+	Level GetCurrLevel();		// Get player's current level.
+
 	void IntializeLevels();
 	void UpdateScoreUI();
 
 	void CheckForLevelChange();
 
 	int GetThreshold(int level);
-	Level GetLevel(int level);	// Get level data from vector.
-	Level GetCurrLevel();		// Get player's current level.
 
 	int GetScore() {
 		return score;
@@ -79,9 +80,7 @@ namespace ScoreManger {
 		// Tell ui manager to draw score ui.
 		// Use currLevel and score to draw.
 		std::string synergy = "SYNGERGY " + std::to_string(score) + "/ " + std::to_string(GetThreshold(currLevel.level + 1));
-		//std::string threshold = "/ " + std::to_string(GetThreshold(currLevel.level + 1));
 		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.9f, 0.9f, FontManager::GetFont(FontManager::ROBOTO), 40, synergy);
-		//RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.6f, 0.9f, FontManager::GetFont(FontManager::ROBOTO), 40, threshold);
 	}
 
 	Level GetCurrLevel() {

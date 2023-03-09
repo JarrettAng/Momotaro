@@ -147,6 +147,7 @@ namespace InputManager {
 	}
 
 	void Initialize() {
+		// Initialize dragging functionalities.
 		SubscribeToKey(AEVK_LBUTTON, PRESSED, TryToDrag);
 		SubscribeToKey(AEVK_LBUTTON, RELEASED, StopDragging);
 	}
@@ -155,7 +156,6 @@ namespace InputManager {
 		// Update mouse position.
 		AEInputGetCursorPosition(&mousePos.x, &mousePos.y);
 		AEInputGetCursorPositionDelta(&mousePosDelta.x, &mousePosDelta.y);
-
 
 		// Check and invoke any key events.
 		HandleKeyEvents();
