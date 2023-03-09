@@ -1,0 +1,73 @@
+
+type 1
+size 1 1
+level 0
+synergy 1 3 -5 1
+Small house
+Starter red house with an actual working chimney!
+1
+
+type 1
+size 1 1
+level 1
+synergy 1 3 -5 1
+Terrace house
+Bigger blue house with some lovely flowers.
+2
+
+type 1
+size 1 1
+level 2
+synergy 1 3 -5 1
+Shiny house
+For the rich people, we made your roof shine too.
+3
+
+type 2
+size 1 1
+level 0
+synergy 3 -1 1 1
+Street Stall
+Can use your CDC vouchers here
+7
+
+type 2
+size 1 1
+level 1
+synergy 3 -1 1 1
+Small Shop
+Lovely shop with lovely goods
+8
+
+type 2
+size 1 1
+level 2
+synergy 3 -1 1 1
+Big Shophouse
+Big shophouse which sells many goods
+9
+
+type 3
+size 1 1
+level 0
+synergy -5 1 5 0
+Storage Box
+A small boxy building to store boxes.
+10
+
+type 3
+size 1 1
+level 1
+synergy -5 1 5 0
+Big Lab
+Discover the secrets of life here. Hint: It's ligma.
+11
+
+type 3
+size 1 1
+level 2
+synergy -5 1 5 0
+Power Plant
+Powered by the dead.
+12
+
