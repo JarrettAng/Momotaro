@@ -32,9 +32,9 @@ The functions include:
 #pragma once
 
 #include <list>
-
+#include <MomoMaths.h>
+#include <RenderSystem.h>
 #include <EventSystem.h>
-#include <GameObject.h>
 
 class Scene {
 public:

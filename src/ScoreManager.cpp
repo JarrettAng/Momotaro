@@ -10,8 +10,8 @@ namespace ScoreManger {
 		bool receivedReward = false;	// Has player received reward for this level?
 	};
 
-	const float EXP_MOD = 0.25f;				// Affects amount of exp. Lower values = more XP required per level
-	const float EXP_INCREASE_MOD = 2.0f;		// Affects how quicky required exp per level. Higher values = larger gaps between levels
+	const float EXP_MOD = 0.3f;					// Affects amount of exp. Lower values = more XP required per level
+	const float EXP_INCREASE_MOD = 1.8f;		// Affects how quicky required exp per level. Higher values = larger gaps between levels
 
 	EventSystem::Event<void> onScoreUpdate;
 	EventSystem::Event<void> onLevelChange;
@@ -51,7 +51,7 @@ namespace ScoreManger {
 
 	void IntializeLevels() {
 		// TODO: READ FROM FILE I/O
-		int levelNum = 10;
+		int levelNum = 127;
 		for (int i = 0; i < levelNum; ++i) {
 			levels.push_back(Level{ i, "Temp description." });
 		}

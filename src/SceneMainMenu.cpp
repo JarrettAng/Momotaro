@@ -16,8 +16,8 @@ The functions include:
 #include <InputManager.h>
 #include <RenderSystem.h>
 
-#include <SceneMainMenu.h>
 #include <SceneManager.h>
+#include <SceneMainMenu.h>
 
 #include <TextureManager.h>
 
