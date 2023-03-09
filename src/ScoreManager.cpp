@@ -79,8 +79,8 @@ namespace ScoreManger {
 	void ScoreManger::Draw() {
 		// Tell ui manager to draw score ui.
 		// Use currLevel and score to draw.
-		std::string synergy = "SYNGERGY " + std::to_string(score) + "/ " + std::to_string(GetThreshold(currLevel.level + 1));
-		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.9f, 0.9f, FontManager::GetFont(FontManager::ROBOTO), 40, synergy);
+		std::string synergy = "SYNERGY " + std::to_string(score) + "/ " + std::to_string(GetThreshold(currLevel.level + 1));
+		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.9f, 0.8f, FontManager::GetFont(FontManager::ROBOTO), 40, synergy);
 	}
 
 	Level GetCurrLevel() {
