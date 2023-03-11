@@ -75,6 +75,7 @@ namespace RenderSystem {
 		s8 fontID;
 		int fontSize;
 		Vec2<float> pos{};
+		Vec2<float> cachedPos{};
 		std::string text;
 		Vec3<float> color;
 	};

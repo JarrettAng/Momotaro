@@ -19,6 +19,7 @@ namespace FontManager {
 	* FONTS
 	*************************************************************************/
 	FONT roboto;
+	FONT shin_go;
 
 	// Stores fonts.
 	std::vector<FONT> fonts;
@@ -33,6 +34,7 @@ namespace FontManager {
 	*************************************************************************/
 	void InitializeFont() {
 		fonts.push_back({ ROBOTO,  AEGfxCreateFont("Assets/Fonts/Roboto-Regular.ttf", (int)DEFAULT_FONT_SIZE) });
+		fonts.push_back({ SHIN_GO,  AEGfxCreateFont("Assets/Fonts/Shin-Go.otf", (int)DEFAULT_FONT_SIZE) });
 	}
 
 	/*!***********************************************************************

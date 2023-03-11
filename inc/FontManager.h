@@ -7,8 +7,8 @@ namespace FontManager {
 	const float DEFAULT_FONT_SIZE = 100.0;	// Base font size to reference to when scaling down font size.
 
 	enum FONT_TYPE {
-		NONE,
-		ROBOTO
+		ROBOTO,
+		SHIN_GO
 	};
 
 	struct FONT {

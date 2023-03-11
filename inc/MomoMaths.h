@@ -12,6 +12,7 @@ This header file declares
 
 #pragma once
 #include <iostream>
+#include <AEEngine.h>
 
 template<class T>
 struct Vec2 {
@@ -409,4 +410,32 @@ inline bool IsPointWithinRect(Vec2<T> point, Vec2<T> pos, Vec2<T> size) {
 	if (point.x < pos.x || point.x > pos.x + size.x ||
 		point.y < pos.y - size.y || point.y > pos.y) return false;
 	return true;
+}
+
+// How many percentage from the left.
+// Left side of world pos is negative.
+// Right side of world pos is positive.
+inline float GetWorldXByPercentage(float percent) {
+	return AEGfxGetWinMinX() * ((50 - percent) / 50.0f);
+}
+
+// How many percent from the left
+// Top side of world pos is positive.
+// Bottom side of world pos is negative.
+inline float GetWorldYByPercentage(float percent) {
+	return AEGfxGetWinMinY() * ((50 - percent) / 50.0f);
+}
+
+inline bool MouseInsideButton(Vec2<int> mousePos, Vec2<float> btnPos, Vec2<float> btnSize) {
+	// LEFT / RIGHT BOUNDS
+	if ((mousePos.x > btnPos.x &&
+		mousePos.x < btnPos.x + btnSize.x) &&
+
+		// TOP / BOTTOM BOUNDS
+		(mousePos.y > -btnPos.y &&
+			mousePos.y < -btnPos.y + btnSize.y)) {
+
+		return true;
+	}
+	return false;
 }

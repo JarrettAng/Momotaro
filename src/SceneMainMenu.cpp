@@ -15,7 +15,7 @@ The functions include:
 #include <AEEngine.h>
 #include <InputManager.h>
 #include <RenderSystem.h>
-
+#include <MomoMaths.h>
 #include <SceneManager.h>
 #include <SceneMainMenu.h>
 
@@ -79,8 +79,8 @@ RenderSystem::Interactable clickedBtn{};	// Button player clicked on. To get pos
 bool isTransitioning = false;
 bool isBlinking = false;					// Use to toggle opacity of pointer to mimic blinking.
 
-float currBlinkInterval = BLINK_INTERVAL;
-float currTransitionTime = TRANSITION_TIME;
+float currBlinkInterval = 0;
+float currTransitionTime = 0;
 
 /*!***********************************************************************
 * TITLE ANIMATION
@@ -104,6 +104,11 @@ void SceneMainMenu::Initialize() {
 	// Hardcoding to animate menu animation.
 	// Num of frames * dt + total delay between frames.
 	ANIMATION_FRAMES = 13.0f * (float)AEFrameRateControllerGetFrameTime() + 1.3f;
+
+	currBlinkInterval = BLINK_INTERVAL;
+	currTransitionTime = TRANSITION_TIME;
+	isTransitioning = false;
+	isBlinking = false;
 }
 
 void SceneMainMenu::Update() {
@@ -390,32 +395,4 @@ void LoadCredits() {
 
 void LoadQuit() {
 	SceneManager::LoadScene(SceneManager::QUIT);
-}
-
-bool MouseInsideButton(Vec2<int> mousePos, Vec2<float> btnPos, Vec2<float> btnSize) {
-	// LEFT / RIGHT BOUNDS
-	if ((mousePos.x > btnPos.x &&
-		mousePos.x < btnPos.x + btnSize.x) &&
-
-		// TOP / BOTTOM BOUNDS
-		(mousePos.y > -btnPos.y &&
-			mousePos.y < -btnPos.y + btnSize.y)) {
-
-		return true;
-	}
-	return false;
-}
-
-// How many percentage from the left.
-// Left side of world pos is negative.
-// Right side of world pos is positive.
-float GetWorldXByPercentage(float percent) {
-	return AEGfxGetWinMinX() * ((50 - percent) / 50.0f);
-}
-
-// How many percent from the left
-// Top side of world pos is positive.
-// Bottom side of world pos is negative.
-float GetWorldYByPercentage(float percent) {
-	return AEGfxGetWinMinY() * ((50 - percent) / 50.0f);
 }

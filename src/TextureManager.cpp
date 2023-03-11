@@ -68,7 +68,7 @@ namespace TextureManager {
 	AEGfxTexture* digipen_Logo_Tex;
 
 	// MAIN MENU.
-	AEGfxTexture* background_Tex;
+	AEGfxTexture* menu_Background_Tex;
 	AEGfxTexture* pointer_Tex;
 
 	AEGfxTexture* startGame_Tex;
@@ -81,6 +81,10 @@ namespace TextureManager {
 	AEGfxTexture* confirm_Prompt_Tex;
 	AEGfxTexture* yes_Tex;
 	AEGfxTexture* no_Tex;
+
+	// CREDITS
+	AEGfxTexture* credits_Background_Tex;
+	AEGfxTexture* back_Tex;
 
 	void Initialize() {
 		LoadTextures();
@@ -128,7 +132,7 @@ namespace TextureManager {
 		digipen_Logo_Tex = AEGfxTextureLoad("Assets/Textures/UI/Digipen_Logo.png");
 
 		// MAIN MENU.
-		background_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Background.png");
+		menu_Background_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Background.png");
 		pointer_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Pointer.png");
 
 		startGame_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/StartGame.png");
@@ -141,6 +145,10 @@ namespace TextureManager {
 		confirm_Prompt_Tex = AEGfxTextureLoad("Assets/Textures/UI/Confirmation_Prompt.png");
 		yes_Tex = AEGfxTextureLoad("Assets/Textures/UI/Yes_Btn.png");
 		no_Tex = AEGfxTextureLoad("Assets/Textures/UI/No_Btn.png");
+
+		// CREDITS
+		credits_Background_Tex = AEGfxTextureLoad("Assets/Textures/UI/Credits/Background.png");
+		back_Tex = AEGfxTextureLoad("Assets/Textures/UI/Back_Btn.png");
 	}
 
 	/*!***********************************************************************
@@ -181,7 +189,7 @@ namespace TextureManager {
 
 		textures.push_back(TextureSheet{ DIGIPEN_LOGO,digipen_Logo_Tex, 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ MENU_BG,background_Tex, 1, 13, .1f });
+		textures.push_back(TextureSheet{ MENU_BG,menu_Background_Tex, 1, 13, .1f });
 		textures.push_back(TextureSheet{ POINTER,pointer_Tex, 1, 1, -1.f });
 
 		textures.push_back(TextureSheet{ STARTGAME_BTN,startGame_Tex, 1, 1, -1.f });
@@ -194,6 +202,10 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ CONFIRM_PROMPT,confirm_Prompt_Tex, 1, 1, -1.f });
 		textures.push_back(TextureSheet{ YES_BTN,yes_Tex, 1, 1, -1.f });
 		textures.push_back(TextureSheet{ NO_BTN,no_Tex, 1, 1, -1.f });
+
+		textures.push_back(TextureSheet{ CREDITS_BG,credits_Background_Tex, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ BACK_BTN,back_Tex, 1, 1, -1.f });
+
 
 		// Initialize frame UV size based on number of cols and rows.
 		for (TextureSheet& t : textures) {
@@ -373,7 +385,7 @@ namespace TextureManager {
 
 		AEGfxTextureUnload(digipen_Logo_Tex);
 
-		AEGfxTextureUnload(background_Tex);
+		AEGfxTextureUnload(menu_Background_Tex);
 		AEGfxTextureUnload(pointer_Tex);
 
 		AEGfxTextureUnload(startGame_Tex);
@@ -386,6 +398,9 @@ namespace TextureManager {
 		AEGfxTextureUnload(confirm_Prompt_Tex);
 		AEGfxTextureUnload(yes_Tex);
 		AEGfxTextureUnload(no_Tex);
+
+		AEGfxTextureUnload(credits_Background_Tex);
+		AEGfxTextureUnload(back_Tex);
 	}
 
 	/*!***********************************************************************
