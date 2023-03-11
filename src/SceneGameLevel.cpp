@@ -62,7 +62,7 @@ void SceneGameLevel::Draw() {
 void SceneGameLevel::Free() {
 	InputManager::Free();
 	CardManager::Free();
-
+	RenderSystem::Free();
 }
 
 void SceneGameLevel::Unload() {

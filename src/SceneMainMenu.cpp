@@ -147,7 +147,9 @@ void SceneMainMenu::Draw() {
 }
 
 void SceneMainMenu::Free() {
+	buttons.clear();
 	InputManager::Free();
+	RenderSystem::Free();
 }
 
 void SceneMainMenu::Unload() {

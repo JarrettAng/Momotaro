@@ -68,6 +68,12 @@ namespace RenderSystem {
 		return;
 	}
 
+	void RenderSystem::Free() {
+		tileBatch.clear();
+		gamePieceBatch.clear();
+		UIBatch.clear();
+	}
+
 	/*!***********************************************************************
 	\brief
 		Main rendering func.

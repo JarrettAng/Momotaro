@@ -100,6 +100,7 @@ namespace RenderSystem {
 	};
 
 	void Initialize();
+	void Free();
 	void Render();
 
 	Vec2<float> GetPivotPos(const Vec2<float>& pos, const float& width, const float& height);
