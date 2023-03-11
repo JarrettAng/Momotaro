@@ -49,7 +49,7 @@ std::vector<RenderSystem::Text> creditTexts;
 RenderSystem::Interactable backBtn{};
 
 float textWidth, textHeight;	// For caching text width and height to center the text.
-float currTextY = -1;			// -1 is the bottom of the screen when drawing text.
+float currTextY{};				// Y position when initializing texts.
 
 void SceneCredits::Load() {
 	return;
@@ -79,7 +79,9 @@ void SceneCredits::Draw() {
 }
 
 void SceneCredits::Free() {
+	creditTexts.clear();
 	InputManager::Free();
+	RenderSystem::Free();
 }
 
 void SceneCredits::Unload() {
@@ -117,6 +119,8 @@ void HandleBackBtnClick() {
 }
 
 void InitializeTexts() {
+	currTextY = -1;	// -1 is the bottom of the screen when drawing text. So start drawing below the screen.
+
 	creditTexts.push_back(GenerateHeader("TEAM MOMOTARO"));
 	creditTexts.push_back(GenerateName("Ang Jiawei Jarrett"));
 	creditTexts.push_back(GenerateName("Amadeus Jinhan Chia"));
