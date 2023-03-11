@@ -19,25 +19,25 @@ The functions include:
 ///////////////////////////////////////////////////////////////////////////
 
 void SceneLevelEditor::Load() {
-
+	return;
 }
 
 void SceneLevelEditor::Initialize() {
-
+	return;
 }
 
 void SceneLevelEditor::Update() {
-
+	return;
 }
 
 void SceneLevelEditor::Draw() {
-
+	return;
 }
 
 void SceneLevelEditor::Free() {
-
+	return;
 }
 
 void SceneLevelEditor::Unload() {
-
+	return;
 }

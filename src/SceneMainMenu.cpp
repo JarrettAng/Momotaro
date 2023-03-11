@@ -37,7 +37,6 @@ const float ANIMATION_INTERVAL = 4.0f;
 *************************************************************************/
 void LoadStart();
 void LoadEditor();
-void LoadOptions();
 void LoadControls();
 void LoadCredits();
 void LoadQuit();
@@ -61,7 +60,6 @@ float GetWorldYByPercentage(float percent);
 *************************************************************************/
 RenderSystem::Interactable startBtn{};
 RenderSystem::Interactable editorBtn{};
-RenderSystem::Interactable optionsBtn{};
 RenderSystem::Interactable controlsBtn{};
 RenderSystem::Interactable creditsBtn{};
 RenderSystem::Interactable quitBtn{};
@@ -184,7 +182,6 @@ void HandleBtnClick() {
 
 			switch (clickedBtn.render.rect.graphics.tex)
 			{
-			case TextureManager::CREDITS_BTN:
 			case TextureManager::QUIT_BTN:
 			case TextureManager::YES_BTN:
 			case TextureManager::NO_BTN:
@@ -244,10 +241,8 @@ void DrawPointer() {
 		// Skip if button is not visible or clickable.
 		if (!btn.isActive || !btn.isClickable) continue;
 
-		// Dont draw pointer for credits and quit buttons.
-		if (btn.render.rect.graphics.tex == TextureManager::CREDITS_BTN || btn.render.rect.graphics.tex == TextureManager::QUIT_BTN) {
-			continue;
-		}
+		// Dont draw pointer for quit button.
+		if (btn.render.rect.graphics.tex == TextureManager::QUIT_BTN) continue;
 
 		// Check if mouse is hovering button.
 		if (MouseInsideButton(mousePos, btn.render.rect.transform.pos, btn.render.rect.transform.size)) {
@@ -309,17 +304,6 @@ void InitializeButtons() {
 	editorBtn.render.rect.transform.size.y = 100.0f;
 	buttons.push_back(editorBtn);
 
-	// OPTION BUTTON
-	optionsBtn.render.rect.graphics.tex = TextureManager::OPTIONS_BTN;
-	optionsBtn.func = LoadOptions;
-
-	optionsBtn.render.rect.transform.pos.x = GetWorldXByPercentage(21.9);
-	optionsBtn.render.rect.transform.pos.y = GetWorldYByPercentage(25.5);
-
-	optionsBtn.render.rect.transform.size.x = 300.0f;
-	optionsBtn.render.rect.transform.size.y = 100.0f;
-	buttons.push_back(optionsBtn);
-
 	// CONTROLS BUTTON
 	controlsBtn.render.rect.graphics.tex = TextureManager::CONTROLS_BTN;
 	controlsBtn.func = LoadControls;
@@ -335,8 +319,8 @@ void InitializeButtons() {
 	creditsBtn.render.rect.graphics.tex = TextureManager::CREDITS_BTN;
 	creditsBtn.func = LoadCredits;
 
-	creditsBtn.render.rect.transform.pos.x = GetWorldXByPercentage(1.2);
-	creditsBtn.render.rect.transform.pos.y = GetWorldYByPercentage(13.5);
+	creditsBtn.render.rect.transform.pos.x = GetWorldXByPercentage(21.9);
+	creditsBtn.render.rect.transform.pos.y = GetWorldYByPercentage(25.5);
 
 	creditsBtn.render.rect.transform.size.x = 300.0f;
 	creditsBtn.render.rect.transform.size.y = 100.0f;
@@ -394,10 +378,6 @@ void LoadStart() {
 
 void LoadEditor() {
 	SceneManager::LoadScene(SceneManager::EDITOR);
-}
-
-void LoadOptions() {
-	SceneManager::LoadScene(SceneManager::OPTIONS);
 }
 
 void LoadControls() {

@@ -22,6 +22,7 @@
     <ClCompile Include="src\PauseManager.cpp" />
     <ClCompile Include="src\RenderSystem.cpp" />
     <ClCompile Include="src\Scene.cpp" />
+    <ClCompile Include="src\SceneCredits.cpp" />
     <ClCompile Include="src\SceneGameLevel.cpp" />
     <ClCompile Include="src\SceneLevelEditor.cpp" />
     <ClCompile Include="src\SceneMainMenu.cpp" />
@@ -47,6 +48,7 @@
     <ClInclude Include="inc\PauseManager.h" />
     <ClInclude Include="inc\RenderSystem.h" />
     <ClInclude Include="inc\Scene.h" />
+    <ClInclude Include="inc\SceneCredits.h" />
     <ClInclude Include="inc\SceneGameLevel.h" />
     <ClInclude Include="inc\SceneLevelEditor.h" />
     <ClInclude Include="inc\SceneMainMenu.h" />

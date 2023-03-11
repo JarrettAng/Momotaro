@@ -22,7 +22,6 @@ namespace SceneManager {
 		SPLASHSCREEN,
 		MAIN_MENU,
 		EDITOR,
-		OPTIONS,
 		CONTROLS,
 		GAME_LEVEL,
 		CREDITS,

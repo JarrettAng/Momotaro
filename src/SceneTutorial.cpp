@@ -19,25 +19,25 @@ The functions include:
 ///////////////////////////////////////////////////////////////////////////
 
 void SceneTutorial::Load() {
-
+	return;
 }
 
 void SceneTutorial::Initialize() {
-
+	return;
 }
 
 void SceneTutorial::Update() {
-
+	return;
 }
 
 void SceneTutorial::Draw() {
-
+	return;
 }
 
 void SceneTutorial::Free() {
-
+	return;
 }
 
 void SceneTutorial::Unload() {
-
+	return;
 }

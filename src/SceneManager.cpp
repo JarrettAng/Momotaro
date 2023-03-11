@@ -18,9 +18,10 @@ The functions include:
 #include <InputManager.h>
 #include <PauseManager.h>
 
-#include <SceneGameLevel.h>
-#include <SceneMainMenu.h>
 #include <SceneSplashscreen.h>
+#include <SceneMainMenu.h>
+#include <SceneGameLevel.h>
+#include <SceneCredits.h>
 ///////////////////////////////////////////////////////////////////////////
 
 namespace SceneManager {
@@ -31,10 +32,9 @@ namespace SceneManager {
 	Scene* currentScene;
 
 	SceneSplashscreen splashScreen;
-	SceneGameLevel gameLevel;
 	SceneMainMenu mainMenu;
-	// SceneSettings settings;
-	// SceneCredits  credits;
+	SceneGameLevel gameLevel;
+	SceneCredits  credits;
 	// SceneEditor   editor;
 	// 
 	///////////////////////////////////////////////////////////////////////
@@ -63,6 +63,9 @@ namespace SceneManager {
 			break;
 		case GAME_LEVEL:
 			currentScene = &gameLevel;
+			break;
+		case CREDITS:
+			currentScene = &credits;
 			break;
 		}
 	}
