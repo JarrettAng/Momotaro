@@ -102,6 +102,22 @@ namespace BuildingManager {
 
 		return buildingsData[0];
 	}
+
+	Building GetRandomNatureBuilding(){		
+		Building _randNature{
+			BuildingData{
+				BuildingEnum::NATURE,
+				Vec2<int>{1,1},
+				BuildingEnum::L1,
+				BuildingEnum::RIGHT,
+				0,0,0,0,
+				"Nature", "You're not supposed to see this!",
+				(TextureManager::TEX_TYPE)((rand()%3)+15)
+			}
+		};
+		return _randNature;
+	}
+
     std::vector<BuildingData> GetBuildingDataVector()
     {
         return buildingsData;

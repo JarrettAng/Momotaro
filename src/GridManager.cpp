@@ -21,6 +21,7 @@ The functions include:
 #include <ColorTable.h>
 #include <GridManager.h>
 #include <PauseManager.h>
+#include <BuildingManager.h>
 #include <CardManager.h>
 #include <UIManager.h>
 #include <ScoreManager.h>
@@ -53,86 +54,6 @@ namespace GridManager {
 	int randomNature{ 0 };
 	BuildingEnum::ORIENTATION TestOrientation{ BuildingEnum::RIGHT };
 	std::vector<BuildingData> _testBuildingVector;
-	///////////////////////////////////////////////////////////////////////////
-
-#pragma region BuildingStuff
-	//Temporary stuff for buildings
-	Building ResidentialLvl1{
-		BuildingEnum::RESIDENTIAL,
-		Vec2<int>{1,1},
-		BuildingEnum::L1,
-		BuildingEnum::RIGHT,
-		1,3,-3,2,
-		"Residential Lvl 1","Joe",
-		TextureManager::RESIDENTIAL_1X1_L1 };
-
-	Building BigResidentialLvl1{
-		BuildingEnum::RESIDENTIAL,
-		Vec2<int>{2,2},
-		BuildingEnum::L1,
-		BuildingEnum::RIGHT,
-		1,5,-8,1,
-		"Residential Lvl 1","Bigger Joe",
-		TextureManager::RESIDENTIAL_1X2_L1 };
-	Building BigResidential3x1Lvl1{
-		BuildingEnum::RESIDENTIAL,
-		Vec2<int>{3,1},
-		BuildingEnum::L1,
-		BuildingEnum::RIGHT,
-		1,5,-8,1,
-		"Residential Lvl 1","Bigger Joe mama",
-		TextureManager::RESIDENTIAL_1X2_L1 };
-
-	Building CommercialLvl1{
-		BuildingEnum::COMMERCIAL,
-		Vec2<int>{1,1},
-		BuildingEnum::L1,
-		BuildingEnum::RIGHT,
-		3,0,-1,1,
-		"Commercial Lvl 1","Sugondese",
-		TextureManager::COMMERCIAL_1X1_L1 };
-
-	Building IndustrialLvl1{
-		BuildingEnum::INDUSTRIAL,
-		Vec2<int>{1,1},
-		BuildingEnum::L1,
-		BuildingEnum::RIGHT,
-		-3,-1,3,0,
-		"Industrial Lvl 1","Candice",
-		TextureManager::INDUSTRIAL_1X1_L1 };
-
-	Building NaturePond{
-		BuildingEnum::NATURE,
-		Vec2<int>{1,1},
-		BuildingEnum::L1,
-		BuildingEnum::RIGHT,
-		0,0,0,0,
-		"Nature!","Tree",
-		TextureManager::NATURE_POND
-	};
-
-	Building NatureMushroom{
-	BuildingEnum::NATURE,
-	Vec2<int>{1,1},
-	BuildingEnum::L1,
-	BuildingEnum::RIGHT,
-	0,0,0,0,
-	"Nature!","Mushroom",
-	TextureManager::NATURE_MUSHROOM
-	};
-
-	Building NatureRock{
-		BuildingEnum::NATURE,
-		Vec2<int>{1,1},
-		BuildingEnum::L1,
-		BuildingEnum::RIGHT,
-		0,0,0,0,
-		"Nature!","The Rock",
-		TextureManager::NATURE_ROCK
-	};
-#pragma endregion
-
-
 	///////////////////////////////////////////////////////////////////////////
 	//INITIALISE GRID 								
 	///////////////////////////////////////////////////////////////////////////
@@ -258,17 +179,19 @@ namespace GridManager {
 		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
-
+		BuildingData _residential{BuildingManager::GetBuildingData(
+			BuildingEnum::RESIDENTIAL,
+			Vec2<int>{1,1},
+			BuildingEnum::L1
+		)};
 		grid[index].ID = ++buildingID;
-		grid[index]._building = ResidentialLvl1;
+		grid[index]._building = _residential;
 		grid[index]._building.buildingCells.push_back(SelectedCell);
-		grid[index]._building.GetSynergyArea();
-		for (Vec2<int> cell : grid[index]._building.synergyAreaCells) {
-			// grid[GetIndex(cell)].isRenderable = false;
-		}
+		// grid[index]._building.GetSynergyArea();
+		// for (Vec2<int> cell : grid[index]._building.synergyAreaCells) {
+		// 	// grid[GetIndex(cell)].isRenderable = false;
+		// }
 		CheckCellNeighbor(grid, SelectedCell);
-
-
 	}
 	void SpawnCommerical() {
 		if (PauseManager::IsPaused()) return;
@@ -277,8 +200,13 @@ namespace GridManager {
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
 
+		BuildingData _commercial{BuildingManager::GetBuildingData(
+			BuildingEnum::COMMERCIAL,
+			Vec2<int>{1,1},
+			BuildingEnum::L1
+		)};
 		grid[index].ID = ++buildingID;
-		grid[index]._building = CommercialLvl1;
+		grid[index]._building = _commercial;
 		grid[index]._building.buildingCells.push_back(SelectedCell);
 		CheckCellNeighbor(grid, SelectedCell);
 	}
@@ -289,35 +217,26 @@ namespace GridManager {
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
 
+		BuildingData _industrial{BuildingManager::GetBuildingData(
+			BuildingEnum::INDUSTRIAL,
+			Vec2<int>{1,1},
+			BuildingEnum::L1
+		)};
 		grid[index].ID = ++buildingID;
-		grid[index]._building = IndustrialLvl1;
+		grid[index]._building = _industrial;
 		grid[index]._building.buildingCells.push_back(SelectedCell);
 		CheckCellNeighbor(grid, SelectedCell);
 	}
 	void SpawnNature() {
 		if (PauseManager::IsPaused()) return;
-		FileIOManager::LoadBuildingDataFromFile(_testBuildingVector);
-		FileIOManager::SaveBuildingDataToFile(_testBuildingVector);
-		// FileIOManager::SaveGridToFile();
-		// FileIOManager::SaveBuildingDataToFile();
-		// Vec2<int> mousePos = InputManager::GetMousePos();
-		// Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
-		// int index = GetIndex(SelectedCell.x, SelectedCell.y);
-		// if (!isCellSafe(SelectedCell)) return;
-		// randomNature = rand() % 3;
-		// switch (randomNature)
-		// {
-		// case 0:
-		// 	grid[index]._building = NatureRock;
-		// 	break;
-		// case 1:
-		// 	grid[index]._building = NaturePond;
-		// 	break;
-		// case 2:
-		// 	grid[index]._building = NatureMushroom;
-		// 	break;
-		// }
-		// grid[index].ID = ++buildingID;
+		// FileIOManager::LoadBuildingDataFromFile(_testBuildingVector);
+		// FileIOManager::SaveBuildingDataToFile(_testBuildingVector);
+		Vec2<int> mousePos = InputManager::GetMousePos();
+		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
+		int index = GetIndex(SelectedCell.x, SelectedCell.y);
+		if (!isCellSafe(SelectedCell)) return;
+		grid[index].ID = ++buildingID;
+		grid[index]._building = BuildingManager::GetRandomNatureBuilding();
 	}
 #pragma endregion
 
