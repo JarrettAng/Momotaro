@@ -71,6 +71,11 @@ namespace FileIOManager {
 				if(lineCount == 6) _data.desc = buffer;
 				for(int i{ 0 }; i < static_cast<int>(buffer.length()); ++i){
 				if(isdigit(buffer[i])){
+					//This is to explicitly tell the compiler, hey! I know what I'm doing with the indexes
+					int _residential = i - 1;
+					int _commercial = i + 2;
+					int _industrial = i + 4;
+					int _nature = i + 6;
 					switch (lineCount)
 					{
 					case 1://TYPE
@@ -84,11 +89,12 @@ namespace FileIOManager {
 					_data.level = (BuildingEnum::LEVEL)(std::atoi(&buffer[i]));
 						break;
 					case 4://SYNERGY
+
 					if(!_data.SynergyResidential){
-						_data.SynergyResidential = std::atoi(&buffer[i-1]);
-						_data.SynergyCommercial = std::atoi(&buffer[i+2]);
-						_data.SynergyIndustrial = std::atoi(&buffer[i+4]);
-						_data.SynergyNature = std::atoi(&buffer[i+6]);
+						_data.SynergyResidential = std::atoi(&buffer[_residential]);
+						_data.SynergyCommercial = std::atoi(&buffer[_commercial]);
+						_data.SynergyIndustrial = std::atoi(&buffer[_industrial]);
+						_data.SynergyNature = std::atoi(&buffer[_nature]);
 						break;
 					}
 						break;
@@ -151,14 +157,9 @@ namespace FileIOManager {
 			{
 				//The first 2 lines will be the width and the height
 				if (lineCount == 0 && GM::gridX == 0) GM::gridX = std::atoi(&buffer[i]);
-				if (lineCount == 1 && GM::gridY == 0) {
-					GM::gridY = std::atoi(&buffer[i]);
-					//since we got the width and height of the map, we can generate it
-					if (GM::gridY > 0 && GM::gridX > 0) {		//This check is to ensure we do have a width and height
-						//then we create the array
-						newMap = {new GM::cell[GM::gridX*GM::gridY]{}};			
-					}
-				}
+				if (lineCount == 1 && GM::gridY == 0) GM::gridY = std::atoi(&buffer[i]);
+				// 	//since we got the width and height of the map, we can generate it
+				if (lineCount == 1 && (GM::gridY > 0 && GM::gridX > 0)) newMap = {new GM::cell[GM::gridX*GM::gridY]{}};
 				//Once the line count exceeds 1, meaning we already have the width&height, we can start to add to array
 				if (lineCount > 1) {
 					//If the value in the mapdata is NOT 1, it shall be treated as a 0 (which means it's renderable)

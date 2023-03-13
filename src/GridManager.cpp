@@ -59,7 +59,9 @@ namespace GridManager {
 	///////////////////////////////////////////////////////////////////////////
 	void Initialize() {
 		// grid = { new cell[gridX * gridY]{} };
+		std::cout <<"before loading : " << sizeof(grid) <<'\n';
 		grid = FileIOManager::LoadGridFromFile("Assets/JSON_Data/Maps/map2.momomaps");
+		std::cout <<"after loading : " << sizeof(grid) <<'\n';
 		//GRID SET UP
 		//Init a grid with 0 tiles
 		for (int y{ 0 }; y < gridY; ++y) {
@@ -702,6 +704,8 @@ namespace GridManager {
 		CardManager::onCardPlaced.Unsubscribe(SpawnBuilding);
 
 	}
+
+
 ///////////////////////////////////////////////////////////////////////////
 //GRID HELPER FUNCTIONS
 ///////////////////////////////////////////////////////////////////////////
