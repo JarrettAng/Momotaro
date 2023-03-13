@@ -39,6 +39,7 @@ namespace PauseManager {
 
 	void Initialize()
 	{
+		pauseMenuBtns.clear();
 		isPaused = false;
 		InputManager::SubscribeToKey(AEVK_ESCAPE, InputManager::TRIGGERED, TogglePause);
 
