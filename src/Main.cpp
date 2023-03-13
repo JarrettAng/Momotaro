@@ -44,7 +44,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	///////////////////////////////////////////////////////////////////////
 	// Free the things that were initialized here
-	GridManager::Free();
+	//GridManager::Free();
 
 	// Engine Exit
 	AESysExit();

@@ -292,8 +292,8 @@ void InitializeButtons() {
 	startBtn.render.rect.graphics.tex = TextureManager::STARTGAME_BTN;
 	startBtn.func = LoadStart;
 
-	startBtn.render.rect.transform.pos.x = GetWorldXByPercentage(21.9);
-	startBtn.render.rect.transform.pos.y = GetWorldYByPercentage(39);
+	startBtn.render.rect.transform.pos.x = GetWorldXByPercentage(21.9f);
+	startBtn.render.rect.transform.pos.y = GetWorldYByPercentage(39.0f);
 
 	startBtn.render.rect.transform.size.x = 460.0f;
 	startBtn.render.rect.transform.size.y = 100.0f;
@@ -304,8 +304,8 @@ void InitializeButtons() {
 	editorBtn.render.rect.graphics.tex = TextureManager::EDITOR_BTN;
 	editorBtn.func = LoadEditor;
 
-	editorBtn.render.rect.transform.pos.x = GetWorldXByPercentage(61.9);
-	editorBtn.render.rect.transform.pos.y = GetWorldYByPercentage(39);
+	editorBtn.render.rect.transform.pos.x = GetWorldXByPercentage(61.9f);
+	editorBtn.render.rect.transform.pos.y = GetWorldYByPercentage(39.0f);
 
 	editorBtn.render.rect.transform.size.x = 260.0f;
 	editorBtn.render.rect.transform.size.y = 100.0f;
@@ -315,8 +315,8 @@ void InitializeButtons() {
 	controlsBtn.render.rect.graphics.tex = TextureManager::CONTROLS_BTN;
 	controlsBtn.func = LoadControls;
 
-	controlsBtn.render.rect.transform.pos.x = GetWorldXByPercentage(55.7);
-	controlsBtn.render.rect.transform.pos.y = GetWorldYByPercentage(25.5);
+	controlsBtn.render.rect.transform.pos.x = GetWorldXByPercentage(55.7f);
+	controlsBtn.render.rect.transform.pos.y = GetWorldYByPercentage(25.5f);
 
 	controlsBtn.render.rect.transform.size.x = 360.0f;
 	controlsBtn.render.rect.transform.size.y = 100.0f;
@@ -326,8 +326,8 @@ void InitializeButtons() {
 	creditsBtn.render.rect.graphics.tex = TextureManager::CREDITS_BTN;
 	creditsBtn.func = LoadCredits;
 
-	creditsBtn.render.rect.transform.pos.x = GetWorldXByPercentage(21.9);
-	creditsBtn.render.rect.transform.pos.y = GetWorldYByPercentage(25.5);
+	creditsBtn.render.rect.transform.pos.x = GetWorldXByPercentage(21.9f);
+	creditsBtn.render.rect.transform.pos.y = GetWorldYByPercentage(25.5f);
 
 	creditsBtn.render.rect.transform.size.x = 300.0f;
 	creditsBtn.render.rect.transform.size.y = 100.0f;
@@ -337,8 +337,8 @@ void InitializeButtons() {
 	quitBtn.render.rect.graphics.tex = TextureManager::QUIT_BTN;
 	quitBtn.func = ToggleQuitConfirm;
 
-	quitBtn.render.rect.transform.pos.x = GetWorldXByPercentage(88);
-	quitBtn.render.rect.transform.pos.y = GetWorldYByPercentage(13.2);
+	quitBtn.render.rect.transform.pos.x = GetWorldXByPercentage(88.0f);
+	quitBtn.render.rect.transform.pos.y = GetWorldYByPercentage(13.2f);
 
 	quitBtn.render.rect.transform.size.x = 170.0f;
 	quitBtn.render.rect.transform.size.y = 110.0f;
@@ -349,8 +349,8 @@ void InitializeButtons() {
 	quitYesBtn.func = LoadQuit;
 	quitYesBtn.isActive = false;
 
-	quitYesBtn.render.rect.transform.pos.x = GetWorldXByPercentage(35);
-	quitYesBtn.render.rect.transform.pos.y = GetWorldYByPercentage(50);
+	quitYesBtn.render.rect.transform.pos.x = GetWorldXByPercentage(35.0f);
+	quitYesBtn.render.rect.transform.pos.y = GetWorldYByPercentage(50.0f);
 
 	quitYesBtn.render.rect.transform.size.x = 130.0f;
 	quitYesBtn.render.rect.transform.size.y = 100.0f;
@@ -362,8 +362,8 @@ void InitializeButtons() {
 	quitNoBtn.func = ToggleQuitConfirm;
 	quitNoBtn.isActive = false;
 
-	quitNoBtn.render.rect.transform.pos.x = GetWorldXByPercentage(56.7);
-	quitNoBtn.render.rect.transform.pos.y = GetWorldYByPercentage(50);
+	quitNoBtn.render.rect.transform.pos.x = GetWorldXByPercentage(56.7f);
+	quitNoBtn.render.rect.transform.pos.y = GetWorldYByPercentage(50.0f);
 
 	quitNoBtn.render.rect.transform.size.x = 100.0f;
 	quitNoBtn.render.rect.transform.size.y = 100.0f;
@@ -371,8 +371,8 @@ void InitializeButtons() {
 	buttons.push_back(quitNoBtn);
 
 	// CONFIRMATION PROMPT
-	confirmQuitPrompt.rect.transform.pos.x = GetWorldXByPercentage(23.1);
-	confirmQuitPrompt.rect.transform.pos.y = GetWorldYByPercentage(72.3);
+	confirmQuitPrompt.rect.transform.pos.x = GetWorldXByPercentage(23.1f);
+	confirmQuitPrompt.rect.transform.pos.y = GetWorldYByPercentage(72.3f);
 
 	confirmQuitPrompt.rect.transform.size.x = 850.0f;
 	confirmQuitPrompt.rect.transform.size.y = 390.0f;

@@ -22,6 +22,8 @@ The functions include:
 #include <SceneMainMenu.h>
 #include <SceneGameLevel.h>
 #include <SceneCredits.h>
+#include <SceneLevelEditor.h>
+#include <SceneTutorial.h>
 ///////////////////////////////////////////////////////////////////////////
 
 namespace SceneManager {
@@ -32,16 +34,16 @@ namespace SceneManager {
 	Scene* currentScene;
 
 	SceneSplashscreen splashScreen;
-	SceneMainMenu mainMenu;
-	SceneGameLevel gameLevel;
-	SceneCredits  credits;
-	// SceneEditor   editor;
-	// 
+	SceneMainMenu	  mainMenu;
+	SceneGameLevel	  gameLevel;
+	SceneCredits	  credits;
+	SceneLevelEditor  editor;
+	SceneTutorial	  tutorial;
+	
 	///////////////////////////////////////////////////////////////////////
 	// Forward Declarations
 	void UpdatePausedState(bool newPausedState);
 	void SceneManagerLoop();
-	void SwitchScene();
 	void SwitchScene();
 	///////////////////////////////////////////////////////////////////////
 
@@ -66,6 +68,12 @@ namespace SceneManager {
 			break;
 		case CREDITS:
 			currentScene = &credits;
+			break;
+		case EDITOR:
+			currentScene = &editor;
+			break;
+		case CONTROLS:
+			currentScene = &tutorial;
 			break;
 		}
 	}

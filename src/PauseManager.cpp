@@ -104,7 +104,7 @@ namespace PauseManager {
 	}
 
 	void Quitgame() {
-		SceneManager::LoadScene(SceneManager::QUIT);
+		SceneManager::LoadScene(SceneManager::MAIN_MENU);
 	}
 
 	void TogglePause() {

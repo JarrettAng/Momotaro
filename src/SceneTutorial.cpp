@@ -13,9 +13,21 @@ The functions include:
 **************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////
+#include <AEEngine.h>
+#include <RenderSystem.h>
+
 #include <SceneManager.h>
+#include <GridManager.h>
+#include <BuildingManager.h>
+#include <InputManager.h>
+#include <CardManager.h>
+#include <UIManager.h>
 
 #include <SceneTutorial.h>
+#include <ColorTable.h>
+#include <PauseManager.h>
+#include <ScoreManager.h>
+#include <TextureManager.h>
 ///////////////////////////////////////////////////////////////////////////
 
 void SceneTutorial::Load() {
@@ -23,15 +35,19 @@ void SceneTutorial::Load() {
 }
 
 void SceneTutorial::Initialize() {
-	return;
+	PauseManager::Initialize();
 }
 
 void SceneTutorial::Update() {
-	return;
+	PauseManager::Update();
 }
 
 void SceneTutorial::Draw() {
-	return;
+	AEGfxSetBackgroundColor(WATER);
+
+	PauseManager::Draw();
+
+	RenderSystem::Render();
 }
 
 void SceneTutorial::Free() {

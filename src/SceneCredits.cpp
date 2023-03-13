@@ -91,7 +91,7 @@ void SceneCredits::Unload() {
 void DrawCredits() {
 	for (RenderSystem::Text& t : creditTexts) {
 		// Scroll the text up.
-		t.pos.y += AEFrameRateControllerGetFrameTime() * SCROLL_SPEED_MULTIPLIER;
+		t.pos.y += (float)AEFrameRateControllerGetFrameTime() * SCROLL_SPEED_MULTIPLIER;
 		// Draw the text.
 		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, t.pos.x, t.pos.y, t.fontID, t.fontSize, t.text, 1, Vec3<float> {1, 1, 1});
 	}
@@ -195,7 +195,7 @@ RenderSystem::Text GenerateName(std::string text) {
 RenderSystem::Text GenerateText(std::string text, float fontSize, float offset) {
 	RenderSystem::Text name;
 	name.fontID = FontManager::GetFont(FontManager::SHIN_GO);
-	name.fontSize = fontSize;
+	name.fontSize = (int)fontSize;
 	name.text = text;
 
 

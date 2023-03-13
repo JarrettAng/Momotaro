@@ -66,5 +66,6 @@ void SceneGameLevel::Free() {
 }
 
 void SceneGameLevel::Unload() {
+	GridManager::Free();
 	BuildingManager::Clear();
 }
