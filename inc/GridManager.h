@@ -24,6 +24,10 @@ namespace GridManager {
     extern const int tileHeight;
 	extern int gridX;
 	extern int gridY;
+
+	extern EventSystem::Event<void> onMergeBuildings;
+	extern EventSystem::Event<void> onBoardFull;
+
     enum TileType{
         NONE = 0,
         RESIDENTIAL = 1,
@@ -162,7 +166,6 @@ namespace GridManager {
 
     int GetIndexFromID(int ID);
 
-	extern EventSystem::Event<void> onMergeBuildings;
 
 
     /**

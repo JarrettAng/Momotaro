@@ -26,4 +26,6 @@ public:
 
 	void Free();
 	void Unload();
+
 };
+	void GameOver();

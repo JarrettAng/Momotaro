@@ -48,10 +48,12 @@ namespace GridManager {
 	//EVENT RELATED VARIABLES
 	const BuildingData* selectedBuilding{};			//Selected building from cardmanager event
 	EventSystem::Event<void> onMergeBuildings;		//Event on merge
+	EventSystem::Event<void> onBoardFull;
 
 	//DEBUG VARIABLES
 	int terrainNum{ 2 };
 	int randomNature{ 0 };
+	int playableArea {0};
 	BuildingEnum::ORIENTATION TestOrientation{ BuildingEnum::RIGHT };
 	std::vector<BuildingData> _testBuildingVector;
 	///////////////////////////////////////////////////////////////////////////
@@ -59,9 +61,7 @@ namespace GridManager {
 	///////////////////////////////////////////////////////////////////////////
 	void Initialize() {
 		// grid = { new cell[gridX * gridY]{} };
-		std::cout <<"before loading : " << sizeof(grid) <<'\n';
 		grid = FileIOManager::LoadGridFromFile("Assets/JSON_Data/Maps/map2.momomaps");
-		std::cout <<"after loading : " << sizeof(grid) <<'\n';
 		//GRID SET UP
 		//Init a grid with 0 tiles
 		for (int y{ 0 }; y < gridY; ++y) {
@@ -72,11 +72,14 @@ namespace GridManager {
 				ScreenPos.y += (gridY * tileHeight) / 2;		//move the grid up by half its size (20 units / 2 = 10)
 				grid[index].pos = ScreenPos;
 
-				//basically we want the grid to be from -2 to 2, but since there's a 10 unit offset, we add 10
-				if (((x >= (mapPos + gridX / 2)) && (x <= (mapPos + gridX / 2 + mapSize))) && (y >= (mapPos + gridY / 2) && y <= (mapPos + gridY / 2 + mapSize))) {
-					grid[index].isRenderable = true;
-				}
-				grid[index].ID = 0;
+				if(grid[index].isRenderable) playableArea++;
+
+				// //basically we want the grid to be from -2 to 2, but since there's a 10 unit offset, we add 10
+				// if (((x >= (mapPos + gridX / 2)) && (x <= (mapPos + gridX / 2 + mapSize))) && (y >= (mapPos + gridY / 2) && y <= (mapPos + gridY / 2 + mapSize))) {
+				// 	grid[index].isRenderable = true;
+				// 	playableArea++;
+				// }
+				// grid[index].ID = 0;
 			}
 		}
 		//////////////////////////////////////////////////////////////////////
@@ -114,6 +117,12 @@ namespace GridManager {
 		ScoreManger::AddScore(totalPoints);
 		CurrentSynergyArea.clear();
 		CurrentBuildingCells.clear();
+		playableArea--;
+
+		//!TODO CHANGE THIS TO FIT BIGGER SIZES!!
+		if(playableArea < 1){
+			onBoardFull.Invoke();
+		}
 	}
 
 	const cell* GetGrid() {

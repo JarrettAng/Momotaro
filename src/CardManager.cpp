@@ -126,6 +126,7 @@ namespace CardManager {
 namespace CardManager {
 	EventSystem::Event<const BuildingData*> onNewCardSelected;	// Event that gets called when player selects/deselects a card
 	EventSystem::Event<Vec2<int>> onCardPlaced;					// Event that gets called when player plays a card
+	EventSystem::Event<void> onHandEmpty;						//Event that gets called when player runs out of cards
 
 	int startingHandSize = 5;						// How many cards should the player start with
 	std::vector<Card> hand;							// Data on rendering for current cards held
@@ -374,8 +375,10 @@ namespace CardManager {
 			RemoveFromHand(selectedCard);
 			selectedCard = nullptr;
 			onNewCardSelected.Invoke(nullptr); // Invoke the card deselected event
-
 		}
+		// if(spawnMergeBuilding && hand.empty()){
+		// 	std::cout << "hand empty\n";
+		// }
 	}
 
 	// Removes the selected card from the hand then updates the positions of the remaining cards
@@ -427,6 +430,9 @@ namespace CardManager {
 		// Otherwise check if the player has played the card on the grid
 		if (selectedCard) {
 			PlayCard();
+		}
+		if(!spawnMergeBuilding && hand.empty()){
+			onHandEmpty.Invoke();
 		}
 	}
 

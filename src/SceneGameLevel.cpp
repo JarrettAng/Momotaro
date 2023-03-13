@@ -29,6 +29,7 @@ The functions include:
 #include <TextureManager.h>
 
 
+
 void SceneGameLevel::Load() {
 	GridManager::Initialize();
 	BuildingManager::Initialize();
@@ -36,6 +37,8 @@ void SceneGameLevel::Load() {
 }
 
 void SceneGameLevel::Initialize() {
+	GridManager::onBoardFull.Subscribe(GameOver);
+	CardManager::onHandEmpty.Subscribe(GameOver);
 	PauseManager::Initialize();
 	CardManager::Initialize();
 }
@@ -69,3 +72,8 @@ void SceneGameLevel::Unload() {
 	GridManager::Free();
 	BuildingManager::Clear();
 }
+
+void GameOver(){
+	std::cout << "Spawn Game Over UI!\n";
+}
+
