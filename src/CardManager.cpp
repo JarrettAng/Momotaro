@@ -31,10 +31,10 @@ namespace CardManager {
 		arrowPos = transform = RenderSystem::Transform();
 
 		// Set its size to be 25% of the screen size
-		transform.size.x  = AEGfxGetWinMaxX() * 0.5f;
-		transform.size.y  = AEGfxGetWinMaxY() * 0.5f;
+		transform.size.x = AEGfxGetWinMaxX() * 0.5f;
+		transform.size.y = AEGfxGetWinMaxY() * 0.5f;
 		// The arrow at the bottom is 10% of the box's size
-		arrowPos.size.x   = arrowPos.size.y = transform.size.y * 0.1f;
+		arrowPos.size.x = arrowPos.size.y = transform.size.y * 0.1f;
 		// The header dividing line's height is 1% of the box's height and 80% of the box's width
 		headerLine.size.x = transform.size.x * 0.8f;
 		headerLine.size.y = transform.size.y * 0.01f;
@@ -45,9 +45,9 @@ namespace CardManager {
 	// Draws the entire info box objects and its texts
 	void InfoBox::Render() {
 		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, transform.pos.x, transform.pos.y, transform.size.x, transform.size.y, color, 0);
-		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, headerLine.pos.x, headerLine.pos.y, headerLine.size.x, headerLine.size.y, COLOR_BOX_HEADERLINE, 0);
+		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, headerLine.pos.x, headerLine.pos.y, headerLine.size.x, headerLine.size.y, COLOR_BOX_HEADERLINE, 4);
 		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, arrowPos.pos.x, arrowPos.pos.y, arrowPos.size.x, arrowPos.size.y, color, 0);
-		
+
 		name.Render();
 		desc.Render();
 
@@ -171,7 +171,7 @@ namespace CardManager {
 
 		cardPositionTemplate.size.y = handBackground.size.y * 0.9f;				 // Keep the height of each card to 90% of the hand BG
 		cardPositionTemplate.size.x = cardPositionTemplate.size.y * 0.75f;		 // Card width to height ratio is 3:4
-		cardPositionTemplate.pos.y  = handBackground.pos.y - (handBackground.size.y - cardPositionTemplate.size.y) / 2.0f; // Set the y-pos so the card is in the middle of hand BG
+		cardPositionTemplate.pos.y = handBackground.pos.y - (handBackground.size.y - cardPositionTemplate.size.y) / 2.0f; // Set the y-pos so the card is in the middle of hand BG
 
 		// Initialize card information box
 		cardInfoBox = InfoBox();
@@ -212,7 +212,7 @@ namespace CardManager {
 
 		// Check each card to see if the player is hovering over it
 		for (Card& card : hand) {
-			cardPos  = { card.position.pos.x, card.position.pos.y };
+			cardPos = { card.position.pos.x, card.position.pos.y };
 			cardSize = { card.position.size.x, card.position.size.y };
 
 			// If the player is hovering over a card!
@@ -221,7 +221,7 @@ namespace CardManager {
 
 				if (hoverTimeElapsed >= hoverTimeShowThreshold) {			  // If the player hovers long enough, show the info box
 					if (hoveredCard != &card) {
-						hoveredCard = &card;								  
+						hoveredCard = &card;
 						cardInfoBox.UpdateInfo(Vec2<float>{hoveredCard->position.pos.x + hoveredCard->position.size.x * 0.5f, hoveredCard->position.pos.y}, hoveredCard);
 					}
 					hoverTimeElapsed = hoverTimeShowThreshold;				  // Cap the hover time
@@ -271,7 +271,7 @@ namespace CardManager {
 
 	///////////////////////////////////////////////////////////////////////
 	// Player hand & cards functions
-	
+
 	// Everytime the player reaches the next threshold, give 4 random L1 cards
 	void GiveCardOnThreshold() {
 		for (int i{ 0 }; i < 4; ++i) {
@@ -280,7 +280,7 @@ namespace CardManager {
 	}
 
 	// Everytime the player merges, set the flag to give more cards to true
-	void GiveCardOnMerge(){
+	void GiveCardOnMerge() {
 		spawnMergeBuilding = true;
 	}
 
@@ -370,7 +370,7 @@ namespace CardManager {
 		selectedCard->UpdateCountText();
 
 		onCardPlaced.Invoke(mousePos);		   // Let the world know a card has been played
-		
+
 		if (selectedCard->count <= 0) {		   // If the card has run out, remove it from the hand
 			RemoveFromHand(selectedCard);
 			selectedCard = nullptr;
@@ -431,7 +431,7 @@ namespace CardManager {
 		if (selectedCard) {
 			PlayCard();
 		}
-		if(!spawnMergeBuilding && hand.empty()){
+		if (!spawnMergeBuilding && hand.empty()) {
 			onHandEmpty.Invoke();
 		}
 	}

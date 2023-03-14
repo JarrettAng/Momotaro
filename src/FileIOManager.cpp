@@ -21,56 +21,56 @@ The functions include:
 namespace FileIOManager {
 
 	namespace GM = GridManager;
-///////////////////////////////////////////////////////////////////////////
-//Helper function to save the current building data to file
-	void SaveBuildingDataToFile(std::vector<BuildingData>& buildingData){
-		if(buildingData.empty()){
-		// if(BuildingManager::GetBuildingDataVector().empty()){
+	///////////////////////////////////////////////////////////////////////////
+	//Helper function to save the current building data to file
+	void SaveBuildingDataToFile(std::vector<BuildingData>& buildingData) {
+		if (buildingData.empty()) {
+			// if(BuildingManager::GetBuildingDataVector().empty()){
 			std::cerr << "No buildings to save from!\n";
 			assert(0);
 			return;
 		}
 		std::ofstream buildingFile("Assets/JSON_Data/buildings2.momodata");
-		if(!buildingFile.is_open()){
+		if (!buildingFile.is_open()) {
 			std::cerr << "Unable to write to file!\n";
 			assert(0);
 		}
 		// buildingFile << "Building Count " << BuildingManager::GetBuildingDataVector().size() <<'\n';
 		buildingFile << '\n';
-		for(BuildingData _data : buildingData){
-		// for(BuildingData _data : BuildingManager::GetBuildingDataVector()){
+		for (BuildingData _data : buildingData) {
+			// for(BuildingData _data : BuildingManager::GetBuildingDataVector()){
 			buildingFile << "type " << (int)(_data.type) << '\n';
 			buildingFile << "size " << _data.size.x << ' ' << _data.size.y << '\n';
 			buildingFile << "level " << (int)(_data.level) << '\n';
 			buildingFile << "synergy ";
-			buildingFile << _data.SynergyResidential <<' ';
-			buildingFile << _data.SynergyCommercial <<' ';
-			buildingFile << _data.SynergyIndustrial <<' ';
-			buildingFile << _data.SynergyNature <<'\n';
+			buildingFile << _data.SynergyResidential << ' ';
+			buildingFile << _data.SynergyCommercial << ' ';
+			buildingFile << _data.SynergyIndustrial << ' ';
+			buildingFile << _data.SynergyNature << '\n';
 			buildingFile << _data.name << '\n';
 			buildingFile << _data.desc << '\n';
-			buildingFile << "texture " <<(int)(_data.TextureID) << '\n';
+			buildingFile << "texture " << (int)(_data.TextureID) << '\n';
 			buildingFile << '\n';
 		}
 		buildingFile.close();
 	}
-///////////////////////////////////////////////////////////////////////////
-//
-	void LoadBuildingDataFromFile(std::vector<BuildingData>& buildingsData){
+	///////////////////////////////////////////////////////////////////////////
+	//
+	void LoadBuildingDataFromFile(std::vector<BuildingData>& buildingsData) {
 		std::ifstream buildingFile("Assets/JSON_Data/buildings.momodata");
-		if(!buildingFile.is_open()){
+		if (!buildingFile.is_open()) {
 			std::cerr << "Unable to open Assets/JSON_Data/buildings.momodata!" << '\n';
 			assert(0);
 		}
 		std::string buffer{};
-		int lineCount{0};
+		int lineCount{ 0 };
 		BuildingData _data{};
-		while(std::getline(buildingFile,buffer)){
-				//Loop through each char 
-				if(lineCount == 5) _data.name = buffer;
-				if(lineCount == 6) _data.desc = buffer;
-				for(int i{ 0 }; i < static_cast<int>(buffer.length()); ++i){
-				if(isdigit(buffer[i])){
+		while (std::getline(buildingFile, buffer)) {
+			//Loop through each char 
+			if (lineCount == 5) _data.name = buffer;
+			if (lineCount == 6) _data.desc = buffer;
+			for (int i{ 0 }; i < static_cast<int>(buffer.length()); ++i) {
+				if (isdigit(buffer[i])) {
 					//This is to explicitly tell the compiler, hey! I know what I'm doing with the indexes
 					int _residential = i - 1;
 					int _commercial = i + 2;
@@ -79,36 +79,36 @@ namespace FileIOManager {
 					switch (lineCount)
 					{
 					case 1://TYPE
-					_data.type = (BuildingEnum::TYPE)(std::atoi(&buffer[i]));
+						_data.type = (BuildingEnum::TYPE)(std::atoi(&buffer[i]));
 						break;
 					case 2://SIZE
-					if(!_data.size.x)_data.size.x = std::atoi(&buffer[i]);
-					if(_data.size.x)_data.size.y = std::atoi(&buffer[i]);
+						if (!_data.size.x)_data.size.x = std::atoi(&buffer[i]);
+						if (_data.size.x)_data.size.y = std::atoi(&buffer[i]);
 						break;
 					case 3://LEVEL
-					_data.level = (BuildingEnum::LEVEL)(std::atoi(&buffer[i]));
+						_data.level = (BuildingEnum::LEVEL)(std::atoi(&buffer[i]));
 						break;
 					case 4://SYNERGY
 
-					if(!_data.SynergyResidential){
-						_data.SynergyResidential = std::atoi(&buffer[_residential]);
-						_data.SynergyCommercial = std::atoi(&buffer[_commercial]);
-						_data.SynergyIndustrial = std::atoi(&buffer[_industrial]);
-						_data.SynergyNature = std::atoi(&buffer[_nature]);
-						break;
-					}
+						if (!_data.SynergyResidential) {
+							_data.SynergyResidential = std::atoi(&buffer[_residential]);
+							_data.SynergyCommercial = std::atoi(&buffer[_commercial]);
+							_data.SynergyIndustrial = std::atoi(&buffer[_industrial]);
+							_data.SynergyNature = std::atoi(&buffer[_nature]);
+							break;
+						}
 						break;
 					case 5://NAME	
-					// _data.name = buffer;						
+						// _data.name = buffer;						
 						break;
 					case 6://DESC							
-					// _data.desc = buffer;						
+						// _data.desc = buffer;						
 						break;
 					case 7://TEXTURE							
-					_data.TextureID = (TextureManager::TEX_TYPE)(std::atoi(&buffer[i]));
-					buildingsData.push_back(_data);
-					_data= BuildingData{};
-					lineCount = -1;
+						_data.TextureID = (TextureManager::TEX_TYPE)(std::atoi(&buffer[i]));
+						buildingsData.push_back(_data);
+						_data = BuildingData{};
+						lineCount = -1;
 						break;
 					}
 				}
@@ -117,70 +117,70 @@ namespace FileIOManager {
 		}
 		buildingFile.close();
 	}
-///////////////////////////////////////////////////////////////////////////
-//Saves the map to a custom file (used by gridmanager)
-	void SaveGridToFile(){
+	///////////////////////////////////////////////////////////////////////////
+	//Saves the map to a custom file (used by gridmanager)
+	void SaveGridToFile() {
 		std::ofstream mapFile("Assets/JSON_Data/Maps/map.momomaps");
-		if(!mapFile.is_open()){
+		if (!mapFile.is_open()) {
 			std::cerr << "Unable to write to file!\n";
 			assert(0);
 		}
-		mapFile << "Width " << GridManager::gridX <<'\n';
-		mapFile << "Height " << GridManager::gridY <<'\n';
-		for(int y{0}; y < GridManager::gridY; ++y){
-			for(int x{0}; x < GridManager::gridX; ++x){
-				mapFile << static_cast<int>((GridManager::GetGrid()+GridManager::GetIndex(Vec2<int>{x,y}))->isRenderable);
-				if(x < GridManager::gridX-1) mapFile << ' ';
+		mapFile << "Width " << GridManager::gridX << '\n';
+		mapFile << "Height " << GridManager::gridY << '\n';
+		for (int y{ 0 }; y < GridManager::gridY; ++y) {
+			for (int x{ 0 }; x < GridManager::gridX; ++x) {
+				mapFile << static_cast<int>((GridManager::GetGrid() + GridManager::GetIndex(Vec2<int>{x, y}))->isRenderable);
+				if (x < GridManager::gridX - 1) mapFile << ' ';
 			}
-			mapFile<<'\n';
+			mapFile << '\n';
 		}
 		mapFile.close();
 	}
 
-///////////////////////////////////////////////////////////////////////////
-//Loads a map from the specified filename (used in gridmanager)
-    GM::cell* LoadGridFromFile(std::string fileName)
-    {
+	///////////////////////////////////////////////////////////////////////////
+	//Loads a map from the specified filename (used in gridmanager)
+	GM::cell* LoadGridFromFile(std::string fileName)
+	{
 		GM::cell* newMap{};
 		std::fstream inputFile(fileName);
-		if(!inputFile.is_open()){
+		if (!inputFile.is_open()) {
 			std::cerr << "Unable to read" << fileName << '\n';
 			assert(0);
 		}
 		std::string buffer; 		//where each line of text will be stored
 		int lineCount{};
 		while (std::getline(inputFile, buffer)) {
-		int xIndex = 0;	//Since each line has a spacing, we only want to count the xIndex when we get a number
-		//First we loop through each line and grab the numbers
-		for (int i{ 0 }; i < static_cast<int>(buffer.length()); ++i) {
-			if (isdigit(buffer[i]))
-			{
-				//The first 2 lines will be the width and the height
-				if (lineCount == 0 && GM::gridX == 0) GM::gridX = std::atoi(&buffer[i]);
-				if (lineCount == 1 && GM::gridY == 0) GM::gridY = std::atoi(&buffer[i]);
-				// 	//since we got the width and height of the map, we can generate it
-				if (lineCount == 1 && (GM::gridY > 0 && GM::gridX > 0)) newMap = {new GM::cell[GM::gridX*GM::gridY]{}};
-				//Once the line count exceeds 1, meaning we already have the width&height, we can start to add to array
-				if (lineCount > 1) {
-					//If the value in the mapdata is NOT 1, it shall be treated as a 0 (which means it's renderable)
-					newMap[GM::GetIndex(xIndex,lineCount-2)].isRenderable = std::atoi(&buffer[i]);
-					xIndex++;
+			int xIndex = 0;	//Since each line has a spacing, we only want to count the xIndex when we get a number
+			//First we loop through each line and grab the numbers
+			for (int i{ 0 }; i < static_cast<int>(buffer.length()); ++i) {
+				if (isdigit(buffer[i]))
+				{
+					//The first 2 lines will be the width and the height
+					if (lineCount == 0 && GM::gridX == 0) GM::gridX = std::atoi(&buffer[i]);
+					if (lineCount == 1 && GM::gridY == 0) GM::gridY = std::atoi(&buffer[i]);
+					// 	//since we got the width and height of the map, we can generate it
+					if (lineCount == 1 && (GM::gridY > 0 && GM::gridX > 0)) newMap = { new GM::cell[GM::gridX * GM::gridY]{} };
+					//Once the line count exceeds 1, meaning we already have the width&height, we can start to add to array
+					if (lineCount > 1) {
+						//If the value in the mapdata is NOT 1, it shall be treated as a 0 (which means it's renderable)
+						newMap[GM::GetIndex(xIndex, lineCount - 2)].isRenderable = std::atoi(&buffer[i]);
+						xIndex++;
+					}
 				}
 			}
+			lineCount++;		//Linecount-2 is basically our yIndex
 		}
-		lineCount++;		//Linecount-2 is basically our yIndex
+		inputFile.close();
+		return newMap;
 	}
-	inputFile.close();
-	return newMap;
-    }
 
-///////////////////////////////////////////////////////////////////////////
-//*TODO : SERIALISATION FOR BUILDINGS WITH CUSTOM FILETYPES!
-    void ReadBuildingsData(std::vector<BuildingData>& buildingsData) {
+	///////////////////////////////////////////////////////////////////////////
+	//*TODO : SERIALISATION FOR BUILDINGS WITH CUSTOM FILETYPES!
+	void ReadBuildingsData(std::vector<BuildingData>& buildingsData) {
 		std::ifstream dataFile{ "Assets/JSON_Data/buildingsData.json" };
 		// json data = json::parse(dataFile);
 		if (!dataFile) {
-			std::cerr << "Error " <<__FILE__ << "ln" << __LINE__ << ": Unable to read buildings data JSON file!\n";
+			std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << ": Unable to read buildings data JSON file!\n";
 		}
 
 		// BuildingData testBuilding{};
@@ -193,32 +193,32 @@ namespace FileIOManager {
 
 		// Store data in the buildingsData vector (array)
 		// Temp only!! To be replaced with actual reading of the JSON file on top ^^
-		BuildingData newBuilding{ 
-			BuildingEnum::RESIDENTIAL, 
+		BuildingData newBuilding{
+			BuildingEnum::RESIDENTIAL,
 			Vec2<int>{1,1},
-			BuildingEnum::L1, 
+			BuildingEnum::L1,
 			BuildingEnum::RIGHT,
 			1, 3, -5, 1,
-			"Small house", "Starter red house with an actual working chimney!",
-			TextureManager::RESIDENTIAL_1X1_L1};
+			"Small house", "Starter red house!",
+			TextureManager::RESIDENTIAL_1X1_L1 };
 		buildingsData.push_back(newBuilding);
 		BuildingData newBuilding2{
 			 BuildingEnum::RESIDENTIAL,
-			 Vec2<int>{1,1}, 
+			 Vec2<int>{1,1},
 			 BuildingEnum::L2,
 			 BuildingEnum::RIGHT,
-			 1, 3, -5, 1, 
+			 1, 3, -5, 1,
 			 "Terrace house", "Bigger blue house with some lovely flowers.",
-			 TextureManager::RESIDENTIAL_1X1_L2};
+			 TextureManager::RESIDENTIAL_1X1_L2 };
 		buildingsData.push_back(newBuilding2);
-		BuildingData newBuilding3{ 
+		BuildingData newBuilding3{
 			BuildingEnum::RESIDENTIAL,
 			Vec2<int>{1,1},
 			BuildingEnum::L3,
 			BuildingEnum::RIGHT,
-			1, 3, -5, 1, 
+			1, 3, -5, 1,
 			"Shiny house", "For the rich people, we made your roof shine too.",
-			TextureManager::RESIDENTIAL_1X1_L3};
+			TextureManager::RESIDENTIAL_1X1_L3 };
 		buildingsData.push_back(newBuilding3);
 
 		//BuildingData newBuilding4{ RESIDENTIAL, _2X1, L1, -1, 5, -8, 3, "Small house", "Small lovely house", 010, 000 };
@@ -228,32 +228,32 @@ namespace FileIOManager {
 		//BuildingData newBuilding6{ RESIDENTIAL, _2X1, L3, -1, 5, -8, 3, "Small house", "Small lovely house", 012, 000 };
 		//buildingsData.push_back(newBuilding6);
 
-		BuildingData newBuilding7{ 
+		BuildingData newBuilding7{
 			BuildingEnum::COMMERCIAL,
-			Vec2<int>{1,1}, 
-			BuildingEnum::L1, 
-			BuildingEnum::RIGHT,
-			3, -1, 1, 1, 
-			"Street Stall","Can use your CDC vouchers here",
-			TextureManager::COMMERCIAL_1X1_L1};
-		buildingsData.push_back(newBuilding7);
-		BuildingData newBuilding8{ 
-			BuildingEnum::COMMERCIAL, 
-			Vec2<int>{1,1}, 
-			BuildingEnum::L2, 
-			BuildingEnum::RIGHT,
-			3, -1, 1, 1, 
-			"Small Shop", "Lovely shop with lovely goods", 
-			TextureManager::COMMERCIAL_1X1_L2};
-		buildingsData.push_back(newBuilding8);
-		BuildingData newBuilding9{ 
-			BuildingEnum::COMMERCIAL, 
 			Vec2<int>{1,1},
-			BuildingEnum::L3, 
+			BuildingEnum::L1,
 			BuildingEnum::RIGHT,
-			3, -1, 1, 1, 
-			"Big Shophouse", "Big shophouse which sells many goods", 
-			TextureManager::COMMERCIAL_1X1_L3};
+			3, -1, 1, 1,
+			"Street Stall","Can use your CDC vouchers here",
+			TextureManager::COMMERCIAL_1X1_L1 };
+		buildingsData.push_back(newBuilding7);
+		BuildingData newBuilding8{
+			BuildingEnum::COMMERCIAL,
+			Vec2<int>{1,1},
+			BuildingEnum::L2,
+			BuildingEnum::RIGHT,
+			3, -1, 1, 1,
+			"Small Shop", "Lovely shop with lovely goods",
+			TextureManager::COMMERCIAL_1X1_L2 };
+		buildingsData.push_back(newBuilding8);
+		BuildingData newBuilding9{
+			BuildingEnum::COMMERCIAL,
+			Vec2<int>{1,1},
+			BuildingEnum::L3,
+			BuildingEnum::RIGHT,
+			3, -1, 1, 1,
+			"Big Shophouse", "Big shophouse which sells many goods",
+			TextureManager::COMMERCIAL_1X1_L3 };
 		buildingsData.push_back(newBuilding9);
 
 		//BuildingData newBuilding10{ COMMERCIAL, _2X1, L1, 5, 0, -5, 1, "Small house", "Small lovely house", 110, 000 };
@@ -263,32 +263,32 @@ namespace FileIOManager {
 		//BuildingData newBuilding12{ COMMERCIAL, _2X1, L3, 5, 0, -5, 1, "Small house", "Small lovely house", 112, 000 };
 		//buildingsData.push_back(newBuilding12);
 
-		BuildingData newBuilding13{ 
-			BuildingEnum::INDUSTRIAL, 
-			Vec2<int>{1,1}, 
-			BuildingEnum::L1, 
+		BuildingData newBuilding13{
+			BuildingEnum::INDUSTRIAL,
+			Vec2<int>{1,1},
+			BuildingEnum::L1,
 			BuildingEnum::RIGHT,
-			-5, 1, 5, 0, 
+			-5, 1, 5, 0,
 			"Storage Box", "A small boxy building to store boxes.",
-			TextureManager::INDUSTRIAL_1X1_L1};
+			TextureManager::INDUSTRIAL_1X1_L1 };
 		buildingsData.push_back(newBuilding13);
-		BuildingData newBuilding14{ 
-			BuildingEnum::INDUSTRIAL, 
-			Vec2<int>{1,1}, 
-			BuildingEnum::L2, 
+		BuildingData newBuilding14{
+			BuildingEnum::INDUSTRIAL,
+			Vec2<int>{1,1},
+			BuildingEnum::L2,
 			BuildingEnum::RIGHT,
-			-5, 1, 5, 0, 
-			"Big Lab", "Discover the secrets of life here. Hint: It's ligma.", 
-			TextureManager::INDUSTRIAL_1X1_L2};
+			-5, 1, 5, 0,
+			"Big Lab", "Discover the secrets of life here. Hint: It's ligma.",
+			TextureManager::INDUSTRIAL_1X1_L2 };
 		buildingsData.push_back(newBuilding14);
-		BuildingData newBuilding15{ 
-			BuildingEnum::INDUSTRIAL, 
-			Vec2<int>{1,1}, 
-			BuildingEnum::L3, 
+		BuildingData newBuilding15{
+			BuildingEnum::INDUSTRIAL,
+			Vec2<int>{1,1},
+			BuildingEnum::L3,
 			BuildingEnum::RIGHT,
-			-5, 1, 5, 0, 
-			"Power Plant", "Powered by the dead.", 
-			TextureManager::INDUSTRIAL_1X1_L3};
+			-5, 1, 5, 0,
+			"Power Plant", "Powered by the dead.",
+			TextureManager::INDUSTRIAL_1X1_L3 };
 		buildingsData.push_back(newBuilding15);
 
 		//BuildingData newBuilding16{ INDUSTRIAL, _2X2, L1, -8, -5, 8, 0, "Small house", "Small lovely house", 210, 000 };
