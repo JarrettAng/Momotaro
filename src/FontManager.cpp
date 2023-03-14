@@ -33,7 +33,7 @@ namespace FontManager {
 		Add fonts to vector.
 	*************************************************************************/
 	void InitializeFont() {
-		fonts.push_back({ ROBOTO,  AEGfxCreateFont("Assets/Fonts/Roboto-Regular.ttf", (int)DEFAULT_FONT_SIZE) });
+		fonts.push_back({ ROBOTO,  AEGfxCreateFont("Assets/Fonts/RobotoMono-Regular.ttf", (int)DEFAULT_FONT_SIZE) });
 		fonts.push_back({ SHIN_GO,  AEGfxCreateFont("Assets/Fonts/Shin-Go.otf", (int)DEFAULT_FONT_SIZE) });
 	}
 
