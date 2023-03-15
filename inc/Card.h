@@ -80,7 +80,7 @@ public:
 	void UpdateComponentPositions() {
 		// Load name data based on position
 		// The name text is at the top 75% of the card with a 10% padding from the left
-		Vec2<float> nameTextPos{position.pos.x + GetPercentageOf(position.size.x, 0.1f), position.pos.y - GetPercentageOf(position.size.y, 0.75f)};
+		Vec2<float> nameTextPos{position.pos.x + GetPercentageOf(position.size.x, 0.15f), position.pos.y - GetPercentageOf(position.size.y, 0.75f)};
 		// Add a 20% padding for the text so it does not touch the edge
 		nameText = UI::TextBox(nameTextPos, bData.name, UI::CENTER_JUSTIFY, GetPercentageOf(position.size.x, 0.8f), 15.0f, COLOR_BLACK);
 

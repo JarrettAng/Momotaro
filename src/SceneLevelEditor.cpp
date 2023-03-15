@@ -29,7 +29,7 @@ The functions include:
 ///////////////////////////////////////////////////////////////////////////
 
 void SceneLevelEditor::Load() {
-	return;
+	GridManager::Initialize();
 }
 
 void SceneLevelEditor::Initialize() {
@@ -37,19 +37,21 @@ void SceneLevelEditor::Initialize() {
 }
 
 void SceneLevelEditor::Update() {
+	GridManager::UpdateMouseToGrid();
 	PauseManager::Update();
 }
 
 void SceneLevelEditor::Draw() {
 	AEGfxSetBackgroundColor(WATER);
 
+	GridManager::PrepareTileRenderBatch();
 	PauseManager::Draw();
 
 	RenderSystem::Render();
 }
 
 void SceneLevelEditor::Free() {
-	return;
+	GridManager::Free();
 }
 
 void SceneLevelEditor::Unload() {

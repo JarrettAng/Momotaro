@@ -31,7 +31,7 @@ The functions include:
 ///////////////////////////////////////////////////////////////////////////
 
 void SceneTutorial::Load() {
-	return;
+	GridManager::Initialize();
 }
 
 void SceneTutorial::Initialize() {
@@ -39,19 +39,21 @@ void SceneTutorial::Initialize() {
 }
 
 void SceneTutorial::Update() {
+	GridManager::UpdateMouseToGrid();
 	PauseManager::Update();
 }
 
 void SceneTutorial::Draw() {
 	AEGfxSetBackgroundColor(WATER);
 
+	GridManager::PrepareTileRenderBatch();
 	PauseManager::Draw();
 
 	RenderSystem::Render();
 }
 
 void SceneTutorial::Free() {
-	return;
+	GridManager::Free();
 }
 
 void SceneTutorial::Unload() {
