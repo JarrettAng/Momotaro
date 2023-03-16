@@ -16,7 +16,6 @@ namespace TextureManager {
 	/*!***********************************************************************
 	* FORWARD DECLARATION
 	*************************************************************************/
-	void LoadTextures();
 	void InitializeTextures();
 	void GenerateMesh();
 
@@ -28,127 +27,9 @@ namespace TextureManager {
 	std::vector<TextureSheet> textures;
 	std::vector<Mesh> meshes;
 
-	/*!***********************************************************************
-	* TEXTURES
-	*************************************************************************/
-
-	// BUILDINGS.
-	AEGfxTexture* residential_S_Tex;
-	AEGfxTexture* residential_M_Tex;
-	AEGfxTexture* residential_L_Tex;
-
-	AEGfxTexture* residential_1x2_S_Tex;
-	AEGfxTexture* residential_1x2_M_Tex;
-	AEGfxTexture* residential_1x2_L_Tex;
-
-	AEGfxTexture* commercial_S_Tex;
-	AEGfxTexture* commercial_M_Tex;
-	AEGfxTexture* commercial_L_Tex;
-
-	AEGfxTexture* industrial_S_Tex;
-	AEGfxTexture* industrial_M_Tex;
-	AEGfxTexture* industrial_L_Tex;
-
-	// NATURES.
-	AEGfxTexture* pond_Tex;
-	AEGfxTexture* mushroom_Tex;
-	AEGfxTexture* rock_Tex;
-
-	// NORMAL TILE.
-	AEGfxTexture* tile_Tex;
-
-	// UI.
-	AEGfxTexture* card_Tex;
-	AEGfxTexture* synergy_Tex;
-
-	AEGfxTexture* pause_Tex;
-	AEGfxTexture* pauseButton_Tex;
-
-	// SPLASH SCREEN.
-	AEGfxTexture* digipen_Logo_Tex;
-
-	// MAIN MENU.
-	AEGfxTexture* menu_Background_Tex;
-	AEGfxTexture* pointer_Tex;
-
-	AEGfxTexture* startGame_Tex;
-	AEGfxTexture* controls_Tex;
-	AEGfxTexture* options_Tex;
-	AEGfxTexture* editor_Tex;
-	AEGfxTexture* credits_Tex;
-	AEGfxTexture* quit_Tex;
-
-	AEGfxTexture* confirm_Prompt_Tex;
-	AEGfxTexture* yes_Tex;
-	AEGfxTexture* no_Tex;
-
-	// CREDITS
-	AEGfxTexture* credits_Background_Tex;
-	AEGfxTexture* back_Tex;
-
 	void Initialize() {
-		LoadTextures();
 		InitializeTextures();
 		GenerateMesh();
-	}
-
-	/*!***********************************************************************
-	\brief
-		Load textures from file.
-	*************************************************************************/
-	void LoadTextures() {
-		// BUILDINGS.
-		residential_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L1.png");
-		residential_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L2.png");
-		residential_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L3.png");
-
-		residential_1x2_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/residential_1x2_test.png");
-		residential_1x2_M_Tex = AEGfxTextureLoad("Assets/Textures/UI/BlueRect.png");
-		residential_1x2_L_Tex = AEGfxTextureLoad("Assets/Textures/UI/BlueRect.png");
-
-		commercial_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Commercial_1x1_L1.png");
-		commercial_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Commercial_1x1_L2.png");
-		commercial_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Commercial_1x1_L3.png");
-
-		industrial_S_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Industrial_1x1_L1.png");
-		industrial_M_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Industrial_1x1_L2.png");
-		industrial_L_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Industrial_1x1_L3.png");
-
-		// NORMAL TILE.
-		tile_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Tile.png");
-
-		// NATURE.
-		pond_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Pond.png");
-		mushroom_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Mushroom.png");
-		rock_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Rock.png");
-
-		// UI.
-		synergy_Tex = AEGfxTextureLoad("Assets/Textures/Game Pieces/Synergy.png");
-		card_Tex = AEGfxTextureLoad("Assets/Textures/UI/Card.png");
-		pause_Tex = AEGfxTextureLoad("Assets/Textures/UI/GameWindow.png");
-		pauseButton_Tex = AEGfxTextureLoad("Assets/Textures/UI/Pause_Button.png");
-
-		// SPLASH SCREEN.
-		digipen_Logo_Tex = AEGfxTextureLoad("Assets/Textures/UI/Digipen_Logo.png");
-
-		// MAIN MENU.
-		menu_Background_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Background.png");
-		pointer_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Pointer.png");
-
-		startGame_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/StartGame.png");
-		editor_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Editor.png");
-		options_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Options.png");
-		controls_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Controls.png");
-		credits_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Credits.png");
-		quit_Tex = AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Quit.png");
-
-		confirm_Prompt_Tex = AEGfxTextureLoad("Assets/Textures/UI/Confirmation_Prompt.png");
-		yes_Tex = AEGfxTextureLoad("Assets/Textures/UI/Yes_Btn.png");
-		no_Tex = AEGfxTextureLoad("Assets/Textures/UI/No_Btn.png");
-
-		// CREDITS
-		credits_Background_Tex = AEGfxTextureLoad("Assets/Textures/UI/Credits/Background.png");
-		back_Tex = AEGfxTextureLoad("Assets/Textures/UI/Back_Btn.png");
 	}
 
 	/*!***********************************************************************
@@ -160,52 +41,51 @@ namespace TextureManager {
 		// TO GET: ROWS, COLS AND FRAME INTERVAL, 
 		textures.push_back(TextureSheet{ NONE,nullptr, 1, 1,-1 });
 
-		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L1,residential_S_Tex,  1, 6, .2f });
-		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L2,residential_M_Tex, 1, 6, .2f });
-		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L3,residential_L_Tex, 3, 6, .2f });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L1, AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L1.png"),  1, 6, .2f });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L2, AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L2.png"), 1, 6, .2f });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L3,AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L3.png"), 3, 6, .2f });
 
-		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L1,residential_1x2_S_Tex, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L2,residential_1x2_M_Tex, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L3,residential_1x2_L_Tex, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L1,AEGfxTextureLoad("Assets/Textures/Game Pieces/residential_1x2_test.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L2, AEGfxTextureLoad("Assets/Textures/UI/BlueRect.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ RESIDENTIAL_1X2_L3,AEGfxTextureLoad("Assets/Textures/UI/BlueRect.png"), 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L1,commercial_S_Tex, 4, 6, .2f });
-		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L2,commercial_M_Tex, 4, 6, .2f });
-		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L3,commercial_L_Tex, 4, 6, .2f });
+		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L1,AEGfxTextureLoad("Assets/Textures/Game Pieces/Commercial_1x1_L1.png"), 4, 6, .2f });
+		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L2,AEGfxTextureLoad("Assets/Textures/Game Pieces/Commercial_1x1_L2.png"), 4, 6, .2f });
+		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L3,AEGfxTextureLoad("Assets/Textures/Game Pieces/Commercial_1x1_L3.png"), 4, 6, .2f });
 
-		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L1,industrial_S_Tex, 3, 9, .2f });
-		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L2,industrial_M_Tex, 3, 9, .2f });
-		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L3,industrial_L_Tex, 1, 27, .2f });
+		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L1,AEGfxTextureLoad("Assets/Textures/Game Pieces/Industrial_1x1_L1.png"), 3, 9, .2f });
+		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L2,AEGfxTextureLoad("Assets/Textures/Game Pieces/Industrial_1x1_L2.png"), 3, 9, .2f });
+		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L3,AEGfxTextureLoad("Assets/Textures/Game Pieces/Industrial_1x1_L3.png"), 1, 27, .2f });
 
-		textures.push_back(TextureSheet{ TILE_TEX,tile_Tex, 1, 2, .7f });
-		textures.push_back(TextureSheet{ NATURE_POND, pond_Tex,1, 2, 1.f });
-		textures.push_back(TextureSheet{ NATURE_MUSHROOM,mushroom_Tex, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ NATURE_ROCK, rock_Tex,1, 1, -1.f });
+		textures.push_back(TextureSheet{ TILE_TEX, AEGfxTextureLoad("Assets/Textures/Game Pieces/Tile.png"), 1, 2, .7f });
+		textures.push_back(TextureSheet{ NATURE_POND, AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Pond.png"),1, 2, 1.f });
+		textures.push_back(TextureSheet{ NATURE_MUSHROOM,AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Mushroom.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ NATURE_ROCK, AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Rock.png"),1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ CARD_BLUE,card_Tex, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ PAUSE_WINDOW,pause_Tex, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ PAUSE_BUTTON,pauseButton_Tex, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ CARD_BLUE,AEGfxTextureLoad("Assets/Textures/UI/Card.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ PAUSE_WINDOW,AEGfxTextureLoad("Assets/Textures/UI/GameWindow.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ PAUSE_BUTTON,AEGfxTextureLoad("Assets/Textures/UI/Pause_Button.png"), 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ SYNERGY,synergy_Tex, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ SYNERGY,AEGfxTextureLoad("Assets/Textures/Game Pieces/Synergy.png"), 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ DIGIPEN_LOGO,digipen_Logo_Tex, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ DIGIPEN_LOGO,AEGfxTextureLoad("Assets/Textures/UI/Digipen_Logo.png"), 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ MENU_BG,menu_Background_Tex, 1, 13, .1f });
-		textures.push_back(TextureSheet{ POINTER,pointer_Tex, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ MENU_BG,AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Background.png"), 1, 13, .1f });
+		textures.push_back(TextureSheet{ POINTER,AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Pointer.png"), 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ STARTGAME_BTN,startGame_Tex, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ EDITOR_BTN,editor_Tex, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ OPTIONS_BTN,options_Tex, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ CONTROLS_BTN,controls_Tex, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ CREDITS_BTN,credits_Tex, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ QUIT_BTN,quit_Tex, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ STARTGAME_BTN,AEGfxTextureLoad("Assets/Textures/UI/Main Menu/StartGame.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ EDITOR_BTN,AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Editor.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ OPTIONS_BTN,AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Options.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ CONTROLS_BTN,AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Controls.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ CREDITS_BTN,AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Credits.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ QUIT_BTN, AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Quit.png"), 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ CONFIRM_PROMPT,confirm_Prompt_Tex, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ YES_BTN,yes_Tex, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ NO_BTN,no_Tex, 1, 1, -1.f });
+		textures.push_back(TextureSheet{ CONFIRM_PROMPT,AEGfxTextureLoad("Assets/Textures/UI/Confirmation_Prompt.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ YES_BTN,AEGfxTextureLoad("Assets/Textures/UI/Yes_Btn.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ NO_BTN,AEGfxTextureLoad("Assets/Textures/UI/No_Btn.png"), 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ CREDITS_BG,credits_Background_Tex, 1, 1, -1.f });
-		textures.push_back(TextureSheet{ BACK_BTN,back_Tex, 1, 1, -1.f });
-
+		textures.push_back(TextureSheet{ CREDITS_BG, AEGfxTextureLoad("Assets/Textures/UI/Credits/Background.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ BACK_BTN, AEGfxTextureLoad("Assets/Textures/UI/Back_Btn.png"), 1, 1, -1.f });
 
 		// Initialize frame UV size based on number of cols and rows.
 		for (TextureSheet& t : textures) {
@@ -352,55 +232,12 @@ namespace TextureManager {
 			AEGfxMeshFree(m.mesh);
 		}
 
-		// Access violation error?
 		for (TextureSheet& t : textures) {
+			// Cant unload nullptr. So skip.
+			if (t.type == NONE) continue;
+
 			AEGfxTextureUnload(t.tex);
 		}
-
-		//AEGfxTextureUnload(residential_S_Tex);
-		//AEGfxTextureUnload(residential_M_Tex);
-		//AEGfxTextureUnload(residential_L_Tex);
-
-		//AEGfxTextureUnload(residential_1x2_S_Tex);
-		//AEGfxTextureUnload(residential_1x2_M_Tex);
-		//AEGfxTextureUnload(residential_1x2_L_Tex);
-
-		//AEGfxTextureUnload(commercial_S_Tex);
-		//AEGfxTextureUnload(commercial_M_Tex);
-		//AEGfxTextureUnload(commercial_L_Tex);
-
-		//AEGfxTextureUnload(industrial_S_Tex);
-		//AEGfxTextureUnload(industrial_M_Tex);
-		//AEGfxTextureUnload(industrial_L_Tex);
-
-		//AEGfxTextureUnload(tile_Tex);
-		//AEGfxTextureUnload(pond_Tex);
-		//AEGfxTextureUnload(mushroom_Tex);
-		//AEGfxTextureUnload(rock_Tex);
-
-		//AEGfxTextureUnload(synergy_Tex);
-		//AEGfxTextureUnload(card_Tex);
-		//AEGfxTextureUnload(pause_Tex);
-		//AEGfxTextureUnload(pauseButton_Tex);
-
-		//AEGfxTextureUnload(digipen_Logo_Tex);
-
-		//AEGfxTextureUnload(menu_Background_Tex);
-		//AEGfxTextureUnload(pointer_Tex);
-
-		//AEGfxTextureUnload(startGame_Tex);
-		//AEGfxTextureUnload(editor_Tex);
-		//AEGfxTextureUnload(options_Tex);
-		//AEGfxTextureUnload(controls_Tex);
-		//AEGfxTextureUnload(credits_Tex);
-		//AEGfxTextureUnload(quit_Tex);
-
-		//AEGfxTextureUnload(confirm_Prompt_Tex);
-		//AEGfxTextureUnload(yes_Tex);
-		//AEGfxTextureUnload(no_Tex);
-
-		//AEGfxTextureUnload(credits_Background_Tex);
-		//AEGfxTextureUnload(back_Tex);
 	}
 
 	/*!***********************************************************************
