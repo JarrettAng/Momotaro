@@ -31,7 +31,7 @@ The functions include:
 ///////////////////////////////////////////////////////////////////////////
 
 void SceneTutorial::Load() {
-	GridManager::Initialize();
+	GridManager::Initialize("Assets/JSON_Data/Maps/tutorial.momomaps");
 }
 
 void SceneTutorial::Initialize() {

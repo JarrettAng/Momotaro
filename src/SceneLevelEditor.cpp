@@ -29,7 +29,7 @@ The functions include:
 ///////////////////////////////////////////////////////////////////////////
 
 void SceneLevelEditor::Load() {
-	GridManager::Initialize();
+	GridManager::Initialize("Assets/JSON_Data/Maps/tutorial.momomaps");
 }
 
 void SceneLevelEditor::Initialize() {

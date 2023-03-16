@@ -86,7 +86,7 @@ namespace GridManager {
 	 * @brief Initializes the grid and spawns in the tiles. Also sets which tiles are to be rendered
 	 *
 	 */
-	void Initialize();
+	void Initialize(std::string const& filePath);
 
     void SpawnBuilding(Vec2<int> mousePos);
 	void Free();
