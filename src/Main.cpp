@@ -28,6 +28,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 #if defined(DEBUG) | defined(_DEBUG)
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
+	//_crtBreakAlloc = 6359;
 
 	// Engine Initialization
 	AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, true, NULL);	// Using custom window procedure
@@ -44,7 +45,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	///////////////////////////////////////////////////////////////////////
 	// Free the things that were initialized here
-	//GridManager::Free();
+	TextureManager::Unload();
+	FontManager::Unload();
 
 	// Engine Exit
 	AESysExit();

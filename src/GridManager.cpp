@@ -700,16 +700,15 @@ namespace GridManager {
 	void Free() {
 		
 		delete[] grid;
-		InputManager::Free();
-		//InputManager::UnsubscribeKey(AEVK_C, InputManager::TRIGGERED, ClearGrid);
-		//InputManager::UnsubscribeKey(AEVK_1, InputManager::TRIGGERED, SpawnResidential);
-		//InputManager::UnsubscribeKey(AEVK_2, InputManager::TRIGGERED, SpawnCommerical);
-		//InputManager::UnsubscribeKey(AEVK_3, InputManager::TRIGGERED, SpawnIndustrial);
-		//InputManager::UnsubscribeKey(AEVK_Q, InputManager::TRIGGERED, SpawnBigResidential);
-		//InputManager::UnsubscribeKey(AEVK_W, InputManager::TRIGGERED, SpawnBigResidential3x1);
-		//InputManager::UnsubscribeKey(AEVK_E, InputManager::TRIGGERED, SpawnBigResidential);
-		//InputManager::UnsubscribeKey(AEVK_S, InputManager::TRIGGERED, SpawnBigResidential);
-		//InputManager::UnsubscribeKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
+		InputManager::UnsubscribeKey(AEVK_C, InputManager::TRIGGERED, ClearGrid);
+		InputManager::UnsubscribeKey(AEVK_1, InputManager::TRIGGERED, SpawnResidential);
+		InputManager::UnsubscribeKey(AEVK_2, InputManager::TRIGGERED, SpawnCommerical);
+		InputManager::UnsubscribeKey(AEVK_3, InputManager::TRIGGERED, SpawnIndustrial);
+		InputManager::UnsubscribeKey(AEVK_Q, InputManager::TRIGGERED, SpawnBigResidential);
+		InputManager::UnsubscribeKey(AEVK_W, InputManager::TRIGGERED, SpawnBigResidential3x1);
+		InputManager::UnsubscribeKey(AEVK_E, InputManager::TRIGGERED, SpawnBigResidential);
+		InputManager::UnsubscribeKey(AEVK_S, InputManager::TRIGGERED, SpawnBigResidential);
+		InputManager::UnsubscribeKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
 
 		CardManager::onNewCardSelected.Unsubscribe(GetBuildingCard);
 		CardManager::onCardPlaced.Unsubscribe(SpawnBuilding);

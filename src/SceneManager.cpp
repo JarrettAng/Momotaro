@@ -131,8 +131,7 @@ namespace SceneManager {
 	// Things to do at the very end of the game
 	void Free() {
 		PauseManager::onTogglePause.UnsubscribeAll();
-		FontManager::Unload();
-		TextureManager::Unload();
+		InputManager::Free();
 	}
 
 	void UpdatePausedState(bool newPausedState) {

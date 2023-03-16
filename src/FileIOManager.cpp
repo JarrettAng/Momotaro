@@ -159,7 +159,11 @@ namespace FileIOManager {
 					if (lineCount == 0 && GM::gridX == 0) GM::gridX = std::atoi(&buffer[i]);
 					if (lineCount == 1 && GM::gridY == 0) GM::gridY = std::atoi(&buffer[i]);
 					// 	//since we got the width and height of the map, we can generate it
-					if (lineCount == 1 && (GM::gridY > 0 && GM::gridX > 0)) newMap = { new GM::cell[GM::gridX * GM::gridY]{} };
+					if (lineCount == 1 && (GM::gridY > 0 && GM::gridX > 0)) {
+						if (!newMap) {
+							newMap = { new GM::cell[GM::gridX * GM::gridY]{} };
+						}
+					}
 					//Once the line count exceeds 1, meaning we already have the width&height, we can start to add to array
 					if (lineCount > 1) {
 						//If the value in the mapdata is NOT 1, it shall be treated as a 0 (which means it's renderable)
