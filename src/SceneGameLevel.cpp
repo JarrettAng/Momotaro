@@ -31,7 +31,7 @@ The functions include:
 
 
 void SceneGameLevel::Load() {
-	GridManager::Initialize();
+	GridManager::Initialize("Assets/JSON_Data/Maps/map2.momomaps");
 	BuildingManager::Initialize();
 	ScoreManger::Initialize();
 }

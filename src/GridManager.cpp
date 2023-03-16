@@ -59,9 +59,9 @@ namespace GridManager {
 	///////////////////////////////////////////////////////////////////////////
 	//INITIALISE GRID 								
 	///////////////////////////////////////////////////////////////////////////
-	void Initialize() {
+	void Initialize(std::string const& filePath) {
 		// grid = { new cell[gridX * gridY]{} };
-		grid = FileIOManager::LoadGridFromFile("Assets/JSON_Data/Maps/map2.momomaps");
+		grid = FileIOManager::LoadGridFromFile(filePath);
 		//GRID SET UP
 		//Init a grid with 0 tiles
 		for (int y{ 0 }; y < gridY; ++y) {
