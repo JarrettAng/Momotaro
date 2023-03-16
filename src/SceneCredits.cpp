@@ -216,7 +216,7 @@ void InitializeBackBtn() {
 	backBtn.func = ReturnToMenu;
 
 	backBtn.render.rect.transform.pos.x = GetWorldXByPercentage(89.5f);
-	backBtn.render.rect.transform.pos.y = GetWorldYByPercentage(13.2f);
+	backBtn.render.rect.transform.pos.y = GetWorldYByPercentage(10.2f);
 
 	backBtn.render.rect.transform.size.x = 150.0f;
 	backBtn.render.rect.transform.size.y = 78.0f;

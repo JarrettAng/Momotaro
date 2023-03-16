@@ -173,7 +173,7 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ COMMERCIAL_1X1_L3,commercial_L_Tex, 4, 6, .2f });
 
 		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L1,industrial_S_Tex, 3, 9, .2f });
-		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L2,industrial_M_Tex,	3, 9, .2f });
+		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L2,industrial_M_Tex, 3, 9, .2f });
 		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L3,industrial_L_Tex, 1, 27, .2f });
 
 		textures.push_back(TextureSheet{ TILE_TEX,tile_Tex, 1, 2, .7f });
@@ -353,54 +353,54 @@ namespace TextureManager {
 		}
 
 		// Access violation error?
-		//for (TextureSheet& t : textures) {
-		//	AEGfxTextureUnload(t.tex);
-		//}
+		for (TextureSheet& t : textures) {
+			AEGfxTextureUnload(t.tex);
+		}
 
-		AEGfxTextureUnload(residential_S_Tex);
-		AEGfxTextureUnload(residential_M_Tex);
-		AEGfxTextureUnload(residential_L_Tex);
+		//AEGfxTextureUnload(residential_S_Tex);
+		//AEGfxTextureUnload(residential_M_Tex);
+		//AEGfxTextureUnload(residential_L_Tex);
 
-		AEGfxTextureUnload(residential_1x2_S_Tex);
-		AEGfxTextureUnload(residential_1x2_M_Tex);
-		AEGfxTextureUnload(residential_1x2_L_Tex);
+		//AEGfxTextureUnload(residential_1x2_S_Tex);
+		//AEGfxTextureUnload(residential_1x2_M_Tex);
+		//AEGfxTextureUnload(residential_1x2_L_Tex);
 
-		AEGfxTextureUnload(commercial_S_Tex);
-		AEGfxTextureUnload(commercial_M_Tex);
-		AEGfxTextureUnload(commercial_L_Tex);
+		//AEGfxTextureUnload(commercial_S_Tex);
+		//AEGfxTextureUnload(commercial_M_Tex);
+		//AEGfxTextureUnload(commercial_L_Tex);
 
-		AEGfxTextureUnload(industrial_S_Tex);
-		AEGfxTextureUnload(industrial_M_Tex);
-		AEGfxTextureUnload(industrial_L_Tex);
+		//AEGfxTextureUnload(industrial_S_Tex);
+		//AEGfxTextureUnload(industrial_M_Tex);
+		//AEGfxTextureUnload(industrial_L_Tex);
 
-		AEGfxTextureUnload(tile_Tex);
-		AEGfxTextureUnload(pond_Tex);
-		AEGfxTextureUnload(mushroom_Tex);
-		AEGfxTextureUnload(rock_Tex);
+		//AEGfxTextureUnload(tile_Tex);
+		//AEGfxTextureUnload(pond_Tex);
+		//AEGfxTextureUnload(mushroom_Tex);
+		//AEGfxTextureUnload(rock_Tex);
 
-		AEGfxTextureUnload(synergy_Tex);
-		AEGfxTextureUnload(card_Tex);
-		AEGfxTextureUnload(pause_Tex);
-		AEGfxTextureUnload(pauseButton_Tex);
+		//AEGfxTextureUnload(synergy_Tex);
+		//AEGfxTextureUnload(card_Tex);
+		//AEGfxTextureUnload(pause_Tex);
+		//AEGfxTextureUnload(pauseButton_Tex);
 
-		AEGfxTextureUnload(digipen_Logo_Tex);
+		//AEGfxTextureUnload(digipen_Logo_Tex);
 
-		AEGfxTextureUnload(menu_Background_Tex);
-		AEGfxTextureUnload(pointer_Tex);
+		//AEGfxTextureUnload(menu_Background_Tex);
+		//AEGfxTextureUnload(pointer_Tex);
 
-		AEGfxTextureUnload(startGame_Tex);
-		AEGfxTextureUnload(editor_Tex);
-		AEGfxTextureUnload(options_Tex);
-		AEGfxTextureUnload(controls_Tex);
-		AEGfxTextureUnload(credits_Tex);
-		AEGfxTextureUnload(quit_Tex);
+		//AEGfxTextureUnload(startGame_Tex);
+		//AEGfxTextureUnload(editor_Tex);
+		//AEGfxTextureUnload(options_Tex);
+		//AEGfxTextureUnload(controls_Tex);
+		//AEGfxTextureUnload(credits_Tex);
+		//AEGfxTextureUnload(quit_Tex);
 
-		AEGfxTextureUnload(confirm_Prompt_Tex);
-		AEGfxTextureUnload(yes_Tex);
-		AEGfxTextureUnload(no_Tex);
+		//AEGfxTextureUnload(confirm_Prompt_Tex);
+		//AEGfxTextureUnload(yes_Tex);
+		//AEGfxTextureUnload(no_Tex);
 
-		AEGfxTextureUnload(credits_Background_Tex);
-		AEGfxTextureUnload(back_Tex);
+		//AEGfxTextureUnload(credits_Background_Tex);
+		//AEGfxTextureUnload(back_Tex);
 	}
 
 	/*!***********************************************************************
