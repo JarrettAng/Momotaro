@@ -129,7 +129,12 @@ namespace FileIOManager {
 		mapFile << "Height " << GridManager::gridY << '\n';
 		for (int y{ 0 }; y < GridManager::gridY; ++y) {
 			for (int x{ 0 }; x < GridManager::gridX; ++x) {
-				mapFile << static_cast<int>((GridManager::GetGrid() + GridManager::GetIndex(Vec2<int>{x, y}))->isRenderable);
+				//If the tile is a placeable tile, we meed to check if it has a nature tile and store that
+				if((GridManager::GetGrid() + GridManager::GetIndex(Vec2<int>{x, y}))->isRenderable){
+					if((GM::GetGrid()+GM::GetIndex(Vec2<int>{x,y}))->_building.data.type != BuildingEnum::NATURE){
+						mapFile << 1;
+					} else mapFile << 2;
+				} else mapFile << 0;	//if not, the tile is probably not renderable anyway
 				if (x < GridManager::gridX - 1) mapFile << ' ';
 			}
 			mapFile << '\n';
@@ -168,6 +173,13 @@ namespace FileIOManager {
 					if (lineCount > 1) {
 						//If the value in the mapdata is NOT 1, it shall be treated as a 0 (which means it's renderable)
 						newMap[GM::GetIndex(xIndex, lineCount - 2)].isRenderable = std::atoi(&buffer[i]);
+						//Now that we know it's renderable, if it's > 1 it's either probabilisitic OR Nature.
+						if(std::atoi(&buffer[i])>1){
+							//assuming right now we only have nature tiles and not probabilistic. 
+							//gotta do some switch case here in future!
+							//TODO Future implementation for rando stuff
+							newMap[GM::GetIndex(xIndex, lineCount - 2)] = GM::NatureCell();
+						}
 						xIndex++;
 					}
 				}

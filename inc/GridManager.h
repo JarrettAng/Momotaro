@@ -99,6 +99,7 @@ namespace GridManager {
 	 * @return false if a building cannot be placed.
 	 */
 	bool isCellSafe(Vec2<int> selectedCell);
+	bool isWithinGrid(Vec2<int> selectedCell);
 
 	/**
 	 * @brief Spawns a residential building at mouse pos. Overwrites any existing structure.
@@ -126,6 +127,8 @@ namespace GridManager {
 	 * @param mousePos Player's Mouse position
 	 */
 	void SpawnNature();
+	cell NatureCell();
+	void ToggleTileRenderable();
 
 	/**
 	 * @brief Unused

@@ -93,8 +93,9 @@ namespace GridManager {
 		InputManager::SubscribeToKey(AEVK_Q, InputManager::TRIGGERED, SpawnBigResidential);
 		InputManager::SubscribeToKey(AEVK_W, InputManager::TRIGGERED, SpawnBigResidential3x1);
 		InputManager::SubscribeToKey(AEVK_E, InputManager::TRIGGERED, SpawnBigResidential);
-		InputManager::SubscribeToKey(AEVK_S, InputManager::TRIGGERED, SpawnBigResidential);
+		InputManager::SubscribeToKey(AEVK_S, InputManager::TRIGGERED, FileIOManager::SaveGridToFile);
 		InputManager::SubscribeToKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
+		InputManager::SubscribeToKey(AEVK_T,InputManager::TRIGGERED, ToggleTileRenderable);
 
 		CardManager::onNewCardSelected.Subscribe(GetBuildingCard);
 		CardManager::onCardPlaced.Subscribe(SpawnBuilding);
@@ -135,6 +136,7 @@ namespace GridManager {
 	//Checks if the selected cell is safe to place a building on
 	///////////////////////////////////////////////////////////////////////////
 	bool isCellSafe(Vec2<int> selectedCell) {
+		if(!isWithinGrid(selectedCell)) return false;
 		// if ((((selectedCell.x) < 0) || ((selectedCell.x) > gridX)) || ((selectedCell.y) < 0 || (selectedCell.y) > gridY)) return false;
 		//If the tile is not even renderable, we cannot place
 		if (!grid[GetIndex(selectedCell.x, selectedCell.y)].isRenderable) return false;
@@ -142,7 +144,9 @@ namespace GridManager {
 		if (grid[GetIndex(selectedCell.x, selectedCell.y)].ID > 0) return false;
 		return true;
 	}
-
+	bool isWithinGrid(Vec2<int> selectedCell){
+		return (GetIndex(selectedCell) >= 0 && GetIndex(selectedCell) < (gridX*gridY));
+	}
 
 	///////////////////////////////////////////////////////////////////////////
 	//Changes the building orientation (debugging)
@@ -248,6 +252,28 @@ namespace GridManager {
 		if (!isCellSafe(SelectedCell)) return;
 		grid[index].ID = ++buildingID;
 		grid[index]._building = BuildingManager::GetRandomNatureBuilding();
+	}
+
+	cell NatureCell(){
+		return cell{
+			Vec2<int>{0,0},
+			true,
+			++buildingID,
+			BuildingManager::GetRandomNatureBuilding()
+		};
+	}
+
+	void ToggleTileRenderable(){
+		Vec2<int> mousePos = InputManager::GetMousePos();
+		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
+		int index = GetIndex(SelectedCell.x, SelectedCell.y);
+		if(!isWithinGrid(SelectedCell)) return;
+		grid[index].isRenderable = !grid[index].isRenderable;
+		//If the grid is not renderable, we reset the cell.
+		if(!grid[index].isRenderable){
+			grid[index].ID = 0;
+			grid[index]._building = Building{};
+		}
 	}
 #pragma endregion
 
@@ -438,12 +464,13 @@ namespace GridManager {
 //Draw function for the grid
 ///////////////////////////////////////////////////////////////////////////
 	void PrepareTileRenderBatch() {
-		// Your own rendering logic goes here
-		//Render grid test
+
+		///////////////////////////////////////////////////////////////////////////
+		//TILE RENDERING
+		///////////////////////////////////////////////////////////////////////////
 		for (int y{ 0 }; y < gridY; ++y) {
 			for (int x{ 0 }; x < gridX; ++x) {
 				int index = GetIndex(x, y);
-
 			//Draws the normal tiles (if it's water don't draw any)
 				if (grid[index].ID > 0) {
 					RenderSystem::AddRectToBatch(
@@ -453,7 +480,8 @@ namespace GridManager {
 						grid[index]._building.data.TextureID, 99
 					);
 				}
-				if (grid[index].isRenderable) RenderSystem::AddRectToBatch(RenderSystem::TILE_BATCH, static_cast<float>(grid[index].pos.x), static_cast<float>(grid[index].pos.y), 100, 100, TextureManager::TILE_TEX);
+				if (grid[index].isRenderable)
+				 RenderSystem::AddRectToBatch(RenderSystem::TILE_BATCH, static_cast<float>(grid[index].pos.x), static_cast<float>(grid[index].pos.y), 100, 100, TextureManager::TILE_TEX);
 			}
 		}
 		if (selectedBuilding != nullptr) {
