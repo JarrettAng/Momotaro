@@ -162,7 +162,7 @@ namespace CardManager {
 		selectedCard = nullptr;								// Deselect held card, if any
 
 		handBackground.size.x = (float)AEGfxGetWinMaxX();			// The width of the hand BG default to half the screen width
-		handBackground.size.y = (float)AEGfxGetWinMaxY() * 0.4f;	// and 25% of the screen height
+		handBackground.size.y = (float)AEGfxGetWinMaxY() * 0.4f;	// and 40% of the screen height
 
 		handBackground.pos.x = -handBackground.size.x / 2.0f;					 // The hand BG should be at the middle
 		handBackground.pos.y = (float)AEGfxGetWinMinY() * 0.95f + handBackground.size.y; // and bottom of the screen
@@ -253,13 +253,13 @@ namespace CardManager {
 			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.position.pos.x, card.position.pos.y, card.position.size.x, card.position.size.y, card.borderColor, 1);
 
 			// Drawing the card background
-			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.position.pos.x + card.position.size.x * 0.05f, card.position.pos.y - card.position.size.y * 0.035f, card.position.size.x * 0.9f, card.position.size.y * 0.925f, TextureManager::BLANK_PROMPT, 2);
+			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.position.pos.x + card.position.size.x * 0.05f, card.position.pos.y - card.position.size.y * 0.035f, card.position.size.x * 0.9f, card.position.size.y * 0.925f, TextureManager::CARD, 2);
 
 			// Drawing the building icon of the card
 			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.iconPos.pos.x, card.iconPos.pos.y, card.iconPos.size.x, card.iconPos.size.y, card.bData.TextureID, 3);
 
 			// Drawing of the card count at the top right corner of the card
-			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.countIconPos.pos.x, card.countIconPos.pos.y, card.countIconPos.size.x, card.countIconPos.size.y, { 1,1,1,1 }, 4);
+			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.countIconPos.pos.x, card.countIconPos.pos.y, card.countIconPos.size.x, card.countIconPos.size.y, TextureManager::CARD_COUNT, 4);
 			card.countText.Render();
 			card.nameText.Render();
 		}

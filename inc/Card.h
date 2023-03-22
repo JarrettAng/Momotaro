@@ -112,7 +112,7 @@ public:
 	void UpdateCountText() {
 		// Make the text box size bigger than the background icon size (to prevent wrapping in case of large numbers like 9999)
 		Vec2<float> countTextPos{ countIconPos.pos.x - GetPercentageOf(countIconPos.size.x, 0.40f), countIconPos.pos.y - GetPercentageOf(countIconPos.size.y, 0.65f) };
-		countText = UI::TextBox(countTextPos, std::to_string(count), UI::CENTER_JUSTIFY, countIconPos.size.x * 2.0f, 18.0f, COLOR_BLACK);
+		countText = UI::TextBox(countTextPos, std::to_string(count), UI::CENTER_JUSTIFY, countIconPos.size.x * 2.0f, 18.0f, COLOR_CARD_COUNT);
 	}
 
 	///////////////////////////////////////////////////////////////////////

@@ -81,7 +81,8 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ CONFIRM_PROMPT,AEGfxTextureLoad("Assets/Textures/UI/Prompts/Confirmation_Prompt.png"), 1, 1, -1.f });
 		textures.push_back(TextureSheet{ PAUSE_WINDOW,AEGfxTextureLoad("Assets/Textures/UI/Prompts/Paused_Prompt.png"), 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ CARD_BLUE,AEGfxTextureLoad("Assets/Textures/UI/Card.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ CARD,AEGfxTextureLoad("Assets/Textures/UI/Card.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ CARD_COUNT,AEGfxTextureLoad("Assets/Textures/UI/CardCount_Icon.png"), 1, 1, -1.f });
 		textures.push_back(TextureSheet{ SYNERGY,AEGfxTextureLoad("Assets/Textures/Game Pieces/Synergy.png"), 1, 1, -1.f });
 
 		textures.push_back(TextureSheet{ DIGIPEN_LOGO,AEGfxTextureLoad("Assets/Textures/UI/Digipen_Logo.png"), 1, 1, -1.f });
