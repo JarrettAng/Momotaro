@@ -47,13 +47,10 @@ void DrawButtons();
 void DrawPointer();
 void DrawQuitPrompt();
 
-void InitializeButtons();
+void InitializeMenuUI();
 bool MouseInsideButton(Vec2<int> mousePos, Vec2<float> btnPos, Vec2<float> btnSize);
 
 void ToggleQuitConfirm();
-
-float GetWorldXByPercentage(float percent);
-float GetWorldYByPercentage(float percent);
 
 /*!***********************************************************************
 * MENU BUTTONS
@@ -98,7 +95,7 @@ void SceneMainMenu::Load() {
 }
 
 void SceneMainMenu::Initialize() {
-	InitializeButtons();
+	InitializeMenuUI();
 	InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleBtnClick);
 
 	// Hardcoding to animate menu animation.
@@ -248,9 +245,6 @@ void DrawPointer() {
 		// Skip if button is not visible or clickable.
 		if (!btn.isActive || !btn.isClickable) continue;
 
-		// Dont draw pointer for quit button.
-		if (btn.render.rect.graphics.tex == TextureManager::QUIT_BTN) continue;
-
 		// Check if mouse is hovering button.
 		if (MouseInsideButton(mousePos, btn.render.rect.transform.pos, btn.render.rect.transform.size)) {
 			// Draw pointer.
@@ -263,7 +257,7 @@ void DrawPointer() {
 void DrawQuitPrompt() {
 	// If player wants to quit, draw quit prompt.
 	if (showQuitConfirm) {
-		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, confirmQuitPrompt.rect.transform.pos.x, confirmQuitPrompt.rect.transform.pos.y, confirmQuitPrompt.rect.transform.size.x, confirmQuitPrompt.rect.transform.size.y, TextureManager::CONFIRM_PROMPT);
+		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, confirmQuitPrompt.rect.transform.pos.x, confirmQuitPrompt.rect.transform.pos.y, confirmQuitPrompt.rect.transform.size.x, confirmQuitPrompt.rect.transform.size.y, confirmQuitPrompt.rect.graphics.tex);
 	}
 }
 
@@ -284,7 +278,7 @@ void ToggleQuitConfirm() {
 	}
 }
 
-void InitializeButtons() {
+void InitializeMenuUI() {
 	// Position button based on window width / height.
 	// Width and height of button are based on png size.
 
@@ -371,6 +365,7 @@ void InitializeButtons() {
 	buttons.push_back(quitNoBtn);
 
 	// CONFIRMATION PROMPT
+	confirmQuitPrompt.rect.graphics.tex = TextureManager::CONFIRM_PROMPT;
 	confirmQuitPrompt.rect.transform.pos.x = GetWorldXByPercentage(23.1f);
 	confirmQuitPrompt.rect.transform.pos.y = GetWorldYByPercentage(72.3f);
 

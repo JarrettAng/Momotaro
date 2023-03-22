@@ -36,7 +36,7 @@ const float SCROLL_SPEED_MULTIPLIER = 0.3f;
 * FORWARD DECLARATIONS
 *************************************************************************/
 void InitializeTexts();
-void InitializeBackBtn();
+void InitializeCreditsUI();
 void DrawCredits();
 RenderSystem::Text GenerateHeader(std::string text);
 RenderSystem::Text GenerateName(std::string text);
@@ -57,7 +57,7 @@ void SceneCredits::Load() {
 
 void SceneCredits::Initialize() {
 	InitializeTexts();
-	InitializeBackBtn();
+	InitializeCreditsUI();
 	InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleBackBtnClick);
 }
 
@@ -211,7 +211,7 @@ RenderSystem::Text GenerateText(std::string text, float fontSize, float offset) 
 	return name;
 }
 
-void InitializeBackBtn() {
+void InitializeCreditsUI() {
 	backBtn.render.rect.graphics.tex = TextureManager::BACK_BTN;
 	backBtn.func = ReturnToMenu;
 

@@ -15,9 +15,13 @@ The functions include:
 #pragma once
 
 #include <EventSystem.h>
+#include <InputManager.h>
+#include <SceneManager.h>
+#include <TextureManager.h>
+#include <RenderSystem.h>
+#include <MomoMaths.h>
 
 namespace PauseManager {
-	extern EventSystem::Event<bool> onTogglePause;
 	bool IsPaused();
 	void Initialize();
 	void Update();

@@ -39,15 +39,13 @@ namespace SceneManager {
 	SceneCredits	  credits;
 	SceneLevelEditor  editor;
 	SceneTutorial	  tutorial;
-	
+
 	///////////////////////////////////////////////////////////////////////
 	// Forward Declarations
 	void UpdatePausedState(bool newPausedState);
 	void SceneManagerLoop();
 	void SwitchScene();
 	///////////////////////////////////////////////////////////////////////
-
-	bool isPaused;
 
 	// Change the current scene (Public; used by other files)
 	void LoadScene(SCENES_ENUM nextScene) {
@@ -122,19 +120,12 @@ namespace SceneManager {
 	void Initialize(SCENES_ENUM startingScene) {
 		current = previous = next = startingScene;
 
-		PauseManager::onTogglePause.Subscribe(UpdatePausedState);
-
 		SwitchScene();
 		SceneManagerLoop();
 	}
 
 	// Things to do at the very end of the game
 	void Free() {
-		PauseManager::onTogglePause.UnsubscribeAll();
 		InputManager::Free();
-	}
-
-	void UpdatePausedState(bool newPausedState) {
-		isPaused = newPausedState;
 	}
 }

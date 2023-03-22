@@ -63,29 +63,30 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ NATURE_ROCK, AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Rock.png"),1, 1, -1.f });
 
 		textures.push_back(TextureSheet{ CARD_BLUE,AEGfxTextureLoad("Assets/Textures/UI/Card.png"), 1, 1, -1.f });
-		textures.push_back(TextureSheet{ PAUSE_WINDOW,AEGfxTextureLoad("Assets/Textures/UI/GameWindow.png"), 1, 1, -1.f });
-		textures.push_back(TextureSheet{ PAUSE_BUTTON,AEGfxTextureLoad("Assets/Textures/UI/Pause_Button.png"), 1, 1, -1.f });
+
+		textures.push_back(TextureSheet{ PAUSE_WINDOW,AEGfxTextureLoad("Assets/Textures/UI/Prompts/Paused_Prompt.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ PAUSE_BUTTON,AEGfxTextureLoad("Assets/Textures/UI/Buttons/Pause_Btn.png"), 1, 1, -1.f });
 
 		textures.push_back(TextureSheet{ SYNERGY,AEGfxTextureLoad("Assets/Textures/Game Pieces/Synergy.png"), 1, 1, -1.f });
 
 		textures.push_back(TextureSheet{ DIGIPEN_LOGO,AEGfxTextureLoad("Assets/Textures/UI/Digipen_Logo.png"), 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ MENU_BG,AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Background.png"), 1, 13, .1f });
-		textures.push_back(TextureSheet{ POINTER,AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Pointer.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ MENU_BG,AEGfxTextureLoad("Assets/Textures/UI/Backgrounds/MainMenu_Background.png"), 1, 13, .1f });
+		textures.push_back(TextureSheet{ POINTER,AEGfxTextureLoad("Assets/Textures/UI/Buttons/Pointer.png"), 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ STARTGAME_BTN,AEGfxTextureLoad("Assets/Textures/UI/Main Menu/StartGame.png"), 1, 1, -1.f });
-		textures.push_back(TextureSheet{ EDITOR_BTN,AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Editor.png"), 1, 1, -1.f });
-		textures.push_back(TextureSheet{ OPTIONS_BTN,AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Options.png"), 1, 1, -1.f });
-		textures.push_back(TextureSheet{ CONTROLS_BTN,AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Controls.png"), 1, 1, -1.f });
-		textures.push_back(TextureSheet{ CREDITS_BTN,AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Credits.png"), 1, 1, -1.f });
-		textures.push_back(TextureSheet{ QUIT_BTN, AEGfxTextureLoad("Assets/Textures/UI/Main Menu/Quit.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ STARTGAME_BTN,AEGfxTextureLoad("Assets/Textures/UI/Buttons/StartGame.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ EDITOR_BTN,AEGfxTextureLoad("Assets/Textures/UI/Buttons/Editor.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ OPTIONS_BTN,AEGfxTextureLoad("Assets/Textures/UI/Buttons/Options.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ CONTROLS_BTN,AEGfxTextureLoad("Assets/Textures/UI/Buttons/Controls.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ CREDITS_BTN,AEGfxTextureLoad("Assets/Textures/UI/Buttons/Credits.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ QUIT_BTN, AEGfxTextureLoad("Assets/Textures/UI/Buttons/Quit.png"), 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ CONFIRM_PROMPT,AEGfxTextureLoad("Assets/Textures/UI/Confirmation_Prompt.png"), 1, 1, -1.f });
-		textures.push_back(TextureSheet{ YES_BTN,AEGfxTextureLoad("Assets/Textures/UI/Yes_Btn.png"), 1, 1, -1.f });
-		textures.push_back(TextureSheet{ NO_BTN,AEGfxTextureLoad("Assets/Textures/UI/No_Btn.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ CONFIRM_PROMPT,AEGfxTextureLoad("Assets/Textures/UI/Prompts/Confirmation_Prompt.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ YES_BTN,AEGfxTextureLoad("Assets/Textures/UI/Buttons/Yes_Btn.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ NO_BTN,AEGfxTextureLoad("Assets/Textures/UI/Buttons/No_Btn.png"), 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ CREDITS_BG, AEGfxTextureLoad("Assets/Textures/UI/Credits/Background.png"), 1, 1, -1.f });
-		textures.push_back(TextureSheet{ BACK_BTN, AEGfxTextureLoad("Assets/Textures/UI/Back_Btn.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ CREDITS_BG, AEGfxTextureLoad("Assets/Textures/UI/Backgrounds/Credit_Background.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ BACK_BTN, AEGfxTextureLoad("Assets/Textures/UI/Buttons/Back_Btn.png"), 1, 1, -1.f });
 
 		// Initialize frame UV size based on number of cols and rows.
 		for (TextureSheet& t : textures) {

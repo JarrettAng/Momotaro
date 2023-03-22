@@ -66,6 +66,7 @@ void SceneGameLevel::Free() {
 	InputManager::Free();
 	CardManager::Free();
 	RenderSystem::Free();
+	PauseManager::Free();
 }
 
 void SceneGameLevel::Unload() {
@@ -73,7 +74,7 @@ void SceneGameLevel::Unload() {
 	BuildingManager::Clear();
 }
 
-void GameOver(){
+void GameOver() {
 	std::cout << "Spawn Game Over UI!\n";
 }
 
