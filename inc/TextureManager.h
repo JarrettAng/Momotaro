@@ -57,7 +57,8 @@ namespace TextureManager {
 		NO_BTN,
 		CREDITS_BG,
 		BACK_BTN,
-		BLANK_PROMPT
+		BLANK_PROMPT,
+		WATER_TEX
 	};
 	TEX_TYPE operator++(TEX_TYPE&, int);
 

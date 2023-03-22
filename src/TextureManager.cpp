@@ -58,6 +58,7 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ INDUSTRIAL_1X1_L3,AEGfxTextureLoad("Assets/Textures/Game Pieces/Industrial_1x1_L3.png"), 1, 27, .2f });
 
 		textures.push_back(TextureSheet{ TILE_TEX, AEGfxTextureLoad("Assets/Textures/Game Pieces/Tile.png"), 1, 2, .7f });
+		textures.push_back(TextureSheet{ WATER_TEX, AEGfxTextureLoad("Assets/Textures/Game Pieces/Water.png"), 1, 1, -1.f });
 		textures.push_back(TextureSheet{ NATURE_POND, AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Pond.png"),1, 2, 1.f });
 		textures.push_back(TextureSheet{ NATURE_MUSHROOM,AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Mushroom.png"), 1, 1, -1.f });
 		textures.push_back(TextureSheet{ NATURE_ROCK, AEGfxTextureLoad("Assets/Textures/Game Pieces/Nature_Rock.png"),1, 1, -1.f });

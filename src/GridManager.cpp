@@ -480,8 +480,14 @@ namespace GridManager {
 						grid[index]._building.data.TextureID, 99
 					);
 				}
-				if (grid[index].isRenderable)
+				// Draw tile.
+				if (grid[index].isRenderable) {
 					RenderSystem::AddRectToBatch(RenderSystem::TILE_BATCH, static_cast<float>(grid[index].pos.x), static_cast<float>(grid[index].pos.y), 100, 100, TextureManager::TILE_TEX);
+				}
+				// Draw water.
+				else {
+					RenderSystem::AddRectToBatch(RenderSystem::TILE_BATCH, static_cast<float>(grid[index].pos.x), static_cast<float>(grid[index].pos.y), 100, 100, TextureManager::WATER_TEX, -1);
+				}
 			}
 		}
 		if (selectedBuilding != nullptr) {
