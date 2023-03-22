@@ -80,30 +80,30 @@ public:
 	void UpdateComponentPositions() {
 		// Load name data based on position
 		// The name text is at the top 75% of the card with a 10% padding from the left
-		Vec2<float> nameTextPos{position.pos.x + GetPercentageOf(position.size.x, 0.15f), position.pos.y - GetPercentageOf(position.size.y, 0.75f)};
+		Vec2<float> nameTextPos{ position.pos.x + GetPercentageOf(position.size.x, 0.15f), position.pos.y - GetPercentageOf(position.size.y, 0.75f) };
 		// Add a 20% padding for the text so it does not touch the edge
 		nameText = UI::TextBox(nameTextPos, bData.name, UI::CENTER_JUSTIFY, GetPercentageOf(position.size.x, 0.8f), 15.0f, COLOR_BLACK);
 
 		// Load desc data based on position
 		descTextPos.pos.x = position.pos.x;
 		// The desc text is 10% of the card's height lower than the name text
-		descTextPos.pos.y = nameText.GetPos().pos.y + GetPercentageOf(position.size.y , 0.1f);
+		descTextPos.pos.y = nameText.GetPos().pos.y + GetPercentageOf(position.size.y, 0.1f);
 
 		// Load icon data based on position
 		// Make the size of the icon (building) bigger to fill up the card
-		iconPos.size.x = position.size.x * 1.5f;
+		iconPos.size.x = position.size.x * 1.1f;
 		iconPos.size.y = iconPos.size.x;
 		// Center the icon by moving it half of its size x
-		iconPos.pos.x  = position.pos.x - (iconPos.size.x - position.size.x) / 2.0f;
+		iconPos.pos.x = position.pos.x - (iconPos.size.x - position.size.x) / 2.0f;
 		// Move the icon down by 25% of its size
-		iconPos.pos.y  = position.pos.y + GetPercentageOf(iconPos.size.x, 0.25f);
+		iconPos.pos.y = position.pos.y /*+ GetPercentageOf(iconPos.size.x, 0.25f)*/;
 
 		// Load count data based on position
 		// Make the size of the count icon 35% the size of the card
 		countIconPos.size.y = countIconPos.size.x = GetPercentageOf(position.size.x, 0.35f);
 		// Move the icon to the top right (80% of the card's width)
-		countIconPos.pos.x  = position.pos.x + GetPercentageOf(position.size.x, 0.8f);
-		countIconPos.pos.y  = position.pos.y + GetPercentageOf(position.size.y, 0.075f);
+		countIconPos.pos.x = position.pos.x + GetPercentageOf(position.size.x, 0.8f);
+		countIconPos.pos.y = position.pos.y + GetPercentageOf(position.size.y, 0.075f);
 
 		UpdateCountText();
 	}
@@ -111,7 +111,7 @@ public:
 	// Updates the text number & position showing the number of copies of the current card
 	void UpdateCountText() {
 		// Make the text box size bigger than the background icon size (to prevent wrapping in case of large numbers like 9999)
-		Vec2<float> countTextPos{ countIconPos.pos.x - GetPercentageOf(countIconPos.size.x, 0.25f), countIconPos.pos.y - GetPercentageOf(countIconPos.size.y, 0.65f) };
+		Vec2<float> countTextPos{ countIconPos.pos.x - GetPercentageOf(countIconPos.size.x, 0.40f), countIconPos.pos.y - GetPercentageOf(countIconPos.size.y, 0.65f) };
 		countText = UI::TextBox(countTextPos, std::to_string(count), UI::CENTER_JUSTIFY, countIconPos.size.x * 2.0f, 18.0f, COLOR_BLACK);
 	}
 

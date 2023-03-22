@@ -1,15 +1,13 @@
 /*!************************************************************************
-\file:          PauseManager.cpp
-\author:
-\par DP email:
-\par Course:    CSD1171B
+\file PauseManager.cpp
+\author Tan Jun Rong
+\par DP email: t.junrong@digipen.edu
+\par Course: CSD1171B
 \par Software Engineering Project
-\date:          30-01-2023
+\date 22-03-2023
 \brief
+This source file declares
 
-
-The functions include:
--
 **************************************************************************/
 
 #include <PauseManager.h>
@@ -169,7 +167,6 @@ namespace PauseManager {
 	}
 
 	void DrawPauseUI() {
-
 		// Draw pause prompt.
 		if (IsPaused()) {
 			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, pausePrompt.rect.transform.pos.x, pausePrompt.rect.transform.pos.y, pausePrompt.rect.transform.size.x, pausePrompt.rect.transform.size.y, pausePrompt.rect.graphics.tex, pausePrompt.layer);

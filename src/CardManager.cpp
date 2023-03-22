@@ -162,14 +162,14 @@ namespace CardManager {
 		selectedCard = nullptr;								// Deselect held card, if any
 
 		handBackground.size.x = (float)AEGfxGetWinMaxX();			// The width of the hand BG default to half the screen width
-		handBackground.size.y = (float)AEGfxGetWinMaxY() * 0.25f;	// and 25% of the screen height
+		handBackground.size.y = (float)AEGfxGetWinMaxY() * 0.4f;	// and 25% of the screen height
 
 		handBackground.pos.x = -handBackground.size.x / 2.0f;					 // The hand BG should be at the middle
 		handBackground.pos.y = (float)AEGfxGetWinMinY() * 0.95f + handBackground.size.y; // and bottom of the screen
 
-		cardSpacing = (float)AEGfxGetWinMaxX() * 0.025f;			// The gap between cards should at least be 2.5% of the screen width apart
+		cardSpacing = (float)AEGfxGetWinMaxX() * 0.05f;			// The gap between cards should at least be 2.5% of the screen width apart
 
-		cardPositionTemplate.size.y = handBackground.size.y * 0.9f;				 // Keep the height of each card to 90% of the hand BG
+		cardPositionTemplate.size.y = handBackground.size.y * 0.8f;				 // Keep the height of each card to 90% of the hand BG
 		cardPositionTemplate.size.x = cardPositionTemplate.size.y * 0.75f;		 // Card width to height ratio is 3:4
 		cardPositionTemplate.pos.y = handBackground.pos.y - (handBackground.size.y - cardPositionTemplate.size.y) / 2.0f; // Set the y-pos so the card is in the middle of hand BG
 
@@ -243,7 +243,9 @@ namespace CardManager {
 	// Sends the information of everything to rendersystem for rendering
 	void PrepareUIRenderBatch() {
 		// Render the hand BG
-		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, handBackground.pos.x, handBackground.pos.y, handBackground.size.x, handBackground.size.y, COLOR_CARD_BACKGROUND);
+		if (hand.size() > 0) {
+			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, handBackground.pos.x, handBackground.pos.y, handBackground.size.x, handBackground.size.y, TextureManager::BLANK_PROMPT);
+		}
 
 		// Render each card
 		for (Card card : hand) {
@@ -251,7 +253,7 @@ namespace CardManager {
 			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.position.pos.x, card.position.pos.y, card.position.size.x, card.position.size.y, card.borderColor, 1);
 
 			// Drawing the card background
-			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.position.pos.x + card.position.size.x * 0.05f, card.position.pos.y - card.position.size.y * 0.035f, card.position.size.x * 0.9f, card.position.size.y * 0.925f, card.color, 2);
+			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.position.pos.x + card.position.size.x * 0.05f, card.position.pos.y - card.position.size.y * 0.035f, card.position.size.x * 0.9f, card.position.size.y * 0.925f, TextureManager::BLANK_PROMPT, 2);
 
 			// Drawing the building icon of the card
 			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.iconPos.pos.x, card.iconPos.pos.y, card.iconPos.size.x, card.iconPos.size.y, card.bData.TextureID, 3);
@@ -259,7 +261,6 @@ namespace CardManager {
 			// Drawing of the card count at the top right corner of the card
 			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, card.countIconPos.pos.x, card.countIconPos.pos.y, card.countIconPos.size.x, card.countIconPos.size.y, { 1,1,1,1 }, 4);
 			card.countText.Render();
-
 			card.nameText.Render();
 		}
 

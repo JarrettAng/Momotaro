@@ -24,23 +24,23 @@ namespace UI {
 	// Default Constructor
 	TextBox::TextBox() {
 		transform = RenderSystem::Transform();
-		maxWidth  = 500;
-		fontSize  = 20;
+		maxWidth = 500;
+		fontSize = 20;
 		alignment = LEFT_JUSTIFY;
-		color     = COLOR_BLACK;
+		color = COLOR_BLACK;
 	}
 
 	// Non-default Constructor
 	TextBox::TextBox(Vec2<float> screenPos, std::string text, TextBoxAlignment _alignment, float _maxWidth, float _fontSize, Vec3<float> _color) {
 
 		// Set the size of the text (normalized already)
-		AEGfxGetPrintSize(FontManager::GetFont(FontManager::ROBOTO), const_cast<char*>(text.c_str()), 
-						  _fontSize / FontManager::DEFAULT_FONT_SIZE, transform.size.x, transform.size.y);
+		AEGfxGetPrintSize(FontManager::GetFont(FontManager::ROBOTO), const_cast<char*>(text.c_str()),
+			_fontSize / FontManager::DEFAULT_FONT_SIZE, transform.size.x, transform.size.y);
 
 		// Normalize the text box position to (0 - 1)
 		transform.pos.x = screenPos.x / AEGfxGetWinMaxX();
 		transform.pos.y = screenPos.y / AEGfxGetWinMaxY();
-		
+
 		fontSize = _fontSize;								// How big the font should be (XX/100)
 		maxWidth = _maxWidth / AEGfxGetWinMaxX();			// Max width before wrapping the text
 		float charWidth = transform.size.x / text.size();	// The x-length of each character
@@ -54,13 +54,13 @@ namespace UI {
 		// Case 1: string of text fits max width, add it to texts then finish
 		if (charWidth * (float)(end - start + 1) < maxWidth) {
 			switch (alignment) { // Set the x-pos of the text based on the current alignment
-				case LEFT_JUSTIFY:
+			case LEFT_JUSTIFY:
 				currPos.x = transform.pos.x;
 				break;
-				case CENTER_JUSTIFY:
+			case CENTER_JUSTIFY:
 				currPos.x = transform.pos.x + (maxWidth / 2.0f) - (charWidth * (end - start + 1) * 0.5f);
 				break;
-				case RIGHT_JUSTIFY:
+			case RIGHT_JUSTIFY:
 				currPos.x = transform.pos.x + maxWidth - (charWidth * (end - start + 1));
 				break;
 			}
@@ -69,10 +69,10 @@ namespace UI {
 			texts.emplace_back(text, currPos);
 		}
 		// Case 2: Wrap the string around based on the max width until it all fits
-		else { 
+		else {
 			while (start < end) {
 				// Keep looping until the largest spacing index within the max-width is reached
-				while (charWidth * (float)(cutoff - start + 1) > maxWidth) { 
+				while (charWidth * (float)(cutoff - start + 1) > maxWidth) {
 					cutoff = text.find_last_of(" \n\t", cutoff - 1);
 
 					if (cutoff < start) {
@@ -85,7 +85,7 @@ namespace UI {
 					}
 				}
 				// Set the x-pos of the text based on the current alignment
-				switch (alignment) { 
+				switch (alignment) {
 				case LEFT_JUSTIFY:
 					currPos.x = transform.pos.x;
 					break;
@@ -109,9 +109,9 @@ namespace UI {
 	// Copy assignment
 	TextBox& TextBox::operator=(TextBox const& rhs) {
 		this->alignment = rhs.alignment;
-		this->color		= rhs.color;
-		this->fontSize	= rhs.fontSize;
-		this->maxWidth	= rhs.maxWidth;
+		this->color = rhs.color;
+		this->fontSize = rhs.fontSize;
+		this->maxWidth = rhs.maxWidth;
 		this->transform = rhs.transform;
 
 		this->texts.clear();
@@ -129,8 +129,8 @@ namespace UI {
 
 	void TextBox::Render() {
 		for (size_t index = 0; index < texts.size(); ++index) {
-			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, texts[index].pos.x, texts[index].pos.y, 
-			FontManager::GetFont(FontManager::ROBOTO), (int)fontSize, texts[index].text, 5, color);
+			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, texts[index].pos.x, texts[index].pos.y,
+				FontManager::GetFont(FontManager::SHIN_GO), (int)fontSize, texts[index].text, 5, color);
 		}
 	}
 }
