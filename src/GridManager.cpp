@@ -53,7 +53,7 @@ namespace GridManager {
 	//DEBUG VARIABLES
 	int terrainNum{ 2 };
 	int randomNature{ 0 };
-	int playableArea {0};
+	int playableArea{ 0 };
 	BuildingEnum::ORIENTATION TestOrientation{ BuildingEnum::RIGHT };
 	std::vector<BuildingData> _testBuildingVector;
 	///////////////////////////////////////////////////////////////////////////
@@ -72,7 +72,7 @@ namespace GridManager {
 				ScreenPos.y += (gridY * tileHeight) / 2;		//move the grid up by half its size (20 units / 2 = 10)
 				grid[index].pos = ScreenPos;
 
-				if(grid[index].isRenderable) playableArea++;
+				if (grid[index].isRenderable) playableArea++;
 
 				// //basically we want the grid to be from -2 to 2, but since there's a 10 unit offset, we add 10
 				// if (((x >= (mapPos + gridX / 2)) && (x <= (mapPos + gridX / 2 + mapSize))) && (y >= (mapPos + gridY / 2) && y <= (mapPos + gridY / 2 + mapSize))) {
@@ -95,7 +95,7 @@ namespace GridManager {
 		InputManager::SubscribeToKey(AEVK_E, InputManager::TRIGGERED, SpawnBigResidential);
 		InputManager::SubscribeToKey(AEVK_S, InputManager::TRIGGERED, FileIOManager::SaveGridToFile);
 		InputManager::SubscribeToKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
-		InputManager::SubscribeToKey(AEVK_T,InputManager::TRIGGERED, ToggleTileRenderable);
+		InputManager::SubscribeToKey(AEVK_T, InputManager::TRIGGERED, ToggleTileRenderable);
 
 		CardManager::onNewCardSelected.Subscribe(GetBuildingCard);
 		CardManager::onCardPlaced.Subscribe(SpawnBuilding);
@@ -121,7 +121,7 @@ namespace GridManager {
 		playableArea--;
 
 		//!TODO CHANGE THIS TO FIT BIGGER SIZES!!
-		if(playableArea < 1){
+		if (playableArea < 1) {
 			onBoardFull.Invoke();
 		}
 	}
@@ -136,7 +136,7 @@ namespace GridManager {
 	//Checks if the selected cell is safe to place a building on
 	///////////////////////////////////////////////////////////////////////////
 	bool isCellSafe(Vec2<int> selectedCell) {
-		if(!isWithinGrid(selectedCell)) return false;
+		if (!isWithinGrid(selectedCell)) return false;
 		// if ((((selectedCell.x) < 0) || ((selectedCell.x) > gridX)) || ((selectedCell.y) < 0 || (selectedCell.y) > gridY)) return false;
 		//If the tile is not even renderable, we cannot place
 		if (!grid[GetIndex(selectedCell.x, selectedCell.y)].isRenderable) return false;
@@ -144,8 +144,8 @@ namespace GridManager {
 		if (grid[GetIndex(selectedCell.x, selectedCell.y)].ID > 0) return false;
 		return true;
 	}
-	bool isWithinGrid(Vec2<int> selectedCell){
-		return (GetIndex(selectedCell) >= 0 && GetIndex(selectedCell) < (gridX*gridY));
+	bool isWithinGrid(Vec2<int> selectedCell) {
+		return (GetIndex(selectedCell) >= 0 && GetIndex(selectedCell) < (gridX * gridY));
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -194,11 +194,11 @@ namespace GridManager {
 		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
-		BuildingData _residential{BuildingManager::GetBuildingData(
+		BuildingData _residential{ BuildingManager::GetBuildingData(
 			BuildingEnum::RESIDENTIAL,
 			Vec2<int>{1,1},
 			BuildingEnum::L1
-		)};
+		) };
 		grid[index].ID = ++buildingID;
 		grid[index]._building = _residential;
 		grid[index]._building.buildingCells.push_back(SelectedCell);
@@ -215,11 +215,11 @@ namespace GridManager {
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
 
-		BuildingData _commercial{BuildingManager::GetBuildingData(
+		BuildingData _commercial{ BuildingManager::GetBuildingData(
 			BuildingEnum::COMMERCIAL,
 			Vec2<int>{1,1},
 			BuildingEnum::L1
-		)};
+		) };
 		grid[index].ID = ++buildingID;
 		grid[index]._building = _commercial;
 		grid[index]._building.buildingCells.push_back(SelectedCell);
@@ -232,11 +232,11 @@ namespace GridManager {
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
 
-		BuildingData _industrial{BuildingManager::GetBuildingData(
+		BuildingData _industrial{ BuildingManager::GetBuildingData(
 			BuildingEnum::INDUSTRIAL,
 			Vec2<int>{1,1},
 			BuildingEnum::L1
-		)};
+		) };
 		grid[index].ID = ++buildingID;
 		grid[index]._building = _industrial;
 		grid[index]._building.buildingCells.push_back(SelectedCell);
@@ -254,7 +254,7 @@ namespace GridManager {
 		grid[index]._building = BuildingManager::GetRandomNatureBuilding();
 	}
 
-	cell NatureCell(){
+	cell NatureCell() {
 		return cell{
 			Vec2<int>{0,0},
 			true,
@@ -263,14 +263,14 @@ namespace GridManager {
 		};
 	}
 
-	void ToggleTileRenderable(){
+	void ToggleTileRenderable() {
 		Vec2<int> mousePos = InputManager::GetMousePos();
 		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
-		if(!isWithinGrid(SelectedCell)) return;
+		if (!isWithinGrid(SelectedCell)) return;
 		grid[index].isRenderable = !grid[index].isRenderable;
 		//If the grid is not renderable, we reset the cell.
-		if(!grid[index].isRenderable){
+		if (!grid[index].isRenderable) {
 			grid[index].ID = 0;
 			grid[index]._building = Building{};
 		}
@@ -406,9 +406,9 @@ namespace GridManager {
 		return tempVec;
 	}
 
-///////////////////////////////////////////////////////////////////////////
-//Checks if the mouse has changed index (Update loop for gridmanager)
-///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
+	//Checks if the mouse has changed index (Update loop for gridmanager)
+	///////////////////////////////////////////////////////////////////////////
 	void UpdateMouseToGrid() {
 		if (PauseManager::IsPaused()) return;
 		Vec2<int> mousePos{ InputManager::GetMousePos() };
@@ -446,9 +446,9 @@ namespace GridManager {
 		}
 		previousIndex = currentIndex;
 	}
-///////////////////////////////////////////////////////////////////////////
-//Clears the grid
-///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
+	//Clears the grid
+	///////////////////////////////////////////////////////////////////////////
 	void ClearGrid() {
 		if (PauseManager::IsPaused()) return;
 
@@ -460,9 +460,9 @@ namespace GridManager {
 			}
 		}
 	}
-///////////////////////////////////////////////////////////////////////////
-//Draw function for the grid
-///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
+	//Draw function for the grid
+	///////////////////////////////////////////////////////////////////////////
 	void PrepareTileRenderBatch() {
 
 		///////////////////////////////////////////////////////////////////////////
@@ -471,7 +471,7 @@ namespace GridManager {
 		for (int y{ 0 }; y < gridY; ++y) {
 			for (int x{ 0 }; x < gridX; ++x) {
 				int index = GetIndex(x, y);
-			//Draws the normal tiles (if it's water don't draw any)
+				//Draws the normal tiles (if it's water don't draw any)
 				if (grid[index].ID > 0) {
 					RenderSystem::AddRectToBatch(
 						RenderSystem::GAME_PIECES_BATCH,
@@ -481,12 +481,12 @@ namespace GridManager {
 					);
 				}
 				if (grid[index].isRenderable)
-				 RenderSystem::AddRectToBatch(RenderSystem::TILE_BATCH, static_cast<float>(grid[index].pos.x), static_cast<float>(grid[index].pos.y), 100, 100, TextureManager::TILE_TEX);
+					RenderSystem::AddRectToBatch(RenderSystem::TILE_BATCH, static_cast<float>(grid[index].pos.x), static_cast<float>(grid[index].pos.y), 100, 100, TextureManager::TILE_TEX);
 			}
 		}
 		if (selectedBuilding != nullptr) {
-		//If we have a building selected from a card, draw it at the mouse pos 
-		//If the building is bigger than 1x1, draw all of them
+			//If we have a building selected from a card, draw it at the mouse pos 
+			//If the building is bigger than 1x1, draw all of them
 			if (!CurrentBuildingCells.empty()) {
 				for (Vec2<int> cell : CurrentBuildingCells) {
 					RenderSystem::AddRectToBatch(
@@ -557,9 +557,9 @@ namespace GridManager {
 
 	}
 
-///////////////////////////////////////////////////////////////////////////
-//Gets the synergy point calculation for the cell
-///////////////////////////////////////////////////////////////////////////	
+	///////////////////////////////////////////////////////////////////////////
+	//Gets the synergy point calculation for the cell
+	///////////////////////////////////////////////////////////////////////////	
 	int GetSynergyText(Vec2<int> cellToCheck, BuildingData _data) {
 		switch (grid[GetIndex(cellToCheck)]._building.data.type) {
 		case BuildingEnum::NONE:
@@ -580,9 +580,9 @@ namespace GridManager {
 		return 0;
 	}
 
-///////////////////////////////////////////////////////////////////////////
-//Merge algorithm
-///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
+	//Merge algorithm
+	///////////////////////////////////////////////////////////////////////////
 	void CheckCellNeighbor(cell* _grid, Vec2<int> cellIndex)
 	{
 		int gridIndex = GetIndex(cellIndex.x, cellIndex.y);
@@ -722,11 +722,11 @@ namespace GridManager {
 	}
 
 
-///////////////////////////////////////////////////////////////////////////
-//Free function for the grid
-///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
+	//Free function for the grid
+	///////////////////////////////////////////////////////////////////////////
 	void Free() {
-		
+
 		delete[] grid;
 		InputManager::UnsubscribeKey(AEVK_C, InputManager::TRIGGERED, ClearGrid);
 		InputManager::UnsubscribeKey(AEVK_1, InputManager::TRIGGERED, SpawnResidential);
@@ -744,9 +744,9 @@ namespace GridManager {
 	}
 
 
-///////////////////////////////////////////////////////////////////////////
-//GRID HELPER FUNCTIONS
-///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
+	//GRID HELPER FUNCTIONS
+	///////////////////////////////////////////////////////////////////////////
 	int GetIndex(int x, int y)
 	{
 		return x + gridX * y;
