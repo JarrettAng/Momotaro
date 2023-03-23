@@ -49,6 +49,7 @@ namespace GridManager {
 	const BuildingData* selectedBuilding{};			//Selected building from cardmanager event
 	EventSystem::Event<void> onMergeBuildings;		//Event on merge
 	EventSystem::Event<void> onBoardFull;
+	EventSystem::Event<int>  onTotalSynergyUpdate;
 
 	//DEBUG VARIABLES
 	int terrainNum{ 2 };
@@ -546,6 +547,8 @@ namespace GridManager {
 					);
 				}
 
+				onTotalSynergyUpdate.Invoke(totalPoints);
+
 				if (totalPoints > 0) {
 					totalPointsColor = COLOR_BOX_POSITIVE;
 				}
@@ -558,9 +561,11 @@ namespace GridManager {
 				Vec2<float> totalPointTexPos{ static_cast<float>(grid[GetIndex(SelectedCell)].pos.x - 65.0f),static_cast<float>(grid[GetIndex(SelectedCell)].pos.y) - 62.5f };
 				pointText = UI::TextBox(totalPointTexPos, std::to_string(totalPoints), UI::CENTER_JUSTIFY, 240, 42, totalPointsColor);
 				pointText.Render();
+				return;
+
 			}
 		}
-
+		onTotalSynergyUpdate.Invoke(0);
 	}
 
 	///////////////////////////////////////////////////////////////////////////

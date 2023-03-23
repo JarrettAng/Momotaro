@@ -2,6 +2,7 @@
 #include <FontManager.h>
 #include <RenderSystem.h>
 #include <ColorTable.h>
+#include <GridManager.h>
 
 namespace ScoreManger {
 	struct Level
@@ -35,6 +36,9 @@ namespace ScoreManger {
 
 	int GetThreshold(int level);
 
+	std::string synergy;
+	int potentialScoreGain;
+
 	int GetScore() {
 		return score;
 	}
@@ -48,6 +52,9 @@ namespace ScoreManger {
 
 	void ScoreManger::Initialize() {
 		IntializeLevels();
+
+		potentialScoreGain = 0;
+		GridManager::onTotalSynergyUpdate.Subscribe(UpdatePotentialScoreGain);
 	}
 
 	void IntializeLevels() {
@@ -80,8 +87,13 @@ namespace ScoreManger {
 	void ScoreManger::Draw() {
 		// Tell ui manager to draw score ui.
 		// Use currLevel and score to draw.
-		std::string synergy = "SYNERGY " + std::to_string(score) + "/ " + std::to_string(GetThreshold(currLevel.level + 1));
-		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.9f, 0.8f, FontManager::GetFont(FontManager::SHIN_GO), 69, synergy,0,COLOR_BLACK);
+		synergy = "SYNERGY " + std::to_string(score) + (potentialScoreGain > 0 ? " +" + std::to_string(potentialScoreGain) : 
+			(!potentialScoreGain ? "" : " " + std::to_string(potentialScoreGain))) + " / " + std::to_string(GetThreshold(currLevel.level + 1));
+		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.9f, 0.8f, FontManager::GetFont(FontManager::SHIN_GO), 60, synergy,0,COLOR_BLACK);
+	}
+
+	void UpdatePotentialScoreGain(int newPotentialScore) {
+		potentialScoreGain = newPotentialScore;
 	}
 
 	Level GetCurrLevel() {

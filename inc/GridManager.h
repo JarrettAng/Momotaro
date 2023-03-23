@@ -27,6 +27,7 @@ namespace GridManager {
 
 	extern EventSystem::Event<void> onMergeBuildings;
 	extern EventSystem::Event<void> onBoardFull;
+	extern EventSystem::Event<int>  onTotalSynergyUpdate;
 
     enum TileType{
         NONE = 0,
