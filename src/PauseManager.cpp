@@ -118,6 +118,7 @@ namespace PauseManager {
 		continueBtn.render.rect.transform.pos.y = GetWorldYByPercentage(57.0f);
 		continueBtn.render.rect.transform.size.x = 190.0f;
 		continueBtn.render.rect.transform.size.y = 100.0f;
+		quitNoBtn.render.layer = 1;
 		buttons.push_back(continueBtn);
 
 		// QUIT TO MENU BUTTON.
@@ -129,6 +130,7 @@ namespace PauseManager {
 		exitBtn.render.rect.transform.pos.y = GetWorldYByPercentage(57.0f);
 		exitBtn.render.rect.transform.size.x = 170.0f;
 		exitBtn.render.rect.transform.size.y = 100.0f;
+		quitNoBtn.render.layer = 1;
 		buttons.push_back(exitBtn);
 	}
 
