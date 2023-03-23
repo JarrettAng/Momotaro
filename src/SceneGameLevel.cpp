@@ -28,12 +28,10 @@ The functions include:
 #include <ScoreManager.h>
 #include <TextureManager.h>
 
-
-
 void SceneGameLevel::Load() {
 	GridManager::Initialize("Assets/JSON_Data/Maps/map2.momomaps");
 	BuildingManager::Initialize();
-	ScoreManger::Initialize();
+	ScoreManager::Initialize();
 }
 
 void SceneGameLevel::Initialize() {
@@ -57,7 +55,7 @@ void SceneGameLevel::Draw() {
 	GridManager::PrepareTileRenderBatch();
 	CardManager::PrepareUIRenderBatch();
 	PauseManager::Draw();
-	ScoreManger::Draw();
+	ScoreManager::Draw();
 
 	RenderSystem::Render();
 }
@@ -72,6 +70,7 @@ void SceneGameLevel::Free() {
 void SceneGameLevel::Unload() {
 	GridManager::Free();
 	BuildingManager::Clear();
+	ScoreManager::Free();
 }
 
 void GameOver() {

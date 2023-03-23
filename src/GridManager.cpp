@@ -116,7 +116,7 @@ namespace GridManager {
 		grid[index]._building.data = *selectedBuilding;
 		grid[index]._building.buildingCells = CurrentBuildingCells;
 		CheckCellNeighbor(grid, SelectedCell);
-		ScoreManger::AddScore(totalPoints);
+		ScoreManager::AddScore(totalPoints);
 		CurrentSynergyArea.clear();
 		CurrentBuildingCells.clear();
 		playableArea--;

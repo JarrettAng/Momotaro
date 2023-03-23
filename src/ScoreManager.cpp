@@ -4,7 +4,7 @@
 #include <ColorTable.h>
 #include <GridManager.h>
 
-namespace ScoreManger {
+namespace ScoreManager {
 	struct Level
 	{
 		int level = 0;
@@ -23,21 +23,18 @@ namespace ScoreManger {
 
 	std::vector<Level> levels;	// Contains all level data.
 
+	std::string synergy;
+	int potentialScoreGain;
+
 	/*!***********************************************************************
 	* FORWARD DECLARATIONS
 	*************************************************************************/
 	Level GetLevel(int level);	// Get level data from vector.
 	Level GetCurrLevel();		// Get player's current level.
-
 	void IntializeLevels();
-	void UpdateScoreUI();
-
 	void CheckForLevelChange();
-
 	int GetThreshold(int level);
 
-	std::string synergy;
-	int potentialScoreGain;
 
 	int GetScore() {
 		return score;
@@ -45,15 +42,14 @@ namespace ScoreManger {
 
 	void AddScore(int modifier) {
 		score += modifier;
-		//if (score < 0) score = 0;
-
 		onScoreUpdate.Invoke();
 	}
 
-	void ScoreManger::Initialize() {
+	void Initialize() {
 		IntializeLevels();
 
-		potentialScoreGain = 0;
+		score = potentialScoreGain = 0;
+		currLevel.level = 0;
 		GridManager::onTotalSynergyUpdate.Subscribe(UpdatePotentialScoreGain);
 	}
 
@@ -68,6 +64,10 @@ namespace ScoreManger {
 		onScoreUpdate.Subscribe(CheckForLevelChange);
 	}
 
+	void Free() {
+		levels.clear();
+	}
+
 	void CheckForLevelChange() {
 		// Level up.
 		if (score >= GetThreshold(currLevel.level + 1)) {
@@ -75,16 +75,9 @@ namespace ScoreManger {
 			onLevelChange.Invoke();
 			return;
 		}
-
-		// Level down.
-		//if (score < GetThreshold(currLevel.level)) {
-		//	currLevel = GetLevel(currLevel.level);
-		//	onLevelChange.Invoke();
-		//	return;
-		//}
 	}
 
-	void ScoreManger::Draw() {
+	void Draw() {
 		// Tell ui manager to draw score ui.
 		// Use currLevel and score to draw.
 		synergy = "SYNERGY " + std::to_string(score) + (potentialScoreGain > 0 ? " +" + std::to_string(potentialScoreGain) : 

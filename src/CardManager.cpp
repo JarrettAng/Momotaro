@@ -186,7 +186,7 @@ namespace CardManager {
 		DrawCard(BuildingEnum::INDUSTRIAL, BuildingEnum::L1);
 
 		InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
-		ScoreManger::onLevelChange.Subscribe(GiveCardOnThreshold);
+		ScoreManager::onLevelChange.Subscribe(GiveCardOnThreshold);
 		GridManager::onMergeBuildings.Subscribe(GiveCardOnMerge);
 
 		// Debugging: Press key to spawn cards
@@ -444,7 +444,7 @@ namespace CardManager {
 		InputManager::UnsubscribeKey(AEVK_F, InputManager::TRIGGERED, GiveRandL1Card);
 		InputManager::UnsubscribeKey(AEVK_G, InputManager::TRIGGERED, GiveRandL2Card);
 		InputManager::UnsubscribeKey(AEVK_H, InputManager::TRIGGERED, GiveRandL3Card);
-		ScoreManger::onLevelChange.Unsubscribe(GiveCardOnThreshold);
+		ScoreManager::onLevelChange.Unsubscribe(GiveCardOnThreshold);
 		GridManager::onMergeBuildings.Unsubscribe(GiveCardOnMerge);
 	}
 }

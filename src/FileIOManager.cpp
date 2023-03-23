@@ -153,6 +153,8 @@ namespace FileIOManager {
 			assert(0);
 		}
 		std::string buffer; 		//where each line of text will be stored
+		GM::gridX = GM::gridY = 0;
+
 		int lineCount{};
 		while (std::getline(inputFile, buffer)) {
 			int xIndex = 0;	//Since each line has a spacing, we only want to count the xIndex when we get a number
