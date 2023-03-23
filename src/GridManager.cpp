@@ -29,11 +29,9 @@ The functions include:
 namespace GridManager {
 	///////////////////////////////////////////////////////////////////////////
 	//GRID CONSTANTS
-	const int tileWidth{ 100 };
-	const int tileHeight{ 50 };
-	int gridX{ 0 }, gridY{ 0 };			//total grid size
-	const int mapSize{ 5 };					//total playing area size
-	const int mapPos{ -2 };					//Playable area position
+	const int tileWidth{ 140 };
+	const int tileHeight{ tileWidth / 2 };
+	int gridX{ 0 }, gridY{ 0 };				//total grid size
 	///////////////////////////////////////////////////////////////////////////
 	//GRID VARIABLES
 	cell* grid;								//The main grid array
@@ -477,17 +475,17 @@ namespace GridManager {
 					RenderSystem::AddRectToBatch(
 						RenderSystem::GAME_PIECES_BATCH,
 						static_cast<float>(grid[index].pos.x), static_cast<float>(grid[index].pos.y),
-						100, 100,
+						tileWidth, tileWidth,
 						grid[index]._building.data.TextureID, 99
 					);
 				}
 				// Draw tile.
 				if (grid[index].isRenderable) {
-					RenderSystem::AddRectToBatch(RenderSystem::TILE_BATCH, static_cast<float>(grid[index].pos.x), static_cast<float>(grid[index].pos.y), 100, 100, TextureManager::TILE_TEX);
+					RenderSystem::AddRectToBatch(RenderSystem::TILE_BATCH, static_cast<float>(grid[index].pos.x), static_cast<float>(grid[index].pos.y), tileWidth, tileWidth, TextureManager::TILE_TEX);
 				}
 				// Draw water.
 				else {
-					RenderSystem::AddRectToBatch(RenderSystem::TILE_BATCH, static_cast<float>(grid[index].pos.x), static_cast<float>(grid[index].pos.y), 100, 100, TextureManager::WATER_TEX);
+					RenderSystem::AddRectToBatch(RenderSystem::TILE_BATCH, static_cast<float>(grid[index].pos.x), static_cast<float>(grid[index].pos.y), tileWidth, tileWidth, TextureManager::WATER_TEX);
 				}
 			}
 		}
@@ -499,7 +497,7 @@ namespace GridManager {
 					RenderSystem::AddRectToBatch(
 						RenderSystem::GAME_PIECES_BATCH,
 						static_cast<float>(grid[GetIndex(cell)].pos.x), static_cast<float>(grid[GetIndex(cell)].pos.y + 12.5f),
-						100, 100,
+						tileWidth, tileWidth,
 						selectedBuilding->TextureID, 99, 0
 					);
 				}
@@ -542,7 +540,7 @@ namespace GridManager {
 					RenderSystem::AddRectToBatch(
 						RenderSystem::GAME_PIECES_BATCH,
 						static_cast<float>(grid[GetIndex(cell)].pos.x), static_cast<float>(grid[GetIndex(cell)].pos.y),
-						100, 100,
+						tileWidth, tileWidth,
 						TextureManager::SYNERGY
 					);
 				}
@@ -811,7 +809,7 @@ namespace GridManager {
 	Vec2<int> WorldIndexToScreenPos(int x, int y) {
 		return Vec2<int>{   //we need to keep the tile height and width a float here!
 			static_cast<int>((x - y)* (tileWidth / 2.f)),
-				static_cast<int>((x + y) * -(tileHeight / 2.f) + (tileHeight / 2.f))		//offset for the correct pos because of the height diff
+			static_cast<int>((x + y) * -(tileHeight / 2.f) + (tileHeight/2.f))		//offset for the correct pos because of the height diff
 		};
 	}
 	Vec2<int> ScreenPosToIso(Vec2<int> cellPos) {
@@ -830,8 +828,8 @@ namespace GridManager {
 		int originY = AEGetWindowHeight() / 2 / tileHeight;
 
 		Vec2<int> SelectedCell{
-			(cellX - originX) + (cellY - originY) + gridX / 2,		//x
-			(cellY - originY) - (cellX - originX) + gridY / 2		//y
+			((cellX - originX) + (cellY - originY) + gridX / 2) - 1,	//x
+			(cellY - originY) - (cellX - originX) + gridY / 2			//y
 		};
 		//TOP LEFT
 		if (isInside(xOffset, yOffset, 0, 0, 0, tileHeight / 2, tileWidth / 2, 0))SelectedCell.x--;
