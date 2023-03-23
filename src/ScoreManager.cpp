@@ -1,6 +1,7 @@
 #include <ScoreManager.h>
 #include <FontManager.h>
 #include <RenderSystem.h>
+#include <ColorTable.h>
 
 namespace ScoreManger {
 	struct Level
@@ -80,7 +81,7 @@ namespace ScoreManger {
 		// Tell ui manager to draw score ui.
 		// Use currLevel and score to draw.
 		std::string synergy = "SYNERGY " + std::to_string(score) + "/ " + std::to_string(GetThreshold(currLevel.level + 1));
-		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.9f, 0.8f, FontManager::GetFont(FontManager::ROBOTO), 40, synergy);
+		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.9f, 0.8f, FontManager::GetFont(FontManager::SHIN_GO), 69, synergy,0,COLOR_BLACK);
 	}
 
 	Level GetCurrLevel() {

@@ -486,7 +486,7 @@ namespace GridManager {
 				}
 				// Draw water.
 				else {
-					RenderSystem::AddRectToBatch(RenderSystem::TILE_BATCH, static_cast<float>(grid[index].pos.x), static_cast<float>(grid[index].pos.y), 100, 100, TextureManager::WATER_TEX, -1);
+					RenderSystem::AddRectToBatch(RenderSystem::TILE_BATCH, static_cast<float>(grid[index].pos.x), static_cast<float>(grid[index].pos.y), 100, 100, TextureManager::WATER_TEX);
 				}
 			}
 		}
@@ -534,7 +534,7 @@ namespace GridManager {
 						continue;
 					}
 					else if (points != 0) {
-						pointText = UI::TextBox(pointTextPos, std::to_string(points), UI::CENTER_JUSTIFY, 100, 42, pointsColor);
+						pointText = UI::TextBox(pointTextPos, std::to_string(points), UI::CENTER_JUSTIFY, 100, 25, pointsColor);
 					}
 					pointText.Render();
 					//Draw synergy texture
@@ -555,8 +555,8 @@ namespace GridManager {
 				else {
 					totalPointsColor = COLOR_BOX_NEUTRAL;
 				}
-				Vec2<float> totalPointTexPos{ static_cast<float>(grid[GetIndex(SelectedCell)].pos.x),static_cast<float>(grid[GetIndex(SelectedCell)].pos.y) - 62.5f };
-				pointText = UI::TextBox(totalPointTexPos, std::to_string(totalPoints), UI::CENTER_JUSTIFY, 120, 69, totalPointsColor);
+				Vec2<float> totalPointTexPos{ static_cast<float>(grid[GetIndex(SelectedCell)].pos.x - 65.0f),static_cast<float>(grid[GetIndex(SelectedCell)].pos.y) - 62.5f };
+				pointText = UI::TextBox(totalPointTexPos, std::to_string(totalPoints), UI::CENTER_JUSTIFY, 240, 42, totalPointsColor);
 				pointText.Render();
 			}
 		}
