@@ -21,6 +21,8 @@ The functions include:
 
 #include <TextureManager.h>
 
+#include <AudioManager.h>
+
 /*!***********************************************************************
 * CONST VARIABLES
 *************************************************************************/
@@ -95,6 +97,7 @@ void SceneMainMenu::Load() {
 }
 
 void SceneMainMenu::Initialize() {
+	AudioManager::Load();
 	InitializeMenuUI();
 	InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleBtnClick);
 
@@ -106,12 +109,14 @@ void SceneMainMenu::Initialize() {
 	currTransitionTime = TRANSITION_TIME;
 	isTransitioning = false;
 	isBlinking = false;
+
+	AudioManager::PlayBGM(AudioManager::ClipName::BGM_MAIN);
 }
 
 void SceneMainMenu::Update() {
 	// Check for button presses.
 	InputManager::HandleInput();
-
+	AudioManager::Update();
 	// Play menu animation.
 	if (currAnimFrame < ANIMATION_FRAMES) {
 		// Tick timer and update texture.

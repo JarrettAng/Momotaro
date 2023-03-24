@@ -20,9 +20,50 @@ Returns a random building information, can be controlled by parameters
 **************************************************************************/
 #pragma once
 #include <AEAudio.h>
+#include <array>
 
 namespace AudioManager {
+	enum ClipName{
+		NONE=0,
+		BGM_MAIN,
+		BGM_GAME,
+		BGM_LOSE,
+		SFX_CLICK,
+		SFX_MERGE,
+		SFX_GAMEOVER,
+		SFX_GAINPOINT,
+		SFX_LOSEPOINT,
+		SFX_THRESHOLD,
+		MAX_COUNT
+	};
+
+	struct AudioClip{
+		AEAudio _audioClip;
+		float _volume;
+		ClipName _name;
+	};
+
+	//GLOBAL VALUES
+	//extern float masterVolume;
+
+	//MANAGER FUNCTIONS
 	void Initialize();
 	void Load();
+	void Update();
 	void Unload();
+
+	//HELPER FUNCTIONS
+	void AddAudioClipToArray(AudioClip _clip);
+	void PlayBGM(ClipName _name);
+	void PlayAudioClip(AudioClip _clip);
+	void StopAllSounds(void);
+	AEAudio GetAudioFromClipName(ClipName _clip);
+	//Possible functions
+	//ToggleBGM
+	//ToggleMute
+	//ToggleMuteAll
+	//SetMasterVolume(float _volume);
+
+
+
 }

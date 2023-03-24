@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AudioManager.cpp" />
+    <ClCompile Include="src\AudioManager.cpp" />
     <ClCompile Include="src\Building.cpp" />
     <ClCompile Include="src\BuildingManager.cpp" />
     <ClCompile Include="src\CardManager.cpp" />
@@ -35,7 +35,7 @@
     <ClCompile Include="src\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="inc\AudioManager.h" />
     <ClInclude Include="inc\Building.h" />
     <ClInclude Include="inc\BuildingManager.h" />
     <ClInclude Include="inc\Card.h" />
@@ -60,6 +60,20 @@
     <ClInclude Include="inc\ScoreManager.h" />
     <ClInclude Include="inc\TextureManager.h" />
     <ClInclude Include="inc\UIManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Assets\Audio\GameLevel2.wav" />
+    <Media Include="Assets\Audio\GameLevelMusic.wav" />
+    <Media Include="Assets\Audio\GameLose.wav" />
+    <Media Include="Assets\Audio\GameMenu2.wav" />
+    <Media Include="Assets\Audio\GameMenuMusic.wav" />
+    <Media Include="Assets\Audio\MergeSFX1.wav" />
+    <Media Include="Assets\Audio\MergeSFX2(higherPitched).wav" />
+    <Media Include="Assets\Audio\MouseClick.wav" />
+    <Media Include="Assets\Audio\PlaceBuildingSFX.wav" />
+    <Media Include="Assets\Audio\PointGain.wav" />
+    <Media Include="Assets\Audio\ThresholdClear.wav" />
+    <Media Include="Assets\Audio\ThresholdUp.wav" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
