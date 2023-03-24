@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="src\Building.cpp" />
     <ClCompile Include="src\BuildingManager.cpp" />
     <ClCompile Include="src\CardManager.cpp" />
@@ -34,6 +35,7 @@
     <ClCompile Include="src\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AudioManager.h" />
     <ClInclude Include="inc\Building.h" />
     <ClInclude Include="inc\BuildingManager.h" />
     <ClInclude Include="inc\Card.h" />

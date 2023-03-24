@@ -64,6 +64,9 @@
     <ClCompile Include="src\SceneCredits.cpp">
       <Filter>src\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\BuildingManager.h">
@@ -137,6 +140,9 @@
     </ClInclude>
     <ClInclude Include="inc\SceneCredits.h">
       <Filter>inc\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>inc\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
