@@ -39,7 +39,13 @@ void ShowTutPart1_Buildings();
 void ShowTutPart1_Buildings2();
 void ShowTutPart1_Buildings3();
 void ShowTutPart1_Buildings4(Vec2<int> mousePos);
+void ShowTutPart1_Buildings5();
 void ShowTutPart1_Tiles();
+void ShowTutPart1_Merging();
+void ShowTutPart1_Merging2();
+void ShowTutPart1_Merging3();
+void ShowTutPart1_Score2();
+void ShowTutPart1_Score3();
 
 void TutLoadMap1();
 void TutLoadMap2();
@@ -70,6 +76,10 @@ void SceneTutorial::Load() {
 void SceneTutorial::Initialize() {
 	PauseManager::Initialize();
 	CardManager::Initialize();
+
+	// Give more residential cards
+	CardManager::DrawCard(BuildingEnum::RESIDENTIAL, BuildingEnum::L1);
+	CardManager::DrawCard(BuildingEnum::RESIDENTIAL, BuildingEnum::L1);
 
 	showHand = false;
 	showScore = false;
@@ -198,14 +208,69 @@ void ShowTutPart1_Buildings3() {
 	UpdatePopupText("Let's place a house down, click on the \"Small house\" card and click anywhere on the tiny island to place it down.", false);
 
 	// What to show next
+	nextTut_FuncPtr = nullptr; // Remove the click trigger, use the event instead
 	CardManager::onCardPlaced.Subscribe(ShowTutPart1_Buildings4);
 }
 
 void ShowTutPart1_Buildings4(Vec2<int> mousePos) {
-	UpdatePopupSize(0.0f, AEGfxGetWinMaxY() * 0.6f, AEGfxGetWinMaxX(), AEGfxGetWinMaxY() * 0.25f);
-	UpdatePopupText("Wow! Look at those points go up! ", false);
+	UpdatePopupSize(0.0f, -AEGfxGetWinMaxY() * 0.3f, AEGfxGetWinMaxX(), AEGfxGetWinMaxY() * 0.3f);
+	UpdatePopupText("Wow! Look at those points go up! This is an example of \"synergy\", houses like to be near nature, the coast for example!");
 
+	// What to show next
 	CardManager::onCardPlaced.Unsubscribe(ShowTutPart1_Buildings4);
+	nextTut_FuncPtr = ShowTutPart1_Buildings5; // Back to the click event
+}
+
+void ShowTutPart1_Buildings5() {
+	UpdatePopupSize(0.0f, -AEGfxGetWinMaxY() * 0.3f, AEGfxGetWinMaxX(), AEGfxGetWinMaxY() * 0.4f);
+	UpdatePopupText("Let's try placing 3 houses next to each other (NOT diagonally)!! The card you last selected will remain selected, so you don't need to re-select it again.", false);
+
+	// What to show next
+	nextTut_FuncPtr = nullptr; // Remove the click trigger, use the event instead
+	GridManager::onMergeBuildings.Subscribe(ShowTutPart1_Merging);
+}
+
+void ShowTutPart1_Merging() {
+	UpdatePopupSize(0.0f, -AEGfxGetWinMaxY() * 0.3f, AEGfxGetWinMaxX(), AEGfxGetWinMaxY() * 0.3f);
+	UpdatePopupText("You're good at this! Placing 3 buildings of the same type will level it up! The new building will remain at the last tile clicked.");
+
+	// What to show next
+	GridManager::onMergeBuildings.Unsubscribe(ShowTutPart1_Merging);
+	nextTut_FuncPtr = ShowTutPart1_Merging2; // Back to the click event
+}
+
+void ShowTutPart1_Merging2() {
+	UpdatePopupSize(0.0f, -AEGfxGetWinMaxY() * 0.3f, AEGfxGetWinMaxX(), AEGfxGetWinMaxY() * 0.3f);
+	UpdatePopupText("Did you notice? Merging buildings not only gives more space, but you get a random level 2 card added to your hand as well!!");
+
+	// What to show next
+	nextTut_FuncPtr = ShowTutPart1_Merging3;
+}
+
+void ShowTutPart1_Merging3() {
+	UpdatePopupSize(0.0f, AEGfxGetWinMaxY() * 0.6f, AEGfxGetWinMaxX(), AEGfxGetWinMaxY() * 0.25f);
+	UpdatePopupText("By the way, if you are ever confused on what each card does, you can hover over it to see more info!");
+
+	// What to show next
+	nextTut_FuncPtr = ShowTutPart1_Score2;
+}
+
+void ShowTutPart1_Score2() {
+	UpdatePopupSize(0.0f, AEGfxGetWinMaxY() * 0.3f, AEGfxGetWinMaxX(), AEGfxGetWinMaxY() * 0.3f);
+	UpdatePopupText("Now, another way to get more cards is to hit the \"synergy\" threshold at the top left. Place buildings until you reach the next goal!");
+
+	// What to show next
+	nextTut_FuncPtr = nullptr; // Remove the click trigger, use the event instead
+	ScoreManager::onLevelChange.Subscribe(ShowTutPart1_Score3);
+}
+
+void ShowTutPart1_Score3() {
+	UpdatePopupSize(0.0f, AEGfxGetWinMaxY() * 0.3f, AEGfxGetWinMaxX(), AEGfxGetWinMaxY() * 0.3f);
+	UpdatePopupText("Nice one!");
+
+	// What to show next
+	ScoreManager::onLevelChange.Unsubscribe(ShowTutPart1_Score3);
+	nextTut_FuncPtr = ShowTutPart1_Merging2; // Back to the click event
 }
 
 void ShowTutPart1_Tiles() {

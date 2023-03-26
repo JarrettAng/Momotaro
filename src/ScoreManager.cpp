@@ -12,8 +12,8 @@ namespace ScoreManager {
 		bool receivedReward = false;	// Has player received reward for this level?
 	};
 
-	const float EXP_MOD = 0.3f;					// Affects amount of exp. Lower values = more XP required per level
-	const float EXP_INCREASE_MOD = 1.8f;		// Affects how quicky required exp per level. Higher values = larger gaps between levels
+	float exp_mod = 0.3f;				// Affects amount of exp. Lower values = more XP required per level
+	float exp_increase_mod = 1.8f;		// Affects how quicky required exp per level. Higher values = larger gaps between levels
 
 	EventSystem::Event<void> onScoreUpdate;
 	EventSystem::Event<void> onLevelChange;
@@ -45,7 +45,7 @@ namespace ScoreManager {
 		onScoreUpdate.Invoke();
 	}
 
-	void Initialize() {
+	void Initialize(float _exp_mod, float _exp_increase_mod) {
 		IntializeLevels();
 
 		score = potentialScoreGain = 0;
@@ -105,6 +105,6 @@ namespace ScoreManager {
 
 	// Calculate score needed based on current level and score.
 	int GetThreshold(int level) {
-		return static_cast<int>(pow(level / EXP_MOD, EXP_INCREASE_MOD));
+		return static_cast<int>(pow(level / exp_mod, exp_increase_mod));
 	}
 }
