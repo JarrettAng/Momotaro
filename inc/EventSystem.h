@@ -101,12 +101,23 @@ namespace EventSystem {
 	private:
 		std::list<EventData<void>> subscribers; // All the functions subscribed to *this* event
 
+		bool isInvoking;
+		bool shouldRemove;
+		typename std::list<EventData<void>>::iterator eventToRemove;
 	public:
 		// Call each function subscribe with the parameter (var) passed here
 		void Invoke() {
+			isInvoking = true;
+
 			for (typename std::list<EventData<void>>::iterator i = subscribers.begin(); i != subscribers.end(); ++i) {
 				(i->fun_ptr)();
 			}
+
+			if (shouldRemove) {
+				shouldRemove = false;
+				subscribers.erase(eventToRemove);
+			}
+			isInvoking = false;
 		}
 
 		// Add or "subscribe" a function to this event list
@@ -129,7 +140,13 @@ namespace EventSystem {
 		void Unsubscribe(void (*fun_ptr)()) {
 			for (typename std::list<EventData<void>>::iterator i = subscribers.begin(); i != subscribers.end(); ++i) {
 				if (i->fun_ptr == fun_ptr) {
-					subscribers.erase(i);
+					if (isInvoking) {
+						eventToRemove = i;
+						shouldRemove = true;
+					}
+					else {
+						subscribers.erase(i);
+					}
 					break;
 				}
 			}
