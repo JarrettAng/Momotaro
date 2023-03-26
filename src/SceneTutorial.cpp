@@ -92,6 +92,7 @@ void SceneTutorial::Initialize() {
 	// Give more residential cards
 	CardManager::DrawCard(BuildingEnum::RESIDENTIAL, BuildingEnum::L1);
 	CardManager::DrawCard(BuildingEnum::RESIDENTIAL, BuildingEnum::L1);
+	CardManager::ToggleClickable(false);
 
 	showHand = false;
 	showScore = false;
@@ -219,6 +220,8 @@ void ShowTutPart1_Buildings3() {
 	UpdatePopupSize(0.0f, AEGfxGetWinMaxY() * 0.6f, AEGfxGetWinMaxX(), AEGfxGetWinMaxY() * 0.25f);
 	UpdatePopupText("Let's place a house down, click on the \"Small house\" card and click anywhere on the tiny island to place it down.", false);
 
+	CardManager::ToggleClickable(true);
+
 	// What to show next
 	nextTut_FuncPtr = nullptr; // Remove the click trigger, use the event instead
 	CardManager::onCardPlaced.Subscribe(ShowTutPart1_Buildings4);
@@ -228,6 +231,8 @@ void ShowTutPart1_Buildings4(Vec2<int> mousePos) {
 	UpdatePopupSize(0.0f, -AEGfxGetWinMaxY() * 0.3f, AEGfxGetWinMaxX(), AEGfxGetWinMaxY() * 0.3f);
 	UpdatePopupText("Wow! Look at those points go up! This is an example of \"synergy\", houses like to be near nature, the coast for example!");
 
+	CardManager::ToggleClickable(false);
+
 	// What to show next
 	CardManager::onCardPlaced.Unsubscribe(ShowTutPart1_Buildings4);
 	nextTut_FuncPtr = ShowTutPart1_Buildings5; // Back to the click event
@@ -235,7 +240,9 @@ void ShowTutPart1_Buildings4(Vec2<int> mousePos) {
 
 void ShowTutPart1_Buildings5() {
 	UpdatePopupSize(0.0f, -AEGfxGetWinMaxY() * 0.3f, AEGfxGetWinMaxX(), AEGfxGetWinMaxY() * 0.4f);
-	UpdatePopupText("Let's try placing 3 houses next to each other (NOT diagonally)!! The card you last selected will remain selected, so you don't need to re-select it again.", false);
+	UpdatePopupText("Let's try placing 3 HOUSES next to each other (NOT diagonally)!! The card you last selected will remain selected, so you don't need to re-select it again.", false);
+
+	CardManager::ToggleClickable(true);
 
 	// What to show next
 	nextTut_FuncPtr = nullptr; // Remove the click trigger, use the event instead
@@ -245,6 +252,8 @@ void ShowTutPart1_Buildings5() {
 void ShowTutPart1_Merging() {
 	UpdatePopupSize(0.0f, -AEGfxGetWinMaxY() * 0.3f, AEGfxGetWinMaxX(), AEGfxGetWinMaxY() * 0.3f);
 	UpdatePopupText("You're good at this! Placing 3 buildings of the same type will merge it and level up! The new building will remain at the last tile clicked.");
+
+	CardManager::ToggleClickable(false);
 
 	// What to show next
 	GridManager::onMergeBuildings.Unsubscribe(ShowTutPart1_Merging);
@@ -271,6 +280,8 @@ void ShowTutPart1_Score2() {
 	UpdatePopupSize(0.0f, AEGfxGetWinMaxY() * 0.6f, AEGfxGetWinMaxX(), AEGfxGetWinMaxY() * 0.3f);
 	UpdatePopupText("Now, another way to get more cards is to hit the \"synergy\" threshold at the top left. Place buildings until you reach the next threshold!", false);
 
+	CardManager::ToggleClickable(true);
+
 	// What to show next
 	nextTut_FuncPtr = nullptr; // Remove the click trigger, use the event instead
 	ScoreManager::onLevelChange.Subscribe(ShowTutPart1_Score3);
@@ -279,6 +290,8 @@ void ShowTutPart1_Score2() {
 void ShowTutPart1_Score3() {
 	UpdatePopupSize(0.0f, -AEGfxGetWinMaxY() * 0.3f, AEGfxGetWinMaxX(), AEGfxGetWinMaxY() * 0.3f);
 	UpdatePopupText("Nice one! You get a few level 1 cards every time a threshold is reached. However, the amount needed will get bigger over time, so plan ahead!");
+
+	CardManager::ToggleClickable(false);
 
 	// What to show next
 	ScoreManager::onLevelChange.Unsubscribe(ShowTutPart1_Score3);
@@ -302,6 +315,7 @@ void ShowTutPart2_Tiles() {
 	
 	CardManager::Free();
 	CardManager::Initialize();
+	CardManager::ToggleClickable(false);
 
 	ScoreManager::Free();
 	ScoreManager::Initialize();
@@ -342,6 +356,8 @@ void ShowTutPart2_Tiles5() {
 	UpdatePopupSize(0.0f, -AEGfxGetWinMaxY() * 0.35f, AEGfxGetWinMaxX(), AEGfxGetWinMaxY() * 0.25f);
 	UpdatePopupText("(Hit the 4th score threshold to end the tutorial, or quit using the pause button at the top right)", false);
 
+	CardManager::ToggleClickable(true);
+
 	// What to show next
 	nextTut_FuncPtr = nullptr; // Remove the click trigger, use the event instead
 	ScoreManager::onLevelChange.Subscribe(FinalTestUpdate);
@@ -358,6 +374,8 @@ void FinalTestUpdate() {
 void ShowTutPart2_Finish() {
 	UpdatePopupSize(0.0f, 0.0f, AEGfxGetWinMaxX(), AEGfxGetWinMaxY() * 0.25f);
 	UpdatePopupText("Woohoo!");
+
+	CardManager::ToggleClickable(false);
 
 	// What to show next
 	nextTut_FuncPtr = ShowTutPart2_Finish2; // Back to the click event

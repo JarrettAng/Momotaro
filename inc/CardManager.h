@@ -96,5 +96,7 @@ namespace CardManager {
 	void DrawRandomCard(BuildingEnum::TYPE type);
 	void DrawRandomCard();
 
+	void ToggleClickable(bool clickable);
+
 	void Free(); // At the end of the level free and unsubscribe from everything
 }

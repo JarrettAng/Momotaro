@@ -452,4 +452,13 @@ namespace CardManager {
 		ScoreManager::onLevelChange.Unsubscribe(GiveCardOnThreshold);
 		GridManager::onMergeBuildings.Unsubscribe(GiveCardOnMerge);
 	}
+
+	void ToggleClickable(bool clickable) {
+		if (clickable) {
+			InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
+		}
+		else {
+			InputManager::UnsubscribeKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
+		}
+	}
 }
