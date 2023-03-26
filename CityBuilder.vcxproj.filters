@@ -64,7 +64,9 @@
     <ClCompile Include="src\SceneCredits.cpp">
       <Filter>src\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\AudioManager.cpp" />
+    <ClCompile Include="src\AudioManager.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\BuildingManager.h">
@@ -139,7 +141,9 @@
     <ClInclude Include="inc\SceneCredits.h">
       <Filter>inc\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="inc\AudioManager.h" />
+    <ClInclude Include="inc\AudioManager.h">
+      <Filter>inc\Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -172,19 +176,46 @@
     <Filter Include="src\Systems">
       <UniqueIdentifier>{bbd48993-a36f-43ef-8905-c4217b241c98}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{e4f6fe2b-ebc0-4f32-9ada-483f964c4987}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="Assets\Audio\GameLevel2.wav" />
-    <Media Include="Assets\Audio\GameLevelMusic.wav" />
-    <Media Include="Assets\Audio\GameLose.wav" />
-    <Media Include="Assets\Audio\GameMenu2.wav" />
-    <Media Include="Assets\Audio\GameMenuMusic.wav" />
-    <Media Include="Assets\Audio\MergeSFX1.wav" />
-    <Media Include="Assets\Audio\MergeSFX2(higherPitched).wav" />
-    <Media Include="Assets\Audio\MouseClick.wav" />
-    <Media Include="Assets\Audio\PlaceBuildingSFX.wav" />
-    <Media Include="Assets\Audio\PointGain.wav" />
-    <Media Include="Assets\Audio\ThresholdClear.wav" />
-    <Media Include="Assets\Audio\ThresholdUp.wav" />
+    <Media Include="Assets\Audio\GameLevel2.wav">
+      <Filter>Audio</Filter>
+    </Media>
+    <Media Include="Assets\Audio\GameLevelMusic.wav">
+      <Filter>Audio</Filter>
+    </Media>
+    <Media Include="Assets\Audio\GameLose.wav">
+      <Filter>Audio</Filter>
+    </Media>
+    <Media Include="Assets\Audio\GameMenu2.wav">
+      <Filter>Audio</Filter>
+    </Media>
+    <Media Include="Assets\Audio\GameMenuMusic.wav">
+      <Filter>Audio</Filter>
+    </Media>
+    <Media Include="Assets\Audio\MergeSFX1.wav">
+      <Filter>Audio</Filter>
+    </Media>
+    <Media Include="Assets\Audio\MergeSFX2(higherPitched).wav">
+      <Filter>Audio</Filter>
+    </Media>
+    <Media Include="Assets\Audio\MouseClick.wav">
+      <Filter>Audio</Filter>
+    </Media>
+    <Media Include="Assets\Audio\PlaceBuildingSFX.wav">
+      <Filter>Audio</Filter>
+    </Media>
+    <Media Include="Assets\Audio\PointGain.wav">
+      <Filter>Audio</Filter>
+    </Media>
+    <Media Include="Assets\Audio\ThresholdClear.wav">
+      <Filter>Audio</Filter>
+    </Media>
+    <Media Include="Assets\Audio\ThresholdUp.wav">
+      <Filter>Audio</Filter>
+    </Media>
   </ItemGroup>
 </Project>
