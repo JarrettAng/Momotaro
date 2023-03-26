@@ -72,6 +72,7 @@ namespace PauseManager {
 		pausePrompt.rect.transform.pos.y = GetWorldYByPercentage(80.0f);
 		pausePrompt.rect.transform.size.x = 850.0f;
 		pausePrompt.rect.transform.size.y = 390.0f;
+		pausePrompt.layer = 6;
 
 		// QUIT CONFIRMATION PROMPT
 		confirmQuitPrompt.rect.graphics.tex = TextureManager::CONFIRM_PROMPT;
@@ -81,7 +82,7 @@ namespace PauseManager {
 
 		confirmQuitPrompt.rect.transform.size.x = 850.0f;
 		confirmQuitPrompt.rect.transform.size.y = 390.0f;
-		confirmQuitPrompt.layer = 2;
+		confirmQuitPrompt.layer = 8;
 
 		// QUIT YES BUTTON
 		quitYesBtn.render.rect.graphics.tex = TextureManager::YES_BTN;
@@ -93,7 +94,7 @@ namespace PauseManager {
 
 		quitYesBtn.render.rect.transform.size.x = 130.0f;
 		quitYesBtn.render.rect.transform.size.y = 100.0f;
-		quitYesBtn.render.layer = 3;
+		quitYesBtn.render.layer = 9;
 		buttons.push_back(quitYesBtn);
 
 		// QUIT NO BUTTON
@@ -106,7 +107,7 @@ namespace PauseManager {
 
 		quitNoBtn.render.rect.transform.size.x = 100.0f;
 		quitNoBtn.render.rect.transform.size.y = 100.0f;
-		quitNoBtn.render.layer = 3;
+		quitNoBtn.render.layer = 9;
 		buttons.push_back(quitNoBtn);
 
 		// CONTINUE BUTTON.
@@ -118,7 +119,7 @@ namespace PauseManager {
 		continueBtn.render.rect.transform.pos.y = GetWorldYByPercentage(57.0f);
 		continueBtn.render.rect.transform.size.x = 190.0f;
 		continueBtn.render.rect.transform.size.y = 100.0f;
-		quitNoBtn.render.layer = 1;
+		continueBtn.render.layer = 7;
 		buttons.push_back(continueBtn);
 
 		// QUIT TO MENU BUTTON.
@@ -130,7 +131,7 @@ namespace PauseManager {
 		exitBtn.render.rect.transform.pos.y = GetWorldYByPercentage(57.0f);
 		exitBtn.render.rect.transform.size.x = 170.0f;
 		exitBtn.render.rect.transform.size.y = 100.0f;
-		quitNoBtn.render.layer = 1;
+		exitBtn.render.layer = 7;
 		buttons.push_back(exitBtn);
 	}
 
@@ -162,7 +163,7 @@ namespace PauseManager {
 			// Check if mouse is hovering button.
 			if (MouseInsideButton(mousePos, btn.render.rect.transform.pos, btn.render.rect.transform.size)) {
 				// Draw pointer.
-				RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, btn.render.rect.transform.pos.x - POINTER_OFFSET, btn.render.rect.transform.pos.y, 60, 90, TextureManager::POINTER, 3);
+				RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, btn.render.rect.transform.pos.x - POINTER_OFFSET, btn.render.rect.transform.pos.y, 60, 90, TextureManager::POINTER, 9);
 				break;
 			}
 		}
