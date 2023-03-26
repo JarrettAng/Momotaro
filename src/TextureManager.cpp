@@ -86,6 +86,8 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ CARD_COUNT,AEGfxTextureLoad("Assets/Textures/UI/CardCount_Icon.png"), 1, 1, -1.f });
 		textures.push_back(TextureSheet{ SYNERGY,AEGfxTextureLoad("Assets/Textures/Game Pieces/Synergy.png"), 1, 1, -1.f });
 
+		textures.push_back(TextureSheet{ MOMO_THE_PEACH,AEGfxTextureLoad("Assets/Textures/UI/MomoThePeach.png"), 1, 1, -1.f });
+
 		textures.push_back(TextureSheet{ DIGIPEN_LOGO,AEGfxTextureLoad("Assets/Textures/UI/Digipen_Logo.png"), 1, 1, -1.f });
 
 		// Initialize frame UV size based on number of cols and rows.

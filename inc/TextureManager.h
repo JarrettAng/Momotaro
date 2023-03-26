@@ -58,7 +58,8 @@ namespace TextureManager {
 		CREDITS_BG,
 		BACK_BTN,
 		BLANK_PROMPT,
-		WATER_TEX
+		WATER_TEX,
+		MOMO_THE_PEACH
 	};
 	TEX_TYPE operator++(TEX_TYPE&, int);
 
