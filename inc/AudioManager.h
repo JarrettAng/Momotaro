@@ -27,9 +27,9 @@ namespace AudioManager {
 		NONE=0,
 		BGM_MAIN,
 		BGM_GAME,
-		BGM_LOSE,
 		SFX_CLICK,
-		SFX_MERGE,
+		SFX_MERGE1,
+		SFX_MERGE2,
 		SFX_GAMEOVER,
 		SFX_GAINPOINT,
 		SFX_LOSEPOINT,
@@ -40,12 +40,13 @@ namespace AudioManager {
 	struct AudioClip{
 		AEAudio _audioClip;
 		float _volume;
-		ClipName _name;
+		AEAudioGroup _group;
 	};
 
 	//GLOBAL VALUES
 	//extern float masterVolume;
-
+	extern AEAudioGroup BGM_GROUP;
+	extern AEAudioGroup SFX_GROUP;
 	//MANAGER FUNCTIONS
 	void Initialize();
 	void Load();
@@ -53,9 +54,8 @@ namespace AudioManager {
 	void Unload();
 
 	//HELPER FUNCTIONS
-	void AddAudioClipToArray(AudioClip _clip);
 	void PlayBGM(ClipName _name);
-	void PlayAudioClip(AudioClip _clip);
+	void PlayAudioClip(ClipName _clip);
 	void StopAllSounds(void);
 	AEAudio GetAudioFromClipName(ClipName _clip);
 	//Possible functions

@@ -18,11 +18,13 @@ The functions include:
 
 #include <TextureManager.h>
 #include <SceneSplashscreen.h>
+#include <AudioManager.h>
 
 const float SPLASH_SCREEN_TIME = 1.0f;
 float fade = 0;
 
 void SceneSplashscreen::Load() {
+	AudioManager::Load();
 	return;
 }
 

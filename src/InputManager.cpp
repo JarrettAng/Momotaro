@@ -11,6 +11,7 @@ This source file declares
 **************************************************************************/
 
 #include <InputManager.h>
+#include <AudioManager.h>
 
 namespace InputManager {
 	struct KeyEvent {
@@ -48,7 +49,7 @@ namespace InputManager {
 			// Key triggered.
 			if (AEInputCheckTriggered(k.first)) {
 				k.second.onKeyTriggered.Invoke();
-
+				AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_CLICK);
 				// Check if player is double clicking based on time between key triggered.
 				if (AEFrameRateControllerGetFrameCount() - k.second.clickTime < DOUBLE_CLICK_TIME) {
 					k.second.onKeyDoubleClick.Invoke();

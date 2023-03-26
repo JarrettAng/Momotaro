@@ -21,6 +21,7 @@ The functions include:
 namespace FileIOManager {
 
 	namespace GM = GridManager;
+	namespace AM = AudioManager;
 	///////////////////////////////////////////////////////////////////////////
 	//Helper function to save the current building data to file
 	void SaveBuildingDataToFile(std::vector<BuildingData>& buildingData) {
@@ -192,9 +193,41 @@ namespace FileIOManager {
 		return newMap;
 	}
 
-	///////////////////////////////////////////////////////////////////////////
-	//*TODO : SERIALISATION FOR BUILDINGS WITH CUSTOM FILETYPES!
-	void ReadBuildingsData(std::vector<BuildingData>& buildingsData) {
+    void LoadAudioClipsFromFile(std::array<AM::AudioClip, AM::ClipName::MAX_COUNT> &audioData)
+    {
+		//Note: to load the sounds, just put in the name of the enum and the volume for it
+		audioData[AM::ClipName::BGM_MAIN]=AM::AudioClip{ 
+			AEAudioLoadMusic("Assets/Audio/GameMenu.wav"),
+			0.25f, AM::BGM_GROUP};
+		audioData[AM::ClipName::BGM_GAME]=AM::AudioClip{ 
+			AEAudioLoadMusic("Assets/Audio/GameLevel.wav"),
+			1.0f,AM::BGM_GROUP};
+		audioData[AM::ClipName::SFX_CLICK]=AM::AudioClip{ 
+			AEAudioLoadSound("Assets/Audio/MouseClick.wav"),
+			0.10f,AM::SFX_GROUP};
+		audioData[AM::ClipName::SFX_MERGE1]=AM::AudioClip{ 
+			AEAudioLoadSound("Assets/Audio/MergeSFX1.wav"),
+			.30f,AM::SFX_GROUP};
+		audioData[AM::ClipName::SFX_MERGE2]=AM::AudioClip{ 
+			AEAudioLoadSound("Assets/Audio/MergeSFX2.wav"),
+			1.0f,AM::SFX_GROUP};
+		audioData[AM::ClipName::SFX_GAMEOVER]=AM::AudioClip{ 
+			AEAudioLoadSound("Assets/Audio/BuildFinished.wav"),
+			1.0f,AM::SFX_GROUP};
+		audioData[AM::ClipName::SFX_GAINPOINT]=AM::AudioClip{ 
+			AEAudioLoadSound("Assets/Audio/PointGain.wav"),
+			1.0f,AM::SFX_GROUP};
+		audioData[AM::ClipName::SFX_LOSEPOINT]=AM::AudioClip{ 
+			AEAudioLoadSound("Assets/Audio/GameLose.wav"),
+			1.0f,AM::SFX_GROUP};
+		audioData[AM::ClipName::SFX_THRESHOLD]=AM::AudioClip{ 
+			AEAudioLoadSound("Assets/Audio/ThresholdUp.wav"),
+			1.0f,AM::SFX_GROUP};
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    //*TODO : SERIALISATION FOR BUILDINGS WITH CUSTOM FILETYPES!
+    void ReadBuildingsData(std::vector<BuildingData>& buildingsData) {
 		std::ifstream dataFile{ "Assets/JSON_Data/buildingsData.json" };
 		// json data = json::parse(dataFile);
 		if (!dataFile) {

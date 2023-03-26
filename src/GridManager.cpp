@@ -25,6 +25,7 @@ The functions include:
 #include <CardManager.h>
 #include <UIManager.h>
 #include <ScoreManager.h>
+#include <AudioManager.h>
 #include <FileIOManager.h>
 namespace GridManager {
 	///////////////////////////////////////////////////////////////////////////
@@ -81,6 +82,7 @@ namespace GridManager {
 				// grid[index].ID = 0;
 			}
 		}
+		AudioManager::PlayBGM(AudioManager::ClipName::BGM_GAME);
 		//////////////////////////////////////////////////////////////////////
 		//					SUBSCRIBE EVENTS 								//
 		//////////////////////////////////////////////////////////////////////
@@ -409,6 +411,7 @@ namespace GridManager {
 	//Checks if the mouse has changed index (Update loop for gridmanager)
 	///////////////////////////////////////////////////////////////////////////
 	void UpdateMouseToGrid() {
+		AudioManager::Update();
 		if (PauseManager::IsPaused()) return;
 		Vec2<int> mousePos{ InputManager::GetMousePos() };
 		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
@@ -516,8 +519,8 @@ namespace GridManager {
 				//Convert the mouse position into iso
 				Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 				for (Vec2<int> cell : CurrentSynergyArea) {
-					pointTextPos.x = static_cast<float>(grid[GetIndex(cell)].pos.x);
-					pointTextPos.y = static_cast<float>(grid[GetIndex(cell)].pos.y) - 62.5f;
+					pointTextPos.x = static_cast<float>(grid[GetIndex(cell)].pos.x) + tileWidth/6.f;
+					pointTextPos.y = static_cast<float>(grid[GetIndex(cell)].pos.y) - (tileHeight*1.2f);
 					points = GetSynergyText(cell, *selectedBuilding);
 					totalPoints += points;
 					if (points > 0) {
@@ -556,7 +559,7 @@ namespace GridManager {
 				else {
 					totalPointsColor = COLOR_BOX_NEUTRAL;
 				}
-				Vec2<float> totalPointTexPos{ static_cast<float>(grid[GetIndex(SelectedCell)].pos.x - 65.0f),static_cast<float>(grid[GetIndex(SelectedCell)].pos.y) - 62.5f };
+				Vec2<float> totalPointTexPos{ static_cast<float>(grid[GetIndex(SelectedCell)].pos.x-(tileWidth/4.f)),static_cast<float>(grid[GetIndex(SelectedCell)].pos.y) - (tileHeight) };
 				pointText = UI::TextBox(totalPointTexPos, std::to_string(totalPoints), UI::CENTER_JUSTIFY, 240, 42, totalPointsColor);
 				pointText.Render();
 				return;
@@ -683,8 +686,8 @@ namespace GridManager {
 			}
 		}
 		std::cout << "match count is " << matchCount << '\n';
-		//if more than 200 means it's lvl 3
 		if (matchCount == 3 && _grid[gridIndex]._building.data.level < BuildingEnum::L3) {
+
 			for (int i{ 0 }; i < matchCount; ++i) {
 				std::cout << "MATCH!\n" << "Match ID's : " << matchedCells[i] << '\n';
 				int index = GetIndexFromID(matchedCells[i]);
@@ -709,6 +712,8 @@ namespace GridManager {
 					_grid[index]._building = Building{};
 				}
 			}
+			 AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_MERGE1);
+			// if(_grid[gridIndex]._building.data.level == BuildingEnum::L3) AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_MERGE2);
 			onMergeBuildings.Invoke();
 			//then we recurse and check again till no matches
 			CheckCellNeighbor(_grid, cellIndex);

@@ -97,7 +97,6 @@ void SceneMainMenu::Load() {
 }
 
 void SceneMainMenu::Initialize() {
-	AudioManager::Load();
 	InitializeMenuUI();
 	InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleBtnClick);
 

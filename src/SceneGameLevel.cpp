@@ -27,6 +27,7 @@ The functions include:
 #include <PauseManager.h>
 #include <ScoreManager.h>
 #include <TextureManager.h>
+#include <AudioManager.h>
 
 void SceneGameLevel::Load() {
 	GridManager::Initialize("Assets/JSON_Data/Maps/map2.momomaps");
@@ -74,6 +75,7 @@ void SceneGameLevel::Unload() {
 }
 
 void GameOver() {
+	AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_GAMEOVER);
 	std::cout << "Spawn Game Over UI!\n";
 }
 

@@ -17,13 +17,15 @@ The functions include:
 #include <vector>
 #include <Building.h>
 #include <GridManager.h>
+#include <AudioManager.h>
+
 
 namespace FileIOManager {
+    void LoadAudioClipsFromFile(std::array<AudioManager::AudioClip,AudioManager::ClipName::MAX_COUNT>& audioData);
 	void ReadBuildingsData(std::vector<BuildingData>& buildingsData);
     void SaveBuildingDataToFile(std::vector<BuildingData>& buildingData);
     void LoadBuildingDataFromFile(std::vector<BuildingData> &buildingsData);
     void SaveGridToFile();
     GridManager::cell* LoadGridFromFile(std::string fileName);
-
 }
 

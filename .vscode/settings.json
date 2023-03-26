@@ -53,6 +53,7 @@
         "deque": "cpp",
         "array": "cpp",
         "ranges": "cpp",
-        "span": "cpp"
+        "span": "cpp",
+        "chrono": "cpp"
     }
 }

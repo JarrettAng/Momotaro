@@ -3,6 +3,7 @@
 #include <RenderSystem.h>
 #include <ColorTable.h>
 #include <GridManager.h>
+#include <AudioManager.h>
 
 namespace ScoreManager {
 	struct Level
@@ -71,6 +72,7 @@ namespace ScoreManager {
 	void CheckForLevelChange() {
 		// Level up.
 		if (score >= GetThreshold(currLevel.level + 1)) {
+			AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_THRESHOLD);
 			currLevel = GetLevel(currLevel.level + 1);
 			onLevelChange.Invoke();
 			return;
