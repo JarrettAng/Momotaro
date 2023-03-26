@@ -26,7 +26,7 @@ The functions include:
 /*!***********************************************************************
 * CONST VARIABLES
 *************************************************************************/
-const float POINTER_OFFSET = 80.0f;
+const Vec2<float> POINTER_OFFSET = { 80.0f, 10.0f };
 const float TRANSITION_TIME = 1.0f;
 const float BLINK_INTERVAL = 0.07f;
 
@@ -44,9 +44,9 @@ void LoadCredits();
 void LoadQuit();
 
 void HandleBtnClick();
+void HandleBtnHover();
 
 void DrawButtons();
-void DrawPointer();
 void DrawQuitPrompt();
 
 void InitializeMenuUI();
@@ -142,7 +142,7 @@ void SceneMainMenu::Draw() {
 	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, AEGfxGetWinMinX(), -AEGfxGetWinMinY(), (float)AEGetWindowWidth(), (float)AEGetWindowHeight(), TextureManager::MENU_BG, -1);
 
 	DrawButtons();
-	DrawPointer();
+	HandleBtnHover();
 	DrawQuitPrompt();
 
 	RenderSystem::Render();
@@ -207,7 +207,7 @@ void HandleBtnClick() {
 	}
 }
 
-void DrawPointer() {
+void HandleBtnHover() {
 	// Handle pointer blinking when transitioning to a different scene.
 	if (isTransitioning) {
 		// Transition timer.
@@ -234,7 +234,7 @@ void DrawPointer() {
 		// Change opacity of render setting to mimic blinking.
 		RenderSystem::SetRenderSetting(Vec4<float>{1, 1, 1, static_cast<float>(isBlinking)});
 		// Draw pointer blinking.
-		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, clickedBtn.render.rect.transform.pos.x - POINTER_OFFSET, clickedBtn.render.rect.transform.pos.y, 60, 90, TextureManager::POINTER);
+		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, clickedBtn.render.rect.transform.pos.x - POINTER_OFFSET.x, clickedBtn.render.rect.transform.pos.y - POINTER_OFFSET.y, 60, 90, TextureManager::POINTER);
 		return;
 	}
 
@@ -252,9 +252,15 @@ void DrawPointer() {
 
 		// Check if mouse is hovering button.
 		if (MouseInsideButton(mousePos, btn.render.rect.transform.pos, btn.render.rect.transform.size)) {
+			// Scale btn for visual feedback.
+			btn.render.rect.transform.size = btn.render.rect.transform.cachedSize * 1.1f;
+
 			// Draw pointer.
-			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, btn.render.rect.transform.pos.x - POINTER_OFFSET, btn.render.rect.transform.pos.y, 60, 90, TextureManager::POINTER, 3);
-			break;
+			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, btn.render.rect.transform.pos.x - POINTER_OFFSET.x, btn.render.rect.transform.pos.y - POINTER_OFFSET.y, 60, 90, TextureManager::POINTER, 3);
+		}
+		else {
+			// Scale btn to original size.
+			btn.render.rect.transform.size = btn.render.rect.transform.cachedSize;
 		}
 	}
 }
@@ -296,6 +302,7 @@ void InitializeMenuUI() {
 
 	startBtn.render.rect.transform.size.x = 460.0f;
 	startBtn.render.rect.transform.size.y = 100.0f;
+	startBtn.render.rect.transform.cachedSize = startBtn.render.rect.transform.size;
 
 	buttons.push_back(startBtn);
 
@@ -308,6 +315,8 @@ void InitializeMenuUI() {
 
 	editorBtn.render.rect.transform.size.x = 260.0f;
 	editorBtn.render.rect.transform.size.y = 100.0f;
+	editorBtn.render.rect.transform.cachedSize = editorBtn.render.rect.transform.size;
+
 	buttons.push_back(editorBtn);
 
 	// CONTROLS BUTTON
@@ -319,6 +328,8 @@ void InitializeMenuUI() {
 
 	controlsBtn.render.rect.transform.size.x = 360.0f;
 	controlsBtn.render.rect.transform.size.y = 100.0f;
+	controlsBtn.render.rect.transform.cachedSize = controlsBtn.render.rect.transform.size;
+
 	buttons.push_back(controlsBtn);
 
 	// CREDITS BUTTON
@@ -330,6 +341,8 @@ void InitializeMenuUI() {
 
 	creditsBtn.render.rect.transform.size.x = 300.0f;
 	creditsBtn.render.rect.transform.size.y = 100.0f;
+	creditsBtn.render.rect.transform.cachedSize = creditsBtn.render.rect.transform.size;
+
 	buttons.push_back(creditsBtn);
 
 	// QUIT BUTTON
@@ -341,6 +354,8 @@ void InitializeMenuUI() {
 
 	quitBtn.render.rect.transform.size.x = 170.0f;
 	quitBtn.render.rect.transform.size.y = 110.0f;
+	quitBtn.render.rect.transform.cachedSize = quitBtn.render.rect.transform.size;
+
 	buttons.push_back(quitBtn);
 
 	// QUIT YES BUTTON
@@ -353,6 +368,8 @@ void InitializeMenuUI() {
 
 	quitYesBtn.render.rect.transform.size.x = 130.0f;
 	quitYesBtn.render.rect.transform.size.y = 100.0f;
+	quitYesBtn.render.rect.transform.cachedSize = quitYesBtn.render.rect.transform.size;
+
 	quitYesBtn.render.layer = 2;
 	buttons.push_back(quitYesBtn);
 
@@ -366,6 +383,8 @@ void InitializeMenuUI() {
 
 	quitNoBtn.render.rect.transform.size.x = 100.0f;
 	quitNoBtn.render.rect.transform.size.y = 100.0f;
+	quitNoBtn.render.rect.transform.cachedSize = quitNoBtn.render.rect.transform.size;
+
 	quitNoBtn.render.layer = 2;
 	buttons.push_back(quitNoBtn);
 
@@ -376,7 +395,8 @@ void InitializeMenuUI() {
 
 	confirmQuitPrompt.rect.transform.size.x = 850.0f;
 	confirmQuitPrompt.rect.transform.size.y = 390.0f;
-	quitYesBtn.render.layer = 1;
+
+	confirmQuitPrompt.layer = 1;
 }
 
 void LoadStart() {

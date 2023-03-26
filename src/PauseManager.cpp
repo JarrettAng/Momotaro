@@ -13,7 +13,7 @@ This source file declares
 #include <PauseManager.h>
 
 namespace PauseManager {
-	const float POINTER_OFFSET = 80.0f;
+	const Vec2<float> POINTER_OFFSET = { 80.0f, 10.0f };
 
 	RenderSystem::Interactable pauseBtn{};
 	RenderSystem::Interactable continueBtn{};
@@ -36,7 +36,7 @@ namespace PauseManager {
 	void ToggleQuitConfirm();
 	void HandlePauseUIClick();
 	void LoadMainMenu();
-	void DrawPointer();
+	void HandleBtnHover();
 #pragma endregion
 
 	bool IsPaused()
@@ -61,8 +61,11 @@ namespace PauseManager {
 
 		pauseBtn.render.rect.transform.pos.x = GetWorldXByPercentage(92.0f);
 		pauseBtn.render.rect.transform.pos.y = GetWorldYByPercentage(95.0f);
+
 		pauseBtn.render.rect.transform.size.x = 72.0f;
 		pauseBtn.render.rect.transform.size.y = 80.0f;
+		pauseBtn.render.rect.transform.cachedSize = pauseBtn.render.rect.transform.size;
+
 		buttons.push_back(pauseBtn);
 
 		// PAUSE PROMPT.
@@ -70,6 +73,7 @@ namespace PauseManager {
 
 		pausePrompt.rect.transform.pos.x = GetWorldXByPercentage(25.0f);
 		pausePrompt.rect.transform.pos.y = GetWorldYByPercentage(80.0f);
+
 		pausePrompt.rect.transform.size.x = 850.0f;
 		pausePrompt.rect.transform.size.y = 390.0f;
 
@@ -93,6 +97,8 @@ namespace PauseManager {
 
 		quitYesBtn.render.rect.transform.size.x = 130.0f;
 		quitYesBtn.render.rect.transform.size.y = 100.0f;
+		quitYesBtn.render.rect.transform.cachedSize = quitYesBtn.render.rect.transform.size;
+
 		quitYesBtn.render.layer = 3;
 		buttons.push_back(quitYesBtn);
 
@@ -106,6 +112,8 @@ namespace PauseManager {
 
 		quitNoBtn.render.rect.transform.size.x = 100.0f;
 		quitNoBtn.render.rect.transform.size.y = 100.0f;
+		quitNoBtn.render.rect.transform.cachedSize = quitNoBtn.render.rect.transform.size;
+
 		quitNoBtn.render.layer = 3;
 		buttons.push_back(quitNoBtn);
 
@@ -116,9 +124,12 @@ namespace PauseManager {
 
 		continueBtn.render.rect.transform.pos.x = GetWorldXByPercentage(35.0f);
 		continueBtn.render.rect.transform.pos.y = GetWorldYByPercentage(57.0f);
+
 		continueBtn.render.rect.transform.size.x = 190.0f;
 		continueBtn.render.rect.transform.size.y = 100.0f;
-		quitNoBtn.render.layer = 1;
+		continueBtn.render.rect.transform.cachedSize = continueBtn.render.rect.transform.size;
+
+		continueBtn.render.layer = 1;
 		buttons.push_back(continueBtn);
 
 		// QUIT TO MENU BUTTON.
@@ -128,9 +139,12 @@ namespace PauseManager {
 
 		exitBtn.render.rect.transform.pos.x = GetWorldXByPercentage(58.0f);
 		exitBtn.render.rect.transform.pos.y = GetWorldYByPercentage(57.0f);
+
 		exitBtn.render.rect.transform.size.x = 170.0f;
 		exitBtn.render.rect.transform.size.y = 100.0f;
-		quitNoBtn.render.layer = 1;
+		exitBtn.render.rect.transform.cachedSize = exitBtn.render.rect.transform.size;
+
+		exitBtn.render.layer = 1;
 		buttons.push_back(exitBtn);
 	}
 
@@ -139,11 +153,11 @@ namespace PauseManager {
 	}
 
 	void PauseManager::Draw() {
-		DrawPointer();
+		HandleBtnHover();
 		DrawPauseUI();
 	}
 
-	void DrawPointer() {
+	void HandleBtnHover() {
 		// Cache mouse position.
 		Vec2<int> mousePos = InputManager::GetMousePos();
 
@@ -156,14 +170,22 @@ namespace PauseManager {
 			// Skip if button is not visible or clickable.
 			if (!btn.isActive || !btn.isClickable) continue;
 
-			// Dont draw pointer for quit button.
-			if (btn.render.rect.graphics.tex == TextureManager::PAUSE_BUTTON) continue;
+
 
 			// Check if mouse is hovering button.
 			if (MouseInsideButton(mousePos, btn.render.rect.transform.pos, btn.render.rect.transform.size)) {
+				// Scale btn for visual feedback.
+				btn.render.rect.transform.size = btn.render.rect.transform.cachedSize * 1.1f;
+
+				// Dont draw pointer for quit button.
+				if (btn.render.rect.graphics.tex == TextureManager::PAUSE_BUTTON) continue;
+
 				// Draw pointer.
-				RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, btn.render.rect.transform.pos.x - POINTER_OFFSET, btn.render.rect.transform.pos.y, 60, 90, TextureManager::POINTER, 3);
-				break;
+				RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, btn.render.rect.transform.pos.x - POINTER_OFFSET.x, btn.render.rect.transform.pos.y - POINTER_OFFSET.y, 60, 90, TextureManager::POINTER, 3);
+			}
+			else {
+				// Scale btn to original size.
+				btn.render.rect.transform.size = btn.render.rect.transform.cachedSize;
 			}
 		}
 	}

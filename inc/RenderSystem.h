@@ -57,7 +57,11 @@ namespace RenderSystem {
 
 	struct Transform {
 		Vec2<float> pos{};
+		Vec2<float> cachedPos{};
+
 		Vec2<float> size = { 1,1 };
+		Vec2<float> cachedSize{};
+
 		float rot = 0;
 	};
 
