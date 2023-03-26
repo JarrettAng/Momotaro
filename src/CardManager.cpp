@@ -126,6 +126,7 @@ namespace CardManager {
 namespace CardManager {
 	EventSystem::Event<const BuildingData*> onNewCardSelected;	// Event that gets called when player selects/deselects a card
 	EventSystem::Event<Vec2<int>> onCardPlaced;					// Event that gets called when player plays a card
+	EventSystem::Event<void>	  onCardPlacedVoid;				// Event that gets called when player plays a card
 	EventSystem::Event<void> onHandEmpty;						//Event that gets called when player runs out of cards
 
 	int startingHandSize = 5;						// How many cards should the player start with
@@ -144,6 +145,7 @@ namespace CardManager {
 	float hoverTimeElapsed;							// How long the player is currently hovering over a card for
 
 	bool spawnMergeBuilding;
+	bool isClickable;
 
 	///////////////////////////////////////////////////////////////////////
 	// Forward Declarations
@@ -195,6 +197,7 @@ namespace CardManager {
 		InputManager::SubscribeToKey(AEVK_H, InputManager::TRIGGERED, GiveRandL3Card);
 
 		spawnMergeBuilding = false;
+		isClickable = true;
 	}
 
 	// Every frame check if the info box should show
@@ -371,6 +374,7 @@ namespace CardManager {
 		selectedCard->UpdateCountText();
 
 		onCardPlaced.Invoke(mousePos);		   // Let the world know a card has been played
+		onCardPlacedVoid.Invoke();
 
 		if (selectedCard->count <= 0) {		   // If the card has run out, remove it from the hand
 			RemoveFromHand(selectedCard);
@@ -399,6 +403,8 @@ namespace CardManager {
 
 	// When the player clicks (for any reason)
 	void HandleClick() {
+		if (!isClickable) return;
+
 		Vec2<float> mousePos = { (float)InputManager::GetMousePos().x - AEGfxGetWinMaxX(), -((float)InputManager::GetMousePos().y - AEGfxGetWinMaxY()) };
 		Vec2<float> cardPos, cardSize;
 
@@ -454,11 +460,6 @@ namespace CardManager {
 	}
 
 	void ToggleClickable(bool clickable) {
-		if (clickable) {
-			InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
-		}
-		else {
-			InputManager::UnsubscribeKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
-		}
+		isClickable = clickable;
 	}
 }

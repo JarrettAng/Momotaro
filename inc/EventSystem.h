@@ -59,7 +59,7 @@ namespace EventSystem {
 	public:
 		// Call each function subscribe with the parameter (var) passed here
 		void Invoke(T var) {
-			for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
+			for (typename std::list<EventData<T>>::iterator i = subscribers.begin(); i != subscribers.end(); ++i) {
 				(i->fun_ptr)(var);
 			}
 		}
@@ -69,7 +69,7 @@ namespace EventSystem {
 			EventData<T> new_sub = { fun_ptr, priority };
 
 			if (subscribers.size() >= 1) {
-				for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
+				for (typename std::list<EventData<T>>::iterator i = subscribers.begin(); i != subscribers.end(); ++i) {
 					if (i->priority <= priority) {
 						subscribers.insert(i, new_sub);
 						return;
@@ -81,7 +81,7 @@ namespace EventSystem {
 
 		// Remove or "unsubscribe" a function from this event list
 		void Unsubscribe(void (*fun_ptr)(T)) {
-			for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
+			for (typename std::list<EventData<T>>::iterator i = subscribers.begin(); i != subscribers.end(); ++i) {
 				if (i->fun_ptr == fun_ptr) {
 					subscribers.erase(i);
 					break;
@@ -104,7 +104,7 @@ namespace EventSystem {
 	public:
 		// Call each function subscribe with the parameter (var) passed here
 		void Invoke() {
-			for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
+			for (typename std::list<EventData<void>>::iterator i = subscribers.begin(); i != subscribers.end(); ++i) {
 				(i->fun_ptr)();
 			}
 		}
@@ -114,7 +114,7 @@ namespace EventSystem {
 			EventData<void> new_sub = { fun_ptr, priority };
 
 			if (subscribers.size() >= 1) {
-				for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
+				for (typename std::list<EventData<void>>::iterator i = subscribers.begin(); i != subscribers.end(); ++i) {
 					if (i->priority <= priority) {
 						subscribers.insert(i, new_sub);
 						return;
@@ -127,7 +127,7 @@ namespace EventSystem {
 
 		// Remove or "unsubscribe" a function from this event list
 		void Unsubscribe(void (*fun_ptr)()) {
-			for (auto i = subscribers.begin(); i != subscribers.end(); ++i) {
+			for (typename std::list<EventData<void>>::iterator i = subscribers.begin(); i != subscribers.end(); ++i) {
 				if (i->fun_ptr == fun_ptr) {
 					subscribers.erase(i);
 					break;

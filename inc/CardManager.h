@@ -81,6 +81,7 @@ namespace CardManager {
 	// Events
 	extern EventSystem::Event<const BuildingData*> 	onNewCardSelected;
 	extern EventSystem::Event<Vec2<int>>		   	onCardPlaced;
+	extern EventSystem::Event<void>					onCardPlacedVoid;
 	extern EventSystem::Event<void>					onHandEmpty;
 
 	///////////////////////////////////////////////////////////////////////

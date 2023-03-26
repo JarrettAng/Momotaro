@@ -38,7 +38,7 @@ void ShowTutPart1_Score();
 void ShowTutPart1_Buildings();
 void ShowTutPart1_Buildings2();
 void ShowTutPart1_Buildings3();
-void ShowTutPart1_Buildings4(Vec2<int> mousePos);
+void ShowTutPart1_Buildings4();
 void ShowTutPart1_Buildings5();
 void ShowTutPart1_Merging();
 void ShowTutPart1_Merging2();
@@ -224,17 +224,17 @@ void ShowTutPart1_Buildings3() {
 
 	// What to show next
 	nextTut_FuncPtr = nullptr; // Remove the click trigger, use the event instead
-	CardManager::onCardPlaced.Subscribe(ShowTutPart1_Buildings4);
+	CardManager::onCardPlacedVoid.Subscribe(ShowTutPart1_Buildings4);
 }
 
-void ShowTutPart1_Buildings4(Vec2<int> mousePos) {
+void ShowTutPart1_Buildings4() {
 	UpdatePopupSize(0.0f, -AEGfxGetWinMaxY() * 0.3f, AEGfxGetWinMaxX(), AEGfxGetWinMaxY() * 0.3f);
 	UpdatePopupText("Wow! Look at those points go up! This is an example of \"synergy\", houses like to be near nature, the coast for example!");
 
 	CardManager::ToggleClickable(false);
 
 	// What to show next
-	CardManager::onCardPlaced.Unsubscribe(ShowTutPart1_Buildings4);
+	CardManager::onCardPlacedVoid.Unsubscribe(ShowTutPart1_Buildings4);
 	nextTut_FuncPtr = ShowTutPart1_Buildings5; // Back to the click event
 }
 
