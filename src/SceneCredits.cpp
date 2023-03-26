@@ -42,6 +42,7 @@ RenderSystem::Text GenerateHeader(std::string text);
 RenderSystem::Text GenerateName(std::string text);
 RenderSystem::Text GenerateText(std::string text, float fontSize, float offset);
 void HandleBackBtnClick();
+void HandleBackBtnHover();
 void ReturnToMenu();
 
 std::vector<RenderSystem::Text> creditTexts;
@@ -74,6 +75,7 @@ void SceneCredits::Draw() {
 	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, backBtn.render.rect.transform.pos.x, backBtn.render.rect.transform.pos.y, backBtn.render.rect.transform.size.x, backBtn.render.rect.transform.size.y, TextureManager::BACK_BTN);
 
 	DrawCredits();
+	HandleBackBtnHover();
 
 	RenderSystem::Render();
 }
@@ -101,6 +103,25 @@ void DrawCredits() {
 		for (RenderSystem::Text& t : creditTexts) {
 			t.pos.y = t.cachedPos.y;
 		}
+	}
+}
+
+void HandleBackBtnHover() {
+	// Cache mouse position.
+	Vec2<int> mousePos = InputManager::GetMousePos();
+
+	// Convert to world space position.
+	mousePos.x -= (int)AEGfxGetWinMaxX();
+	mousePos.y -= (int)AEGfxGetWinMaxY();
+
+	// Check if mouse is clicking back btn.
+	if (MouseInsideButton(mousePos, backBtn.render.rect.transform.pos, backBtn.render.rect.transform.size)) {
+		// Scale btn for visual feedback.
+		backBtn.render.rect.transform.size = backBtn.render.rect.transform.cachedSize * 1.1f;
+	}
+	else {
+		// Scale btn to original size.
+		backBtn.render.rect.transform.size = backBtn.render.rect.transform.cachedSize;
 	}
 }
 
@@ -220,6 +241,7 @@ void InitializeCreditsUI() {
 
 	backBtn.render.rect.transform.size.x = 150.0f;
 	backBtn.render.rect.transform.size.y = 78.0f;
+	backBtn.render.rect.transform.cachedSize = backBtn.render.rect.transform.size;
 }
 
 void ReturnToMenu() {
