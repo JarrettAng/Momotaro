@@ -439,11 +439,16 @@ namespace CardManager {
 
 	// At the end of the level free and unsubscribe from everything
 	void Free() {
+		selectedCard = nullptr;
+		onNewCardSelected.Invoke(nullptr); // Invoke the card deselected event
+
 		hand.clear();
+
 		InputManager::UnsubscribeKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
 		InputManager::UnsubscribeKey(AEVK_F, InputManager::TRIGGERED, GiveRandL1Card);
 		InputManager::UnsubscribeKey(AEVK_G, InputManager::TRIGGERED, GiveRandL2Card);
 		InputManager::UnsubscribeKey(AEVK_H, InputManager::TRIGGERED, GiveRandL3Card);
+
 		ScoreManager::onLevelChange.Unsubscribe(GiveCardOnThreshold);
 		GridManager::onMergeBuildings.Unsubscribe(GiveCardOnMerge);
 	}
