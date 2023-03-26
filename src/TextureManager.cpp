@@ -73,6 +73,7 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ YES_BTN,AEGfxTextureLoad("Assets/Textures/UI/Buttons/Yes_Btn.png"), 1, 1, -1.f });
 		textures.push_back(TextureSheet{ NO_BTN,AEGfxTextureLoad("Assets/Textures/UI/Buttons/No_Btn.png"), 1, 1, -1.f });
 		textures.push_back(TextureSheet{ BACK_BTN, AEGfxTextureLoad("Assets/Textures/UI/Buttons/Back_Btn.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ RESUME_BTN, AEGfxTextureLoad("Assets/Textures/UI/Buttons/Resume_Btn.png"), 1, 1, -1.f });
 		textures.push_back(TextureSheet{ PAUSE_BUTTON,AEGfxTextureLoad("Assets/Textures/UI/Buttons/Pause_Btn.png"), 1, 1, -1.f });
 
 		textures.push_back(TextureSheet{ MENU_BG,AEGfxTextureLoad("Assets/Textures/UI/Backgrounds/MainMenu_Background.png"), 1, 13, .1f });

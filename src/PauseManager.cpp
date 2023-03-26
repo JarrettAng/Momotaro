@@ -119,14 +119,14 @@ namespace PauseManager {
 		buttons.push_back(quitNoBtn);
 
 		// CONTINUE BUTTON.
-		continueBtn.render.rect.graphics.tex = TextureManager::BACK_BTN;
+		continueBtn.render.rect.graphics.tex = TextureManager::RESUME_BTN;
 		continueBtn.func = TogglePause;
 		continueBtn.isActive = false;
 
-		continueBtn.render.rect.transform.pos.x = GetWorldXByPercentage(35.0f);
+		continueBtn.render.rect.transform.pos.x = GetWorldXByPercentage(33.0f);
 		continueBtn.render.rect.transform.pos.y = GetWorldYByPercentage(57.0f);
 
-		continueBtn.render.rect.transform.size.x = 190.0f;
+		continueBtn.render.rect.transform.size.x = 270.0f;
 		continueBtn.render.rect.transform.size.y = 100.0f;
 		continueBtn.render.rect.transform.cachedSize = continueBtn.render.rect.transform.size;
 
@@ -138,7 +138,7 @@ namespace PauseManager {
 		exitBtn.func = ToggleQuitConfirm;
 		exitBtn.isActive = false;
 
-		exitBtn.render.rect.transform.pos.x = GetWorldXByPercentage(58.0f);
+		exitBtn.render.rect.transform.pos.x = GetWorldXByPercentage(60.0f);
 		exitBtn.render.rect.transform.pos.y = GetWorldYByPercentage(57.0f);
 
 		exitBtn.render.rect.transform.size.x = 170.0f;
@@ -170,8 +170,6 @@ namespace PauseManager {
 		for (RenderSystem::Interactable& btn : buttons) {
 			// Skip if button is not visible or clickable.
 			if (!btn.isActive || !btn.isClickable) continue;
-
-
 
 			// Check if mouse is hovering button.
 			if (MouseInsideButton(mousePos, btn.render.rect.transform.pos, btn.render.rect.transform.size)) {
@@ -224,7 +222,7 @@ namespace PauseManager {
 		// Buttons.
 		for (RenderSystem::Interactable& i : buttons) {
 			// Toggle the visibility and clickability of back and quit btn.
-			if (i.render.rect.graphics.tex == TextureManager::BACK_BTN || i.render.rect.graphics.tex == TextureManager::QUIT_BTN) {
+			if (i.render.rect.graphics.tex == TextureManager::RESUME_BTN || i.render.rect.graphics.tex == TextureManager::QUIT_BTN) {
 				i.isActive = isPaused;
 				i.isClickable = isPaused;
 			}

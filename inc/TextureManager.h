@@ -57,6 +57,7 @@ namespace TextureManager {
 		NO_BTN,
 		CREDITS_BG,
 		BACK_BTN,
+		RESUME_BTN,
 		BLANK_PROMPT,
 		WATER_TEX,
 		MOMO_THE_PEACH
