@@ -158,6 +158,7 @@ namespace CardManager {
 	void GiveRandL1Card();
 	void GiveRandL2Card();
 	void GiveRandL3Card();
+	void ToggleClickableOff();
 	///////////////////////////////////////////////////////////////////////
 	// Set up the hand properly at the start of the level
 	void Initialize() {
@@ -190,6 +191,8 @@ namespace CardManager {
 		InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
 		ScoreManager::onLevelChange.Subscribe(GiveCardOnThreshold);
 		GridManager::onMergeBuildings.Subscribe(GiveCardOnMerge);
+
+		CardManager::onHandEmpty.Subscribe(ToggleClickableOff);
 
 		// Debugging: Press key to spawn cards
 		InputManager::SubscribeToKey(AEVK_F, InputManager::TRIGGERED, GiveRandL1Card);
@@ -461,5 +464,10 @@ namespace CardManager {
 
 	void ToggleClickable(bool clickable) {
 		isClickable = clickable;
+	}
+
+	void ToggleClickableOff() {
+		isClickable = false;
+		CardManager::onHandEmpty.Unsubscribe(ToggleClickableOff);
 	}
 }

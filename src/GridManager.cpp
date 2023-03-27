@@ -111,6 +111,7 @@ namespace GridManager {
 			std::cout << "Debug " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
 			return;
 		}
+		AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_GAINPOINT);
 		int index = GetIndex(SelectedCell);
 		grid[index].ID = ++buildingID;
 		grid[index]._building.data = *selectedBuilding;
