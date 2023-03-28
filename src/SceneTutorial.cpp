@@ -140,6 +140,9 @@ void SceneTutorial::Free() {
 
 	InputManager::UnsubscribeKey(AEVK_M, InputManager::TRIGGERED, ShowTutPart2_Tiles);
 	InputManager::UnsubscribeKey(AEVK_LBUTTON, InputManager::TRIGGERED, AdvanceTutorial);
+	GridManager::onMergeBuildings.Unsubscribe(ShowTutPart1_Merging);
+	ScoreManager::onLevelChange.Unsubscribe(ShowTutPart1_Score3);
+	CardManager::onCardPlacedVoid.Unsubscribe(ShowTutPart1_Buildings4);
 }
 
 void SceneTutorial::Unload() {
@@ -312,7 +315,7 @@ void ShowTutPart2_Tiles() {
 
 	// Reset everything
 	showHand = showScore = true;
-	
+
 	CardManager::Free();
 	CardManager::Initialize();
 	CardManager::ToggleClickable(false);
