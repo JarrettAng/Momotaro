@@ -22,6 +22,7 @@ The functions include:
 #include <MomoMaths.h>
 
 #include <TextureManager.h>
+#include <AudioManager.h>
 ///////////////////////////////////////////////////////////////////////////
 
 const float HEADER_FONT_SIZE = 60.0f;
@@ -60,11 +61,13 @@ void SceneCredits::Initialize() {
 	InitializeTexts();
 	InitializeCreditsUI();
 	InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleBackBtnClick);
+	AudioManager::PlayBGM(AudioManager::ClipName::BGM_CREDITS);
 }
 
 void SceneCredits::Update() {
 	// Check for button presses.
 	InputManager::HandleInput();
+	AudioManager::Update();
 }
 
 void SceneCredits::Draw() {

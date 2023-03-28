@@ -202,6 +202,9 @@ namespace FileIOManager {
 		audioData[AM::ClipName::BGM_GAME]=AM::AudioClip{ 
 			AEAudioLoadMusic("Assets/Audio/GameLevel.wav"),
 			1.0f,AM::BGM_GROUP};
+		audioData[AM::ClipName::BGM_CREDITS]=AM::AudioClip{ 
+			AEAudioLoadMusic("Assets/Audio/CreditsLoop.wav"),
+			.25f,AM::BGM_GROUP};
 		audioData[AM::ClipName::SFX_CLICK]=AM::AudioClip{ 
 			AEAudioLoadSound("Assets/Audio/MouseClick.wav"),
 			0.10f,AM::SFX_GROUP};
