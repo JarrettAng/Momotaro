@@ -74,8 +74,11 @@ namespace TextureManager {
 		int cols;
 
 		// Animation.
-		float frameInterval;		// Time between each frame.
-		float currInterval = 0;
+		float frameDelay;			// Time between each frame.
+		float animDelay = 0;			// Time between animation loop. 0 = No delay between animation loop.
+
+		float currFrameDelay = 0;
+		float currAnimeDelay = 0;
 
 		float texWidth;				// Texture frame UV width offset:	1/cols
 		float texHeight;			// Texture frame UV height offset:	1/rows

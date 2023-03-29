@@ -37,9 +37,8 @@ namespace TextureManager {
 		Initialize texture sheets and properties for animations.
 	*************************************************************************/
 	void InitializeTextures() {
-		// TODO: READ FROM JSON
-		// TO GET: ROWS, COLS AND FRAME INTERVAL, 
-		textures.push_back(TextureSheet{ NONE,nullptr, 1, 1,-1 });
+		// ROW, COL, FRAME DELAY, ANIMATION DELAY.
+		textures.push_back(TextureSheet{ NONE, nullptr, 1, 1,-1 });
 
 		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L1, AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L1.png"),  1, 6, .2f });
 		textures.push_back(TextureSheet{ RESIDENTIAL_1X1_L2, AEGfxTextureLoad("Assets/Textures/Game Pieces/Residential_1x1_L2.png"), 1, 6, .2f });
@@ -77,7 +76,7 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ PAUSE_BUTTON,AEGfxTextureLoad("Assets/Textures/UI/Buttons/Pause_Btn.png"), 1, 1, -1.f });
 		textures.push_back(TextureSheet{ RESTART_BUTTON,AEGfxTextureLoad("Assets/Textures/UI/Buttons/Restart_Btn.png"), 1, 1, -1.f });
 
-		textures.push_back(TextureSheet{ MENU_BG,AEGfxTextureLoad("Assets/Textures/UI/Backgrounds/MainMenu_Background.png"), 1, 42, .1f });
+		textures.push_back(TextureSheet{ MENU_BG,AEGfxTextureLoad("Assets/Textures/UI/Backgrounds/MainMenu_Background.png"), 1, 13, .1f, 4.0f });
 		textures.push_back(TextureSheet{ CREDITS_BG, AEGfxTextureLoad("Assets/Textures/UI/Backgrounds/Credit_Background.png"), 1, 1, -1.f });
 
 		textures.push_back(TextureSheet{ BLANK_PROMPT ,AEGfxTextureLoad("Assets/Textures/UI/Prompts/Blank_Prompt.png"), 1, 1, -1.f });
@@ -96,7 +95,7 @@ namespace TextureManager {
 		for (TextureSheet& t : textures) {
 			t.texWidth = 1.f / t.cols;
 			t.texHeight = 1.f / t.rows;
-			t.currInterval = t.frameInterval;
+			t.currFrameDelay = t.frameDelay;
 		}
 	}
 
@@ -143,16 +142,22 @@ namespace TextureManager {
 		// Update animation.
 		for (TextureSheet& t : textures) {
 			// No animation.
-			if (t.frameInterval == -1) continue;
+			if (t.frameDelay == -1) continue;
 
-			// Tick timer.
-			if (t.currInterval > 0) {
-				t.currInterval -= (f32)AEFrameRateControllerGetFrameTime();
+			// Tick animation timer.
+			if (t.currAnimeDelay > 0) {
+				t.currAnimeDelay -= (f32)AEFrameRateControllerGetFrameTime();
+				continue;
+			}
+
+			// Tick frame timer.
+			if (t.currFrameDelay > 0) {
+				t.currFrameDelay -= (f32)AEFrameRateControllerGetFrameTime();
 				continue;
 			}
 
 			// Goto next anim frame.
-			if (t.currInterval <= 0) {
+			if (t.currFrameDelay <= 0) {
 				// Try to go to next frame.
 				t.currTexWidth += t.texWidth;
 				// End of row
@@ -166,9 +171,12 @@ namespace TextureManager {
 				if (t.currTexHeight >= 1) {
 					// Back to the top of spritesheet.
 					t.currTexHeight = 0;
+
+					// End of animation loop.
+					t.currAnimeDelay = t.animDelay;
 				}
 				// Reset timer.
-				t.currInterval = t.frameInterval;
+				t.currFrameDelay = t.frameDelay;
 			}
 		}
 	}

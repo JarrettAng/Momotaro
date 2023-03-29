@@ -30,10 +30,6 @@ const Vec2<float> POINTER_OFFSET = { 80.0f, 10.0f };
 const float TRANSITION_TIME = 1.0f;
 const float BLINK_INTERVAL = 0.07f;
 
-// Title animation.
-float ANIMATION_FRAMES;
-const float ANIMATION_INTERVAL = 4.0f;
-
 /*!***********************************************************************
 * FORWARD DECLARATIONS
 *************************************************************************/
@@ -82,12 +78,6 @@ float currBlinkInterval = 0;
 float currTransitionTime = 0;
 
 /*!***********************************************************************
-* TITLE ANIMATION
-*************************************************************************/
-float currAnimFrame = 0;
-float currAnimInterval = 0.0f;
-
-/*!***********************************************************************
 * QUIT CONFIRMATION PROMPT
 *************************************************************************/
 bool showQuitConfirm = false;
@@ -100,12 +90,9 @@ void SceneMainMenu::Initialize() {
 	InitializeMenuUI();
 	InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleBtnClick);
 
-	// Hardcoding to animate menu animation.
-	// Num of frames * dt + total delay between frames.
-	ANIMATION_FRAMES = 13.0f * (float)AEFrameRateControllerGetFrameTime() + 1.3f;
-
 	currBlinkInterval = BLINK_INTERVAL;
 	currTransitionTime = TRANSITION_TIME;
+
 	isTransitioning = false;
 	isBlinking = false;
 
@@ -116,24 +103,7 @@ void SceneMainMenu::Update() {
 	// Check for button presses.
 	InputManager::HandleInput();
 	AudioManager::Update();
-		TextureManager::Update();
-	// Play menu animation.
-	// if (currAnimFrame < ANIMATION_FRAMES) {
-	// 	// Tick timer and update texture.
-	// 	currAnimFrame += (float)AEFrameRateControllerGetFrameTime();
-	// }
-	// else {
-	// 	// Handle delay between animation loop.
-	// 	if (currAnimInterval < ANIMATION_INTERVAL) {
-	// 		// Tick timer.
-	// 		currAnimInterval += (float)AEFrameRateControllerGetFrameTime();
-	// 	}
-	// 	else {
-	// 		// Reset animation loop.
-	// 		currAnimFrame = 0;
-	// 		currAnimInterval = 0;
-	// 	}
-	// }
+	TextureManager::Update();
 }
 
 void SceneMainMenu::Draw() {
