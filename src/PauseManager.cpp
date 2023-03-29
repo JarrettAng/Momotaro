@@ -16,6 +16,7 @@ namespace PauseManager {
 	const Vec2<float> POINTER_OFFSET = { 80.0f, 10.0f };
 
 	RenderSystem::Interactable pauseBtn{};
+	RenderSystem::Interactable restartBtn{};
 	RenderSystem::Interactable continueBtn{};
 	RenderSystem::Interactable exitBtn{};
 	RenderSystem::Interactable quitYesBtn{};
@@ -28,12 +29,15 @@ namespace PauseManager {
 
 	bool isPaused;
 	bool showQuitConfirm;
+	bool showRestartConfirm;
 
 #pragma region Forward Delcarations;
 	void InitializePauseUI();
 	void DrawPauseUI();
 	void TogglePause();
 	void ToggleQuitConfirm();
+	void ToggleRestartConfirm();
+	void RestartLevel();
 	void HandlePauseUIClick();
 	void LoadMainMenu();
 	void HandleBtnHover();
@@ -41,13 +45,14 @@ namespace PauseManager {
 
 	bool IsPaused()
 	{
-		return isPaused;
+		return isPaused || showRestartConfirm;
 	}
 
 	void Initialize()
 	{
 		isPaused = false;
 		showQuitConfirm = false;
+		showRestartConfirm = false;
 		InitializePauseUI();
 
 		InputManager::SubscribeToKey(AEVK_ESCAPE, InputManager::TRIGGERED, TogglePause);
@@ -59,14 +64,29 @@ namespace PauseManager {
 		pauseBtn.render.rect.graphics.tex = TextureManager::PAUSE_BUTTON;
 		pauseBtn.func = TogglePause;
 
-		pauseBtn.render.rect.transform.pos.x = GetWorldXByPercentage(92.0f);
-		pauseBtn.render.rect.transform.pos.y = GetWorldYByPercentage(95.0f);
+		pauseBtn.render.rect.transform.pos.x = GetWorldXByPercentage(93.0f);
+		pauseBtn.render.rect.transform.pos.y = GetWorldYByPercentage(97.0f);
 
 		pauseBtn.render.rect.transform.size.x = 72.0f;
 		pauseBtn.render.rect.transform.size.y = 80.0f;
 		pauseBtn.render.rect.transform.cachedSize = pauseBtn.render.rect.transform.size;
 
 		buttons.push_back(pauseBtn);
+
+
+		//RESTART BUTTON.
+		restartBtn.render.rect.graphics.tex = TextureManager::RESTART_BUTTON;
+		restartBtn.func = ToggleRestartConfirm;
+
+		restartBtn.render.rect.transform.pos.x = GetWorldXByPercentage(86.0f);
+		restartBtn.render.rect.transform.pos.y = GetWorldYByPercentage(97.0f);
+
+		restartBtn.render.rect.transform.size.x = 72.0f;
+		restartBtn.render.rect.transform.size.y = 80.0f;
+		restartBtn.render.rect.transform.cachedSize = restartBtn.render.rect.transform.size;
+
+		buttons.push_back(restartBtn);
+
 
 		// PAUSE PROMPT.
 		pausePrompt.rect.graphics.tex = TextureManager::PAUSE_WINDOW;
@@ -176,8 +196,9 @@ namespace PauseManager {
 				// Scale btn for visual feedback.
 				btn.render.rect.transform.size = btn.render.rect.transform.cachedSize * 1.1f;
 
-				// Dont draw pointer for quit button.
+				// Dont draw pointer for quit/restart button.
 				if (btn.render.rect.graphics.tex == TextureManager::PAUSE_BUTTON) continue;
+				if (btn.render.rect.graphics.tex == TextureManager::RESTART_BUTTON) continue;
 
 				// Draw pointer.
 				RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, btn.render.rect.transform.pos.x - POINTER_OFFSET.x, btn.render.rect.transform.pos.y - POINTER_OFFSET.y, 60, 90, TextureManager::POINTER, 9);
@@ -200,6 +221,11 @@ namespace PauseManager {
 			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, confirmQuitPrompt.rect.transform.pos.x, confirmQuitPrompt.rect.transform.pos.y, confirmQuitPrompt.rect.transform.size.x, confirmQuitPrompt.rect.transform.size.y, confirmQuitPrompt.rect.graphics.tex, confirmQuitPrompt.layer);
 		}
 
+		// Draw confirm quit prompt.
+		if (showRestartConfirm) {
+			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, confirmQuitPrompt.rect.transform.pos.x, confirmQuitPrompt.rect.transform.pos.y, confirmQuitPrompt.rect.transform.size.x, confirmQuitPrompt.rect.transform.size.y, confirmQuitPrompt.rect.graphics.tex, confirmQuitPrompt.layer);
+		}
+
 		// Draw buttons.
 		for (RenderSystem::Interactable const& i : buttons) {
 			if (i.isActive) {
@@ -211,6 +237,7 @@ namespace PauseManager {
 	void LoadMainMenu() {
 		// Close prompts and reset active / clickability.
 		ToggleQuitConfirm();
+		//ToggleRestartConfirm();
 		TogglePause();
 		// Load menu scene.
 		SceneManager::LoadScene(SceneManager::MAIN_MENU);
@@ -218,7 +245,7 @@ namespace PauseManager {
 
 	void TogglePause() {
 		isPaused = !isPaused;
-
+		CardManager::ToggleClickable(!isPaused);
 		// Buttons.
 		for (RenderSystem::Interactable& i : buttons) {
 			// Toggle the visibility and clickability of back and quit btn.
@@ -235,8 +262,13 @@ namespace PauseManager {
 	void ToggleQuitConfirm() {
 		// Toggle between quit confirm state.
 		showQuitConfirm = !showQuitConfirm;
-
 		for (RenderSystem::Interactable& btn : buttons) {
+			if(btn.render.rect.graphics.tex == TextureManager::YES_BTN){
+				btn.func = LoadMainMenu;	
+			}
+			if(btn.render.rect.graphics.tex == TextureManager::NO_BTN){
+				btn.func = ToggleQuitConfirm;
+			}
 			// Toggle the visibility and clickability of yes and no buttons.
 			if (btn.render.rect.graphics.tex == TextureManager::YES_BTN || btn.render.rect.graphics.tex == TextureManager::NO_BTN) {
 				btn.isActive = showQuitConfirm;
@@ -248,7 +280,33 @@ namespace PauseManager {
 			}
 		}
 	}
+	void ToggleRestartConfirm(){
+		// Toggle between quit confirm state.
+		showRestartConfirm = !showRestartConfirm;
+		CardManager::ToggleClickable(!showRestartConfirm);
 
+		for (RenderSystem::Interactable& btn : buttons) {
+			// Toggle the visibility and clickability of yes and no buttons.
+			if (btn.render.rect.graphics.tex == TextureManager::YES_BTN || btn.render.rect.graphics.tex == TextureManager::NO_BTN) {
+				btn.isActive = showRestartConfirm;
+				btn.isClickable = showRestartConfirm;
+				if(btn.render.rect.graphics.tex == TextureManager::YES_BTN){
+					btn.func= RestartLevel;
+				}
+				if(btn.render.rect.graphics.tex == TextureManager::NO_BTN){
+					btn.func = ToggleRestartConfirm;
+				}
+			}
+			else {
+				// Toggle the clickability of other buttons.
+				btn.isClickable = !showRestartConfirm;
+			}
+		}
+
+	}
+	void RestartLevel(){
+		SceneManager::LoadScene(SceneManager::RESTART);
+	}
 	void Free() {
 		buttons.clear();
 		InputManager::UnsubscribeKey(AEVK_ESCAPE, InputManager::TRIGGERED, TogglePause);

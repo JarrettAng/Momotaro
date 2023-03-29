@@ -106,6 +106,7 @@ namespace GridManager {
 	//Spawns buildings at mouse position
 	///////////////////////////////////////////////////////////////////////////
 	void SpawnBuilding(Vec2<int>mousePos) {
+		if(PauseManager::IsPaused()) return;
 		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		if (!isCellSafe(SelectedCell)) {
 			std::cout << "Debug " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
@@ -742,6 +743,9 @@ namespace GridManager {
 	///////////////////////////////////////////////////////////////////////////
 	void Free() {
 		delete[] grid;
+		CurrentSynergyArea.clear();
+		CurrentBuildingCells.clear();
+		selectedBuilding = nullptr;
 		InputManager::UnsubscribeKey(AEVK_C, InputManager::TRIGGERED, ClearGrid);
 		InputManager::UnsubscribeKey(AEVK_1, InputManager::TRIGGERED, SpawnResidential);
 		InputManager::UnsubscribeKey(AEVK_2, InputManager::TRIGGERED, SpawnCommerical);

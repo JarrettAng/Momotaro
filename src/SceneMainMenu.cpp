@@ -399,7 +399,7 @@ void InitializeMenuUI() {
 }
 
 void LoadStart() {
-	SceneManager::LoadScene(SceneManager::LVL_SELECT);
+	SceneManager::LoadScene(SceneManager::GAME_LEVEL);
 }
 
 void LoadEditor() {

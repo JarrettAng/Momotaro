@@ -20,6 +20,8 @@ The functions include:
 #include <TextureManager.h>
 #include <RenderSystem.h>
 #include <MomoMaths.h>
+#include <GridManager.h>
+#include <CardManager.h>
 
 namespace PauseManager {
 	bool IsPaused();

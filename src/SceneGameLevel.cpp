@@ -32,12 +32,12 @@ The functions include:
 std::string mapToLoad = "Assets/JSON_Data/Maps/map0.momomaps";
 
 void SceneGameLevel::Load() {
-	GridManager::Initialize(mapToLoad);
 	BuildingManager::Initialize();
-	ScoreManager::Initialize();
 }
 
 void SceneGameLevel::Initialize() {
+	ScoreManager::Initialize();
+	GridManager::Initialize(mapToLoad);
 	GridManager::onBoardFull.Subscribe(GameOver);
 	CardManager::onHandEmpty.Subscribe(GameOver);
 	PauseManager::Initialize();
@@ -64,16 +64,16 @@ void SceneGameLevel::Draw() {
 }
 
 void SceneGameLevel::Free() {
+	GridManager::Free();
 	InputManager::Free();
 	CardManager::Free();
 	RenderSystem::Free();
 	PauseManager::Free();
+	ScoreManager::Free();
 }
 
 void SceneGameLevel::Unload() {
-	GridManager::Free();
 	BuildingManager::Clear();
-	ScoreManager::Free();
 }
 
 void MapToLoad(std::string const& mapFilePath) {

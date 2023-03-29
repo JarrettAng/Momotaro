@@ -42,6 +42,7 @@ namespace TextureManager {
 		CARD_COUNT,
 		PAUSE_WINDOW,
 		PAUSE_BUTTON,
+		RESTART_BUTTON,
 		DIGIPEN_LOGO,
 		SYNERGY,
 		MENU_BG,

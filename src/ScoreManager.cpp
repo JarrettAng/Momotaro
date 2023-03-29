@@ -25,7 +25,11 @@ namespace ScoreManager {
 	std::vector<Level> levels;	// Contains all level data.
 
 	std::string synergy;
+	std::string highscore;
 	int potentialScoreGain;
+
+	int lastHighScore{};
+	RenderSystem::Transform background;
 
 	/*!***********************************************************************
 	* FORWARD DECLARATIONS
@@ -48,10 +52,12 @@ namespace ScoreManager {
 
 	void Initialize(float _exp_mod, float _exp_increase_mod) {
 		IntializeLevels();
-
+		//Load highscore from file here 
 		score = potentialScoreGain = 0;
 		currLevel.level = 0;
 		GridManager::onTotalSynergyUpdate.Subscribe(UpdatePotentialScoreGain);
+		// background.pos.x = -AEGfxGetWinMaxX()/2;
+		// background.pos.y = -AEGfxGetWinMaxY()*0.95;
 	}
 
 	void IntializeLevels() {
@@ -82,9 +88,22 @@ namespace ScoreManager {
 	void Draw() {
 		// Tell ui manager to draw score ui.
 		// Use currLevel and score to draw.
+		//////////////////////////////////////////////////////////////////////////////////////
+		// DRAW SYNERGY POINTS TEXT
+		//////////////////////////////////////////////////////////////////////////////////////
+		
 		synergy = "SYNERGY " + std::to_string(score) + (potentialScoreGain > 0 ? " +" + std::to_string(potentialScoreGain) : 
 			(!potentialScoreGain ? "" : " " + std::to_string(potentialScoreGain))) + " / " + std::to_string(GetThreshold(currLevel.level + 1));
-		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.9f, 0.8f, FontManager::GetFont(FontManager::SHIN_GO), 60, synergy,0,COLOR_BLACK);
+		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.95f, 0.85f, FontManager::GetFont(FontManager::SHIN_GO), 50, synergy,0,COLOR_BLACK);
+
+		//////////////////////////////////////////////////////////////////////////////////////
+		// HIGH SCORE TEXT
+		//////////////////////////////////////////////////////////////////////////////////////
+		highscore = "HIGHSCORE : " + std::to_string(lastHighScore);
+		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.95f, -0.65f, FontManager::GetFont(FontManager::SHIN_GO),40,highscore,1,COLOR_BLACK);
+		background.size.x = (float)(highscore.size()*40.f);
+		background.size.y = 50.f;
+		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, -AEGfxGetWinMaxX(), -AEGfxGetWinMaxY()*0.56f, background.size.x, background.size.y, TextureManager::BLANK_PROMPT);
 	}
 
 	void UpdatePotentialScoreGain(int newPotentialScore) {
