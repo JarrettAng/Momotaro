@@ -19,7 +19,10 @@ The functions include:
 #include <AudioManager.h>
 #include <SceneManager.h>
 #include <InputManager.h>
+#include <GridManager.h>
+#include <FileIOManager.h>
 
+#include <Building.h>
 #include <SceneLevelSelect.h>
 #include <SceneGameLevel.h>
 #include <TextureManager.h>
@@ -44,17 +47,22 @@ std::vector<RenderSystem::Interactable> lvlSelectButtons;
 RenderSystem::Interactable lvlSelectClickedBtn{};	// Button player clicked on. To get position and callback func.
 
 RenderSystem::Interactable lvlSelectBackBtn{};
+RenderSystem::Interactable lastMapBtn{};
 RenderSystem::Interactable lvl1Btn{};
 RenderSystem::Interactable lvl2Btn{};
 RenderSystem::Interactable lvl3Btn{};
 RenderSystem::Interactable lvlUser1Btn{};
 RenderSystem::Interactable lvlUser2Btn{};
 
+std::vector<LevelPreview> lvlPreviews;
+
 ///////////////////////////////////////////////////////////////////////////
 // Const variables
-const Vec2<float> LVL_SELECT_POINTER_OFFSET = { 80.0f, 10.0f };
 const float LVL_SELECT_TRANSITION_TIME = 1.0f;
 const float LVL_SELECT_BLINK_INTERVAL = 0.07f;
+const float MAP_PREVIEW_HEIGHT = 250.0f;
+const float MAP_PREVIEW_LENGTH = 400.0f;
+const Vec2<float> LVL_SELECT_POINTER_OFFSET = { MAP_PREVIEW_LENGTH / 3.0f, MAP_PREVIEW_HEIGHT / 3.0f };
 
 ///////////////////////////////////////////////////////////////////////////
 // Button pointer variables
@@ -63,6 +71,49 @@ bool lvlSelectIsBlinking = false;					// Use to toggle opacity of pointer to mim
 
 float lvlSelectCurrBlinkInterval = 0;
 float lvlSelectCurrTransitionTime = 0;
+
+///////////////////////////////////////////////////////////////////////////
+// Level Preview Class
+LevelPreview::LevelPreview(float x_pos, float y_pos, float x_size, float y_size, 
+						   std::string const& mapFilePath, std::string const& _name) {
+	transform.pos.x = x_pos;
+	transform.pos.y = y_pos;
+	transform.size.x = x_size;
+	transform.size.y = y_size;
+
+	// name = _name;
+	
+	GridManager::cell *mapData = FileIOManager::LoadGridFromFile(mapFilePath);
+
+	mapSize = GridManager::gridX * GridManager::gridY;
+	
+	for (int index = 0; index < mapSize; ++index) {
+		if (!mapData[index].isRenderable) {
+			//map[index] = 0;
+			map.push_back(0);
+		}
+		else if (mapData[index]._building.data.type == BuildingEnum::NONE) {
+			//map[index] = 1;
+			map.push_back(1);
+		}
+		else if (mapData[index]._building.data.type == BuildingEnum::NATURE) {
+			//map[index] = 2;
+			map.push_back(2);
+		}
+		else {
+			//map[index] = 3;
+			map.push_back(3);
+		}
+	}
+
+	delete[] mapData;
+}
+
+void LevelPreview::Render() {
+	for (int index = 0; index < mapSize; ++index) {
+
+	}
+}
 
 ///////////////////////////////////////////////////////////////////////////
 // Scene Functions
@@ -100,11 +151,13 @@ void SceneLevelSelect::Draw() {
 void SceneLevelSelect::Free() {
 	InputManager::Free();
 	RenderSystem::Free();
+
 	lvlSelectButtons.clear();
+	lvlPreviews.clear();
 }
 
 void SceneLevelSelect::Unload() {
-
+	
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -115,16 +168,122 @@ void LvlSelectInitializeUI() {
 	lvlSelectBackBtn.render.rect.graphics.tex = TextureManager::BACK_BTN;
 	lvlSelectBackBtn.func = LvlSelectReturnToMenu;
 
+	lvlSelectBackBtn.render.rect.transform.size.x = 150.0f;
+	lvlSelectBackBtn.render.rect.transform.size.y = 78.0f;
+
 	lvlSelectBackBtn.render.rect.transform.pos.x = GetWorldXByPercentage(88.0f);
 	lvlSelectBackBtn.render.rect.transform.pos.y = GetWorldYByPercentage(13.2f);
 
-	lvlSelectBackBtn.render.rect.transform.size.x = 150.0f;
-	lvlSelectBackBtn.render.rect.transform.size.y = 78.0f;
 	lvlSelectBackBtn.render.rect.transform.cachedSize = lvlSelectBackBtn.render.rect.transform.size;
 	lvlSelectButtons.push_back(lvlSelectBackBtn);
 
-	// MAP 0 BUTTON
+	// LAST SAVED GAME BUTTON
+	lastMapBtn.render.rect.graphics.tex = TextureManager::BLANK_PROMPT;
+	// lastMapBtn.func = LvlSelectReturnToMenu;
 
+	lastMapBtn.render.rect.transform.size.x = MAP_PREVIEW_LENGTH;
+	lastMapBtn.render.rect.transform.size.y = MAP_PREVIEW_HEIGHT;
+
+	lastMapBtn.render.rect.transform.pos.x = GetWorldXByPercentage(35.0f) - lastMapBtn.render.rect.transform.size.x * 0.5f;
+	lastMapBtn.render.rect.transform.pos.y = GetWorldYByPercentage(80.0f) + lastMapBtn.render.rect.transform.size.y * 0.5f;
+
+	lastMapBtn.render.rect.transform.cachedSize = lastMapBtn.render.rect.transform.size;
+	lvlSelectButtons.push_back(lastMapBtn);
+
+	LevelPreview lastMapPreview{ lastMapBtn.render.rect.transform.pos.x, lastMapBtn.render.rect.transform.pos.y,
+								 lastMapBtn.render.rect.transform.size.x, lastMapBtn.render.rect.transform.size.y,
+								 "Assets/JSON_Data/Maps/lastSaved.momomaps", "Last Saved" };
+	lvlPreviews.push_back(lastMapPreview);
+
+	// MAP 0 BUTTON
+	lvl1Btn.render.rect.graphics.tex = TextureManager::BLANK_PROMPT;
+	lvl1Btn.func = LvlSelectLoadMap1;
+
+	lvl1Btn.render.rect.transform.size.x = MAP_PREVIEW_LENGTH;
+	lvl1Btn.render.rect.transform.size.y = MAP_PREVIEW_HEIGHT;
+
+	lvl1Btn.render.rect.transform.pos.x = GetWorldXByPercentage(65.0f) - lvl1Btn.render.rect.transform.size.x * 0.5f;
+	lvl1Btn.render.rect.transform.pos.y = GetWorldYByPercentage(80.0f) + lvl1Btn.render.rect.transform.size.y * 0.5f;
+
+	lvl1Btn.render.rect.transform.cachedSize = lvl1Btn.render.rect.transform.size;
+	lvlSelectButtons.push_back(lvl1Btn);
+
+	LevelPreview map0Preview{ lvl1Btn.render.rect.transform.pos.x, lvl1Btn.render.rect.transform.pos.y,
+							  lvl1Btn.render.rect.transform.size.x, lvl1Btn.render.rect.transform.size.y,
+							  "Assets/JSON_Data/Maps/map0.momomaps", "Archipelago" };
+	lvlPreviews.push_back(map0Preview);
+
+	// MAP 1 BUTTON
+	lvl2Btn.render.rect.graphics.tex = TextureManager::BLANK_PROMPT;
+	lvl2Btn.func = LvlSelectLoadMap2;
+
+	lvl2Btn.render.rect.transform.size.x = MAP_PREVIEW_LENGTH;
+	lvl2Btn.render.rect.transform.size.y = MAP_PREVIEW_HEIGHT;
+
+	lvl2Btn.render.rect.transform.pos.x = GetWorldXByPercentage(35.0f) - lvl2Btn.render.rect.transform.size.x * 0.5f;
+	lvl2Btn.render.rect.transform.pos.y = GetWorldYByPercentage(50.0f) + lvl2Btn.render.rect.transform.size.y * 0.5f;
+
+	lvl2Btn.render.rect.transform.cachedSize = lvl2Btn.render.rect.transform.size;
+	lvlSelectButtons.push_back(lvl2Btn);
+
+	LevelPreview map1Preview{ lvl2Btn.render.rect.transform.pos.x, lvl2Btn.render.rect.transform.pos.y,
+						      lvl2Btn.render.rect.transform.size.x, lvl2Btn.render.rect.transform.size.y,
+							  "Assets/JSON_Data/Maps/map1.momomaps", "Big Donut" };
+	lvlPreviews.push_back(map1Preview);
+
+	// MAP 2 BUTTON
+	lvl3Btn.render.rect.graphics.tex = TextureManager::BLANK_PROMPT;
+	lvl3Btn.func = LvlSelectLoadMap3;
+
+	lvl3Btn.render.rect.transform.size.x = MAP_PREVIEW_LENGTH;
+	lvl3Btn.render.rect.transform.size.y = MAP_PREVIEW_HEIGHT;
+
+	lvl3Btn.render.rect.transform.pos.x = GetWorldXByPercentage(65.0f) - lvl3Btn.render.rect.transform.size.x * 0.5f;
+	lvl3Btn.render.rect.transform.pos.y = GetWorldYByPercentage(50.0f) + lvl3Btn.render.rect.transform.size.y * 0.5f;
+
+	lvl3Btn.render.rect.transform.cachedSize = lvl3Btn.render.rect.transform.size;
+	lvlSelectButtons.push_back(lvl3Btn);
+
+	LevelPreview map2Preview{ lvl3Btn.render.rect.transform.pos.x, lvl3Btn.render.rect.transform.pos.y,
+							  lvl3Btn.render.rect.transform.size.x, lvl3Btn.render.rect.transform.size.y,
+							  "Assets/JSON_Data/Maps/map2.momomaps", "Spiral Island" };
+	lvlPreviews.push_back(map2Preview);
+
+	// USER MAP 0 BUTTON
+	lvlUser1Btn.render.rect.graphics.tex = TextureManager::BLANK_PROMPT;
+	lvlUser1Btn.func = LvlSelectLoadUserMap1;
+
+	lvlUser1Btn.render.rect.transform.size.x = MAP_PREVIEW_LENGTH;
+	lvlUser1Btn.render.rect.transform.size.y = MAP_PREVIEW_HEIGHT;
+
+	lvlUser1Btn.render.rect.transform.pos.x = GetWorldXByPercentage(35.0f) - lvlUser1Btn.render.rect.transform.size.x * 0.5f;
+	lvlUser1Btn.render.rect.transform.pos.y = GetWorldYByPercentage(20.0f) + lvlUser1Btn.render.rect.transform.size.y * 0.5f;
+
+	lvlUser1Btn.render.rect.transform.cachedSize = lvlUser1Btn.render.rect.transform.size;
+	lvlSelectButtons.push_back(lvlUser1Btn);
+
+	LevelPreview userMap0Preview{ lvlUser1Btn.render.rect.transform.pos.x, lvlUser1Btn.render.rect.transform.pos.y,
+								  lvlUser1Btn.render.rect.transform.size.x, lvlUser1Btn.render.rect.transform.size.y,
+								  "Assets/JSON_Data/Maps/userMap0.momomaps", "User Map 1" };
+	lvlPreviews.push_back(userMap0Preview);
+
+	// USER MAP 1 BUTTON
+	lvlUser2Btn.render.rect.graphics.tex = TextureManager::BLANK_PROMPT;
+	lvlUser2Btn.func = LvlSelectLoadUserMap2;
+
+	lvlUser2Btn.render.rect.transform.size.x = MAP_PREVIEW_LENGTH;
+	lvlUser2Btn.render.rect.transform.size.y = MAP_PREVIEW_HEIGHT;
+
+	lvlUser2Btn.render.rect.transform.pos.x = GetWorldXByPercentage(65.0f) - lvlUser2Btn.render.rect.transform.size.x * 0.5f;
+	lvlUser2Btn.render.rect.transform.pos.y = GetWorldYByPercentage(20.0f) + lvlUser2Btn.render.rect.transform.size.y * 0.5f;
+
+	lvlUser2Btn.render.rect.transform.cachedSize = lvlUser2Btn.render.rect.transform.size;
+	lvlSelectButtons.push_back(lvlUser2Btn);
+
+	LevelPreview userMap1Preview{ lvlUser2Btn.render.rect.transform.pos.x, lvlUser2Btn.render.rect.transform.pos.y,
+								  lvlUser2Btn.render.rect.transform.size.x, lvlUser2Btn.render.rect.transform.size.y,
+								  "Assets/JSON_Data/Maps/userMap1.momomaps", "User Map 2" };
+	lvlPreviews.push_back(userMap1Preview);
 }
 
 void DrawLvlSelectButtons() {
@@ -243,20 +402,25 @@ void LvlSelectReturnToMenu() {
 
 void LvlSelectLoadMap1() {
 	MapToLoad("Assets/JSON_Data/Maps/map0.momomaps");
+	SceneManager::LoadScene(SceneManager::GAME_LEVEL);
 }
 
 void LvlSelectLoadMap2() {
 	MapToLoad("Assets/JSON_Data/Maps/map1.momomaps");
+	SceneManager::LoadScene(SceneManager::GAME_LEVEL);
 }
 
 void LvlSelectLoadMap3() {
 	MapToLoad("Assets/JSON_Data/Maps/map2.momomaps");
+	SceneManager::LoadScene(SceneManager::GAME_LEVEL);
 }
 
 void LvlSelectLoadUserMap1() {
 	MapToLoad("Assets/JSON_Data/Maps/userMap0.momomaps");
+	SceneManager::LoadScene(SceneManager::GAME_LEVEL);
 }
 
 void LvlSelectLoadUserMap2() {
 	MapToLoad("Assets/JSON_Data/Maps/userMap1.momomaps");
+	SceneManager::LoadScene(SceneManager::GAME_LEVEL);
 }

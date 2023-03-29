@@ -16,6 +16,8 @@ The functions include:
 ///////////////////////////////////////////////////////////////////////////
 #include <Scene.h>
 #include <UIManager.h>
+#include <string>
+#include <vector>
 ///////////////////////////////////////////////////////////////////////////
 
 class SceneLevelSelect : public Scene {
@@ -31,6 +33,15 @@ public:
 };
 
 class LevelPreview {
+	public:
+	LevelPreview(float x_pos, float y_pos, float x_size, float y_size, std::string const& mapFile, std::string const& _nam);
+	void Render();
+
+	private:
 	RenderSystem::Transform transform;
+
+	std::vector<int> map;
+	int mapSize;
+
 	UI::TextBox name;
 };
