@@ -13,15 +13,15 @@ The functions include:
 **************************************************************************/
 
 #include <AEEngine.h>
-#include <InputManager.h>
-#include <RenderSystem.h>
-#include <MomoMaths.h>
-#include <SceneManager.h>
-#include <SceneMainMenu.h>
 
+#include <SceneManager.h>
+#include <InputManager.h>
+#include <AudioManager.h>
 #include <TextureManager.h>
 
-#include <AudioManager.h>
+#include <MomoMaths.h>
+#include <RenderSystem.h>
+#include <SceneMainMenu.h>
 
 /*!***********************************************************************
 * CONST VARIABLES
@@ -399,7 +399,7 @@ void InitializeMenuUI() {
 }
 
 void LoadStart() {
-	SceneManager::LoadScene(SceneManager::GAME_LEVEL);
+	SceneManager::LoadScene(SceneManager::LVL_SELECT);
 }
 
 void LoadEditor() {

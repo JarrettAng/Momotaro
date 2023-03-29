@@ -25,6 +25,7 @@ namespace SceneManager {
 		CONTROLS,
 		GAME_LEVEL,
 		CREDITS,
+		LVL_SELECT,
 
 		RESTART,
 		QUIT

@@ -24,6 +24,7 @@ The functions include:
 #include <SceneCredits.h>
 #include <SceneLevelEditor.h>
 #include <SceneTutorial.h>
+#include <SceneLevelSelect.h>
 ///////////////////////////////////////////////////////////////////////////
 
 namespace SceneManager {
@@ -39,6 +40,7 @@ namespace SceneManager {
 	SceneCredits	  credits;
 	SceneLevelEditor  editor;
 	SceneTutorial	  tutorial;
+	SceneLevelSelect  levelSelect;
 
 	///////////////////////////////////////////////////////////////////////
 	// Forward Declarations
@@ -72,6 +74,9 @@ namespace SceneManager {
 			break;
 		case CONTROLS:
 			currentScene = &tutorial;
+			break;
+		case LVL_SELECT:
+			currentScene = &levelSelect;
 			break;
 		}
 	}

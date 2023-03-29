@@ -21,6 +21,7 @@ The functions include:
 #include <BuildingManager.h>
 #include <InputManager.h>
 #include <UIManager.h>
+#include <AudioManager.h>
 
 #include <SceneLevelEditor.h>
 #include <ColorTable.h>
@@ -61,6 +62,7 @@ void SceneLevelEditor::Initialize() {
 void SceneLevelEditor::Update() {
 	GridManager::UpdateMouseToGrid();
 	PauseManager::Update();
+	AudioManager::Update();
 }
 
 void SceneLevelEditor::Draw() {
