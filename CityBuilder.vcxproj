@@ -17,6 +17,7 @@
     <ClCompile Include="src\CardManager.cpp" />
     <ClCompile Include="src\FileIOManager.cpp" />
     <ClCompile Include="src\FontManager.cpp" />
+    <ClCompile Include="src\GameOverManager.cpp" />
     <ClCompile Include="src\GridManager.cpp" />
     <ClCompile Include="src\InputManager.cpp" />
     <ClCompile Include="src\SceneLevelSelect.cpp" />
@@ -45,6 +46,7 @@
     <ClInclude Include="inc\EventSystem.h" />
     <ClInclude Include="inc\FileIOManager.h" />
     <ClInclude Include="inc\FontManager.h" />
+    <ClInclude Include="inc\GameOverManager.h" />
     <ClInclude Include="inc\GridManager.h" />
     <ClInclude Include="inc\InputManager.h" />
     <ClInclude Include="inc\SceneLevelSelect.h" />

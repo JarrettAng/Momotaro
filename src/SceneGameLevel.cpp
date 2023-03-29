@@ -28,6 +28,7 @@ The functions include:
 #include <ScoreManager.h>
 #include <TextureManager.h>
 #include <AudioManager.h>
+#include <GameOverManager.h>
 
 std::string mapToLoad = "Assets/JSON_Data/Maps/map0.momomaps";
 
@@ -38,10 +39,9 @@ void SceneGameLevel::Load() {
 void SceneGameLevel::Initialize() {
 	ScoreManager::Initialize();
 	GridManager::Initialize(mapToLoad);
-	GridManager::onBoardFull.Subscribe(GameOver);
-	CardManager::onHandEmpty.Subscribe(GameOver);
 	PauseManager::Initialize();
 	CardManager::Initialize();
+	GameOverManager::Initialize();
 }
 
 void SceneGameLevel::Update() {
@@ -49,6 +49,7 @@ void SceneGameLevel::Update() {
 	PauseManager::Update();
 	TextureManager::Update();
 	CardManager::Update();
+	GameOverManager::Update();
 }
 
 void SceneGameLevel::Draw() {
@@ -59,6 +60,7 @@ void SceneGameLevel::Draw() {
 	CardManager::PrepareUIRenderBatch();
 	PauseManager::Draw();
 	ScoreManager::Draw();
+	GameOverManager::Draw();
 
 	RenderSystem::Render();
 }
@@ -70,6 +72,7 @@ void SceneGameLevel::Free() {
 	RenderSystem::Free();
 	PauseManager::Free();
 	ScoreManager::Free();
+	GameOverManager::Free();
 }
 
 void SceneGameLevel::Unload() {
@@ -79,9 +82,3 @@ void SceneGameLevel::Unload() {
 void MapToLoad(std::string const& mapFilePath) {
 	mapToLoad = mapFilePath;
 }
-
-void GameOver() {
-	AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_GAMEOVER);
-	std::cout << "Spawn Game Over UI!\n";
-}
-

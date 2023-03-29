@@ -70,6 +70,9 @@
     <ClCompile Include="src\SceneLevelSelect.cpp">
       <Filter>src\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\GameOverManager.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\BuildingManager.h">
@@ -149,6 +152,9 @@
     </ClInclude>
     <ClInclude Include="inc\SceneLevelSelect.h">
       <Filter>inc\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\GameOverManager.h">
+      <Filter>inc\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

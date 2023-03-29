@@ -31,7 +31,7 @@ namespace PauseManager {
 	bool showQuitConfirm;
 	bool showRestartConfirm;
 
-#pragma region Forward Delcarations;
+#pragma region Forward Delcarations
 	void InitializePauseUI();
 	void DrawPauseUI();
 	void TogglePause();
@@ -263,10 +263,10 @@ namespace PauseManager {
 		// Toggle between quit confirm state.
 		showQuitConfirm = !showQuitConfirm;
 		for (RenderSystem::Interactable& btn : buttons) {
-			if(btn.render.rect.graphics.tex == TextureManager::YES_BTN){
-				btn.func = LoadMainMenu;	
+			if (btn.render.rect.graphics.tex == TextureManager::YES_BTN) {
+				btn.func = LoadMainMenu;
 			}
-			if(btn.render.rect.graphics.tex == TextureManager::NO_BTN){
+			if (btn.render.rect.graphics.tex == TextureManager::NO_BTN) {
 				btn.func = ToggleQuitConfirm;
 			}
 			// Toggle the visibility and clickability of yes and no buttons.
@@ -280,7 +280,7 @@ namespace PauseManager {
 			}
 		}
 	}
-	void ToggleRestartConfirm(){
+	void ToggleRestartConfirm() {
 		// Toggle between quit confirm state.
 		showRestartConfirm = !showRestartConfirm;
 		CardManager::ToggleClickable(!showRestartConfirm);
@@ -290,10 +290,10 @@ namespace PauseManager {
 			if (btn.render.rect.graphics.tex == TextureManager::YES_BTN || btn.render.rect.graphics.tex == TextureManager::NO_BTN) {
 				btn.isActive = showRestartConfirm;
 				btn.isClickable = showRestartConfirm;
-				if(btn.render.rect.graphics.tex == TextureManager::YES_BTN){
-					btn.func= RestartLevel;
+				if (btn.render.rect.graphics.tex == TextureManager::YES_BTN) {
+					btn.func = RestartLevel;
 				}
-				if(btn.render.rect.graphics.tex == TextureManager::NO_BTN){
+				if (btn.render.rect.graphics.tex == TextureManager::NO_BTN) {
 					btn.func = ToggleRestartConfirm;
 				}
 			}
@@ -304,7 +304,7 @@ namespace PauseManager {
 		}
 
 	}
-	void RestartLevel(){
+	void RestartLevel() {
 		SceneManager::LoadScene(SceneManager::RESTART);
 	}
 	void Free() {

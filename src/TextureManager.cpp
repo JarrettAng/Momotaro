@@ -75,12 +75,14 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ RESUME_BTN, AEGfxTextureLoad("Assets/Textures/UI/Buttons/Resume_Btn.png"), 1, 1, -1.f });
 		textures.push_back(TextureSheet{ PAUSE_BUTTON,AEGfxTextureLoad("Assets/Textures/UI/Buttons/Pause_Btn.png"), 1, 1, -1.f });
 		textures.push_back(TextureSheet{ RESTART_BUTTON,AEGfxTextureLoad("Assets/Textures/UI/Buttons/Restart_Btn.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ RETRY_BTN,AEGfxTextureLoad("Assets/Textures/UI/Buttons/Retry_Btn.png"), 1, 1, -1.f });
 
 		textures.push_back(TextureSheet{ MENU_BG,AEGfxTextureLoad("Assets/Textures/UI/Backgrounds/MainMenu_Background.png"), 1, 13, .1f, 4.0f });
 		textures.push_back(TextureSheet{ CLOUD_BG,AEGfxTextureLoad("Assets/Textures/UI/Backgrounds/MainMenu_Clouds.png"), 1, 42, 0.15f });
 		textures.push_back(TextureSheet{ SKY_BG,AEGfxTextureLoad("Assets/Textures/UI/Backgrounds/MainMenu_Sky.png"), 1, 1, -1.f });
 
 		textures.push_back(TextureSheet{ CREDITS_BG, AEGfxTextureLoad("Assets/Textures/UI/Backgrounds/Credit_Background.png"), 1, 1, -1.f });
+		textures.push_back(TextureSheet{ GAMEOVER_BG, AEGfxTextureLoad("Assets/Textures/UI/Backgrounds/GameOver_Background.png"), 1, 8, .05f, 4.0f });
 
 		textures.push_back(TextureSheet{ BLANK_PROMPT ,AEGfxTextureLoad("Assets/Textures/UI/Prompts/Blank_Prompt.png"), 1, 1, -1.f });
 		textures.push_back(TextureSheet{ CONFIRM_PROMPT,AEGfxTextureLoad("Assets/Textures/UI/Prompts/Confirmation_Prompt.png"), 1, 1, -1.f });
