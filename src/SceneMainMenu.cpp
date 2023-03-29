@@ -116,24 +116,24 @@ void SceneMainMenu::Update() {
 	// Check for button presses.
 	InputManager::HandleInput();
 	AudioManager::Update();
-	// Play menu animation.
-	if (currAnimFrame < ANIMATION_FRAMES) {
-		// Tick timer and update texture.
-		currAnimFrame += (float)AEFrameRateControllerGetFrameTime();
 		TextureManager::Update();
-	}
-	else {
-		// Handle delay between animation loop.
-		if (currAnimInterval < ANIMATION_INTERVAL) {
-			// Tick timer.
-			currAnimInterval += (float)AEFrameRateControllerGetFrameTime();
-		}
-		else {
-			// Reset animation loop.
-			currAnimFrame = 0;
-			currAnimInterval = 0;
-		}
-	}
+	// Play menu animation.
+	// if (currAnimFrame < ANIMATION_FRAMES) {
+	// 	// Tick timer and update texture.
+	// 	currAnimFrame += (float)AEFrameRateControllerGetFrameTime();
+	// }
+	// else {
+	// 	// Handle delay between animation loop.
+	// 	if (currAnimInterval < ANIMATION_INTERVAL) {
+	// 		// Tick timer.
+	// 		currAnimInterval += (float)AEFrameRateControllerGetFrameTime();
+	// 	}
+	// 	else {
+	// 		// Reset animation loop.
+	// 		currAnimFrame = 0;
+	// 		currAnimInterval = 0;
+	// 	}
+	// }
 }
 
 void SceneMainMenu::Draw() {
