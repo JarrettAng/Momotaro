@@ -76,43 +76,112 @@ float lvlSelectCurrTransitionTime = 0;
 // Level Preview Class
 LevelPreview::LevelPreview(float x_pos, float y_pos, float x_size, float y_size, 
 						   std::string const& mapFilePath, std::string const& _name) {
+	// Initialize transform (pos and size) of the preview
 	transform.pos.x = x_pos;
 	transform.pos.y = y_pos;
 	transform.size.x = x_size;
 	transform.size.y = y_size;
-
-	// name = _name;
 	
+	// Initialize map preview part
 	GridManager::cell *mapData = FileIOManager::LoadGridFromFile(mapFilePath);
 
-	mapSize = GridManager::gridX * GridManager::gridY;
-	
-	for (int index = 0; index < mapSize; ++index) {
-		if (!mapData[index].isRenderable) {
-			//map[index] = 0;
-			map.push_back(0);
+	int mapX = GridManager::gridX, mapY = GridManager::gridY;
+	int minX = 0, minY = 0, maxX = 0, maxY = 0;
+
+	// Set the bounds of the map
+	for (int index = 0; index < mapX * mapY; ++index) { // Min Y
+		if (mapData[index].isRenderable) {
+			minY = index / mapX;
+
+			if (minY > 0) minY -= 1;
+			break;
 		}
-		else if (mapData[index]._building.data.type == BuildingEnum::NONE) {
-			//map[index] = 1;
-			map.push_back(1);
+	}
+
+	for (int index = mapX * mapY - 1; index > 0; --index) { // Max Y
+		if (mapData[index].isRenderable) {
+			maxY = index / mapX + 1;
+
+			if (maxY < mapY) maxY += 1;
+			break;
 		}
-		else if (mapData[index]._building.data.type == BuildingEnum::NATURE) {
-			//map[index] = 2;
-			map.push_back(2);
+	}
+
+	for (int index_x = 0; index_x < mapX; ++index_x) { // Min X
+		for (int index_y = 0; index_y < mapX * mapY; index_y += mapX) {
+			if (mapData[index_x + index_y].isRenderable) {
+				minX = index_x;
+
+				if (minX > 0) minX -= 1;
+				break;
+			}
 		}
-		else {
-			//map[index] = 3;
-			map.push_back(3);
+		if (minX) break;
+	}
+
+	for (int index_x = mapX - 1; index_x > 0; --index_x) { // Max X
+		for (int index_y = 0; index_y < mapX * mapY; index_y += mapX) {
+			if (mapData[index_x + index_y].isRenderable) {
+				maxX = index_x + 1;
+
+				if (maxX < mapX) maxX += 1;
+				break;
+			}
+		}
+		if (maxX) break;
+	}
+
+	// Read the mapdata within the smaller bounds
+	for (int index_y = minY; index_y < maxY; ++index_y) {
+		for (int index_x = minX; index_x < maxX; ++index_x) {
+			if (!mapData[index_x + index_y * mapX].isRenderable) {
+				map.push_back(0);
+			}
+			else if (mapData[index_x + index_y * mapX]._building.data.type == BuildingEnum::NONE) {
+				map.push_back(1);
+			}
+			else if (mapData[index_x + index_y * mapX]._building.data.type == BuildingEnum::NATURE) {
+				map.push_back(2);
+			}
+			else {
+				map.push_back(3);
+			}
 		}
 	}
 
 	delete[] mapData;
+
+	mapSizeX = maxX - minX;
+	int mapSizeY = maxY - minY;
+	cellSize = transform.size.y / (float)mapSizeY * 0.9f;
+	startingCellPos.x = transform.pos.x + transform.size.x * 0.5f - ((float)mapSizeX * 0.5f * cellSize);
+	startingCellPos.y = transform.pos.y - transform.size.y * 0.5f + ((float)mapSizeY * 0.5f * cellSize);
+
+	// Initialize preview name
+	name = UI::TextBox({ x_pos, y_pos - y_size * 0.9f }, _name, UI::CENTER_JUSTIFY, x_size, 30.0f, COLOR_BLACK);
+	// Debug size: std::to_string(minX) + " " + std::to_string(maxX) + " " + std::to_string(minY) + " " + std::to_string(maxY)
 }
 
 void LevelPreview::Render() {
-	for (int index = 0; index < mapSize; ++index) {
+	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, transform.pos.x + transform.size.x * 0.025f, transform.pos.y - transform.size.y * 0.05f, transform.size.x * 0.95f, transform.size.y * 0.9f, COLOR_PREVIEW_WATER, 2);
 
+	float x, y;
+	for (int index = 0; index < map.size(); ++index) {
+		if (map[index]) {
+			switch (map[index]) {
+			case 1:
+				RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, startingCellPos.x + (index % mapSizeX) * cellSize, startingCellPos.y - (index / mapSizeX) * cellSize,
+											 cellSize, cellSize, COLOR_PREVIEW_LAND, 3);
+			break;
+			case 2:
+				RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, startingCellPos.x + (index % mapSizeX) * cellSize, startingCellPos.y - (index / mapSizeX) * cellSize,
+											 cellSize, cellSize, COLOR_PREVIEW_NATURE, 3);
+			break;
+			}
+		}
 	}
+
+	name.Render();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -142,8 +211,13 @@ void SceneLevelSelect::Update() {
 void SceneLevelSelect::Draw() {
 	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, AEGfxGetWinMinX(), -AEGfxGetWinMinY(), (float)AEGetWindowWidth(), (float)AEGetWindowHeight(), TextureManager::CREDITS_BG, -1);
 	
-	DrawLvlSelectButtons();
 	HandleLvlSelectBtnHover();
+	
+	DrawLvlSelectButtons();
+	for (LevelPreview preview : lvlPreviews) {
+		preview.Render();
+	}
+
 
 	RenderSystem::Render();
 }
@@ -323,7 +397,7 @@ void HandleLvlSelectBtnHover() {
 		// Change opacity of render setting to mimic blinking.
 		RenderSystem::SetRenderSetting(Vec4<float>{1, 1, 1, static_cast<float>(lvlSelectIsBlinking)});
 		// Draw pointer blinking.
-		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, lvlSelectClickedBtn.render.rect.transform.pos.x - LVL_SELECT_POINTER_OFFSET.x, lvlSelectClickedBtn.render.rect.transform.pos.y - LVL_SELECT_POINTER_OFFSET.y, 60, 90, TextureManager::POINTER);
+		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, lvlSelectClickedBtn.render.rect.transform.pos.x - LVL_SELECT_POINTER_OFFSET.x, lvlSelectClickedBtn.render.rect.transform.pos.y - LVL_SELECT_POINTER_OFFSET.y, 60, 90, TextureManager::POINTER, 2);
 		return;
 	}
 
@@ -341,15 +415,8 @@ void HandleLvlSelectBtnHover() {
 
 		// Check if mouse is hovering button.
 		if (MouseInsideButton(mousePos, btn.render.rect.transform.pos, btn.render.rect.transform.size)) {
-			// Scale btn for visual feedback.
-			btn.render.rect.transform.size = btn.render.rect.transform.cachedSize * 1.1f;
-
 			// Draw pointer.
 			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, btn.render.rect.transform.pos.x - LVL_SELECT_POINTER_OFFSET.x, btn.render.rect.transform.pos.y - LVL_SELECT_POINTER_OFFSET.y, 60, 90, TextureManager::POINTER, 3);
-		}
-		else {
-			// Scale btn to original size.
-			btn.render.rect.transform.size = btn.render.rect.transform.cachedSize;
 		}
 	}
 }

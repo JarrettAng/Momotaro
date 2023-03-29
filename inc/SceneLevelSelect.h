@@ -39,9 +39,9 @@ class LevelPreview {
 
 	private:
 	RenderSystem::Transform transform;
-
 	std::vector<int> map;
-	int mapSize;
-
+	int mapSizeX;
+	float cellSize;
+	Vec2<float> startingCellPos;
 	UI::TextBox name;
 };
