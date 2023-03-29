@@ -29,8 +29,10 @@ The functions include:
 #include <TextureManager.h>
 #include <AudioManager.h>
 
+std::string mapToLoad = "Assets/JSON_Data/Maps/map0.momomaps";
+
 void SceneGameLevel::Load() {
-	GridManager::Initialize("Assets/JSON_Data/Maps/map2.momomaps");
+	GridManager::Initialize(mapToLoad);
 	BuildingManager::Initialize();
 	ScoreManager::Initialize();
 }
@@ -72,6 +74,10 @@ void SceneGameLevel::Unload() {
 	GridManager::Free();
 	BuildingManager::Clear();
 	ScoreManager::Free();
+}
+
+void MapToLoad(std::string const& mapFilePath) {
+	mapToLoad = mapFilePath;
 }
 
 void GameOver() {

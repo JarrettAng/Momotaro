@@ -15,12 +15,19 @@ The functions include:
 #include <RenderSystem.h>
 
 #include <SceneManager.h>
+#include <InputManager.h>
 
 #include <TextureManager.h>
 #include <SceneSplashscreen.h>
 #include <AudioManager.h>
 
-const float SPLASH_SCREEN_TIME = 1.0f;
+///////////////////////////////////////////////////////////////////////////
+// Forward Declarations
+void BypassIntro();
+
+///////////////////////////////////////////////////////////////////////////
+// Timing variables
+const float SPLASH_SCREEN_TIME = 2.0f;
 float fade = 0;
 
 void SceneSplashscreen::Load() {
@@ -29,7 +36,8 @@ void SceneSplashscreen::Load() {
 }
 
 void SceneSplashscreen::Initialize() {
-	return;
+	InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, BypassIntro);
+	InputManager::SubscribeToKey(AEVK_ESCAPE, InputManager::TRIGGERED, BypassIntro);
 }
 
 void SceneSplashscreen::Update() {
@@ -51,9 +59,14 @@ void SceneSplashscreen::Draw() {
 }
 
 void SceneSplashscreen::Free() {
-	return;
+	InputManager::UnsubscribeKey(AEVK_LBUTTON, InputManager::TRIGGERED, BypassIntro);
+	InputManager::UnsubscribeKey(AEVK_ESCAPE, InputManager::TRIGGERED, BypassIntro);
 }
 
 void SceneSplashscreen::Unload() {
 	return;
+}
+
+void BypassIntro() {
+	fade = SPLASH_SCREEN_TIME;
 }

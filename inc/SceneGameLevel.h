@@ -26,6 +26,7 @@ public:
 
 	void Free();
 	void Unload();
-
 };
-	void GameOver();
+
+void MapToLoad(std::string const& mapFilePath);
+void GameOver();

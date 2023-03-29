@@ -15,6 +15,7 @@ The functions include:
 #pragma once
 ///////////////////////////////////////////////////////////////////////////
 #include <Scene.h>
+#include <UIManager.h>
 ///////////////////////////////////////////////////////////////////////////
 
 class SceneLevelSelect : public Scene {
@@ -27,4 +28,9 @@ public:
 
 	void Free();
 	void Unload();
+};
+
+class LevelPreview {
+	RenderSystem::Transform transform;
+	UI::TextBox name;
 };
