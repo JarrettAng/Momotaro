@@ -741,7 +741,6 @@ namespace GridManager {
 	//Free function for the grid
 	///////////////////////////////////////////////////////////////////////////
 	void Free() {
-
 		delete[] grid;
 		InputManager::UnsubscribeKey(AEVK_C, InputManager::TRIGGERED, ClearGrid);
 		InputManager::UnsubscribeKey(AEVK_1, InputManager::TRIGGERED, SpawnResidential);

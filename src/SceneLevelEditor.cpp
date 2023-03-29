@@ -42,7 +42,7 @@ std::string selectedMapFilePath;
 
 void SceneLevelEditor::Load() {
 	BuildingManager::Initialize();
-	LoadMap1();
+	GridManager::Initialize("Assets/JSON_Data/Maps/map0.momomaps");
 }
 
 void SceneLevelEditor::Initialize() {
