@@ -61,7 +61,9 @@ namespace TextureManager {
 		RESUME_BTN,
 		BLANK_PROMPT,
 		WATER_TEX,
-		MOMO_THE_PEACH
+		MOMO_THE_PEACH,
+		CLOUD_BG,
+		SKY_BG
 	};
 	TEX_TYPE operator++(TEX_TYPE&, int);
 

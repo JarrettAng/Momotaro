@@ -107,8 +107,15 @@ void SceneMainMenu::Update() {
 }
 
 void SceneMainMenu::Draw() {
+	// Draw sky to fit to screen.
+	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, AEGfxGetWinMinX(), -AEGfxGetWinMinY(), (float)AEGetWindowWidth(), (float)AEGetWindowHeight(), TextureManager::SKY_BG, -3);
+
+	// Draw clouds to fit to screen.
+	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, AEGfxGetWinMinX(), -AEGfxGetWinMinY(), (float)AEGetWindowWidth(), (float)AEGetWindowHeight(), TextureManager::CLOUD_BG, -2);
+
 	// Draw background to fit to screen.
 	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, AEGfxGetWinMinX(), -AEGfxGetWinMinY(), (float)AEGetWindowWidth(), (float)AEGetWindowHeight(), TextureManager::MENU_BG, -1);
+
 
 	DrawButtons();
 	HandleBtnHover();

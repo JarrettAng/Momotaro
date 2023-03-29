@@ -77,6 +77,9 @@ namespace TextureManager {
 		textures.push_back(TextureSheet{ RESTART_BUTTON,AEGfxTextureLoad("Assets/Textures/UI/Buttons/Restart_Btn.png"), 1, 1, -1.f });
 
 		textures.push_back(TextureSheet{ MENU_BG,AEGfxTextureLoad("Assets/Textures/UI/Backgrounds/MainMenu_Background.png"), 1, 13, .1f, 4.0f });
+		textures.push_back(TextureSheet{ CLOUD_BG,AEGfxTextureLoad("Assets/Textures/UI/Backgrounds/MainMenu_Clouds.png"), 1, 42, 0.15f });
+		textures.push_back(TextureSheet{ SKY_BG,AEGfxTextureLoad("Assets/Textures/UI/Backgrounds/MainMenu_Sky.png"), 1, 1, -1.f });
+
 		textures.push_back(TextureSheet{ CREDITS_BG, AEGfxTextureLoad("Assets/Textures/UI/Backgrounds/Credit_Background.png"), 1, 1, -1.f });
 
 		textures.push_back(TextureSheet{ BLANK_PROMPT ,AEGfxTextureLoad("Assets/Textures/UI/Prompts/Blank_Prompt.png"), 1, 1, -1.f });
