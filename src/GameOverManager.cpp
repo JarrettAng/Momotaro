@@ -138,6 +138,8 @@ namespace GameOverManager {
 	}
 
 	void HandleBtnClick() {
+		if (!GAME_OVER) return;
+
 		Vec2<int> mousePos = InputManager::GetMousePos();
 
 		// Convert to world space position.
