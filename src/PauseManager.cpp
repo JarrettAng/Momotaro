@@ -253,9 +253,6 @@ namespace PauseManager {
 				i.isActive = isPaused;
 				i.isClickable = isPaused;
 			}
-
-			// Dont allow clicking of paused btn when is already paused.
-			pauseBtn.isClickable = !isPaused;
 		}
 	}
 
