@@ -55,8 +55,6 @@ void SceneLevelEditor::Initialize() {
 	InputManager::SubscribeToKey(AEVK_3, InputManager::TRIGGERED, LoadMap3);
 	InputManager::SubscribeToKey(AEVK_4, InputManager::TRIGGERED, LoadUserMap1);
 	InputManager::SubscribeToKey(AEVK_5, InputManager::TRIGGERED, LoadUserMap2);
-	InputManager::SubscribeToKey(AEVK_6, InputManager::TRIGGERED, LoadUserMap3);
-
 }
 
 void SceneLevelEditor::Update() {
@@ -82,7 +80,6 @@ void SceneLevelEditor::Free() {
 	InputManager::UnsubscribeKey(AEVK_3, InputManager::TRIGGERED, LoadMap3);
 	InputManager::UnsubscribeKey(AEVK_4, InputManager::TRIGGERED, LoadUserMap1);
 	InputManager::UnsubscribeKey(AEVK_5, InputManager::TRIGGERED, LoadUserMap2);
-	InputManager::UnsubscribeKey(AEVK_6, InputManager::TRIGGERED, LoadUserMap3);
 }
 
 void SceneLevelEditor::Unload() {
@@ -119,10 +116,5 @@ void LoadUserMap1() {
 
 void LoadUserMap2() {
 	selectedMapFilePath = "Assets/JSON_Data/Maps/userMap1.momomaps";
-	LoadSelectedMap();
-}
-
-void LoadUserMap3() {
-	selectedMapFilePath = "Assets/JSON_Data/Maps/userMap2.momomaps";
 	LoadSelectedMap();
 }
