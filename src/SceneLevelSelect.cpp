@@ -63,7 +63,8 @@ const float LVL_SELECT_TRANSITION_TIME = 1.0f;
 const float LVL_SELECT_BLINK_INTERVAL = 0.07f;
 const float MAP_PREVIEW_HEIGHT = 250.0f;
 const float MAP_PREVIEW_LENGTH = 400.0f;
-const Vec2<float> LVL_SELECT_POINTER_OFFSET = { MAP_PREVIEW_LENGTH / 3.0f, MAP_PREVIEW_HEIGHT / 3.0f };
+const Vec2<float> LVL_SELECT_POINTER_OFFSET = { MAP_PREVIEW_LENGTH / 6.0f, MAP_PREVIEW_HEIGHT / 3.0f };
+const Vec2<float> LVL_SELECT_BACK_POINTER_OFFSET = { 80.0f, -10.0f };
 
 ///////////////////////////////////////////////////////////////////////////
 // Button pointer variables
@@ -417,7 +418,12 @@ void HandleLvlSelectBtnHover() {
 		// Check if mouse is hovering button.
 		if (MouseInsideButton(mousePos, btn.render.rect.transform.pos, btn.render.rect.transform.size)) {
 			// Draw pointer.
-			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, btn.render.rect.transform.pos.x - LVL_SELECT_POINTER_OFFSET.x, btn.render.rect.transform.pos.y - LVL_SELECT_POINTER_OFFSET.y, 60, 90, TextureManager::POINTER, 3);
+			if (btn.func == lvlSelectBackBtn.func) {
+				RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, btn.render.rect.transform.pos.x - LVL_SELECT_BACK_POINTER_OFFSET.x, btn.render.rect.transform.pos.y - LVL_SELECT_BACK_POINTER_OFFSET.y, 60, 90, TextureManager::POINTER, 3);
+			}
+			else {
+				RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, btn.render.rect.transform.pos.x - LVL_SELECT_POINTER_OFFSET.x, btn.render.rect.transform.pos.y - LVL_SELECT_POINTER_OFFSET.y, 60, 90, TextureManager::POINTER, 3);
+			}
 		}
 	}
 }
@@ -445,9 +451,7 @@ void HandleLvlSelectBtnClick() {
 
 			switch (lvlSelectClickedBtn.render.rect.graphics.tex)
 			{
-			case TextureManager::QUIT_BTN:
-			case TextureManager::YES_BTN:
-			case TextureManager::NO_BTN:
+			case TextureManager::BACK_BTN:
 				// Immediate calling of button function when clicking. No transition needed. (For the above buttons)
 				lvlSelectClickedBtn.func();
 				break;
