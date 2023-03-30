@@ -129,6 +129,7 @@ namespace GridManager {
 	 */
 	void SpawnNature();
 	cell NatureCell();
+	cell BuildingCell(int);
 	void ToggleTileRenderable();
 
 	/**
@@ -187,6 +188,5 @@ namespace GridManager {
 
 
     void ChangeOrientation();
-
 	// iso::cell& GetNeighbor(iso::cell* &grid,iso::vec2i indexToCheck, iso::vec2i startingIndex);
 }

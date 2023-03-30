@@ -33,7 +33,6 @@ The functions include:
 std::string mapToLoad = "Assets/JSON_Data/Maps/map0.momomaps";
 
 void SceneGameLevel::Load() {
-	BuildingManager::Initialize();
 }
 
 void SceneGameLevel::Initialize() {

@@ -41,8 +41,8 @@ namespace ScoreManager {
 	int GetThreshold(int level);
 
 
-	int GetScore() {
-		return score;
+	int GetHighScore() {
+		return max(score,lastHighScore);
 	}
 
 	void AddScore(int modifier) {

@@ -56,6 +56,7 @@ namespace GridManager {
 	int playableArea{ 0 };
 	BuildingEnum::ORIENTATION TestOrientation{ BuildingEnum::RIGHT };
 	std::vector<BuildingData> _testBuildingVector;
+	void TestSave();
 	///////////////////////////////////////////////////////////////////////////
 	//INITIALISE GRID 								
 	///////////////////////////////////////////////////////////////////////////
@@ -91,17 +92,20 @@ namespace GridManager {
 		InputManager::SubscribeToKey(AEVK_1, InputManager::TRIGGERED, SpawnResidential);
 		InputManager::SubscribeToKey(AEVK_2, InputManager::TRIGGERED, SpawnCommerical);
 		InputManager::SubscribeToKey(AEVK_3, InputManager::TRIGGERED, SpawnIndustrial);
-		InputManager::SubscribeToKey(AEVK_Q, InputManager::TRIGGERED, SpawnBigResidential);
-		InputManager::SubscribeToKey(AEVK_W, InputManager::TRIGGERED, SpawnBigResidential3x1);
-		InputManager::SubscribeToKey(AEVK_E, InputManager::TRIGGERED, SpawnBigResidential);
-		InputManager::SubscribeToKey(AEVK_S, InputManager::TRIGGERED, FileIOManager::SaveGridToFile);
+		// InputManager::SubscribeToKey(AEVK_Q, InputManager::TRIGGERED, SpawnBigResidential);
+		// InputManager::SubscribeToKey(AEVK_W, InputManager::TRIGGERED, SpawnBigResidential3x1);
+		// InputManager::SubscribeToKey(AEVK_E, InputManager::TRIGGERED, SpawnBigResidential);
+		InputManager::SubscribeToKey(AEVK_S, InputManager::TRIGGERED, TestSave);
 		InputManager::SubscribeToKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
 		InputManager::SubscribeToKey(AEVK_T, InputManager::TRIGGERED, ToggleTileRenderable);
 
 		CardManager::onNewCardSelected.Subscribe(GetBuildingCard);
 		CardManager::onCardPlaced.Subscribe(SpawnBuilding);
 	}
-
+	void TestSave(){
+		//std::cout << "gsdjhgfksdjg "<< buildingID << '\n';
+		FileIOManager::SaveGridToFile("Assets/JSON_Data/Maps/lastSaved2.momomaps");
+	}
 	///////////////////////////////////////////////////////////////////////////
 	//Spawns buildings at mouse position
 	///////////////////////////////////////////////////////////////////////////
@@ -109,7 +113,9 @@ namespace GridManager {
 		if(PauseManager::IsPaused()) return;
 		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		if (!isCellSafe(SelectedCell)) {
+			#if DEBUG
 			std::cout << "Debug " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
+			#endif
 			return;
 		}
 		AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_GAINPOINT);
@@ -211,6 +217,7 @@ namespace GridManager {
 		// }
 		CheckCellNeighbor(grid, SelectedCell);
 	}
+
 	void SpawnCommerical() {
 		if (PauseManager::IsPaused()) return;
 		Vec2<int> mousePos = InputManager::GetMousePos();
@@ -306,25 +313,25 @@ namespace GridManager {
 				{
 				case BuildingEnum::RIGHT:
 					if (!isCellSafe(Vec2<int>{_x + x, y + _y})) {
-						std::cout << "Debug " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
+						//std::cout << "Debug " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
 						return false;
 					}
 					break;
 				case BuildingEnum::TOP:
 					if (!isCellSafe(Vec2<int>{_x + x, _y - y})) {
-						std::cout << "Debug " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
+						//std::cout << "Debug " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
 						return false;
 					}
 					break;
 				case BuildingEnum::LEFT:
 					if (!isCellSafe(Vec2<int>{_x - x, _y - y})) {
-						std::cout << "Debug " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
+						//std::cout << "Debug " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
 						return false;
 					}
 					break;
 				case BuildingEnum::DOWN:
 					if (!isCellSafe(Vec2<int>{_x - x, y + _y})) {
-						std::cout << "Debug " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
+						//std::cout << "Debug " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
 						return false;
 					}
 					break;
@@ -342,7 +349,7 @@ namespace GridManager {
 		Vec2<int> _SelectedCell{ 0,0 };
 		std::vector<Vec2<int>> AllCells;
 		if (!IsBuildingValid(_data, _x, _y)) assert("");
-		std::cout << "Cell Pos : " << _x << ", " << _y << '\n';
+		//std::cout << "Cell Pos : " << _x << ", " << _y << '\n';
 		// grid[index].ID = ++buildingID;
 		for (int y{ 0 }; y < _size.y; ++y) {
 			for (int x{ 0 }; x < _size.x; ++x) {
@@ -383,7 +390,7 @@ namespace GridManager {
 	{
 		//If for some reason the building cells are empty, we need to throw an error
 		if (CurrentBuildingCells.empty()) {
-			std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n";
+			//std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n";
 			//AE_ASSERT(CurrentBuildingCells.size());
 			assert(CurrentBuildingCells.size());
 			//assert("Error " << __FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n");
@@ -687,14 +694,14 @@ namespace GridManager {
 				}
 			}
 		}
-		std::cout << "match count is " << matchCount << '\n';
+		// std::cout << "match count is " << matchCount << '\n';
 		if (matchCount == 3 && _grid[gridIndex]._building.data.level < BuildingEnum::L3) {
 
 			for (int i{ 0 }; i < matchCount; ++i) {
-				std::cout << "MATCH!\n" << "Match ID's : " << matchedCells[i] << '\n';
+				// std::cout << "MATCH!\n" << "Match ID's : " << matchedCells[i] << '\n';
 				int index = GetIndexFromID(matchedCells[i]);
 				if (grid[index].ID == _grid[gridIndex].ID) {
-					std::cout << "CONTINUED!\n";
+					// std::cout << "CONTINUED!\n";
 					for (Vec2<int>cell : _grid[gridIndex]._building.buildingCells) {
 						_grid[GetIndex(cell)]._building.LevelUp();
 					}
@@ -753,7 +760,6 @@ namespace GridManager {
 		InputManager::UnsubscribeKey(AEVK_Q, InputManager::TRIGGERED, SpawnBigResidential);
 		InputManager::UnsubscribeKey(AEVK_W, InputManager::TRIGGERED, SpawnBigResidential3x1);
 		InputManager::UnsubscribeKey(AEVK_E, InputManager::TRIGGERED, SpawnBigResidential);
-		InputManager::UnsubscribeKey(AEVK_S, InputManager::TRIGGERED, SpawnBigResidential);
 		InputManager::UnsubscribeKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
 
 		CardManager::onNewCardSelected.Unsubscribe(GetBuildingCard);
@@ -774,10 +780,10 @@ namespace GridManager {
 	}
 	bool HasID(int* array, int count, int ID) {
 		if (count < 0) return false;
-		std::cout << "Checking for ID: " << ID << '\n';
+		//std::cout << "Checking for ID: " << ID << '\n';
 		for (int i{ 0 }; i < count; ++i) {
 			if (*(array + i) == ID) {
-				std::cout << "Has ID: " << *(array + i) << " == " << ID << '\n';
+				//std::cout << "Has ID: " << *(array + i) << " == " << ID << '\n';
 				return true;
 			}
 		}

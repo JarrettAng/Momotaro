@@ -12,5 +12,6 @@ namespace ScoreManager {
 	void Initialize(float _exp_mod = 0.3f, float _exp_increase_mod = 1.8f);
 	void Free();
 	void Draw();
+	int GetHighScore();
 	void AddScore(int modifier);
 }

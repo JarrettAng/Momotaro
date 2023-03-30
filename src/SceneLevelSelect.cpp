@@ -35,6 +35,7 @@ void HandleLvlSelectBtnHover();
 void HandleLvlSelectBtnClick();
 
 void LvlSelectReturnToMenu(); // Button functions
+void LvlSelectLoadLastSavedMap();
 void LvlSelectLoadMap1();
 void LvlSelectLoadMap2();
 void LvlSelectLoadMap3();
@@ -253,7 +254,7 @@ void LvlSelectInitializeUI() {
 
 	// LAST SAVED GAME BUTTON
 	lastMapBtn.render.rect.graphics.tex = TextureManager::BLANK_PROMPT;
-	// lastMapBtn.func = LvlSelectReturnToMenu;
+	lastMapBtn.func = LvlSelectLoadLastSavedMap;
 
 	lastMapBtn.render.rect.transform.size.x = MAP_PREVIEW_LENGTH;
 	lastMapBtn.render.rect.transform.size.y = MAP_PREVIEW_HEIGHT;
@@ -266,7 +267,7 @@ void LvlSelectInitializeUI() {
 
 	LevelPreview lastMapPreview{ lastMapBtn.render.rect.transform.pos.x, lastMapBtn.render.rect.transform.pos.y,
 								 lastMapBtn.render.rect.transform.size.x, lastMapBtn.render.rect.transform.size.y,
-								 "Assets/JSON_Data/Maps/lastSaved.momomaps", "Last Saved" };
+								 "Assets/JSON_Data/Maps/lastSaved2.momomaps", "Last Saved" };
 	lvlPreviews.push_back(lastMapPreview);
 
 	// MAP 0 BUTTON
@@ -465,6 +466,11 @@ void HandleLvlSelectBtnClick() {
 
 void LvlSelectReturnToMenu() {
 	SceneManager::LoadScene(SceneManager::MAIN_MENU);
+}
+
+void LvlSelectLoadLastSavedMap() {
+	MapToLoad("Assets/JSON_Data/Maps/lastSaved2.momomaps");
+	SceneManager::LoadScene(SceneManager::GAME_LEVEL);
 }
 
 void LvlSelectLoadMap1() {

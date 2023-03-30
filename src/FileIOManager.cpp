@@ -16,6 +16,7 @@ The functions include:
 #include <fstream>
 #include <FileIOManager.h>
 #include <BuildingManager.h>
+#include <ScoreManager.h>
 ///////////////////////////////////////////////////////////////////////////
 
 namespace FileIOManager {
@@ -120,21 +121,31 @@ namespace FileIOManager {
 	}
 	///////////////////////////////////////////////////////////////////////////
 	//Saves the map to a custom file (used by gridmanager)
-	void SaveGridToFile() {
-		std::ofstream mapFile("Assets/JSON_Data/Maps/map.momomaps");
+	void SaveGridToFile(std::string filePath) {
+		std::ofstream mapFile(filePath);
 		if (!mapFile.is_open()) {
 			std::cerr << "Unable to write to file!\n";
 			assert(0);
 		}
+		
 		mapFile << "Width " << GridManager::gridX << '\n';
 		mapFile << "Height " << GridManager::gridY << '\n';
+		mapFile << "Score " << ScoreManager::GetHighScore() << '\n';
+		mapFile << "Joe" << '\n';
 		for (int y{ 0 }; y < GridManager::gridY; ++y) {
 			for (int x{ 0 }; x < GridManager::gridX; ++x) {
 				//If the tile is a placeable tile, we meed to check if it has a nature tile and store that
-				if((GridManager::GetGrid() + GridManager::GetIndex(Vec2<int>{x, y}))->isRenderable){
-					if((GM::GetGrid()+GM::GetIndex(Vec2<int>{x,y}))->_building.data.type != BuildingEnum::NATURE){
-						mapFile << 1;
-					} else mapFile << 2;
+				const GridManager::cell* _temp = (GridManager::GetGrid() + GridManager::GetIndex(Vec2<int>{x, y}));
+				if(_temp->isRenderable){
+				//We have to increment the ID by 1 to represent that it is renderable.
+					mapFile << _temp->ID+1;
+					if(_temp->ID>0){
+						mapFile << "," << (int)(_temp->_building.data.type);	//[0,4]
+						mapFile << "," << (int)(_temp->_building.data.level);	//[0,2]
+					}
+					// if((GM::GetGrid()+GM::GetIndex(Vec2<int>{x,y}))->_building.data.type != BuildingEnum::NATURE){
+					// 	mapFile << 1;
+					// } else mapFile << 2;
 				} else mapFile << 0;	//if not, the tile is probably not renderable anyway
 				if (x < GridManager::gridX - 1) mapFile << ' ';
 			}
@@ -161,6 +172,7 @@ namespace FileIOManager {
 			int xIndex = 0;	//Since each line has a spacing, we only want to count the xIndex when we get a number
 			//First we loop through each line and grab the numbers
 			for (int i{ 0 }; i < static_cast<int>(buffer.length()); ++i) {
+				if(lineCount == 3) std::cout <<buffer << '\n';
 				if (isdigit(buffer[i]))
 				{
 					//The first 2 lines will be the width and the height
@@ -172,19 +184,47 @@ namespace FileIOManager {
 							newMap = { new GM::cell[GM::gridX * GM::gridY]{} };
 						}
 					}
-					//Once the line count exceeds 1, meaning we already have the width&height, we can start to add to array
-					if (lineCount > 1) {
+					//Once the line count exceeds 3, meaning we already have the width&height, we can start to add to array
+					if (lineCount > 3) {
 						//If the value in the mapdata is NOT 1, it shall be treated as a 0 (which means it's renderable)
-						newMap[GM::GetIndex(xIndex, lineCount - 2)].isRenderable = std::atoi(&buffer[i]);
+						// std::cout << std::stoi(&buffer[i]) << ' ';
+						newMap[GM::GetIndex(xIndex, lineCount - 4)].isRenderable = std::atoi(&buffer[i]);
 						//Now that we know it's renderable, if it's > 1 it's either probabilisitic OR Nature.
 						if(std::atoi(&buffer[i])>1){
+							//First we get the ID
+							newMap[GM::GetIndex(xIndex, lineCount - 4)].ID = (std::stoi(&buffer[i])-1);
+							//Then we need to move the index by however many multiples of 10 the ID is
+							i+=(int)(log10f(std::stoi(&buffer[i])));
+							//After getting to the end of the number, we should hit the ','
+							if(buffer[i+=1] == ','){
+								//Then we store the type and level
+								// i += (int)(log(std::stoi(&buffer[i])));
+								// std::cout << buffer[i+1] << "x\n";
+								// else newMap[GM::GetIndex(xIndex, lineCount - 4)] = GM::NatureCell();
+								switch((BuildingEnum::TYPE)(std::stoi(&buffer[i+=1]))){
+									case BuildingEnum::NATURE:
+									newMap[GM::GetIndex(xIndex, lineCount - 4)] = GM::NatureCell();
+									break;
+									default:
+									newMap[GM::GetIndex(xIndex, lineCount - 4)]._building.data =
+									BuildingManager::GetBuildingData(
+										(BuildingEnum::TYPE)(std::stoi(&buffer[i])),
+										Vec2<int>{1,1},
+										(BuildingEnum::LEVEL)(std::atoi(&buffer[i+=2]))
+									);
+									// std::cout << std::atoi(&buffer[i+2]) << '\n';
+									break;
+								}
+
+							}
+
+						}
+							//newMap[GM::GetIndex(xIndex, lineCount - 4)]
 							//assuming right now we only have nature tiles and not probabilistic. 
 							//gotta do some switch case here in future!
 							//TODO Future implementation for rando stuff
-							newMap[GM::GetIndex(xIndex, lineCount - 2)] = GM::NatureCell();
 						}
 						xIndex++;
-					}
 				}
 			}
 			lineCount++;		//Linecount-2 is basically our yIndex

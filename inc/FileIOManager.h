@@ -25,7 +25,7 @@ namespace FileIOManager {
 	void ReadBuildingsData(std::vector<BuildingData>& buildingsData);
     void SaveBuildingDataToFile(std::vector<BuildingData>& buildingData);
     void LoadBuildingDataFromFile(std::vector<BuildingData> &buildingsData);
-    void SaveGridToFile();
+    void SaveGridToFile(std::string fileName);
     GridManager::cell* LoadGridFromFile(std::string fileName);
 }
 

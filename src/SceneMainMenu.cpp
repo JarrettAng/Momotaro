@@ -22,7 +22,7 @@ The functions include:
 #include <MomoMaths.h>
 #include <RenderSystem.h>
 #include <SceneMainMenu.h>
-
+#include <BuildingManager.h>
 /*!***********************************************************************
 * CONST VARIABLES
 *************************************************************************/
@@ -83,6 +83,7 @@ float currTransitionTime = 0;
 bool showQuitConfirm = false;
 
 void SceneMainMenu::Load() {
+	BuildingManager::Initialize();
 	return;
 }
 
