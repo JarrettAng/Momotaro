@@ -172,7 +172,7 @@ namespace FileIOManager {
 			int xIndex = 0;	//Since each line has a spacing, we only want to count the xIndex when we get a number
 			//First we loop through each line and grab the numbers
 			for (int i{ 0 }; i < static_cast<int>(buffer.length()); ++i) {
-				if(lineCount == 3) std::cout <<buffer << '\n';
+				// if(lineCount == 3) std::cout <<buffer << '\n';
 				if (isdigit(buffer[i]))
 				{
 					//The first 2 lines will be the width and the height
@@ -198,9 +198,6 @@ namespace FileIOManager {
 							//After getting to the end of the number, we should hit the ','
 							if(buffer[i+=1] == ','){
 								//Then we store the type and level
-								// i += (int)(log(std::stoi(&buffer[i])));
-								// std::cout << buffer[i+1] << "x\n";
-								// else newMap[GM::GetIndex(xIndex, lineCount - 4)] = GM::NatureCell();
 								switch((BuildingEnum::TYPE)(std::stoi(&buffer[i+=1]))){
 									case BuildingEnum::NATURE:
 									newMap[GM::GetIndex(xIndex, lineCount - 4)] = GM::NatureCell();
@@ -219,7 +216,6 @@ namespace FileIOManager {
 							}
 
 						}
-							//newMap[GM::GetIndex(xIndex, lineCount - 4)]
 							//assuming right now we only have nature tiles and not probabilistic. 
 							//gotta do some switch case here in future!
 							//TODO Future implementation for rando stuff
