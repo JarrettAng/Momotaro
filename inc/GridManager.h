@@ -185,7 +185,7 @@ namespace GridManager {
     std::vector<Vec2<int>> GetBuildingCells(const BuildingData* _data, int _x, int _y);
 	std::vector<Vec2<int>> GetSynergyArea(std::vector<Vec2<int>> _buildingCells);
     // std::vector<Vec2<int>> GetBuildingCells(BuildingData _data, int _x, int _y);
-
+	void SetBuildingID(int _id);
 
     void ChangeOrientation();
 	// iso::cell& GetNeighbor(iso::cell* &grid,iso::vec2i indexToCheck, iso::vec2i startingIndex);

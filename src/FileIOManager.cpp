@@ -140,7 +140,6 @@ namespace FileIOManager {
 				if(_temp->isRenderable){
 				//We have to increment the ID by 1 to represent that it is renderable.
 					mapFile << (_temp->ID+1);
-					std::cout << "ID : " << _temp->ID << '\n';
 					if(_temp->ID>0){
 						mapFile << "," << (int)(_temp->_building.data.type);	//[0,4]
 						mapFile << "," << (int)(_temp->_building.data.level);	//[0,2]
@@ -189,34 +188,25 @@ namespace FileIOManager {
 				Vec2<int>{1,1},
 				(BuildingEnum::LEVEL)(std::atoi(&buffer[2]))
 			));
-			// for(int i{}; i< (int)(buffer.length()); ++i){
-			// 	//Then we go through each character 
-			// }
 		}
 		inputFile.close();
 		if(_temp.empty()) return _temp;
-		for(BuildingData _c : _temp){
-			std::cout << "Data : type = " << _c.type << ", level = " << _c.level << '\n';
-		}
 		return _temp;
 	}
 	void SaveHandToFile(std::vector<Card> const& _hand){
 		std:: ofstream outputFile("Assets/JSON_Data/Maps/Save.momohand");
 		if(!outputFile.is_open()){
 			Debug::Print("Unable to read Assets/JSON_Data/Maps/Save.momohand!\n");
-			std::cout << "Unable to open!" << '\n';
 		}
 		if(_hand.empty()){
 			outputFile.close();
 			Debug::Print("File IO Saved Hand is empty! Check if game is over!\n");
-			std::cout << "ahnd empty" << '\n';
 			return;
 		}
 		for(Card _card : _hand){
 			outputFile << (int)(_card.bData.type) <<",";
 			outputFile << (int)(_card.bData.level) << '\n';
 		}
-			std::cout << "I think it savede" << '\n';
 		outputFile.close();
 	}
 	///////////////////////////////////////////////////////////////////////////
@@ -234,6 +224,7 @@ namespace FileIOManager {
 		GM::gridX = GM::gridY = 0;
 
 		int lineCount{};
+		int maxID{};
 		while (std::getline(inputFile, buffer)) {
 			int xIndex = 0;	//Since each line has a spacing, we only want to count the xIndex when we get a number
 			//First we loop through each line and grab the numbers
@@ -254,36 +245,37 @@ namespace FileIOManager {
 					//Once the line count exceeds 3, meaning we already have the width&height, we can start to add to array
 					if (lineCount > 3) {
 						//If the value in the mapdata is NOT 1, it shall be treated as a 0 (which means it's renderable)
-						// std::cout << std::stoi(&buffer[i]) << ' ';
 						newMap[GM::GetIndex(xIndex, lineCount - 4)].isRenderable = std::atoi(&buffer[i]);
 						//Now that we know it's renderable, if it's > 1 it's either probabilisitic OR Nature.
-						if(std::atoi(&buffer[i])>1){
-							//First we get the ID
-							newMap[GM::GetIndex(xIndex, lineCount - 4)].ID = (std::stoi(&buffer[i]));
-							//Then we need to move the index by however many multiples of 10 the ID is
-							i+=(int)(log10f(std::stoi(&buffer[i])));
-							//After getting to the end of the number, we should hit the ','
-							if(buffer[i+=1] == ','){
-								//Then we store the type and level
-								switch((BuildingEnum::TYPE)(std::stoi(&buffer[i+=1]))){
-									case BuildingEnum::NATURE:
-									newMap[GM::GetIndex(xIndex, lineCount - 4)] = GM::NatureCell();
-									i+=2;
-									break;
-									default:
-									newMap[GM::GetIndex(xIndex, lineCount - 4)]._building.data =
-									BuildingManager::GetBuildingData(
-										(BuildingEnum::TYPE)(std::stoi(&buffer[i])),
-										Vec2<int>{1,1},
-										(BuildingEnum::LEVEL)(std::atoi(&buffer[i+=2]))
-									);
-									// std::cout << std::atoi(&buffer[i+2]) << '\n';
-									break;
+							if(std::atoi(&buffer[i])>1){
+								//First we get the ID
+								maxID = max(std::stoi(&buffer[i])-1,maxID);
+								newMap[GM::GetIndex(xIndex, lineCount - 4)].ID = (std::stoi(&buffer[i])-1);
+								//Then we need to move the index by however many multiples of 10 the ID is
+								i+=(int)(log10f(std::stoi(&buffer[i])));
+								//After getting to the end of the number, we should hit the ','
+								if(buffer[i+=1] == ','){
+									//Then we store the type and level
+									switch((BuildingEnum::TYPE)(std::stoi(&buffer[i+=1]))){
+										case BuildingEnum::NATURE:
+										newMap[GM::GetIndex(xIndex, lineCount - 4)] = GM::NatureCell();
+										i+=2;
+										break;
+										default:
+										newMap[GM::GetIndex(xIndex, lineCount - 4)]._building.data =
+										BuildingManager::GetBuildingData(
+											(BuildingEnum::TYPE)(std::stoi(&buffer[i])),
+											Vec2<int>{1,1},
+											(BuildingEnum::LEVEL)(std::atoi(&buffer[i+=2]))
+										);
+										newMap[GM::GetIndex(xIndex, lineCount - 4)]._building.buildingCells = std::vector<Vec2<int>>{ Vec2<int>{xIndex,lineCount-4}};
+										// std::cout << std::atoi(&buffer[i+2]) << '\n';
+										break;
+									}
+
 								}
 
 							}
-
-						}
 							//assuming right now we only have nature tiles and not probabilistic. 
 							//gotta do some switch case here in future!
 							//TODO Future implementation for rando stuff
@@ -293,6 +285,7 @@ namespace FileIOManager {
 			}
 			lineCount++;		//Linecount-2 is basically our yIndex
 		}
+		GridManager::SetBuildingID(maxID);
 		inputFile.close();
 		return newMap;
 	}

@@ -478,6 +478,7 @@ namespace GridManager {
 		///////////////////////////////////////////////////////////////////////////
 		//TILE RENDERING
 		///////////////////////////////////////////////////////////////////////////
+		UI::TextBox debugTextBox;
 		for (int y{ 0 }; y < gridY; ++y) {
 			for (int x{ 0 }; x < gridX; ++x) {
 				int index = GetIndex(x, y);
@@ -489,6 +490,20 @@ namespace GridManager {
 						tileWidth, tileWidth,
 						grid[index]._building.data.TextureID, 99
 					);
+					if(Debug::IsDebugModeOn()){
+						debugTextBox = UI::TextBox(
+							Vec2<float>{
+								static_cast<float>(grid[index].pos.x) - tileWidth/6.f,
+								static_cast<float>(grid[index].pos.y) - (tileHeight*1.2f)},
+							 std::to_string(grid[index].ID) + ", " + 
+							 std::to_string(grid[index]._building.data.type) + ", " +
+							 std::to_string(grid[index]._building.data.level)
+							 , 
+							 UI::CENTER_JUSTIFY, 
+							 240, 22, 
+							 COLOR_RED);
+						debugTextBox.Render();
+					}
 				}
 				// Draw tile.
 				if (grid[index].isRenderable) {
@@ -755,6 +770,9 @@ namespace GridManager {
 	///////////////////////////////////////////////////////////////////////////
 	//GRID HELPER FUNCTIONS
 	///////////////////////////////////////////////////////////////////////////
+	void SetBuildingID(int _id){
+		buildingID = _id;
+	}
 	int GetIndex(int x, int y)
 	{
 		return x + gridX * y;

@@ -83,4 +83,5 @@ namespace Debug {
 
 		std::cerr << "[ERROR] In file: " << fileName << " at line: " << lineNum << " " << errorMsg << "\n";
 	}
+
 }
