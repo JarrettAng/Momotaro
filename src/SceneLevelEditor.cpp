@@ -53,7 +53,7 @@ void SceneLevelEditor::Load() {
 	BuildingManager::Initialize();
 	selectedMapFilePath = "Assets/JSON_Data/Maps/map0.momomaps";
 	GridManager::Initialize(selectedMapFilePath);
-	currentMapText = UI::TextBox({ -AEGfxGetWinMaxX() + 25.0f, AEGfxGetWinMaxY() - 60.0f }, "Current Map: Archipelago", UI::LEFT_JUSTIFY, AEGfxGetWinMaxX(), 50.0f, COLOR_BLACK);
+	currentMapText = UI::TextBox({ -AEGfxGetWinMaxX() + 25.0f, AEGfxGetWinMaxY() - 60.0f }, "Current Map: Archipelago", UI::LEFT_JUSTIFY, AEGfxGetWinMaxX() * 2.0f, 50.0f, COLOR_BLACK);
 }
 
 void SceneLevelEditor::Initialize() {
@@ -176,34 +176,34 @@ void LoadSelectedMap() {
 void LoadMap1() {
 	FileIOManager::SaveGridToFile(selectedMapFilePath);
 	selectedMapFilePath = "Assets/JSON_Data/Maps/map0.momomaps";
-	currentMapText = UI::TextBox({ -AEGfxGetWinMaxX() + 25.0f, AEGfxGetWinMaxY() - 60.0f }, "Current Map: Archipelago", UI::LEFT_JUSTIFY, AEGfxGetWinMaxX(), 50.0f, COLOR_BLACK);
+	currentMapText = UI::TextBox({ -AEGfxGetWinMaxX() + 25.0f, AEGfxGetWinMaxY() - 60.0f }, "Current Map: Archipelago", UI::LEFT_JUSTIFY, AEGfxGetWinMaxX() * 2.0f, 50.0f, COLOR_BLACK);
 	LoadSelectedMap();
 }
 
 void LoadMap2() {
 	FileIOManager::SaveGridToFile(selectedMapFilePath);
 	selectedMapFilePath = "Assets/JSON_Data/Maps/map1.momomaps";
-	currentMapText = UI::TextBox({ -AEGfxGetWinMaxX() + 25.0f, AEGfxGetWinMaxY() - 60.0f }, "Current Map: Big Donut", UI::LEFT_JUSTIFY, AEGfxGetWinMaxX(), 50.0f, COLOR_BLACK);
+	currentMapText = UI::TextBox({ -AEGfxGetWinMaxX() + 25.0f, AEGfxGetWinMaxY() - 60.0f }, "Current Map: Big Donut", UI::LEFT_JUSTIFY, AEGfxGetWinMaxX() * 2.0f, 50.0f, COLOR_BLACK);
 	LoadSelectedMap();
 }
 
 void LoadMap3() {
 	FileIOManager::SaveGridToFile(selectedMapFilePath);
 	selectedMapFilePath = "Assets/JSON_Data/Maps/map2.momomaps";
-	currentMapText = UI::TextBox({ -AEGfxGetWinMaxX() + 25.0f, AEGfxGetWinMaxY() - 60.0f }, "Current Map: Spiral Island", UI::LEFT_JUSTIFY, AEGfxGetWinMaxX(), 50.0f, COLOR_BLACK);
+	currentMapText = UI::TextBox({ -AEGfxGetWinMaxX() + 25.0f, AEGfxGetWinMaxY() - 60.0f }, "Current Map: Spiral Island", UI::LEFT_JUSTIFY, AEGfxGetWinMaxX() * 2.0f, 50.0f, COLOR_BLACK);
 	LoadSelectedMap();
 }
 
 void LoadUserMap1() {
 	FileIOManager::SaveGridToFile(selectedMapFilePath);
 	selectedMapFilePath = "Assets/JSON_Data/Maps/userMap0.momomaps";
-	currentMapText = UI::TextBox({ -AEGfxGetWinMaxX() + 25.0f, AEGfxGetWinMaxY() - 60.0f }, "Current Map: User Map 1", UI::LEFT_JUSTIFY, AEGfxGetWinMaxX(), 50.0f, COLOR_BLACK);
+	currentMapText = UI::TextBox({ -AEGfxGetWinMaxX() + 25.0f, AEGfxGetWinMaxY() - 60.0f }, "Current Map: User Map 1", UI::LEFT_JUSTIFY, AEGfxGetWinMaxX() * 2.0f, 50.0f, COLOR_BLACK);
 	LoadSelectedMap();
 }
 
 void LoadUserMap2() {
 	FileIOManager::SaveGridToFile(selectedMapFilePath);
 	selectedMapFilePath = "Assets/JSON_Data/Maps/userMap1.momomaps";
-	currentMapText = UI::TextBox({ -AEGfxGetWinMaxX() + 25.0f, AEGfxGetWinMaxY() - 60.0f }, "Current Map: User Map 2", UI::LEFT_JUSTIFY, AEGfxGetWinMaxX(), 50.0f, COLOR_BLACK);
+	currentMapText = UI::TextBox({ -AEGfxGetWinMaxX() + 25.0f, AEGfxGetWinMaxY() - 60.0f }, "Current Map: User Map 2", UI::LEFT_JUSTIFY, AEGfxGetWinMaxX() * 2.0f, 50.0f, COLOR_BLACK);
 	LoadSelectedMap();
 }
