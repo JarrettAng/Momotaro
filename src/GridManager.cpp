@@ -598,9 +598,7 @@ namespace GridManager {
 			return _data.SynergyNature;
 		}
 		
-		std::string debugLog;
-		Debug::Print(debugLog + "Error " + __FILE__ + "ln" + std::to_string(__LINE__) + " : UNABLE TO GET SYNERGY POINTS!\n");
-		// assert(0);
+		Debug::PrintError(__FILE__, __LINE__, "UNABLE TO GET SYNERGY POINTS!");
 		return 0;
 	}
 
@@ -788,7 +786,7 @@ namespace GridManager {
 		}
 
 		std::string debugLog;
-		Debug::Print(debugLog + "Error " + __FILE__ + "ln" + std::to_string(__LINE__) + " : UNABLE TO FIND INDEX FROM ID!\n");
+		Debug::PrintError(__FILE__, __LINE__, "UNABLE TO FIND INDEX FROM ID!");
 		return 0;
 	}
 

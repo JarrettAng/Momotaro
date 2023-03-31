@@ -363,7 +363,7 @@ namespace RenderSystem {
 			break;
 		}
 
-		Debug::Print("Error " + std::to_string(__LINE__) + " UNABLE TO GET PIVOT POS\n");
+		Debug::PrintError(__FILE__, __LINE__, "UNABLE TO GET PIVOT POS");
 		return pos;
 	}
 }

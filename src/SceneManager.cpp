@@ -92,6 +92,7 @@ namespace SceneManager {
 				currentScene->Load();
 			}
 
+			Debug::EnableControls();		// Debug needs persistence
 			currentScene->Initialize();
 
 			// Game update loop
@@ -103,7 +104,7 @@ namespace SceneManager {
 
 				currentScene->Update();
 
-				Debug::ShowDebugStatus();
+				Debug::ShowDebugStatus();	// Debug needs persistence
 				currentScene->Draw();
 
 				AESysFrameEnd();

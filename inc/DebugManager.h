@@ -19,6 +19,7 @@ The functions include:
 
 namespace Debug {
 	void Initialize();
+	void EnableControls();
 	void Free();
 
 	void SetDebugMode(bool turnOn);
@@ -30,4 +31,5 @@ namespace Debug {
 	void ShowDebugStatus();
 
 	void Print(std::string const& msg);
+	void PrintError(std::string const& fileName, int lineNum, std::string const& errorMsg);
 }

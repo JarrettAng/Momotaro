@@ -93,7 +93,7 @@ namespace InputManager {
 					k.second.onKeyDoubleClick.Subscribe(func);
 					return;
 				default:
-					Debug::Print("Error " + std::to_string(__LINE__) + " KEY_EVENT_TYPE invalid!\n");
+					Debug::PrintError(__FILE__, __LINE__, "KEY_EVENT_TYPE invalid!");
 					return;
 				}
 			}
@@ -117,7 +117,7 @@ namespace InputManager {
 			newKey.second.onKeyDoubleClick.Subscribe(func);
 			break;
 		default:
-			Debug::Print("Error " + std::to_string(__LINE__) + " KEY_EVENT_TYPE invalid!\n");
+			Debug::PrintError(__FILE__, __LINE__, "KEY_EVENT_TYPE invalid!");
 			return;
 		}
 		// Add new key to deque.
@@ -143,11 +143,11 @@ namespace InputManager {
 				k.second.onKeyDoubleClick.Unsubscribe(func);
 				return;
 			default:
-				Debug::Print("Error " + std::to_string(__LINE__) + " KEY_EVENT_TYPE invalid!\n");
+				Debug::PrintError(__FILE__, __LINE__, "KEY_EVENT_TYPE invalid!");
 				return;
 			}
 		}
-		Debug::Print("Error " + std::to_string(__LINE__) + " KEY NOT FOUND IN DEQUE.\n");
+		Debug::PrintError(__FILE__, __LINE__, "KEY NOT FOUND IN DEQUE.");
 	}
 
 	void Initialize() {

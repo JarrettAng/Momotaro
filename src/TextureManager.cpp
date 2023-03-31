@@ -199,7 +199,7 @@ namespace TextureManager {
 			}
 		}
 
-		Debug::Print("Error " + std::to_string(__LINE__) + ": WRONG TEXTURE WIDTH DUMMY!!\n");
+		Debug::PrintError(__FILE__, __LINE__, "WRONG TEXTURE WIDTH DUMMY!!");
 		return 0;
 	}
 
@@ -214,7 +214,7 @@ namespace TextureManager {
 				return t.currTexHeight;
 			}
 		}
-		Debug::Print("Error " + std::to_string(__LINE__) + ": WRONG TEXTURE TYPE DUMMY!!\n");
+		Debug::PrintError(__FILE__, __LINE__, "WRONG TEXTURE TYPE DUMMY!!");
 		return 0;
 	}
 
@@ -228,7 +228,7 @@ namespace TextureManager {
 				return t.mesh;
 			}
 		}
-		Debug::Print("Error " + std::to_string(__LINE__) + ": WRONG TEXTURE MESH DUMMY!!\n");
+		Debug::PrintError(__FILE__, __LINE__, "WRONG TEXTURE MESH DUMMY!!");
 		return nullptr;
 	}
 
@@ -243,8 +243,7 @@ namespace TextureManager {
 			}
 		}
 
-		std::string debugLog;
-		Debug::Print(debugLog + "INVALID SPRITE TYPE ( " + std::to_string(type) + " ) WHEN CALLING GetTexture()\n");
+		Debug::PrintError(__FILE__, __LINE__, "INVALID SPRITE TYPE ( " + std::to_string(type) + " ) WHEN CALLING GetTexture()");
 		return nullptr;
 	}
 
@@ -268,7 +267,7 @@ namespace TextureManager {
 	TEX_TYPE operator++(TEX_TYPE& _texture, int)
 	{
 		if (_texture == BUILDING_TEXTURE_COUNT) {
-			Debug::Print("Error " + std::to_string(__LINE__) + ": Texture values wrapped!! Reached max building texture count!\n");
+			Debug::PrintError(__FILE__, __LINE__, "Texture values wrapped!! Reached max building texture count!");
 		}
 		_texture = (_texture == BUILDING_TEXTURE_COUNT) ?
 			RESIDENTIAL_1X1_L1 :

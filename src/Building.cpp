@@ -56,7 +56,6 @@ Building::Building(
 ///////////////////////////////////////////////////////////////////////////
 // Updates the building level and updates its texture
 void Building::LevelUp() {
-	std::string debugLog;
 	switch (data.level) {
 	case BuildingEnum::L1:
 		data.level = BuildingEnum::L2;
@@ -67,7 +66,7 @@ void Building::LevelUp() {
 		data.TextureID++;
 		break;
 	case BuildingEnum::L3:
-		Debug::Print(debugLog + "Error " + __FILE__ + "ln" + std::to_string(__LINE__) + " : Building cannot be leveled up anymore!\n");
+		Debug::PrintError(__FILE__, __LINE__, "Building cannot be leveled up anymore!");
 		break;
 	default:
 		break;
@@ -87,7 +86,7 @@ void Building::GetSynergyArea() {
 	//Check that the building cells are NOT null!
 	if (buildingCells.empty()) {
 		std::string debugLog;
-		Debug::Print(debugLog + "Error " + __FILE__ + "ln" + std::to_string(__LINE__) + " : NO BUILDING CELLS TO GET AREA!\n");
+		Debug::PrintError(__FILE__, __LINE__, "NO BUILDING CELLS TO GET AREA!");
 	}
 
 	//First we get all the building cells

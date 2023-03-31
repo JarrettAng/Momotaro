@@ -37,6 +37,14 @@ namespace Debug {
 		debugOn = false;
 	}
 
+	void EnableControls() {
+		InputManager::UnsubscribeKey(AEVK_SEMICOLON, InputManager::TRIGGERED, ToggleDebugModeOn);
+		InputManager::UnsubscribeKey(AEVK_QUOTE, InputManager::TRIGGERED, ToggleDebugModeOff);
+
+		InputManager::SubscribeToKey(AEVK_SEMICOLON, InputManager::TRIGGERED, ToggleDebugModeOn);
+		InputManager::SubscribeToKey(AEVK_QUOTE, InputManager::TRIGGERED, ToggleDebugModeOff);
+	}
+
 	void Free() {
 		InputManager::UnsubscribeKey(AEVK_SEMICOLON, InputManager::TRIGGERED, ToggleDebugModeOn);
 		InputManager::UnsubscribeKey(AEVK_QUOTE, InputManager::TRIGGERED, ToggleDebugModeOff);
@@ -68,5 +76,11 @@ namespace Debug {
 		if (!debugOn) return;
 
 		std::cout << msg;
+	}
+
+	void PrintError(std::string const& fileName, int lineNum, std::string const& errorMsg) {
+		if (!debugOn) return;
+
+		std::cerr << "[ERROR] In file: " << fileName << " at line: " << lineNum << " " << errorMsg << "\n";
 	}
 }

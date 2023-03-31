@@ -18,10 +18,11 @@ The functions include:
 #include <GridManager.h>
 #include <CardManager.h>
 #include <InputManager.h>
+#include <ScoreManager.h>
 #include <FontManager.h>
 #include <UIManager.h>
+#include <DebugManager.h>
 #include <ColorTable.h>
-#include <ScoreManager.h>
 #include <iostream>
 ///////////////////////////////////////////////////////////////////////////
 // Card info box related functions
@@ -205,12 +206,6 @@ namespace CardManager {
 
 	// Every frame check if the info box should show
 	void Update() {
-		// If a building was merged last frame, give the player more cards
-		if (spawnMergeBuilding) {
-			GiveRandL2Card();
-			spawnMergeBuilding = false;
-		}
-
 		// If mouse hovers over any card long enough, show its information
 		// First, get the mouse pos
 		Vec2<float> mousePos = { (float)InputManager::GetMousePos().x - AEGfxGetWinMaxX(), -((float)InputManager::GetMousePos().y - AEGfxGetWinMaxY()) };
@@ -282,24 +277,27 @@ namespace CardManager {
 	// Everytime the player reaches the next threshold, give 4 random L1 cards
 	void GiveCardOnThreshold() {
 		for (int i{ 0 }; i < 4; ++i) {
-			GiveRandL1Card();
+			DrawRandomCard(BuildingEnum::L1);
 		}
 	}
 
 	// Everytime the player merges, set the flag to give more cards to true
 	void GiveCardOnMerge() {
-		spawnMergeBuilding = true;
+		DrawRandomCard(BuildingEnum::L2);
 	}
 
 	void GiveRandL1Card() {
+		if (!Debug::IsDebugModeOn()) return;
 		DrawRandomCard(BuildingEnum::L1);
 	}
 
 	void GiveRandL2Card() {
+		if (!Debug::IsDebugModeOn()) return;
 		DrawRandomCard(BuildingEnum::L2);
 	}
 
 	void GiveRandL3Card() {
+		if (!Debug::IsDebugModeOn()) return;
 		DrawRandomCard(BuildingEnum::L3);
 	}
 

@@ -51,8 +51,7 @@ namespace FontManager {
 			}
 		}
 		// Default font.
-		std::string debugLog;
-		Debug::Print(debugLog + "Error : " + __FILE__ + " ln" + std::to_string(__LINE__) + " Font type invalid, returning font type roboto.\n");
+		Debug::PrintError(__FILE__, __LINE__, "Font type invalid, returning font type roboto.");
 		return roboto.font;
 	}
 
