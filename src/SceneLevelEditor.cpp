@@ -23,6 +23,7 @@ The functions include:
 #include <UIManager.h>
 #include <AudioManager.h>
 #include <FileIOManager.h>
+#include <ScoreManager.h>
 
 #include <SceneLevelEditor.h>
 #include <ColorTable.h>
@@ -49,15 +50,20 @@ UI::TextBox mapsText;
 UI::TextBox controlsText;
 UI::TextBox keysText;
 
-void SceneLevelEditor::Load() {
+void SceneLevelEditor::Load() {	
 	BuildingManager::Initialize();
+
 	selectedMapFilePath = "Assets/JSON_Data/Maps/map0.momomaps";
 	GridManager::Initialize(selectedMapFilePath);
+
 	currentMapText = UI::TextBox({ -AEGfxGetWinMaxX() + 25.0f, AEGfxGetWinMaxY() - 60.0f }, "Current Map: Archipelago", UI::LEFT_JUSTIFY, AEGfxGetWinMaxX() * 2.0f, 50.0f, COLOR_BLACK);
 }
 
 void SceneLevelEditor::Initialize() {
 	PauseManager::Initialize();
+
+	// Disable score and restart button
+	PauseManager::ToggleShowRestart(false);
 
 	// Bind keys 1-6 to the different maps
 	InputManager::SubscribeToKey(AEVK_1, InputManager::TRIGGERED, LoadMap1);

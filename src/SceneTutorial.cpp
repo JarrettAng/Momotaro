@@ -82,12 +82,16 @@ void (*nextTut_FuncPtr)();
 void SceneTutorial::Load() {
 	GridManager::Initialize("Assets/JSON_Data/Maps/tutorial.momomaps");
 	BuildingManager::Initialize();
+
 	ScoreManager::Initialize();
 }
 
 void SceneTutorial::Initialize() {
 	PauseManager::Initialize();
 	CardManager::Initialize();
+
+	// Disable score and restart button
+	PauseManager::ToggleShowRestart(false);
 
 	// Give more residential cards
 	CardManager::DrawCard(BuildingEnum::RESIDENTIAL, BuildingEnum::L1);
