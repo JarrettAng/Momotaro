@@ -10,6 +10,7 @@
 #include <InputManager.h>
 #include <ScoreManager.h>
 #include <FontManager.h>
+#include <DebugManager.h>
 ///////////////////////////////////////////////////////////////////////////
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,

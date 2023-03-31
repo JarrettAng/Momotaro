@@ -15,6 +15,7 @@
     <ClCompile Include="src\Building.cpp" />
     <ClCompile Include="src\BuildingManager.cpp" />
     <ClCompile Include="src\CardManager.cpp" />
+    <ClCompile Include="src\DebugManager.cpp" />
     <ClCompile Include="src\FileIOManager.cpp" />
     <ClCompile Include="src\FontManager.cpp" />
     <ClCompile Include="src\GameOverManager.cpp" />
@@ -43,6 +44,7 @@
     <ClInclude Include="inc\Card.h" />
     <ClInclude Include="inc\ColorTable.h" />
     <ClInclude Include="inc\CardManager.h" />
+    <ClInclude Include="inc\DebugManager.h" />
     <ClInclude Include="inc\EventSystem.h" />
     <ClInclude Include="inc\FileIOManager.h" />
     <ClInclude Include="inc\FontManager.h" />
