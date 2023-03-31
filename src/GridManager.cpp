@@ -90,17 +90,15 @@ namespace GridManager {
 		//////////////////////////////////////////////////////////////////////
 		
 		InputManager::SubscribeToKey(AEVK_C, InputManager::TRIGGERED, ClearGrid);
-		#if DEBUG
 		InputManager::SubscribeToKey(AEVK_1, InputManager::TRIGGERED, SpawnResidential);
 		InputManager::SubscribeToKey(AEVK_2, InputManager::TRIGGERED, SpawnCommerical);
 		InputManager::SubscribeToKey(AEVK_3, InputManager::TRIGGERED, SpawnIndustrial);
 		// InputManager::SubscribeToKey(AEVK_Q, InputManager::TRIGGERED, SpawnBigResidential);
 		// InputManager::SubscribeToKey(AEVK_W, InputManager::TRIGGERED, SpawnBigResidential3x1);
 		// InputManager::SubscribeToKey(AEVK_E, InputManager::TRIGGERED, SpawnBigResidential);
-		InputManager::SubscribeToKey(AEVK_S, InputManager::TRIGGERED, TestSave);
-		InputManager::SubscribeToKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
-		InputManager::SubscribeToKey(AEVK_T, InputManager::TRIGGERED, ToggleTileRenderable);
-		#endif
+		//InputManager::SubscribeToKey(AEVK_S, InputManager::TRIGGERED, TestSave);
+		//InputManager::SubscribeToKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
+		//InputManager::SubscribeToKey(AEVK_T, InputManager::TRIGGERED, ToggleTileRenderable);
 		CardManager::onNewCardSelected.Subscribe(GetBuildingCard);
 		CardManager::onCardPlaced.Subscribe(SpawnBuilding);
 	}
@@ -199,7 +197,7 @@ namespace GridManager {
 	}
 
 	void SpawnResidential() {
-		if (PauseManager::IsPaused()) return;
+		if (PauseManager::IsPaused() || !Debug::IsDebugModeOn()) return;
 		Vec2<int> mousePos = InputManager::GetMousePos();
 		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
@@ -220,7 +218,7 @@ namespace GridManager {
 	}
 
 	void SpawnCommerical() {
-		if (PauseManager::IsPaused()) return;
+		if (PauseManager::IsPaused() || !Debug::IsDebugModeOn()) return;
 		Vec2<int> mousePos = InputManager::GetMousePos();
 		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
@@ -237,7 +235,7 @@ namespace GridManager {
 		CheckCellNeighbor(grid, SelectedCell);
 	}
 	void SpawnIndustrial() {
-		if (PauseManager::IsPaused()) return;
+		if (PauseManager::IsPaused() || !Debug::IsDebugModeOn()) return;
 		Vec2<int> mousePos = InputManager::GetMousePos();
 		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
@@ -462,7 +460,7 @@ namespace GridManager {
 	//Clears the grid
 	///////////////////////////////////////////////////////////////////////////
 	void ClearGrid() {
-		if (PauseManager::IsPaused()) return;
+		if (PauseManager::IsPaused() || !Debug::IsDebugModeOn()) return;
 
 		for (int y{ 0 }; y < gridY; ++y) {
 			for (int x{ 0 }; x < gridX; ++x) {
@@ -741,15 +739,13 @@ namespace GridManager {
 		CurrentBuildingCells.clear();
 		selectedBuilding = nullptr;
 		InputManager::UnsubscribeKey(AEVK_C, InputManager::TRIGGERED, ClearGrid);
-		#if DEBUG
 		InputManager::UnsubscribeKey(AEVK_1, InputManager::TRIGGERED, SpawnResidential);
 		InputManager::UnsubscribeKey(AEVK_2, InputManager::TRIGGERED, SpawnCommerical);
 		InputManager::UnsubscribeKey(AEVK_3, InputManager::TRIGGERED, SpawnIndustrial);
 		// InputManager::UnsubscribeKey(AEVK_Q, InputManager::TRIGGERED, SpawnBigResidential);
 		// InputManager::UnsubscribeKey(AEVK_W, InputManager::TRIGGERED, SpawnBigResidential3x1);
 		// InputManager::UnsubscribeKey(AEVK_E, InputManager::TRIGGERED, SpawnBigResidential);
-		InputManager::UnsubscribeKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
-		#endif
+		//InputManager::UnsubscribeKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
 		CardManager::onNewCardSelected.Unsubscribe(GetBuildingCard);
 		CardManager::onCardPlaced.Unsubscribe(SpawnBuilding);
 
