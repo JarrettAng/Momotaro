@@ -266,7 +266,7 @@ namespace GridManager {
 
 	cell NatureCell() {
 		return cell{
-			Vec2<int>{0,0},
+			Vec2<int>{1,1},
 			true,
 			++buildingID,
 			BuildingManager::GetRandomNatureBuilding()
