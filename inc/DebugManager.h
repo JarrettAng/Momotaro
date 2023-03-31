@@ -15,8 +15,19 @@ The functions include:
 ///////////////////////////////////////////////////////////////////////////
 #pragma once
 
-void ToggleDebugMode(bool turnOn);
+#include <string>
 
-bool IsDebugModeOn();
+namespace Debug {
+	void Initialize();
+	void Free();
 
-void Print(std::string const& msg);
+	void SetDebugMode(bool turnOn);
+	void ToggleDebugModeOn();
+	void ToggleDebugModeOff();
+
+	bool IsDebugModeOn();
+
+	void ShowDebugStatus();
+
+	void Print(std::string const& msg);
+}

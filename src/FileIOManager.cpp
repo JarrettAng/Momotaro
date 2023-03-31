@@ -17,6 +17,7 @@ The functions include:
 #include <FileIOManager.h>
 #include <BuildingManager.h>
 #include <ScoreManager.h>
+#include <DebugManager.h>
 ///////////////////////////////////////////////////////////////////////////
 
 namespace FileIOManager {
@@ -27,14 +28,13 @@ namespace FileIOManager {
 	//Helper function to save the current building data to file
 	void SaveBuildingDataToFile(std::vector<BuildingData>& buildingData) {
 		if (buildingData.empty()) {
-			// if(BuildingManager::GetBuildingDataVector().empty()){
-			std::cerr << "No buildings to save from!\n";
+			Debug::Print("No buildings to save from!\n");
 			assert(0);
 			return;
 		}
 		std::ofstream buildingFile("Assets/JSON_Data/buildings2.momodata");
 		if (!buildingFile.is_open()) {
-			std::cerr << "Unable to write to file!\n";
+			Debug::Print("Unable to write to file!\n");
 			assert(0);
 		}
 		// buildingFile << "Building Count " << BuildingManager::GetBuildingDataVector().size() <<'\n';
@@ -61,7 +61,7 @@ namespace FileIOManager {
 	void LoadBuildingDataFromFile(std::vector<BuildingData>& buildingsData) {
 		std::ifstream buildingFile("Assets/JSON_Data/buildings.momodata");
 		if (!buildingFile.is_open()) {
-			std::cerr << "Unable to open Assets/JSON_Data/buildings.momodata!" << '\n';
+			Debug::Print("Unable to open Assets/JSON_Data/buildings.momodata!\n");
 			assert(0);
 		}
 		std::string buffer{};
@@ -124,7 +124,7 @@ namespace FileIOManager {
 	void SaveGridToFile(std::string filePath) {
 		std::ofstream mapFile(filePath);
 		if (!mapFile.is_open()) {
-			std::cerr << "Unable to write to file!\n";
+			Debug::Print("Unable to write to file!\n");
 			assert(0);
 		}
 		
@@ -180,7 +180,7 @@ namespace FileIOManager {
 		GM::cell* newMap{};
 		std::fstream inputFile(fileName);
 		if (!inputFile.is_open()) {
-			std::cerr << "Unable to read" << fileName << '\n';
+			Debug::Print("Unable to read" + fileName + "\n");
 			assert(0);
 		}
 		std::string buffer; 		//where each line of text will be stored
@@ -291,7 +291,8 @@ namespace FileIOManager {
 		std::ifstream dataFile{ "Assets/JSON_Data/buildingsData.json" };
 		// json data = json::parse(dataFile);
 		if (!dataFile) {
-			std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << ": Unable to read buildings data JSON file!\n";
+			std::string debugLog;
+			Debug::Print(debugLog + "Error " + __FILE__ + "ln" + std::to_string(__LINE__) + ": Unable to read buildings data JSON file!\n");
 		}
 
 		// BuildingData testBuilding{};

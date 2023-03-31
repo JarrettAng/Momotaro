@@ -4,6 +4,7 @@
 #include <ColorTable.h>
 #include <GridManager.h>
 #include <AudioManager.h>
+#include <DebugManager.h>
 
 namespace ScoreManager {
 	struct Level
@@ -130,7 +131,8 @@ namespace ScoreManager {
 				return l;
 			}
 		}
-		std::cout << "GETTING OUT OF BOUND LEVEL, RETURNED EMPTY LEVEL DATA.";
+
+		Debug::Print("GETTING OUT OF BOUND LEVEL, RETURNED EMPTY LEVEL DATA.\n");
 		return Level{};
 	}
 

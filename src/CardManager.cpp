@@ -384,9 +384,6 @@ namespace CardManager {
 			selectedCard = nullptr;
 			onNewCardSelected.Invoke(nullptr); // Invoke the card deselected event
 		}
-		// if(spawnMergeBuilding && hand.empty()){
-		// 	std::cout << "hand empty\n";
-		// }
 	}
 
 	// Removes the selected card from the hand then updates the positions of the remaining cards

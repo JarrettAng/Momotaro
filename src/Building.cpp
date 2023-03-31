@@ -16,6 +16,7 @@ The functions include:
 #include <Building.h>
 #include <algorithm>
 #include <GridManager.h>
+#include <DebugManager.h>
 ///////////////////////////////////////////////////////////////////////////
 // Constructors
 Building::Building() : data{} { }		// Empty by design
@@ -55,6 +56,7 @@ Building::Building(
 ///////////////////////////////////////////////////////////////////////////
 // Updates the building level and updates its texture
 void Building::LevelUp() {
+	std::string debugLog;
 	switch (data.level) {
 	case BuildingEnum::L1:
 		data.level = BuildingEnum::L2;
@@ -65,7 +67,7 @@ void Building::LevelUp() {
 		data.TextureID++;
 		break;
 	case BuildingEnum::L3:
-		std::cerr << "Error " <<__FILE__ << "ln" << __LINE__ << " : Building cannot be leveled up anymore!\n";
+		Debug::Print(debugLog + "Error " + __FILE__ + "ln" + std::to_string(__LINE__) + " : Building cannot be leveled up anymore!\n");
 		break;
 	default:
 		break;
@@ -75,8 +77,6 @@ void Building::LevelUp() {
 // Checks if the cell exists within the given vector
 bool Building::HasCellInVector(std::vector<Vec2<int>> vectorToCheck,Vec2<int> cell) {
 	for(Vec2<int> _cell : vectorToCheck) {
-	std::cout << "_Cell : " << _cell << ", Cell to check : " << cell << '\n';
-	std::cout << "result : "  << std::noboolalpha << (_cell == cell) <<'\n';
 		if (_cell == cell) return true;
 	}
 	return false;
@@ -85,7 +85,10 @@ bool Building::HasCellInVector(std::vector<Vec2<int>> vectorToCheck,Vec2<int> ce
 // Get the synergy of the surrounding cells and stores it inside the building
 void Building::GetSynergyArea() {
 	//Check that the building cells are NOT null!
-	if(buildingCells.empty()) std::cerr << "Error " <<__FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n" ;
+	if (buildingCells.empty()) {
+		std::string debugLog;
+		Debug::Print(debugLog + "Error " + __FILE__ + "ln" + std::to_string(__LINE__) + " : NO BUILDING CELLS TO GET AREA!\n");
+	}
 
 	//First we get all the building cells
 	std::vector<Vec2<int>> tempVec;
@@ -106,11 +109,6 @@ void Building::GetSynergyArea() {
 
 	auto last = std::unique(tempVec.begin(),tempVec.end());
 	tempVec.erase(last,tempVec.end());
-	synergyAreaCells = tempVec;
-
-	for(Vec2<int>cell : synergyAreaCells){
-		std::cout << "SYNERGY AREA : " << cell << '\n';
-	}
 }
 
 ///////////////////////////////////////////////////////////////////
