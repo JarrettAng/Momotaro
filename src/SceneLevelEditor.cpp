@@ -102,6 +102,7 @@ void SceneLevelEditor::Update() {
 	GridManager::UpdateMouseToGrid();
 	PauseManager::Update();
 	AudioManager::Update();
+	TextureManager::Update();
 }
 
 void SceneLevelEditor::Draw() {

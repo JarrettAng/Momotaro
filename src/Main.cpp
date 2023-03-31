@@ -41,6 +41,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// Manager Initialization
 	FontManager::Initialize();
 	TextureManager::Initialize();
+	Debug::Initialize();
 
 	SceneManager::Initialize(SceneManager::SPLASHSCREEN);				// Game Loop happens in SceneManager
 
@@ -48,6 +49,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// Free the things that were initialized here
 	TextureManager::Unload();
 	FontManager::Unload();
+	Debug::Free();
 
 	// Engine Exit
 	AESysExit();

@@ -38,6 +38,8 @@ void SceneGameLevel::Load() {
 
 void SceneGameLevel::Initialize() {
 	ScoreManager::Initialize();
+	ScoreManager::ToggleShowHighScore(true);
+
 	GridManager::Initialize(mapToLoad);
 	PauseManager::Initialize();
 	CardManager::Initialize();

@@ -17,6 +17,7 @@ The functions include:
 #include <SceneManager.h>
 #include <InputManager.h>
 #include <PauseManager.h>
+#include <DebugManager.h>
 
 #include <SceneSplashscreen.h>
 #include <SceneMainMenu.h>
@@ -44,7 +45,6 @@ namespace SceneManager {
 
 	///////////////////////////////////////////////////////////////////////
 	// Forward Declarations
-	void UpdatePausedState(bool newPausedState);
 	void SceneManagerLoop();
 	void SwitchScene();
 	///////////////////////////////////////////////////////////////////////
@@ -103,6 +103,7 @@ namespace SceneManager {
 
 				currentScene->Update();
 
+				Debug::ShowDebugStatus();
 				currentScene->Draw();
 
 				AESysFrameEnd();
