@@ -138,7 +138,7 @@ namespace FileIOManager {
 				const GridManager::cell* _temp = (GridManager::GetGrid() + GridManager::GetIndex(Vec2<int>{x, y}));
 				if(_temp->isRenderable){
 				//We have to increment the ID by 1 to represent that it is renderable.
-					mapFile << _temp->ID+1;
+					mapFile << (_temp->ID+1);
 					if(_temp->ID>0){
 						mapFile << "," << (int)(_temp->_building.data.type);	//[0,4]
 						mapFile << "," << (int)(_temp->_building.data.level);	//[0,2]

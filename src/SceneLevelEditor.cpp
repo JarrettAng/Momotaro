@@ -115,6 +115,7 @@ void SceneLevelEditor::Draw() {
 }
 
 void SceneLevelEditor::Free() {
+	FileIOManager::SaveGridToFile(selectedMapFilePath);
 	GridManager::Free();
 
 	// Map switching
@@ -131,7 +132,6 @@ void SceneLevelEditor::Free() {
 }
 
 void SceneLevelEditor::Unload() {
-	FileIOManager::SaveGridToFile(selectedMapFilePath);
 	BuildingManager::Clear();
 }
 
