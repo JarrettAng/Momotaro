@@ -87,9 +87,12 @@ namespace CardManager {
 	///////////////////////////////////////////////////////////////////////
 	
 	void Initialize();
+	void Initialize(std::vector<BuildingData> const& startingHand);
 	void Update();
 
 	void PrepareUIRenderBatch(); // Sends the information of everything to rendersystem for rendering
+
+	std::vector<Card> const& GetCurrentHand();
 
 	void DrawCard(BuildingEnum::TYPE type, BuildingEnum::LEVEL level);
 

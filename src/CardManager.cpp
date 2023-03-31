@@ -162,7 +162,20 @@ namespace CardManager {
 	void ToggleClickableOff();
 	///////////////////////////////////////////////////////////////////////
 	// Set up the hand properly at the start of the level
+
+	// By default game will start with 5 cards (3 house, 1 shop, 1 factory)
 	void Initialize() {
+		std::vector<BuildingData> baseStartingHand;
+		baseStartingHand.push_back(BuildingManager::GetBuildingData(BuildingEnum::RESIDENTIAL, Vec2<int>{ 1, 1 }, BuildingEnum::L1));
+		baseStartingHand.push_back(BuildingManager::GetBuildingData(BuildingEnum::RESIDENTIAL, Vec2<int>{ 1, 1 }, BuildingEnum::L1));
+		baseStartingHand.push_back(BuildingManager::GetBuildingData(BuildingEnum::RESIDENTIAL, Vec2<int>{ 1, 1 }, BuildingEnum::L1));
+		baseStartingHand.push_back(BuildingManager::GetBuildingData(BuildingEnum::COMMERCIAL, Vec2<int>{ 1, 1 }, BuildingEnum::L1));
+		baseStartingHand.push_back(BuildingManager::GetBuildingData(BuildingEnum::INDUSTRIAL, Vec2<int>{ 1, 1 }, BuildingEnum::L1));
+		Initialize(baseStartingHand);
+	}
+
+	// Start game with a custom starting hand
+	void Initialize(std::vector<BuildingData> const& startingHand) {
 		selectedCard = nullptr;								// Deselect held card, if any
 
 		handBackground.size.x = (float)AEGfxGetWinMaxX();			// The width of the hand BG default to half the screen width
@@ -181,13 +194,11 @@ namespace CardManager {
 		cardInfoBox = InfoBox();
 		hoverTimeElapsed = 0.0f; // Reset the elapsed time to zero
 
-		// Fill hand with 5 starting cards
+		// Fill starting hand 
 		hand.reserve(32);										// Reserve enough space for 32 seperate cards to prevent shifting
-		DrawCard(BuildingEnum::RESIDENTIAL, BuildingEnum::L1);	// Start the hand with 3 residential, 1 commerical, and 1 industrial
-		DrawCard(BuildingEnum::RESIDENTIAL, BuildingEnum::L1);
-		DrawCard(BuildingEnum::RESIDENTIAL, BuildingEnum::L1);
-		DrawCard(BuildingEnum::COMMERCIAL, BuildingEnum::L1);
-		DrawCard(BuildingEnum::INDUSTRIAL, BuildingEnum::L1);
+		for (BuildingData const& card : startingHand) {
+			AddToHand(card);
+		}
 
 		InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleClick);
 		ScoreManager::onLevelChange.Subscribe(GiveCardOnThreshold);
@@ -273,6 +284,10 @@ namespace CardManager {
 
 	///////////////////////////////////////////////////////////////////////
 	// Player hand & cards functions
+
+	std::vector<Card> const& GetCurrentHand() {
+		return hand;
+	}
 
 	// Everytime the player reaches the next threshold, give 4 random L1 cards
 	void GiveCardOnThreshold() {
