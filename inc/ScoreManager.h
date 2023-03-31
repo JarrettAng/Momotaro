@@ -13,5 +13,6 @@ namespace ScoreManager {
 	void Free();
 	void Draw();
 	int GetHighScore();
+	void SetHighScore(int _score);
 	void AddScore(int modifier);
 }

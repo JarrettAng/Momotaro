@@ -156,6 +156,7 @@
     <ClInclude Include="inc\GameOverManager.h">
       <Filter>inc\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -229,5 +230,12 @@
     <Media Include="Assets\Audio\ThresholdUp.wav">
       <Filter>Audio</Filter>
     </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Textures\UI\momo.ico" />
+    <Image Include="icon1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CityBuilder.rc" />
   </ItemGroup>
 </Project>

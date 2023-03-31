@@ -64,6 +64,7 @@
     <ClInclude Include="inc\ScoreManager.h" />
     <ClInclude Include="inc\TextureManager.h" />
     <ClInclude Include="inc\UIManager.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="Assets\Audio\GameLevel2.wav" />
@@ -78,6 +79,13 @@
     <Media Include="Assets\Audio\PointGain.wav" />
     <Media Include="Assets\Audio\ThresholdClear.wav" />
     <Media Include="Assets\Audio\ThresholdUp.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Textures\UI\momo.ico" />
+    <Image Include="icon1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CityBuilder.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

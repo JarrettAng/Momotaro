@@ -44,6 +44,9 @@ namespace ScoreManager {
 	int GetHighScore() {
 		return max(score,lastHighScore);
 	}
+	void SetHighScore(int _score){
+		lastHighScore = max(_score,lastHighScore);
+	}
 
 	void AddScore(int modifier) {
 		score += modifier;
@@ -99,7 +102,7 @@ namespace ScoreManager {
 		//////////////////////////////////////////////////////////////////////////////////////
 		// HIGH SCORE TEXT
 		//////////////////////////////////////////////////////////////////////////////////////
-		highscore = "HIGHSCORE : " + std::to_string(lastHighScore);
+		highscore = "HIGHSCORE : " + std::to_string(GetHighScore());
 		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.95f, -0.65f, FontManager::GetFont(FontManager::SHIN_GO),40,highscore,1,COLOR_BLACK);
 		background.size.x = (float)(highscore.size()*40.f);
 		background.size.y = 50.f;

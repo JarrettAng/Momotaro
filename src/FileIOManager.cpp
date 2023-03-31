@@ -153,11 +153,30 @@ namespace FileIOManager {
 		}
 		mapFile.close();
 	}
-
+	void ConvertMapFile(){
+		std::ifstream inputFile("Assets/JSON_Data/Maps/tutorial2.momomaps");
+		std::ofstream outputFile("Assets/JSON_Data/Maps/tutorial_2.momomaps");
+		std::string buffer;
+		int id{1};
+		while(std::getline(inputFile,buffer)){
+			for(int i{0}; i< (int)(buffer.length()); ++i){
+				if(buffer[i] == '2'){
+					outputFile << ++id << ',';
+					outputFile << (int)(BuildingEnum::NATURE) << ',';
+					outputFile << (int)(BuildingEnum::L1) << ' ';
+				} else outputFile << buffer[i];
+				if(i == buffer.length()-1) outputFile << '\n';
+			}
+		}
+		inputFile.close();
+		outputFile.close();
+		// std::ofstream outputFile(fileName);
+	}
 	///////////////////////////////////////////////////////////////////////////
 	//Loads a map from the specified filename (used in gridmanager)
 	GM::cell* LoadGridFromFile(std::string fileName)
 	{
+		// ConvertMapFile();
 		GM::cell* newMap{};
 		std::fstream inputFile(fileName);
 		if (!inputFile.is_open()) {
@@ -172,7 +191,6 @@ namespace FileIOManager {
 			int xIndex = 0;	//Since each line has a spacing, we only want to count the xIndex when we get a number
 			//First we loop through each line and grab the numbers
 			for (int i{ 0 }; i < static_cast<int>(buffer.length()); ++i) {
-				// if(lineCount == 3) std::cout <<buffer << '\n';
 				if (isdigit(buffer[i]))
 				{
 					//The first 2 lines will be the width and the height
@@ -184,6 +202,8 @@ namespace FileIOManager {
 							newMap = { new GM::cell[GM::gridX * GM::gridY]{} };
 						}
 					}
+					if(lineCount == 2) ScoreManager::SetHighScore(std::stoi(&buffer[i]));
+					
 					//Once the line count exceeds 3, meaning we already have the width&height, we can start to add to array
 					if (lineCount > 3) {
 						//If the value in the mapdata is NOT 1, it shall be treated as a 0 (which means it's renderable)
@@ -201,6 +221,7 @@ namespace FileIOManager {
 								switch((BuildingEnum::TYPE)(std::stoi(&buffer[i+=1]))){
 									case BuildingEnum::NATURE:
 									newMap[GM::GetIndex(xIndex, lineCount - 4)] = GM::NatureCell();
+									i+=2;
 									break;
 									default:
 									newMap[GM::GetIndex(xIndex, lineCount - 4)]._building.data =
