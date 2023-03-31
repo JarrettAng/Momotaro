@@ -11,6 +11,7 @@ This source file declares
 **************************************************************************/
 
 #include <FontManager.h>
+#include <DebugManager.h>
 
 namespace FontManager {
 	void InitializeFont();
@@ -50,7 +51,8 @@ namespace FontManager {
 			}
 		}
 		// Default font.
-		std::cerr << "Error : " << __FILE__ << " ln" << __LINE__ << " Font type invalid, returning font type roboto." << std::endl;
+		std::string debugLog;
+		Debug::Print(debugLog + "Error : " + __FILE__ + " ln" + std::to_string(__LINE__) + " Font type invalid, returning font type roboto.\n");
 		return roboto.font;
 	}
 

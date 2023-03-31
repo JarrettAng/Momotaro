@@ -15,6 +15,8 @@ The functions include:
 ///////////////////////////////////////////////////////////////////////////
 #pragma once
 
+#include <string>
+
 namespace Debug {
 	void Initialize();
 	void Free();

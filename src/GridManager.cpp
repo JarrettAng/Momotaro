@@ -27,6 +27,7 @@ The functions include:
 #include <ScoreManager.h>
 #include <AudioManager.h>
 #include <FileIOManager.h>
+#include <DebugManager.h>
 namespace GridManager {
 	///////////////////////////////////////////////////////////////////////////
 	//GRID CONSTANTS
@@ -113,9 +114,8 @@ namespace GridManager {
 		if(PauseManager::IsPaused()) return;
 		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		if (!isCellSafe(SelectedCell)) {
-			#if DEBUG
-			std::cout << "Debug " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
-			#endif
+			std::string debugLog("Debug ");
+			Debug::Print(debugLog + __FILE__ + "ln" + std::to_string(__LINE__) + ": Invalid position!\n");
 			return;
 		}
 		AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_GAINPOINT);
@@ -596,7 +596,9 @@ namespace GridManager {
 		case BuildingEnum::NATURE:
 			return _data.SynergyNature;
 		}
-		std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << " : UNABLE TO GET SYNERGY POINTS!\n";
+		
+		std::string debugLog;
+		Debug::Print(debugLog + "Error " + __FILE__ + "ln" + std::to_string(__LINE__) + " : UNABLE TO GET SYNERGY POINTS!\n");
 		// assert(0);
 		return 0;
 	}
@@ -727,21 +729,6 @@ namespace GridManager {
 			//then we recurse and check again till no matches
 			CheckCellNeighbor(_grid, cellIndex);
 		}
-		//NORTH
-#if DEBUG
-// std::cout << "Index : " << cellIndex.x << ", " << cellIndex.y << '\n';
-// std::cout << "Selected : " << grid[gridIndex]._building.data.type << '\n';
-// std::cout << "North : " << grid[NorthIndex]._building.data.type << '\n';
-// std::cout << "East : " << grid[EastIndex]._building.data.type << '\n';
-// std::cout << "South : " << grid[SouthIndex]._building.data.type << '\n';
-// std::cout << "West : " << grid[WestIndex]._building.data.type << '\n';
-
-		std::cout << "Is N true? : " << (grid[NorthIndex].ID != 0 && grid[NorthIndex]._building == grid[gridIndex]._building && grid[NorthIndex].ID != grid[gridIndex].ID) << '\n';
-		std::cout << "Is E true? : " << (grid[EastIndex].ID != 0 && grid[EastIndex]._building == grid[gridIndex]._building && grid[EastIndex].ID != grid[gridIndex].ID) << '\n';
-		std::cout << "Is S true? : " << (grid[SouthIndex].ID != 0 && grid[SouthIndex]._building == grid[gridIndex]._building && grid[SouthIndex].ID != grid[gridIndex].ID) << '\n';
-		std::cout << "Is W true? : " << (grid[WestIndex].ID != 0 && grid[WestIndex]._building == grid[gridIndex]._building && grid[WestIndex].ID != grid[gridIndex].ID) << '\n';
-#endif
-
 	}
 
 
@@ -796,7 +783,9 @@ namespace GridManager {
 		for (int i{ 0 }; i < (gridX * gridY); ++i) {
 			if (grid[i].ID == ID) return i;
 		}
-		std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << ": UNABLE TO FIND INDEX FROM ID!\n";
+
+		std::string debugLog;
+		Debug::Print(debugLog + "Error " + __FILE__ + "ln" + std::to_string(__LINE__) + " : UNABLE TO FIND INDEX FROM ID!\n");
 		return 0;
 	}
 

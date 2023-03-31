@@ -10,7 +10,8 @@ This source file declares
 
 **************************************************************************/
 
-#include<RenderSystem.h>
+#include <RenderSystem.h>
+#include <DebugManager.h>
 
 namespace RenderSystem {
 
@@ -361,7 +362,8 @@ namespace RenderSystem {
 		default:
 			break;
 		}
-		std::cerr << "Error : " << __FILE__ << " ln" << __LINE__ << " UNABLE TO GET PIVOT POS" << std::endl;
+
+		Debug::Print("Error " + std::to_string(__LINE__) + " UNABLE TO GET PIVOT POS\n");
 		return pos;
 	}
 }

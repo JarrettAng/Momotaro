@@ -12,6 +12,7 @@ This source file declares
 
 #include <InputManager.h>
 #include <AudioManager.h>
+#include <DebugManager.h>
 
 namespace InputManager {
 	struct KeyEvent {
@@ -92,7 +93,7 @@ namespace InputManager {
 					k.second.onKeyDoubleClick.Subscribe(func);
 					return;
 				default:
-					std::cerr << "Error : " << __FILE__ << " ln" << __LINE__ << " KEY_EVENT_TYPE invalid!" << std::endl;
+					Debug::Print("Error " + std::to_string(__LINE__) + " KEY_EVENT_TYPE invalid!\n");
 					return;
 				}
 			}
@@ -116,7 +117,7 @@ namespace InputManager {
 			newKey.second.onKeyDoubleClick.Subscribe(func);
 			break;
 		default:
-			std::cerr << "Error : " << __FILE__ << " ln" << __LINE__ << " KEY_EVENT_TYPE invalid!" << std::endl;
+			Debug::Print("Error " + std::to_string(__LINE__) + " KEY_EVENT_TYPE invalid!\n");
 			return;
 		}
 		// Add new key to deque.
@@ -142,11 +143,11 @@ namespace InputManager {
 				k.second.onKeyDoubleClick.Unsubscribe(func);
 				return;
 			default:
-				std::cerr << "Error : " << __FILE__ << " ln" << __LINE__ << " KEY_EVENT_TYPE invalid!" << std::endl;
+				Debug::Print("Error " + std::to_string(__LINE__) + " KEY_EVENT_TYPE invalid!\n");
 				return;
 			}
 		}
-		std::cerr << "Error : " << __FILE__ << " ln" << __LINE__ << " KEY NOT FOUND IN DEQUE." << std::endl;
+		Debug::Print("Error " + std::to_string(__LINE__) + " KEY NOT FOUND IN DEQUE.\n");
 	}
 
 	void Initialize() {

@@ -18,6 +18,7 @@ The functions include:
 
 #include <FileIOManager.h>
 #include <BuildingManager.h>
+#include <DebugManager.h>
 
 #include <iostream>
 ///////////////////////////////////////////////////////////////////////////
@@ -45,7 +46,8 @@ namespace BuildingManager {
 			}
 		}
 		// Error warning
-		std::cerr << "Error : " << __FILE__ << " ln" << __LINE__ << " TRIED TO GET INVALID BUILDING DATA OF TYPE " << type << ", SIZE " << size << ", LEVEL " << level << std::endl;
+		std::string debugLog;
+		Debug::Print(debugLog + "Error " + __FILE__ + "ln" + std::to_string(__LINE__) + " TRIED TO GET INVALID BUILDING DATA OF TYPE " + std::to_string(type) + ", SIZE " + std::to_string(size.x) + std::to_string(size.y) + ", LEVEL " + std::to_string(level) + "\n");
 
 		return buildingsData[0];
 	}
@@ -63,7 +65,8 @@ namespace BuildingManager {
 			}
 		}
 		// Error warning
-		std::cerr << "Error : " << __FILE__ << " ln" << __LINE__ << " TRIED TO GET (RANDOM) INVALID BUILDING DATA OF TYPE " << type << ", SIZE " << randSize << ", LEVEL " << randLevel << std::endl;
+		std::string debugLog;
+		Debug::Print(debugLog + "Error " + __FILE__ + "ln" + std::to_string(__LINE__) + " TRIED TO GET (RANDOM) INVALID BUILDING DATA OF TYPE " + std::to_string(type) + ", SIZE " + std::to_string(randSize.x) + std::to_string(randSize.y) + ", LEVEL " + std::to_string(randLevel) + "\n");
 
 		return buildingsData[0];
 	}
@@ -80,7 +83,8 @@ namespace BuildingManager {
 			}
 		}
 		// Error warning
-		std::cerr << "Error : " << __FILE__ << " ln" << __LINE__ << " TRIED TO GET (RANDOM) INVALID BUILDING DATA OF TYPE " << randType << ", SIZE " << randSize << ", LEVEL " << level << std::endl;
+		std::string debugLog;
+		Debug::Print(debugLog + "Error " + __FILE__ + "ln" + std::to_string(__LINE__) + " TRIED TO GET (RANDOM) INVALID BUILDING DATA OF TYPE " + std::to_string(randType) + ", SIZE " + std::to_string(randSize.x) + std::to_string(randSize.y) + ", LEVEL " + std::to_string(level) + "\n");
 
 		return buildingsData[0];
 	}
@@ -97,8 +101,9 @@ namespace BuildingManager {
 				return building;
 			}
 		}
-		// TODO: Error check
-		std::cerr << "Error : " << __FILE__ << " ln" << __LINE__ << " TRIED TO GET (RANDOM) INVALID BUILDING DATA OF TYPE " << randType << ", SIZE " << randSize << ", LEVEL " << randLevel << std::endl;
+		// Error warning
+		std::string debugLog;
+		Debug::Print(debugLog + "Error " + __FILE__ + "ln" + std::to_string(__LINE__) + " TRIED TO GET (RANDOM) INVALID BUILDING DATA OF TYPE " + std::to_string(randType) + ", SIZE " + std::to_string(randSize.x) + std::to_string(randSize.y) + ", LEVEL " + std::to_string(randLevel) + "\n");
 
 		return buildingsData[0];
 	}
