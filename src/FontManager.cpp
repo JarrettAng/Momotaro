@@ -6,26 +6,32 @@
 \par Software Engineering Project
 \date 18-02-2023
 \brief
-This source file declares
-
+This source file initializes and store fonts in the game.
 **************************************************************************/
 
 #include <FontManager.h>
 #include <DebugManager.h>
 
 namespace FontManager {
+	/*!***********************************************************************
+	* Forward Declarations.
+	*************************************************************************/
 	void InitializeFont();
 
 	/*!***********************************************************************
-	* FONTS
+	* Fonts
 	*************************************************************************/
 	FONT roboto;
 	FONT shin_go;
 
-	// Stores fonts.
 	std::vector<FONT> fonts;
 
+	/*!***********************************************************************
+	\brief
+		Initialize font manager.
+	*************************************************************************/
 	void FontManager::Initialize() {
+		// Initialize fonts.
 		InitializeFont();
 	}
 

@@ -6,8 +6,7 @@
 \par Software Engineering Project
 \date 22-03-2023
 \brief
-This source file declares
-
+This source file handles the pause state of the game.
 **************************************************************************/
 
 #include <PauseManager.h>
@@ -15,8 +14,14 @@ This source file declares
 #include <SceneGameLevel.h>
 #include <CardManager.h>
 namespace PauseManager {
+	/*!***********************************************************************
+	* Const variables.
+	*************************************************************************/
 	const Vec2<float> POINTER_OFFSET = { 80.0f, 10.0f };
-
+	
+	/*!***********************************************************************
+	* UI.
+	*************************************************************************/
 	RenderSystem::Interactable pauseBtn{};
 	RenderSystem::Interactable restartBtn{};
 	RenderSystem::Interactable continueBtn{};
@@ -29,11 +34,16 @@ namespace PauseManager {
 
 	std::vector<RenderSystem::Interactable> buttons;
 
-	bool isPaused;
-	bool showQuitConfirm;
-	bool showRestartConfirm;
-	// bool showRestartButton;
-#pragma region Forward Delcarations
+	/*!***********************************************************************
+	* Variables.
+	*************************************************************************/
+	bool isPaused;			// Is the game currently paused?
+	bool showQuitConfirm;	// Is the confirm quit prompt shown?
+	bool showRestartConfirm;// Is the confirm restart prompt shown?
+
+	/*!***********************************************************************
+	* Forward Declaration.
+	*************************************************************************/
 	void InitializePauseUI();
 	void DrawPauseUI();
 	void TogglePause();
@@ -43,24 +53,31 @@ namespace PauseManager {
 	void HandlePauseUIClick();
 	void LoadMainMenu();
 	void HandleBtnHover();
-#pragma endregion
-
-	bool IsPaused()
-	{
-		return isPaused || showRestartConfirm;
-	}
-
+	bool IsPaused() { return isPaused || showRestartConfirm; }
+	
+	/*!***********************************************************************
+	\brief
+		Initialize PauseManager.
+	*************************************************************************/
 	void Initialize()
 	{
+		// Reset.
 		isPaused = false;
 		showQuitConfirm = false;
 		showRestartConfirm = false;
+
+		// Initialize UI.
 		InitializePauseUI();
 
+		// Subscribe to key events.
 		InputManager::SubscribeToKey(AEVK_ESCAPE, InputManager::TRIGGERED, TogglePause);
 		InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandlePauseUIClick);
 	}
 
+	/*!***********************************************************************
+	\brief
+		Initialize UI.
+	*************************************************************************/
 	void InitializePauseUI() {
 		// PAUSE BUTTON.
 		pauseBtn.render.rect.graphics.tex = TextureManager::PAUSE_BUTTON;
@@ -75,7 +92,6 @@ namespace PauseManager {
 
 		buttons.push_back(pauseBtn);
 
-
 		//RESTART BUTTON.
 		restartBtn.render.rect.graphics.tex = TextureManager::RESTART_BUTTON;
 		restartBtn.func = ToggleRestartConfirm;
@@ -88,7 +104,6 @@ namespace PauseManager {
 		restartBtn.render.rect.transform.cachedSize = restartBtn.render.rect.transform.size;
 
 		buttons.push_back(restartBtn);
-
 
 		// PAUSE PROMPT.
 		pausePrompt.rect.graphics.tex = TextureManager::PAUSE_WINDOW;
@@ -171,15 +186,29 @@ namespace PauseManager {
 		buttons.push_back(exitBtn);
 	}
 
+	/*!***********************************************************************
+	\brief
+		Update PauseManager.
+	*************************************************************************/
 	void PauseManager::Update() {
 		return;
 	}
 
+	/*!***********************************************************************
+	\brief
+		Draw the PauseManager.
+	*************************************************************************/
 	void PauseManager::Draw() {
+		// Draw visual feedback.
 		HandleBtnHover();
+		// Draw UI.
 		DrawPauseUI();
 	}
 
+	/*!***********************************************************************
+	\brief
+		Handle visual feedback of buttons.
+	*************************************************************************/
 	void HandleBtnHover() {
 		// Cache mouse position.
 		Vec2<int> mousePos = InputManager::GetMousePos();
@@ -212,6 +241,10 @@ namespace PauseManager {
 		}
 	}
 
+	/*!***********************************************************************
+	\brief
+		Draw UI.
+	*************************************************************************/
 	void DrawPauseUI() {
 		// Draw pause prompt.
 		if (IsPaused()) {
@@ -235,15 +268,26 @@ namespace PauseManager {
 			}
 		}
 	}
-	void ToggleShowRestart(bool _bool){
+
+	/*!***********************************************************************
+	\brief
+		Toggle restart button based on given bool.
+	\param state
+		True / false.
+	*************************************************************************/
+	void ToggleShowRestart(bool state){
 		for (RenderSystem::Interactable& i : buttons) {
 			if(i.render.rect.graphics.tex == TextureManager::RESTART_BUTTON){
-				i.isActive = _bool;
-				i.isClickable = _bool;
+				i.isActive = state;
+				i.isClickable = state;
 			}
 		}
 	}
 
+	/*!***********************************************************************
+	\brief
+		Load main menu scene.
+	*************************************************************************/
 	void LoadMainMenu() {
 		// Close prompts and reset active / clickability.
 		ToggleQuitConfirm();
@@ -255,6 +299,18 @@ namespace PauseManager {
 		SceneManager::LoadScene(SceneManager::MAIN_MENU);
 	}
 
+	/*!***********************************************************************
+	\brief
+		Restart game level.
+	*************************************************************************/
+	void RestartLevel() {
+		SceneManager::LoadScene(SceneManager::RESTART);
+	}
+
+	/*!***********************************************************************
+	\brief
+		Toggle pause UI.
+	*************************************************************************/
 	void TogglePause() {
 		isPaused = !isPaused;
 		CardManager::ToggleClickable(!isPaused);
@@ -268,6 +324,10 @@ namespace PauseManager {
 		}
 	}
 
+	/*!***********************************************************************
+	\brief
+		Toggle quit confirm UI.
+	*************************************************************************/
 	void ToggleQuitConfirm() {
 		// Toggle between quit confirm state.
 		showQuitConfirm = !showQuitConfirm;
@@ -289,6 +349,11 @@ namespace PauseManager {
 			}
 		}
 	}
+
+	/*!***********************************************************************
+	\brief
+		Toggle restart confirm UI.
+	*************************************************************************/
 	void ToggleRestartConfirm() {
 		// Toggle between quit confirm state.
 		showRestartConfirm = !showRestartConfirm;
@@ -313,16 +378,24 @@ namespace PauseManager {
 		}
 
 	}
-	void RestartLevel() {
-		SceneManager::LoadScene(SceneManager::RESTART);
-	}
+
+	/*!***********************************************************************
+	\brief
+		Free PauseManager.
+	*************************************************************************/
 	void Free() {
 		buttons.clear();
+		// Unsubscribe from keys.
 		InputManager::UnsubscribeKey(AEVK_ESCAPE, InputManager::TRIGGERED, TogglePause);
 		InputManager::UnsubscribeKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandlePauseUIClick);
 	}
 
+	/*!***********************************************************************
+	\brief
+		Handle player click on buttons.
+	*************************************************************************/
 	void HandlePauseUIClick() {
+		// Cache mouse position.
 		Vec2<int> mousePos = InputManager::GetMousePos();
 
 		// Convert to world space position.

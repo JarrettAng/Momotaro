@@ -6,8 +6,7 @@
 \par Software Engineering Project
 \date 15-02-2023
 \brief
-This source file declares
-
+This source file handles the input of the player.
 **************************************************************************/
 
 #include <InputManager.h>
@@ -15,6 +14,10 @@ This source file declares
 #include <DebugManager.h>
 
 namespace InputManager {
+	/*!***********************************************************************
+	\brief
+		Contains the events of a key.
+	*************************************************************************/
 	struct KeyEvent {
 		u32 clickTime{};	// Frame time this key was triggered.
 		EventSystem::Event<void> onKeyTriggered;
@@ -23,6 +26,10 @@ namespace InputManager {
 		EventSystem::Event<void> onKeyDoubleClick;
 	};
 
+	/*!***********************************************************************
+	* CONST VARIABLES
+	*************************************************************************/
+	const int DOUBLE_CLICK_TIME = 20;	// Amount of frames between clicks triggered to be counted as double clicking.
 
 	/*!***********************************************************************
 	* FORWARD DECLARATIONS
@@ -30,10 +37,6 @@ namespace InputManager {
 	void TryToDrag();
 	void StopDragging();
 	void HandleKeyEvents();
-	/*!***********************************************************************
-	* CONST VARIABLES
-	*************************************************************************/
-	const int DOUBLE_CLICK_TIME = 20;	// Amount of frames between clicks triggered to be counted as double clicking.
 
 	/*!***********************************************************************
 	* MOUSE RELATED VARIABLES
@@ -44,17 +47,23 @@ namespace InputManager {
 
 	std::deque<std::pair<u8, KeyEvent>> keys;
 
-	// Loop through all keys and invoke any events if needed.
+	/*!***********************************************************************
+	\brief
+		Loop through all keys and invoke any events if needed.
+	*************************************************************************/
 	void HandleKeyEvents() {
 		for (auto& k : keys) {
 			// Key triggered.
 			if (AEInputCheckTriggered(k.first)) {
-				k.second.onKeyTriggered.Invoke();
+				// Click sound.
 				AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_CLICK);
+				k.second.onKeyTriggered.Invoke();
+
 				// Check if player is double clicking based on time between key triggered.
 				if (AEFrameRateControllerGetFrameCount() - k.second.clickTime < DOUBLE_CLICK_TIME) {
 					k.second.onKeyDoubleClick.Invoke();
 				}
+
 				// Cache time when player clicked.
 				k.second.clickTime = AEFrameRateControllerGetFrameCount();
 				continue;
@@ -74,7 +83,16 @@ namespace InputManager {
 		}
 	}
 
-	// Subscribe func to key event.
+	/*!***********************************************************************
+	\brief
+		Subscribe func to key event.
+	\param key
+		Which key.
+	\param type
+		Type of key event to call function.
+	\param func
+		Callback function when key event is invoke.
+	*************************************************************************/
 	void SubscribeToKey(u8 key, KEY_EVENT_TYPE type, void (*func)()) {
 		for (auto& k : keys) {
 			// Subscribe to key event if key is found.
@@ -124,7 +142,16 @@ namespace InputManager {
 		keys.push_back(newKey);
 	}
 
-	// Unsubscribe func from key event.
+	/*!***********************************************************************
+	\brief
+		Unsubscribe func from key event.
+	\param key
+		Which key.
+	\param type
+		Type of key event to unsubscribe function.
+	\param func
+		Function to unsubscribe.
+	*************************************************************************/
 	void UnsubscribeKey(u8 key, KEY_EVENT_TYPE type, void (*func)()) {
 		for (auto& k : keys) {
 			if (k.first != key) continue;
@@ -150,12 +177,20 @@ namespace InputManager {
 		Debug::PrintError(__FILE__, __LINE__, "KEY NOT FOUND IN DEQUE.");
 	}
 
+	/*!***********************************************************************
+	\brief
+		Initialize InputManager.
+	*************************************************************************/
 	void Initialize() {
 		// Initialize dragging functionalities.
 		SubscribeToKey(AEVK_LBUTTON, PRESSED, TryToDrag);
 		SubscribeToKey(AEVK_LBUTTON, RELEASED, StopDragging);
 	}
 
+	/*!***********************************************************************
+	\brief
+		Update InputManager.
+	*************************************************************************/
 	void HandleInput() {
 		// Update mouse position.
 		AEInputGetCursorPosition(&mousePos.x, &mousePos.y);
@@ -165,10 +200,20 @@ namespace InputManager {
 		HandleKeyEvents();
 	}
 
+	/*!***********************************************************************
+	\brief
+		Check if the mouse has moved.
+	\return
+		True / false.
+	*************************************************************************/
 	bool HasMouseMoved() {
 		return (mousePosDelta.x != 0 && mousePosDelta.y != 0);
 	}
 
+	/*!***********************************************************************
+	\brief
+		Free InputManager.
+	*************************************************************************/
 	void Free() {
 		// Free all key events.
 		for (auto& k : keys) {
@@ -179,18 +224,40 @@ namespace InputManager {
 		}
 	}
 
+	/*!***********************************************************************
+	\brief
+		Get mouse delta position.
+	\return
+		Mouse delta position.
+	*************************************************************************/
 	Vec2<int> GetMousePosDelta() {
 		return mousePosDelta;
 	}
+
+	/*!***********************************************************************
+	\brief
+		Get mouse position.
+	\return
+		Mouse position.
+	*************************************************************************/
 	Vec2<int> GetMousePos() {
 		return mousePos;
 	}
 
-	// Read-only bool.
+	/*!***********************************************************************
+	\brief
+		Get whether if player is dragging.
+	\return
+		True / false.
+	*************************************************************************/
 	bool IsDragging() {
 		return isDragging;
 	}
 
+	/*!***********************************************************************
+	\brief
+		Check if player is dragging.
+	*************************************************************************/
 	void TryToDrag() {
 		// Check if player is trying to drag.
 		if (!isDragging && DragDetect(AESysGetWindowHandle(), POINT{ mousePos.x, mousePos.y })) {
@@ -198,8 +265,11 @@ namespace InputManager {
 		};
 	}
 
+	/*!***********************************************************************
+	\brief
+		Stop dragging.
+	*************************************************************************/
 	void StopDragging() {
 		if (isDragging) isDragging = false;
 	}
-
 }

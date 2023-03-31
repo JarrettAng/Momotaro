@@ -6,24 +6,32 @@
 \par Software Engineering Project
 \date 29-02-2023
 \brief
-This source file declares
-
+This source file handles the game over state of the game.
 **************************************************************************/
 #include <GameOverManager.h>
 
 namespace GameOverManager {
+	/*!***********************************************************************
+	* Const variables.
+	*************************************************************************/
 	const Vec2<float> POINTER_OFFSET = { 80.0f, 10.0f };
 
+	// Game over state of the game.
 	static bool GAME_OVER = false;
 
+	/*!***********************************************************************
+	* UI.
+	*************************************************************************/
 	RenderSystem::Interactable retryBtn;
 	RenderSystem::Interactable quitBtn;
-
+	
 	RenderSystem::Renderable gameOverDisplay;
 
 	std::vector<RenderSystem::Interactable> buttons;
 
-#pragma region Forward Delcarations
+	/*!***********************************************************************
+	* Forward Declarations.
+	*************************************************************************/
 	void Restart();
 	void LoadMainMenu();
 	void GameOver();
@@ -31,44 +39,81 @@ namespace GameOverManager {
 	void HandleBtnClick();
 	void DrawGameOverUI();
 	void InitializeGameOverUI();
-	//bool IsGameOver() { return GAME_OVER; }
-#pragma endregion
 
+	/*!***********************************************************************
+	\brief
+		Initialize the GameOverManager.
+	*************************************************************************/
 	void Initialize() {
+		// Initialize UI.
 		InitializeGameOverUI();
 
 		GAME_OVER = false;
 
+		// Subscribe to events to trigger game over.
 		GridManager::onBoardFull.Subscribe(GameOver);
 		CardManager::onHandEmpty.Subscribe(GameOver);
+
+		// Subscribe to key events.
 		InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleBtnClick);
 	}
 
+	/*!***********************************************************************
+	\brief
+		Update the GameOverManager.
+	*************************************************************************/
 	void Update() {
 		if (!GAME_OVER) return;
 	}
+
+	/*!***********************************************************************
+	\brief
+		Draw the GameOverManager.
+	*************************************************************************/
 	void Draw() {
 		if (!GAME_OVER) return;
 
+		// Draw visual feedback.
 		HandleBtnHover();
+		// Draw UI.
 		DrawGameOverUI();
 	}
+
+	/*!***********************************************************************
+	\brief
+		Free the GameOverManager.
+	*************************************************************************/
 	void Free() {
 		buttons.clear();
+		// Unsubscribe from events.
 		GridManager::onBoardFull.Unsubscribe(GameOver);
 		CardManager::onHandEmpty.Unsubscribe(GameOver);
 		InputManager::UnsubscribeKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleBtnClick);
 	}
 
+	/*!***********************************************************************
+	\brief
+		Check if it is game over.
+	\return
+		True / false.
+	*************************************************************************/
     bool IsGameOver() {
         return GAME_OVER;
     }
 
+	/*!***********************************************************************
+	\brief
+		Enable game over.
+	*************************************************************************/
     void GameOver() {
 		AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_GAMEOVER);
 		GAME_OVER = true;
 	}
 
+	/*!***********************************************************************
+	\brief
+		Initialize game over UI.
+	*************************************************************************/
 	void InitializeGameOverUI() {
 		// GAME OVER BACKGROUND
 		gameOverDisplay.rect.graphics.tex = TextureManager::GAMEOVER_BG;
@@ -109,6 +154,10 @@ namespace GameOverManager {
 		buttons.push_back(quitBtn);
 	}
 
+	/*!***********************************************************************
+	\brief
+		Handle visual feedback when button is hovered.
+	*************************************************************************/
 	void HandleBtnHover() {
 		// Cache mouse position.
 		Vec2<int> mousePos = InputManager::GetMousePos();
@@ -141,9 +190,14 @@ namespace GameOverManager {
 		}
 	}
 
+	/*!***********************************************************************
+	\brief
+		Handle player click on a button.
+	*************************************************************************/
 	void HandleBtnClick() {
 		if (!GAME_OVER) return;
 
+		// Cache mouse position.
 		Vec2<int> mousePos = InputManager::GetMousePos();
 
 		// Convert to world space position.
@@ -163,6 +217,10 @@ namespace GameOverManager {
 		}
 	}
 
+	/*!***********************************************************************
+	\brief
+		Draw game over UI.
+	*************************************************************************/
 	void DrawGameOverUI() {
 		// Draw game over background.
 		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, gameOverDisplay.rect.transform.pos.x, gameOverDisplay.rect.transform.pos.y, gameOverDisplay.rect.transform.size.x, gameOverDisplay.rect.transform.size.y, gameOverDisplay.rect.graphics.tex, gameOverDisplay.layer);
@@ -175,9 +233,18 @@ namespace GameOverManager {
 		}
 	}
 
+	/*!***********************************************************************
+	\brief
+		Restart scene.
+	*************************************************************************/
 	void Restart() {
 		SceneManager::LoadScene(SceneManager::RESTART);
 	}
+
+	/*!***********************************************************************
+	\brief
+		Back to main menu scene.
+	*************************************************************************/
 	void LoadMainMenu() {
 		SceneManager::LoadScene(SceneManager::MAIN_MENU);
 	}

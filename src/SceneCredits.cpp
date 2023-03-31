@@ -1,15 +1,12 @@
 /*!************************************************************************
-\file:          SceneCredits.cpp
-\author:
-\par DP email:
-\par Course:    CSD1171B
+\file SceneCredits.cpp
+\author Tan Jun Rong
+\par DP email: t.junrong@digipen.edu
+\par Course: CSD1171B
 \par Software Engineering Project
-\date:          09-03-2023
+\date 31-03-2023
 \brief
-
-
-The functions include:
--
+This source file handles credits scene of the game.
 **************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////
@@ -25,6 +22,9 @@ The functions include:
 #include <AudioManager.h>
 ///////////////////////////////////////////////////////////////////////////
 
+/*!***********************************************************************
+* Const variables.
+*************************************************************************/
 const float HEADER_FONT_SIZE = 60.0f;
 const float NAME_FONT_SIZE = 40.0f;
 
@@ -33,43 +33,73 @@ const float NAME_OFFSET = 50.0f;
 const float SECTION_OFFSET = 400.0f;
 
 const float SCROLL_SPEED_MULTIPLIER = 0.3f;
+
 /*!***********************************************************************
-* FORWARD DECLARATIONS
+* Forward Declaractions.
 *************************************************************************/
 void InitializeTexts();
 void InitializeCreditsUI();
+
 void DrawCredits();
 RenderSystem::Text GenerateHeader(std::string text);
 RenderSystem::Text GenerateName(std::string text);
 RenderSystem::Text GenerateText(std::string text, float fontSize, float offset);
+
 void HandleBackBtnClick();
 void HandleBackBtnHover();
 void ReturnToMenu();
 
+/*!***********************************************************************
+* UI.
+*************************************************************************/
 std::vector<RenderSystem::Text> creditTexts;
 
 RenderSystem::Interactable backBtn{};
 
+/*!***********************************************************************
+* Variables.
+*************************************************************************/
 float textWidth, textHeight;	// For caching text width and height to center the text.
 float currTextY{};				// Y position when initializing texts.
 
+/*!***********************************************************************
+\brief
+	Load SceneCredits.
+*************************************************************************/
 void SceneCredits::Load() {
 	return;
 }
 
+/*!***********************************************************************
+\brief
+	Initialize SceneCredits.
+*************************************************************************/
 void SceneCredits::Initialize() {
+	// Initialize credits name.
 	InitializeTexts();
+	// Initialize UI.
 	InitializeCreditsUI();
+	// Subscribe to key events.
 	InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleBackBtnClick);
+	// Play credit BGM.
 	AudioManager::PlayBGM(AudioManager::ClipName::BGM_CREDITS);
 }
 
+/*!***********************************************************************
+\brief
+	Update SceneCredits.
+*************************************************************************/
 void SceneCredits::Update() {
 	// Check for button presses.
 	InputManager::HandleInput();
+	// Update AudioManager to play credit BGM.
 	AudioManager::Update();
 }
 
+/*!***********************************************************************
+\brief
+	Draw SceneCredits.
+*************************************************************************/
 void SceneCredits::Draw() {
 	// Draw background to fit to screen.
 	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, AEGfxGetWinMinX(), -AEGfxGetWinMinY(), (float)AEGetWindowWidth(), (float)AEGetWindowHeight(), TextureManager::CREDITS_BG, -1);
@@ -77,22 +107,38 @@ void SceneCredits::Draw() {
 	// Draw back button.
 	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, backBtn.render.rect.transform.pos.x, backBtn.render.rect.transform.pos.y, backBtn.render.rect.transform.size.x, backBtn.render.rect.transform.size.y, TextureManager::BACK_BTN);
 
+	// Draw credit names.
 	DrawCredits();
+
+	// Visual feedback for back btn.
 	HandleBackBtnHover();
 
+	// Render all graphics.
 	RenderSystem::Render();
 }
 
+/*!***********************************************************************
+\brief
+	Free SceneCredits.
+*************************************************************************/
 void SceneCredits::Free() {
 	creditTexts.clear();
 	InputManager::Free();
 	RenderSystem::Free();
 }
 
+/*!***********************************************************************
+\brief
+	Unload SceneCredits.
+*************************************************************************/
 void SceneCredits::Unload() {
 	return;
 }
 
+/*!***********************************************************************
+\brief
+	Draw all the names in credits.
+*************************************************************************/
 void DrawCredits() {
 	for (RenderSystem::Text& t : creditTexts) {
 		// Scroll the text up.
@@ -109,6 +155,10 @@ void DrawCredits() {
 	}
 }
 
+/*!***********************************************************************
+\brief
+	Visual feedback when player hover over the button.
+*************************************************************************/
 void HandleBackBtnHover() {
 	// Cache mouse position.
 	Vec2<int> mousePos = InputManager::GetMousePos();
@@ -128,6 +178,10 @@ void HandleBackBtnHover() {
 	}
 }
 
+/*!***********************************************************************
+\brief
+	Go back to main menu if player clicked on back btn.
+*************************************************************************/
 void HandleBackBtnClick() {
 	// Cache mouse position.
 	Vec2<int> mousePos = InputManager::GetMousePos();
@@ -142,6 +196,10 @@ void HandleBackBtnClick() {
 	}
 }
 
+/*!***********************************************************************
+\brief
+	Initialize all credit text.
+*************************************************************************/
 void InitializeTexts() {
 	currTextY = -1;	// -1 is the bottom of the screen when drawing text. So start drawing below the screen.
 
@@ -208,33 +266,68 @@ void InitializeTexts() {
 	creditTexts.push_back(GenerateName("All Rights Reserved."));
 }
 
+/*!***********************************************************************
+\brief
+	Create a header text object.
+\param text
+	Text string.
+\return
+	Text object.
+*************************************************************************/
 RenderSystem::Text GenerateHeader(std::string text) {
 	return GenerateText(text, HEADER_FONT_SIZE, HEADER_OFFSET);
 }
 
+/*!***********************************************************************
+\brief
+	Create a name text object.
+\param text
+	Text string.
+\return
+	Text object.
+*************************************************************************/
 RenderSystem::Text GenerateName(std::string text) {
 	return GenerateText(text, NAME_FONT_SIZE, NAME_OFFSET);
 }
 
+/*!***********************************************************************
+\brief
+	Create a text object.
+\param text
+	Text string.
+\param fontSize
+	Size of font.
+\param offset
+	Offset to apply to next text.
+\return
+	Text object.
+*************************************************************************/
 RenderSystem::Text GenerateText(std::string text, float fontSize, float offset) {
+	// Initialize text object.
 	RenderSystem::Text name;
+	// Set font and text.
 	name.fontID = FontManager::GetFont(FontManager::SHIN_GO);
 	name.fontSize = (int)fontSize;
 	name.text = text;
 
 
 	AEGfxGetPrintSize(name.fontID, const_cast<char*>(text.c_str()), fontSize / FontManager::DEFAULT_FONT_SIZE, textWidth, textHeight);
-
 	textWidth /= 2;
 
+	// Align to middle of screen.
 	name.pos = Vec2<float>{ -textWidth, currTextY };
 	name.cachedPos = name.pos;
 
+	// Apply offset.
 	currTextY -= textHeight + offset / AEGetWindowHeight();
 
 	return name;
 }
 
+/*!***********************************************************************
+\brief
+	Initialize UI.
+*************************************************************************/
 void InitializeCreditsUI() {
 	backBtn.render.rect.graphics.tex = TextureManager::BACK_BTN;
 	backBtn.func = ReturnToMenu;
@@ -247,6 +340,10 @@ void InitializeCreditsUI() {
 	backBtn.render.rect.transform.cachedSize = backBtn.render.rect.transform.size;
 }
 
+/*!***********************************************************************
+\brief
+	Load Main Menu scene.
+*************************************************************************/
 void ReturnToMenu() {
 	SceneManager::LoadScene(SceneManager::MAIN_MENU);
 }
