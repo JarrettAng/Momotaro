@@ -30,4 +30,5 @@ namespace PauseManager {
 	void Draw();
 	void Free();
 	void TogglePause();
+	void ToggleShowRestart(bool _bool);
 }

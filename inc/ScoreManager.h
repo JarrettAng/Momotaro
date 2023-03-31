@@ -15,4 +15,5 @@ namespace ScoreManager {
 	int GetHighScore();
 	void SetHighScore(int _score);
 	void AddScore(int modifier);
+	void ToggleShowHighScore(bool _bool);
 }

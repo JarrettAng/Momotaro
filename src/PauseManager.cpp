@@ -30,7 +30,7 @@ namespace PauseManager {
 	bool isPaused;
 	bool showQuitConfirm;
 	bool showRestartConfirm;
-
+	// bool showRestartButton;
 #pragma region Forward Delcarations
 	void InitializePauseUI();
 	void DrawPauseUI();
@@ -230,6 +230,14 @@ namespace PauseManager {
 		for (RenderSystem::Interactable const& i : buttons) {
 			if (i.isActive) {
 				RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, i.render.rect.transform.pos.x, i.render.rect.transform.pos.y, i.render.rect.transform.size.x, i.render.rect.transform.size.y, i.render.rect.graphics.tex, i.render.layer);
+			}
+		}
+	}
+	void ToggleShowRestart(bool _bool){
+		for (RenderSystem::Interactable& i : buttons) {
+			if(i.render.rect.graphics.tex == TextureManager::RESTART_BUTTON){
+				i.isActive = _bool;
+				i.isClickable = _bool;
 			}
 		}
 	}

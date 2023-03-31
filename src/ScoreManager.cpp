@@ -31,6 +31,8 @@ namespace ScoreManager {
 	int lastHighScore{};
 	RenderSystem::Transform background;
 
+	bool showHighScore;
+
 	/*!***********************************************************************
 	* FORWARD DECLARATIONS
 	*************************************************************************/
@@ -77,6 +79,9 @@ namespace ScoreManager {
 	void Free() {
 		levels.clear();
 	}
+	void ToggleShowHighScore(bool _bool){
+		showHighScore = _bool;
+	}
 
 	void CheckForLevelChange() {
 		// Level up.
@@ -102,11 +107,13 @@ namespace ScoreManager {
 		//////////////////////////////////////////////////////////////////////////////////////
 		// HIGH SCORE TEXT
 		//////////////////////////////////////////////////////////////////////////////////////
-		highscore = "HIGHSCORE : " + std::to_string(GetHighScore());
-		RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.95f, -0.65f, FontManager::GetFont(FontManager::SHIN_GO),40,highscore,1,COLOR_BLACK);
-		background.size.x = (float)(highscore.size()*40.f);
-		background.size.y = 50.f;
-		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, -AEGfxGetWinMaxX(), -AEGfxGetWinMaxY()*0.56f, background.size.x, background.size.y, TextureManager::BLANK_PROMPT);
+		if(showHighScore){
+			highscore = "HIGHSCORE : " + std::to_string(GetHighScore());
+			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.95f, -0.65f, FontManager::GetFont(FontManager::SHIN_GO),40,highscore,1,COLOR_BLACK);
+			background.size.x = (float)(highscore.size()*40.f);
+			background.size.y = 50.f;
+			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, -AEGfxGetWinMaxX(), -AEGfxGetWinMaxY()*0.56f, background.size.x, background.size.y, TextureManager::BLANK_PROMPT);
+		}
 	}
 
 	void UpdatePotentialScoreGain(int newPotentialScore) {
