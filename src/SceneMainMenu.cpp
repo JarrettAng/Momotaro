@@ -1,15 +1,12 @@
 /*!************************************************************************
-\file:          SceneMainMenu.cpp
-\author:
-\par DP email:
-\par Course:    CSD1171B
+\file SceneMainMenu.cpp
+\author Tan Jun Rong
+\par DP email: t.junrong@digipen.edu
+\par Course: CSD1171B
 \par Software Engineering Project
-\date:          30-01-2023
+\date 31-03-2023
 \brief
-
-
-The functions include:
--
+This source file handles Main Main scene of the game.
 **************************************************************************/
 
 #include <AEEngine.h>
@@ -23,15 +20,16 @@ The functions include:
 #include <RenderSystem.h>
 #include <SceneMainMenu.h>
 #include <BuildingManager.h>
+
 /*!***********************************************************************
-* CONST VARIABLES
+* Const Variables
 *************************************************************************/
 const Vec2<float> POINTER_OFFSET = { 80.0f, 10.0f };
 const float TRANSITION_TIME = 1.0f;
 const float BLINK_INTERVAL = 0.07f;
 
 /*!***********************************************************************
-* FORWARD DECLARATIONS
+* Forward Declarations.
 *************************************************************************/
 void LoadStart();
 void LoadEditor();
@@ -51,7 +49,7 @@ bool MouseInsideButton(Vec2<int> mousePos, Vec2<float> btnPos, Vec2<float> btnSi
 void ToggleQuitConfirm();
 
 /*!***********************************************************************
-* MENU BUTTONS
+* UI.
 *************************************************************************/
 RenderSystem::Interactable startBtn{};
 RenderSystem::Interactable editorBtn{};
@@ -67,7 +65,7 @@ std::vector<RenderSystem::Interactable> buttons;
 RenderSystem::Renderable confirmQuitPrompt{};
 
 /*!***********************************************************************
-* SCENE TRANSITION
+* Scene Transition Variables.
 *************************************************************************/
 RenderSystem::Interactable clickedBtn{};	// Button player clicked on. To get position and callback func.
 
@@ -78,35 +76,58 @@ float currBlinkInterval = 0;
 float currTransitionTime = 0;
 
 /*!***********************************************************************
-* QUIT CONFIRMATION PROMPT
+* Variable.
 *************************************************************************/
 bool showQuitConfirm = false;
 
+/*!***********************************************************************
+\brief
+	Load SceneMainMenu.
+*************************************************************************/
 void SceneMainMenu::Load() {
 	BuildingManager::Initialize();
 	return;
 }
 
+/*!***********************************************************************
+\brief
+	Initialize SceneMainMenu.
+*************************************************************************/
 void SceneMainMenu::Initialize() {
+	// Initialize UI.
 	InitializeMenuUI();
+
+	// Subscribe to key events.
 	InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleBtnClick);
 
+	// Reset.
 	currBlinkInterval = BLINK_INTERVAL;
 	currTransitionTime = TRANSITION_TIME;
 
 	isTransitioning = false;
 	isBlinking = false;
 
+	// Play main menu BGM.
 	AudioManager::PlayBGM(AudioManager::ClipName::BGM_MAIN);
 }
 
+/*!***********************************************************************
+\brief
+	Update SceneMainMenu.
+*************************************************************************/
 void SceneMainMenu::Update() {
 	// Check for button presses.
 	InputManager::HandleInput();
+
+	// Update managers.
 	AudioManager::Update();
 	TextureManager::Update();
 }
 
+/*!***********************************************************************
+\brief
+	Draw SceneMainMenu.
+*************************************************************************/
 void SceneMainMenu::Draw() {
 	// Draw sky to fit to screen.
 	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, AEGfxGetWinMinX(), -AEGfxGetWinMinY(), (float)AEGetWindowWidth(), (float)AEGetWindowHeight(), TextureManager::SKY_BG, -3);
@@ -117,24 +138,38 @@ void SceneMainMenu::Draw() {
 	// Draw background to fit to screen.
 	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, AEGfxGetWinMinX(), -AEGfxGetWinMinY(), (float)AEGetWindowWidth(), (float)AEGetWindowHeight(), TextureManager::MENU_BG, -1);
 
-
+	// Draw UI.
 	DrawButtons();
-	HandleBtnHover();
 	DrawQuitPrompt();
+
+	// Visual feedback.
+	HandleBtnHover();
 
 	RenderSystem::Render();
 }
 
+/*!***********************************************************************
+\brief
+	Free SceneMainMenu.
+*************************************************************************/
 void SceneMainMenu::Free() {
 	buttons.clear();
 	InputManager::Free();
 	RenderSystem::Free();
 }
 
+/*!***********************************************************************
+\brief
+	Unload SceneMainMenu.
+*************************************************************************/
 void SceneMainMenu::Unload() {
 	return;
 }
 
+/*!***********************************************************************
+\brief
+	Draw buttons that are visible.
+*************************************************************************/
 void DrawButtons() {
 	// Loop through all buttons and draw them.
 	for (RenderSystem::Interactable& btn : buttons) {
@@ -145,6 +180,10 @@ void DrawButtons() {
 	}
 }
 
+/*!***********************************************************************
+\brief
+	Handle player click on buttons.
+*************************************************************************/
 void HandleBtnClick() {
 	// Prevent any click if transitioning.
 	if (isTransitioning) return;
@@ -184,6 +223,10 @@ void HandleBtnClick() {
 	}
 }
 
+/*!***********************************************************************
+\brief
+	Handle visual feedback of buttons.
+*************************************************************************/
 void HandleBtnHover() {
 	// Handle pointer blinking when transitioning to a different scene.
 	if (isTransitioning) {
@@ -242,6 +285,10 @@ void HandleBtnHover() {
 	}
 }
 
+/*!***********************************************************************
+\brief
+	Draw quit prompt UI.
+*************************************************************************/
 void DrawQuitPrompt() {
 	// If player wants to quit, draw quit prompt.
 	if (showQuitConfirm) {
@@ -249,6 +296,10 @@ void DrawQuitPrompt() {
 	}
 }
 
+/*!***********************************************************************
+\brief
+	Toggle quit confirm state.
+*************************************************************************/
 void ToggleQuitConfirm() {
 	// Toggle between quit confirm state.
 	showQuitConfirm = !showQuitConfirm;
@@ -266,6 +317,10 @@ void ToggleQuitConfirm() {
 	}
 }
 
+/*!***********************************************************************
+\brief
+	Initialize UI.
+*************************************************************************/
 void InitializeMenuUI() {
 	// Position button based on window width / height.
 	// Width and height of button are based on png size.
@@ -376,22 +431,42 @@ void InitializeMenuUI() {
 	confirmQuitPrompt.layer = 1;
 }
 
+/*!***********************************************************************
+\brief
+	Load level select scene.
+*************************************************************************/
 void LoadStart() {
 	SceneManager::LoadScene(SceneManager::LVL_SELECT);
 }
 
+/*!***********************************************************************
+\brief
+	Load editor scene.
+*************************************************************************/
 void LoadEditor() {
 	SceneManager::LoadScene(SceneManager::EDITOR);
 }
 
+/*!***********************************************************************
+\brief
+	Load controls scene.
+*************************************************************************/
 void LoadControls() {
 	SceneManager::LoadScene(SceneManager::CONTROLS);
 }
 
+/*!***********************************************************************
+\brief
+	Load credits scene.
+*************************************************************************/
 void LoadCredits() {
 	SceneManager::LoadScene(SceneManager::CREDITS);
 }
 
+/*!***********************************************************************
+\brief
+	Quit game.
+*************************************************************************/
 void LoadQuit() {
 	SceneManager::LoadScene(SceneManager::QUIT);
 }

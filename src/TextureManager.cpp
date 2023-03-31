@@ -6,8 +6,7 @@
 \par Software Engineering Project
 \date 18-02-2023
 \brief
-This source file declares
-
+This source file load and store textures ofthe game. It also animates them.
 **************************************************************************/
 
 #include <TextureManager.h>
@@ -15,19 +14,22 @@ This source file declares
 
 namespace TextureManager {
 	/*!***********************************************************************
-	* FORWARD DECLARATION
+	* Forward Declarations.
 	*************************************************************************/
 	void InitializeTextures();
 	void GenerateMesh();
-
 	void UpdateTextureSheetAnimation();
 
 	/*!***********************************************************************
-	* VARIABLES
+	* Textures & mesh cache.
 	*************************************************************************/
 	std::vector<TextureSheet> textures;
 	std::vector<Mesh> meshes;
 
+	/*!***********************************************************************
+	\brief
+		Initialize TextureManager.
+	*************************************************************************/
 	void Initialize() {
 		InitializeTextures();
 		GenerateMesh();
@@ -136,6 +138,10 @@ namespace TextureManager {
 		}
 	}
 
+	/*!***********************************************************************
+	\brief
+		Update TextureManager.
+	*************************************************************************/
 	void TextureManager::Update() {
 		UpdateTextureSheetAnimation();
 	}
@@ -190,6 +196,10 @@ namespace TextureManager {
 	/*!***********************************************************************
 	\brief
 		Get texture width offset.
+	\param type
+		Texture type.
+	\return
+		Width offset.
 	*************************************************************************/
 	float GetTexWidth(const TEX_TYPE& type) {
 
@@ -206,6 +216,10 @@ namespace TextureManager {
 	/*!***********************************************************************
 	\brief
 		Get texture height offset.
+	\param type
+		Texture type.
+	\return
+		Height offset.
 	*************************************************************************/
 	float GetTexHeight(const TEX_TYPE& type) {
 
@@ -221,6 +235,10 @@ namespace TextureManager {
 	/*!***********************************************************************
 	\brief
 		Get mesh from texture type.
+	\param type
+		Texture type.
+	\return
+		Mesh.
 	*************************************************************************/
 	AEGfxVertexList* GetMesh(const TEX_TYPE& type) {
 		for (Mesh& t : meshes) {
@@ -235,6 +253,10 @@ namespace TextureManager {
 	/*!***********************************************************************
 	\brief
 		Get texture from texture type.
+	\param type
+		Texture type.
+	\return
+		Texture.
 	*************************************************************************/
 	AEGfxTexture* GetTexture(const TEX_TYPE& type) {
 		for (TextureSheet& t : textures) {
@@ -247,6 +269,10 @@ namespace TextureManager {
 		return nullptr;
 	}
 
+	/*!***********************************************************************
+	\brief
+		Unload TextureManager.
+	*************************************************************************/
 	void TextureManager::Unload() {
 		for (Mesh& m : meshes) {
 			AEGfxMeshFree(m.mesh);
@@ -263,6 +289,10 @@ namespace TextureManager {
 	/*!***********************************************************************
 	\brief
 		Increment operator overload to get next enum.
+	\param _texture
+		Texture type.
+	\return
+		Texture type.
 	*************************************************************************/
 	TEX_TYPE operator++(TEX_TYPE& _texture, int)
 	{

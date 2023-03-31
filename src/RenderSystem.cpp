@@ -6,8 +6,7 @@
 \par Software Engineering Project
 \date 18-01-2023
 \brief
-This source file declares
-
+This source file handles rendering of graphics of the game.
 **************************************************************************/
 
 #include <RenderSystem.h>
@@ -16,7 +15,7 @@ This source file declares
 namespace RenderSystem {
 
 	/*!***********************************************************************
-	* FORWARD DECLARATIONS
+	* Forward Declarations.
 	*************************************************************************/
 	void SetRenderPivot(const RENDER_PIVOT& pivot);
 	Vec2<float> GetPivotPos(const Vec2<float>& pos, const float& width, const float& height);
@@ -37,7 +36,7 @@ namespace RenderSystem {
 	Vec2<float> GetCenteredTextPos(const float& x, const float& y, const float& width, const float& height, const float& textWidth, const float& textHeight);
 
 	/*!***********************************************************************
-	* RENDER BATCHES
+	* Render Batches.
 	*************************************************************************/
 	std::vector<std::pair<Renderable, RenderSetting>> tileBatch;
 	std::vector<std::pair<Renderable, RenderSetting>> gamePieceBatch;
@@ -45,7 +44,7 @@ namespace RenderSystem {
 	std::vector<std::vector<std::pair<Renderable, RenderSetting>>> renderBatches = { tileBatch, gamePieceBatch, UIBatch };
 
 	/*!***********************************************************************
-	* MATRICES
+	* Matrices.
 	*************************************************************************/
 	AEMtx33 identityMtx{
 		1,0,0,
@@ -55,7 +54,7 @@ namespace RenderSystem {
 	AEMtx33 transformMtx, translateMtx, scaleMtx, rotMtx = identityMtx;
 
 	/*!***********************************************************************
-	* VARIABLES
+	* Variables.
 	*************************************************************************/
 	f32 textWidth, textHeight;	// Cache text width and height for calculating text position when drawing button.
 	RENDER_PIVOT renderPivot;
@@ -63,12 +62,21 @@ namespace RenderSystem {
 
 	/*!***********************************************************************
 	\brief
-		Initialize render system.
+		Initialize RenderSystem.
 	*************************************************************************/
 	void RenderSystem::Initialize() {
-		return;
+		// 30x30 grid.
+		tileBatch.reserve(900);
+
+		// Estimated number of game pieces and UI in game.
+		gamePieceBatch.reserve(30);
+		UIBatch.reserve(30);
 	}
 
+	/*!***********************************************************************
+	\brief
+		Free RenderSystem.
+	*************************************************************************/
 	void RenderSystem::Free() {
 		tileBatch.clear();
 		gamePieceBatch.clear();
@@ -81,11 +89,13 @@ namespace RenderSystem {
 			- Loop through all batches and render each renderable in batch.
 	*************************************************************************/
 	void Render() {
+		// Enable rendering of textures.
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		// Affects global transparency for drawn mesh.
 		AEGfxSetTransparency(1.0f);
 		// Using default render setting.
 		UpdateRenderSetting();
+		// Loop through each batch.
 		for (auto& batch : renderBatches) {
 			// Sort batch based on layer before drawing.
 			SortBatch(batch);
@@ -94,6 +104,7 @@ namespace RenderSystem {
 				// Use object render setting if required.
 				if (!obj.second.isDefault()) UpdateRenderSetting(obj.second);
 				switch (obj.first.type) {
+				// Render rect.
 				case RECT:
 					if (obj.first.rect.graphics.tex != TextureManager::NONE) {
 						// RENDER RECT WITH TEXTURE.
@@ -104,6 +115,7 @@ namespace RenderSystem {
 						RenderRect(obj.first.rect.transform.pos.x, obj.first.rect.transform.pos.y, obj.first.rect.transform.size.x, obj.first.rect.transform.size.y, obj.first.rect.graphics.color);
 					}
 					break;
+				// Render text.
 				case TEXT:
 					// RENDER TEXT
 					RenderText(obj.first.text.pos.x, obj.first.text.pos.y, obj.first.text.fontID, obj.first.text.fontSize, const_cast<char*>(obj.first.text.text.c_str()), obj.first.text.color);
@@ -122,16 +134,35 @@ namespace RenderSystem {
 	/*!***********************************************************************
 	\brief
 		Add text obj to batch.
+	\param id
+		Batch type.
+	\param x
+		X position.
+	\param y
+		Y position.
+	\param font
+		Font of text.
+	\param fontSize
+		Size of text.
+	\param text
+		Text string.
+	\param layer
+		Layer of text.
+	\param color
+		Color of text.
 	*************************************************************************/
 	void AddTextToBatch(const BATCH_TYPE& id, const float& x, const float& y, const s8& font, const int& fontSize, std::string text, const int& layer, const Vec3<float>& color)
 	{
+		// Initializing text object.
 		Renderable obj;
 		obj.type = TEXT;
 		obj.layer = layer;
 
+		// Set font and text.
 		obj.text.fontID = font;
 		obj.text.text = text;
 
+		// Set position and visuals.
 		obj.text.pos = { x,y };
 		obj.text.color = color;
 		obj.text.fontSize = fontSize;
@@ -141,24 +172,48 @@ namespace RenderSystem {
 	}
 
 	/*!***********************************************************************
-	* OVERLOADED RECT FUNCTIONS
+	\brief
+		OVERLOADED RECT FUNCTION.
+		Rect with TEXTURE.
 	*************************************************************************/
-	// Rect with TEXTURE.
 	void AddRectToBatch(const BATCH_TYPE& batch, const float& x, const float& y, const float& width, const float& height, TextureManager::TEX_TYPE tex, const int& layer, const float& rot) {
 		AddRectToBatch(batch, x, y, width, height, rot, layer, {}, tex);
 	}
-	// Rect with COLOR.
+
+	/*!***********************************************************************
+	\brief
+		OVERLOADED RECT FUNCTION.
+		Rect with COLOR.
+	*************************************************************************/
 	void AddRectToBatch(const BATCH_TYPE& batch, const float& x, const float& y, const float& width, const float& height, const Vec4<float>& btnColor, const int& layer, const float& rot) {
 		AddRectToBatch(batch, x, y, width, height, rot, layer, btnColor, TextureManager::NONE);
 	}
-	/************************************************************************/
 
 	/*!***********************************************************************
 	\brief
 		Add rect obj to batch.
+	\param id
+		Batch type.
+	\param x
+		X position.
+	\param y
+		Y position.
+	\param width
+		Width of rect.
+	\param height
+		Height of rect.
+	\param rot
+		Rotation of rect.
+	\param layer
+		Layer of rect.
+	\param color
+		Color of rect.
+	\param tex
+		Texture of rect.
 	*************************************************************************/
 	void AddRectToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& width, const float& height, const float& rot, const int& layer, const Vec4<float>& color, TextureManager::TEX_TYPE tex)
-	{
+	{	
+		// Initialize rect object.
 		Renderable obj;
 		obj.type = RECT;
 		obj.layer = layer;
@@ -179,21 +234,51 @@ namespace RenderSystem {
 		if (!setting.isDefault()) setting.setDefault();
 	}
 
-
 	/*!***********************************************************************
-	* OVERLOADED BUTTON FUNCTIONS
+	\brief
+		OVERLOADED BUTTON FUNCTION.
+		Rect with TEXTURE.
 	*************************************************************************/
 	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const int& fontSize, const std::string& text, TextureManager::TEX_TYPE tex, const int& layer, const Vec3<float>& txtColor) {
 		AddButtonToBatch(id, x, y, xPadding, yPadding, font, fontSize, text, layer, tex, {}, txtColor);
 	}
+
+	/*!***********************************************************************
+	\brief
+		OVERLOADED BUTTON FUNCTION.
+		Rect with COLOR.
+	*************************************************************************/
 	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const int& fontSize, const std::string& text, const int& layer, const Vec4<float>& btnColor, const Vec3<float>& txtColor) {
 		AddButtonToBatch(id, x, y, xPadding, yPadding, font, fontSize, text, layer, TextureManager::NONE, btnColor, txtColor);
 	}
-	/************************************************************************/
 
 	/*!***********************************************************************
 	\brief
 		Add button obj to batch.
+	\param id
+		Batch type.
+	\param x
+		X position.
+	\param y
+		Y position.
+	\param xPadding
+		X padding from the sides.
+	\param yPadding
+		Y padding from top / bottom.
+	\param font
+		Font of text.
+	\param fontSize
+		Size of text.
+	\param text
+		Text string.
+	\param layer
+		Layer of button.
+	\param tex
+		Texture of button.
+	\param btnColor
+		Rect color.
+	\param txtColor
+		Text color.
 	*************************************************************************/
 	void AddButtonToBatch(const BATCH_TYPE& id, const float& x, const float& y, const float& xPadding, const float& yPadding, const s8& font, const int& fontSize, const std::string& text, const int& layer, TextureManager::TEX_TYPE tex, const Vec4<float>& btnColor, const Vec3<float>& txtColor) {
 		// Get text width and height based on text.
@@ -221,6 +306,12 @@ namespace RenderSystem {
 	/*!***********************************************************************
 	\brief
 		Get button width and height based on pos and padding.
+	\param xPadding
+		X padding from the sides.
+	\param yPadding
+		Y padding from top / bottom.
+	\return
+		Size of button.
 	*************************************************************************/
 	Vec2<float> GetButtonSize(const float& xPadding, const float& yPadding) {
 		// Get button's width and height by adding text width/height with padding given.
@@ -231,6 +322,20 @@ namespace RenderSystem {
 	\brief
 		Calculate centered text position based on rect width and height.
 			- Assuming rect is drawn with TOP-LEFT pivot.
+	\param x
+		X position.
+	\param y
+		Y position.
+	\param width
+		Width of rect.
+	\param height
+		Height of rect.
+	\param _textWidth
+		Width of text.
+	\param _textHeight
+		Height of text.
+	\return
+		Final position of text.
 	*************************************************************************/
 	Vec2<float> GetCenteredTextPos(const float& x, const float& y, const float& width, const float& height, const float& _textWidth, const float& _textHeight) {
 		// It just works
@@ -241,17 +346,42 @@ namespace RenderSystem {
 	\brief
 		Render text on screen.
 			- Font start to get blurry after font size 100.
+	\param x
+		X position.
+	\param y
+		Y position.
+	\param fontID
+		Font type.
+	\param fontSize
+		Size of font.
+	\param text
+		Text string.
+	\param color
+		Text color.
 	*************************************************************************/
 	void RenderText(float x, float y, s8 fontID, int fontSize, std::string text, Vec3<float> color) {
+		// Enable drawing of text.
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		// Draw text on screen.
 		AEGfxPrint(fontID, const_cast<char*>(text.c_str()), x, y, fontSize / FontManager::DEFAULT_FONT_SIZE, color.x, color.y, color.z);
 	}
 
 	/*!***********************************************************************
 	\brief
 		Render rect with TEXTURE.
+	\param x
+		X position.
+	\param y
+		Y position.
+	\param width
+		Width of rect.
+	\param height
+		Height of rect.
+	\param tex
+		Texture of rect.
 	*************************************************************************/
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, TextureManager::TEX_TYPE tex) {
+		// Enable drawing of rect.
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		// Get texture + offset UVS for animations.
 		AEGfxTextureSet(TextureManager::GetTexture(tex), TextureManager::GetTexWidth(tex), TextureManager::GetTexHeight(tex));
@@ -264,8 +394,19 @@ namespace RenderSystem {
 	/*!***********************************************************************
 	\brief
 		Render rect with COLOR.
+	\param x
+		X position.
+	\param y
+		Y position.
+	\param width
+		Width of rect.
+	\param height
+		Height of rect.
+	\param color
+		Color of rect.
 	*************************************************************************/
 	void RenderRect(const float& x, const float& y, const float& width, const float& height, Vec4<float> color) {
+		// Enable drawing of rect.
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		// Set color.
 		AEGfxSetTintColor(color.w, color.x, color.y, color.z);
@@ -278,14 +419,22 @@ namespace RenderSystem {
 	/*!***********************************************************************
 	\brief
 		Sort batch list based on layer value.
+	\param batch
+		Batch to sort.
 	*************************************************************************/
 	void SortBatch(std::vector<std::pair<Renderable, RenderSetting>>& batch) {
-		std::sort(batch.begin(), batch.end(), [](const std::pair<Renderable, RenderSetting>& a, const std::pair<Renderable, RenderSetting>& b) {  return a.first.layer < b.first.layer; });
+		std::sort(batch.begin(), batch.end(), [](const std::pair<Renderable, RenderSetting>& lhs, const std::pair<Renderable, RenderSetting>& rhs) {  return lhs.first.layer < rhs.first.layer; });
 	}
 
 	/*!***********************************************************************
 	\brief
 		Update current render setting to use for subsequent object when adding to batch.
+	\param tint
+		Tinting applied on object.
+	\param blendColor
+		Blend color applied on object.
+	\param blendMode
+		Blend mode of object.
 	*************************************************************************/
 	void SetRenderSetting(Vec4<float> tint, Vec4<float> blendColor, AEGfxBlendMode blendMode) {
 		setting.tint = tint;
@@ -296,6 +445,8 @@ namespace RenderSystem {
 	/*!***********************************************************************
 	\brief
 		Update engine render settings.
+	\param _setting
+		Setting to apply.
 	*************************************************************************/
 	void UpdateRenderSetting(RenderSetting _setting) {
 		// Spcify blend mode. AE_GFX_BM_BLEND to allow transperency.
@@ -309,6 +460,14 @@ namespace RenderSystem {
 	/*!***********************************************************************
 	\brief
 		Update global transform mtx for subsequent sprites to be drawn.
+	\param x
+		X position.
+	\param y
+		Y position.
+	\param scale
+		Scale of object.
+	\param rot
+		Rotation of object.
 	*************************************************************************/
 	void UpdateRenderTransformMtx(const float& x, const float& y, const Vec2<float>& scale, const float& rot) {
 		// Set scaling
@@ -329,6 +488,8 @@ namespace RenderSystem {
 	/*!***********************************************************************
 	\brief
 		Set current pivot position.
+	\param pivot
+		Pivot type.
 	*************************************************************************/
 	void SetRenderPivot(const RENDER_PIVOT& pivot) {
 		renderPivot = pivot;
@@ -337,6 +498,14 @@ namespace RenderSystem {
 	/*!***********************************************************************
 	\brief
 		Convert position based on current pivot position.
+	\param pos
+		Position of object.
+	\param width
+		Width of object.
+	\param height
+		Height of object.
+	\return
+		Final position.
 	*************************************************************************/
 	Vec2<float> GetPivotPos(const Vec2<float>& pos, const float& width, const float& height) {
 		switch (renderPivot)
@@ -362,7 +531,6 @@ namespace RenderSystem {
 		default:
 			break;
 		}
-
 		Debug::PrintError(__FILE__, __LINE__, "UNABLE TO GET PIVOT POS");
 		return pos;
 	}
