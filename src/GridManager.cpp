@@ -87,8 +87,9 @@ namespace GridManager {
 		//////////////////////////////////////////////////////////////////////
 		//					SUBSCRIBE EVENTS 								//
 		//////////////////////////////////////////////////////////////////////
-
+		
 		InputManager::SubscribeToKey(AEVK_C, InputManager::TRIGGERED, ClearGrid);
+		#if DEBUG
 		InputManager::SubscribeToKey(AEVK_1, InputManager::TRIGGERED, SpawnResidential);
 		InputManager::SubscribeToKey(AEVK_2, InputManager::TRIGGERED, SpawnCommerical);
 		InputManager::SubscribeToKey(AEVK_3, InputManager::TRIGGERED, SpawnIndustrial);
@@ -98,7 +99,7 @@ namespace GridManager {
 		InputManager::SubscribeToKey(AEVK_S, InputManager::TRIGGERED, TestSave);
 		InputManager::SubscribeToKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
 		InputManager::SubscribeToKey(AEVK_T, InputManager::TRIGGERED, ToggleTileRenderable);
-
+		#endif
 		CardManager::onNewCardSelected.Subscribe(GetBuildingCard);
 		CardManager::onCardPlaced.Subscribe(SpawnBuilding);
 	}
@@ -260,7 +261,7 @@ namespace GridManager {
 		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
-		grid[index].ID = ++buildingID;
+		grid[index].ID = buildingID;
 		grid[index]._building = BuildingManager::GetRandomNatureBuilding();
 	}
 
@@ -750,10 +751,12 @@ namespace GridManager {
 	///////////////////////////////////////////////////////////////////////////
 	void Free() {
 		delete[] grid;
+		buildingID = 0;
 		CurrentSynergyArea.clear();
 		CurrentBuildingCells.clear();
 		selectedBuilding = nullptr;
 		InputManager::UnsubscribeKey(AEVK_C, InputManager::TRIGGERED, ClearGrid);
+		#if DEBUG
 		InputManager::UnsubscribeKey(AEVK_1, InputManager::TRIGGERED, SpawnResidential);
 		InputManager::UnsubscribeKey(AEVK_2, InputManager::TRIGGERED, SpawnCommerical);
 		InputManager::UnsubscribeKey(AEVK_3, InputManager::TRIGGERED, SpawnIndustrial);
@@ -761,7 +764,7 @@ namespace GridManager {
 		// InputManager::UnsubscribeKey(AEVK_W, InputManager::TRIGGERED, SpawnBigResidential3x1);
 		// InputManager::UnsubscribeKey(AEVK_E, InputManager::TRIGGERED, SpawnBigResidential);
 		InputManager::UnsubscribeKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
-
+		#endif
 		CardManager::onNewCardSelected.Unsubscribe(GetBuildingCard);
 		CardManager::onCardPlaced.Unsubscribe(SpawnBuilding);
 
