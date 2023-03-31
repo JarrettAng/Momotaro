@@ -31,7 +31,7 @@ namespace GameOverManager {
 	void HandleBtnClick();
 	void DrawGameOverUI();
 	void InitializeGameOverUI();
-	bool IsGameOver() { return GAME_OVER; }
+	//bool IsGameOver() { return GAME_OVER; }
 #pragma endregion
 
 	void Initialize() {
@@ -60,7 +60,11 @@ namespace GameOverManager {
 		InputManager::UnsubscribeKey(AEVK_LBUTTON, InputManager::TRIGGERED, HandleBtnClick);
 	}
 
-	void GameOver() {
+    bool IsGameOver() {
+        return GAME_OVER;
+    }
+
+    void GameOver() {
 		AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_GAMEOVER);
 		GAME_OVER = true;
 	}

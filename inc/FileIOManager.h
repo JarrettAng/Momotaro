@@ -18,6 +18,7 @@ The functions include:
 #include <Building.h>
 #include <GridManager.h>
 #include <AudioManager.h>
+#include <CardManager.h>
 
 
 namespace FileIOManager {
@@ -27,6 +28,8 @@ namespace FileIOManager {
     void LoadBuildingDataFromFile(std::vector<BuildingData> &buildingsData);
     void ConvertMapFile();
     void SaveGridToFile(std::string fileName);
+    void SaveHandToFile(std::vector<Card> const& _hand);
+    std::vector<BuildingData> LoadHandFromFile();
     GridManager::cell* LoadGridFromFile(std::string fileName);
 }
 

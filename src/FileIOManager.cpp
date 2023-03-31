@@ -24,6 +24,7 @@ namespace FileIOManager {
 
 	namespace GM = GridManager;
 	namespace AM = AudioManager;
+	namespace CM = CardManager;
 	///////////////////////////////////////////////////////////////////////////
 	//Helper function to save the current building data to file
 	void SaveBuildingDataToFile(std::vector<BuildingData>& buildingData) {
@@ -139,6 +140,7 @@ namespace FileIOManager {
 				if(_temp->isRenderable){
 				//We have to increment the ID by 1 to represent that it is renderable.
 					mapFile << (_temp->ID+1);
+					std::cout << "ID : " << _temp->ID << '\n';
 					if(_temp->ID>0){
 						mapFile << "," << (int)(_temp->_building.data.type);	//[0,4]
 						mapFile << "," << (int)(_temp->_building.data.level);	//[0,2]
@@ -172,6 +174,51 @@ namespace FileIOManager {
 		outputFile.close();
 		// std::ofstream outputFile(fileName);
 	}
+
+	std::vector<BuildingData> LoadHandFromFile(){
+		std:: fstream inputFile("Assets/JSON_Data/Maps/Save.momohand");
+		std::vector<BuildingData> _temp;
+		if(!inputFile.is_open()){
+			Debug::Print("Unable to read Assets/JSON_Data/Maps/Save.momohand\n");
+		}
+		std::string buffer;
+		while(std::getline(inputFile,buffer)){
+			//First we get each line of the hand file
+			_temp.push_back(BuildingManager::GetBuildingData(
+				(BuildingEnum::TYPE)(std::stoi(buffer)),
+				Vec2<int>{1,1},
+				(BuildingEnum::LEVEL)(std::atoi(&buffer[2]))
+			));
+			// for(int i{}; i< (int)(buffer.length()); ++i){
+			// 	//Then we go through each character 
+			// }
+		}
+		inputFile.close();
+		if(_temp.empty()) return _temp;
+		for(BuildingData _c : _temp){
+			std::cout << "Data : type = " << _c.type << ", level = " << _c.level << '\n';
+		}
+		return _temp;
+	}
+	void SaveHandToFile(std::vector<Card> const& _hand){
+		std:: ofstream outputFile("Assets/JSON_Data/Maps/Save.momohand");
+		if(!outputFile.is_open()){
+			Debug::Print("Unable to read Assets/JSON_Data/Maps/Save.momohand!\n");
+			std::cout << "Unable to open!" << '\n';
+		}
+		if(_hand.empty()){
+			outputFile.close();
+			Debug::Print("File IO Saved Hand is empty! Check if game is over!\n");
+			std::cout << "ahnd empty" << '\n';
+			return;
+		}
+		for(Card _card : _hand){
+			outputFile << (int)(_card.bData.type) <<",";
+			outputFile << (int)(_card.bData.level) << '\n';
+		}
+			std::cout << "I think it savede" << '\n';
+		outputFile.close();
+	}
 	///////////////////////////////////////////////////////////////////////////
 	//Loads a map from the specified filename (used in gridmanager)
 	GM::cell* LoadGridFromFile(std::string fileName)
@@ -181,7 +228,7 @@ namespace FileIOManager {
 		std::fstream inputFile(fileName);
 		if (!inputFile.is_open()) {
 			Debug::Print("Unable to read" + fileName + "\n");
-			assert(0);
+			// assert(0);
 		}
 		std::string buffer; 		//where each line of text will be stored
 		GM::gridX = GM::gridY = 0;
@@ -212,7 +259,7 @@ namespace FileIOManager {
 						//Now that we know it's renderable, if it's > 1 it's either probabilisitic OR Nature.
 						if(std::atoi(&buffer[i])>1){
 							//First we get the ID
-							newMap[GM::GetIndex(xIndex, lineCount - 4)].ID = (std::stoi(&buffer[i])-1);
+							newMap[GM::GetIndex(xIndex, lineCount - 4)].ID = (std::stoi(&buffer[i]));
 							//Then we need to move the index by however many multiples of 10 the ID is
 							i+=(int)(log10f(std::stoi(&buffer[i])));
 							//After getting to the end of the number, we should hit the ','

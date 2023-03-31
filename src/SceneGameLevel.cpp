@@ -29,6 +29,7 @@ The functions include:
 #include <TextureManager.h>
 #include <AudioManager.h>
 #include <GameOverManager.h>
+#include <FileIOManager.h>
 
 std::string mapToLoad = "Assets/JSON_Data/Maps/map0.momomaps";
 
@@ -42,7 +43,12 @@ void SceneGameLevel::Initialize() {
 
 	GridManager::Initialize(mapToLoad);
 	PauseManager::Initialize();
-	CardManager::Initialize();
+
+	if(FileIOManager::LoadHandFromFile().empty() || mapToLoad != "Assets/JSON_Data/Maps/lastSaved2.momomaps"){
+		CardManager::Initialize();
+	}
+	else CardManager::Initialize(FileIOManager::LoadHandFromFile());
+
 	GameOverManager::Initialize();
 }
 
@@ -68,6 +74,10 @@ void SceneGameLevel::Draw() {
 }
 
 void SceneGameLevel::Free() {
+	if(!GameOverManager::IsGameOver()){
+		FileIOManager::SaveHandToFile(CardManager::GetCurrentHand());
+		FileIOManager::SaveGridToFile("Assets/JSON_Data/Maps/lastSaved2.momomaps");
+	}
 	GridManager::Free();
 	InputManager::Free();
 	CardManager::Free();
@@ -83,4 +93,8 @@ void SceneGameLevel::Unload() {
 
 void MapToLoad(std::string const& mapFilePath) {
 	mapToLoad = mapFilePath;
+}
+
+std::string const &GetCurrentMapName() {
+    return mapToLoad;
 }

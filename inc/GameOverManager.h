@@ -25,4 +25,5 @@ namespace GameOverManager {
 	void Update();
 	void Draw();
 	void Free();
+	bool IsGameOver();
 }

@@ -179,6 +179,10 @@ void LevelPreview::Render() {
 				RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, startingCellPos.x + (index % mapSizeX) * cellSize, startingCellPos.y - (index / mapSizeX) * cellSize,
 											 cellSize, cellSize, COLOR_PREVIEW_NATURE, 3);
 			break;
+			default:
+				RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, startingCellPos.x + (index % mapSizeX) * cellSize, startingCellPos.y - (index / mapSizeX) * cellSize,
+											cellSize, cellSize, COLOR_PREVIEW_BUILDING, 3);
+			break;
 			}
 		}
 	}

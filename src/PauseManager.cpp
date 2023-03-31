@@ -11,7 +11,9 @@ This source file declares
 **************************************************************************/
 
 #include <PauseManager.h>
-
+#include <FileIOManager.h>
+#include <SceneGameLevel.h>
+#include <CardManager.h>
 namespace PauseManager {
 	const Vec2<float> POINTER_OFFSET = { 80.0f, 10.0f };
 
@@ -247,6 +249,8 @@ namespace PauseManager {
 		ToggleQuitConfirm();
 		//ToggleRestartConfirm();
 		TogglePause();
+		//We also save the map data and hand to file 
+
 		// Load menu scene.
 		SceneManager::LoadScene(SceneManager::MAIN_MENU);
 	}

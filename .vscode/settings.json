@@ -54,6 +54,10 @@
         "array": "cpp",
         "ranges": "cpp",
         "span": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "xtree": "cpp",
+        "sstream": "cpp"
     }
 }

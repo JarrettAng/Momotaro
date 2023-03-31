@@ -37,7 +37,7 @@ namespace GridManager {
 	///////////////////////////////////////////////////////////////////////////
 	//GRID VARIABLES
 	cell* grid;								//The main grid array
-	int buildingID{ 0 };					//THIS ID IS FOR TRACKING BUILDINGS!
+	int buildingID{ 1 };					//THIS ID IS FOR TRACKING BUILDINGS!
 	int totalPoints{};						//Synergy point tabulation
 	std::vector<Vec2<int>> CurrentBuildingCells{};		//For calculating synergy area
 	std::vector<Vec2<int>> CurrentSynergyArea{};		//For displaying synergy area
@@ -267,7 +267,7 @@ namespace GridManager {
 		return cell{
 			Vec2<int>{1,1},
 			true,
-			++buildingID,
+			1,
 			BuildingManager::GetRandomNatureBuilding()
 		};
 	}
@@ -734,7 +734,7 @@ namespace GridManager {
 	///////////////////////////////////////////////////////////////////////////
 	void Free() {
 		delete[] grid;
-		buildingID = 0;
+		// buildingID = 0;
 		CurrentSynergyArea.clear();
 		CurrentBuildingCells.clear();
 		selectedBuilding = nullptr;

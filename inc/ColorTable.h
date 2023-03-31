@@ -53,3 +53,4 @@
 #define COLOR_PREVIEW_WATER {0.0f, 0.65f, 0.95f, 1.0f}
 #define COLOR_PREVIEW_LAND {0.8f, 0.9f, 0.55f, 1.0f}
 #define COLOR_PREVIEW_NATURE {0.45f, 0.6f, 0.3f, 1.0f}
+#define COLOR_PREVIEW_BUILDING {0.45f, 0.45f, 0.45f, 1.0f}
