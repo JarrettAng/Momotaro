@@ -30,10 +30,12 @@ namespace AudioManager {
     
 	void PlayBGM(ClipName _clip){
 		AEAudioStopGroup(BGM_GROUP);
-		if(CURRENTBGM != _clip){
 			AEAudioPlay(GetAudioFromClipName(_clip),BGM_GROUP,AudioClipArray[_clip]._volume,1.f, -1);
-			CURRENTBGM = _clip;
-		}
+		// if(CURRENTBGM != _clip){
+		// 	CURRENTBGM = _clip;
+		// } else{
+			
+		// }
 	}
     void PlayAudioClip(ClipName _clip)
     {

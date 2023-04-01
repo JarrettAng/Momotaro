@@ -206,7 +206,7 @@ void SceneLevelSelect::Initialize() {
 	lvlSelectIsTransitioning = false;
 	lvlSelectCurrBlinkInterval = false;
 
-	AudioManager::PlayBGM(AudioManager::ClipName::BGM_MAIN);
+	AudioManager::PlayBGM(AudioManager::ClipName::BGM_LEVELSELECT);
 }
 
 void SceneLevelSelect::Update() {

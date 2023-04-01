@@ -28,6 +28,7 @@ namespace AudioManager {
 		BGM_MAIN,
 		BGM_GAME,
 		BGM_CREDITS,
+		BGM_LEVELSELECT,
 		SFX_CLICK,
 		SFX_MERGE1,
 		SFX_MERGE2,
