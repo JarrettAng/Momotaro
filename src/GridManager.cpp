@@ -62,7 +62,7 @@ namespace GridManager {
 	//INITIALISE GRID 								
 	///////////////////////////////////////////////////////////////////////////
 	void Initialize(std::string const& filePath) {
-		// grid = { new cell[gridX * gridY]{} };
+		playableArea =0;
 		grid = FileIOManager::LoadGridFromFile(filePath);
 		//GRID SET UP
 		//Init a grid with 0 tiles
@@ -74,7 +74,7 @@ namespace GridManager {
 				ScreenPos.y += (gridY * tileHeight) / 2;		//move the grid up by half its size (20 units / 2 = 10)
 				grid[index].pos = ScreenPos;
 
-				if (grid[index].isRenderable) playableArea++;
+				if (grid[index].isRenderable&&grid[index]._building.data.type == BuildingEnum::NONE) playableArea++;
 
 				// //basically we want the grid to be from -2 to 2, but since there's a 10 unit offset, we add 10
 				// if (((x >= (mapPos + gridX / 2)) && (x <= (mapPos + gridX / 2 + mapSize))) && (y >= (mapPos + gridY / 2) && y <= (mapPos + gridY / 2 + mapSize))) {
@@ -128,7 +128,7 @@ namespace GridManager {
 		CurrentSynergyArea.clear();
 		CurrentBuildingCells.clear();
 		playableArea--;
-
+		std::cout <<"Tiles Left: "<< playableArea <<'\n';
 		//!TODO CHANGE THIS TO FIT BIGGER SIZES!!
 		if (playableArea < 1) {
 			onBoardFull.Invoke();
@@ -254,13 +254,11 @@ namespace GridManager {
 	}
 	void SpawnNature() {
 		if (PauseManager::IsPaused()) return;
-		// FileIOManager::LoadBuildingDataFromFile(_testBuildingVector);
-		// FileIOManager::SaveBuildingDataToFile(_testBuildingVector);
 		Vec2<int> mousePos = InputManager::GetMousePos();
 		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
 		if (!isCellSafe(SelectedCell)) return;
-		grid[index].ID = buildingID;
+		grid[index].ID = 1;
 		grid[index]._building = BuildingManager::GetRandomNatureBuilding();
 	}
 
@@ -754,6 +752,7 @@ namespace GridManager {
 					_grid[index]._building = Building{};
 				}
 			}
+			playableArea+=2;
 			 AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_MERGE1);
 			// if(_grid[gridIndex]._building.data.level == BuildingEnum::L3) AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_MERGE2);
 			onMergeBuildings.Invoke();

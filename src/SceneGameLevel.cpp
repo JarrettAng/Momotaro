@@ -86,6 +86,7 @@ void SceneGameLevel::Free() {
 	if(!GameOverManager::IsGameOver()){
 		FileIOManager::SaveHandToFile(CardManager::GetCurrentHand());
 		FileIOManager::SaveGridToFile("Assets/JSON_Data/Maps/lastSaved2.momomaps");
+		FileIOManager::SaveHighScoreToFile();
 	}
 	GridManager::Free();
 	InputManager::Free();

@@ -9,7 +9,7 @@
 This source file handles the game over state of the game.
 **************************************************************************/
 #include <GameOverManager.h>
-
+#include <FileIOManager.h>
 namespace GameOverManager {
 	/*!***********************************************************************
 	* Const variables.
@@ -108,6 +108,7 @@ namespace GameOverManager {
 	*************************************************************************/
     void GameOver() {
 		if(!GAME_OVER) AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_GAMEOVER);
+		FileIOManager::SaveHighScoreToFile();
 		GAME_OVER = true;
 	}
 

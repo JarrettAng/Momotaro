@@ -156,6 +156,7 @@ namespace FileIOManager {
 		}
 		mapFile.close();
 	}
+
 	void ConvertMapFile(){
 		std::ifstream inputFile("Assets/JSON_Data/Maps/tutorial2.momomaps");
 		std::ofstream outputFile("Assets/JSON_Data/Maps/tutorial_2.momomaps");
@@ -176,8 +177,27 @@ namespace FileIOManager {
 		// std::ofstream outputFile(fileName);
 	}
 
+	void LoadHighScoreFromFile(){
+		std::fstream inputFile("Assets/JSON_Data/Maps/HighScore.momohand");
+		if(!inputFile.is_open()){
+			Debug::Print("Unable to read Assets/JSON_Data/Maps/HighScore.momohand\n");
+		}
+		int _highscore;
+		inputFile >> _highscore;
+		ScoreManager::SetHighScore(_highscore);
+		inputFile.close();
+	}
+	void SaveHighScoreToFile(){
+		std::ofstream outputFile("Assets/JSON_Data/Maps/HighScore.momohand");
+		if(!outputFile.is_open()){
+			Debug::Print("Unable to read Assets/JSON_Data/Maps/HighScore.momohand\n");
+		}
+		outputFile << ScoreManager::GetHighScore();
+		outputFile.close();
+	}
+
 	std::vector<BuildingData> LoadHandFromFile(){
-		std:: fstream inputFile("Assets/JSON_Data/Maps/Save.momohand");
+		std::fstream inputFile("Assets/JSON_Data/Maps/Save.momohand");
 		std::vector<BuildingData> _temp;
 		if(!inputFile.is_open()){
 			Debug::Print("Unable to read Assets/JSON_Data/Maps/Save.momohand\n");
@@ -246,12 +266,12 @@ namespace FileIOManager {
 						}
 					}
 					if(lineCount == 2 &&!scoreSet) {
-						ScoreManager::SetHighScore(std::stoi(&buffer[i]));
-						if(std::stoi(&buffer[i]) == 0){
+						//ScoreManager::SetHighScore(std::stoi(&buffer[i]));
+						if(std::stoi(&buffer[i]) <= 0){
 							i+=2;
 						} else i += (int)(log10f(std::stoi(&buffer[i])))+2;
 						ScoreManager::SetScore(std::stoi(&buffer[i]));
-						if(std::stoi(&buffer[i]) == 0){
+						if(std::stoi(&buffer[i]) <= 0){
 							i+=2;
 						} else i += (int)(log10f(std::stoi(&buffer[i])))+2;
 						ScoreManager::SetLevel(std::stoi(&buffer[i]));

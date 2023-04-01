@@ -18,6 +18,7 @@ This source file kep track of the current synergy (score) of the game.
 #include <DebugManager.h>
 #include <UIManager.h>
 #include <CardManager.h>
+#include <FileIOManager.h>
 
 namespace ScoreManager {
 	/*!***********************************************************************
@@ -125,6 +126,7 @@ namespace ScoreManager {
 	*************************************************************************/
 	void AddScore(int modifier) {
 		score += modifier;
+		if(score<0) score = 0;
 		onScoreUpdate.Invoke();
 	}
 
@@ -135,6 +137,7 @@ namespace ScoreManager {
 	void Initialize() {
 		IntializeLevels();
 		//Load highscore from file here 
+		FileIOManager::LoadHighScoreFromFile();
 		score = potentialScoreGain = 0;
 		currLevel.level = 0;
 		GridManager::onTotalSynergyUpdate.Subscribe(UpdatePotentialScoreGain);

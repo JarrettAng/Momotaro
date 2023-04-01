@@ -29,6 +29,8 @@ namespace FileIOManager {
     void ConvertMapFile();
     void SaveGridToFile(std::string fileName);
     void SaveHandToFile(std::vector<Card> const& _hand);
+    void LoadHighScoreFromFile();
+    void SaveHighScoreToFile();
     std::vector<BuildingData> LoadHandFromFile();
     GridManager::cell* LoadGridFromFile(std::string fileName);
 }
