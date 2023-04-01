@@ -6,10 +6,11 @@
 \par Software Engineering Project
 \date:          30-01-2023
 \brief
+This header file declares the Textbox class and other UI related objects in
+the future.
 
-
-The functions include:
--
+The header include:
+- Textbox class declaration
 **************************************************************************/
 
 #pragma once
@@ -21,6 +22,7 @@ The functions include:
 ///////////////////////////////////////////////////////////////////////////
 
 namespace UI {
+	// How the text should arrange itself within the text box
 	enum TextBoxAlignment {
 		LEFT_JUSTIFY,
 		CENTER_JUSTIFY,
@@ -54,11 +56,11 @@ namespace UI {
 	private:
 		///////////////////////////////////////////////////////////////////
 		// Data members
-		RenderSystem::Transform		 transform;
-		std::vector<TextBoxLineData> texts;
+		RenderSystem::Transform		 transform; // Pos of the text box on screen
+		std::vector<TextBoxLineData> texts;		// Each element is a new line in the textbox
 		TextBoxAlignment			 alignment;
 
-		float maxWidth;
+		float maxWidth;	// The width of the textbox (How far text goes before wrapping)
 		float fontSize;
 
 		Vec3<float> color;

@@ -64,10 +64,11 @@ namespace CardManager {
 	///////////////////////////////////////////////////////////////////////
 	// Used to store the information of all synergy types to be sorted in descending order
 	struct SynergyInfo {
-		int			score;
-		std::string name;
-		Vec3<float> color;
+		int			score; // How much the other building type synergizes with this type
+		std::string name;  // Name of the other building type
+		Vec3<float> color; // Color of the text
 
+		// Non-default constructor
 		SynergyInfo(int _score, std::string _name, Vec3<float> _color) {
 			score = _score;
 			name = _name;
@@ -86,21 +87,21 @@ namespace CardManager {
 
 	///////////////////////////////////////////////////////////////////////
 	
-	void Initialize();
-	void Initialize(std::vector<BuildingData> const& startingHand);
+	void Initialize();												// Start the game with the default 5 cards hand
+	void Initialize(std::vector<BuildingData> const& startingHand); // Start the game with a custom starting hand
 	void Update();
 
 	void PrepareUIRenderBatch(); // Sends the information of everything to rendersystem for rendering
 
-	std::vector<Card> const& GetCurrentHand();
+	std::vector<Card> const& GetCurrentHand();		// Get all the cards currently in the player's hand
 
 	void DrawCard(BuildingEnum::TYPE type, BuildingEnum::LEVEL level);
 
-	void DrawRandomCard(BuildingEnum::LEVEL level);
-	void DrawRandomCard(BuildingEnum::TYPE type);
-	void DrawRandomCard();
+	void DrawRandomCard(BuildingEnum::LEVEL level); // Draws a random card of this level
+ 	void DrawRandomCard(BuildingEnum::TYPE type);   // Draws a random card of this type
+	void DrawRandomCard();							// Draws a completely random card
 
-	void ToggleClickable(bool clickable);
-	float GetCardTemplateXPos();
-	void Free(); // At the end of the level free and unsubscribe from everything
+	void ToggleClickable(bool clickable);   // Sets whether the CardManager should check for click input on the cards
+	float GetCardTemplateXPos();			// Give the x-pos of the hand background (For aligning with highscore)
+	void Free();							// At the end of the level free and unsubscribe from everything
 }

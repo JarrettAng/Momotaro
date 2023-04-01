@@ -1,6 +1,6 @@
 /*!************************************************************************
 \file:          SceneLevelEditor.cpp
-\author:
+\author:		
 \par DP email:
 \par Course:    CSD1171B
 \par Software Engineering Project

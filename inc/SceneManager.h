@@ -6,10 +6,13 @@
 \par Software Engineering Project
 \date:          30-01-2023
 \brief
-
+This header file handles the loading and swapping of "scenes" in the game.
 
 The functions include:
--
+- Initialize
+Starts the game loop and loads the scene given in the parameter
+- LoadScene
+Changes the current scene to the one given in the parameter
 **************************************************************************/
 
 #pragma once
@@ -31,7 +34,7 @@ namespace SceneManager {
 		QUIT
 	};
 
-	extern Scene* currentScene;
+	extern Scene* currentScene; // The current scene, SceneManager will call the functions of this
 	extern SCENES_ENUM previous, current, next;
 
 	// Which scene to load at the very beginning of the game
