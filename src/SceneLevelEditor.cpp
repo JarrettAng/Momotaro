@@ -1,15 +1,26 @@
 /*!************************************************************************
 \file:          SceneLevelEditor.cpp
-\author:		
-\par DP email:
+\author:		Jarrett Ang
+\par DP email:	a.jiaweijarrett@digipen.edu
 \par Course:    CSD1171B
 \par Software Engineering Project
 \date:          09-03-2023
 \brief
-
+This source file implements the SceneLevelEditor header file, it handles 
+the level editor of the game.
 
 The functions include:
--
+- Standard base functions from scene
+- LoadMapX
+Loads any of the 3 base maps shipped with MomoTown
+- LoadUserMapX
+Loads any of the 2 empty user defined maps
+- CreateLand
+If the tile hovered is water, spawns a land tile
+- CreateWater
+If the tile hovered is land, spawns a water tile
+- CreateNature
+If the tile hovered is land, spawns a nature tile
 **************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////
@@ -42,20 +53,22 @@ void CreateWater();
 void CreateNature();
 ///////////////////////////////////////////////////////////////////////////
 // Variables
-std::string selectedMapFilePath;
+std::string selectedMapFilePath;		// Which map is currently being editted
 
 RenderSystem::Transform infoBackground;	// Rendering data for the hand background
-UI::TextBox currentMapText;
-UI::TextBox mapsText;
-UI::TextBox controlsText;
-UI::TextBox keysText;
+UI::TextBox currentMapText;				// Shows which map is currently loaded
+UI::TextBox mapsText;					// Shows the keys to swap between maps
+UI::TextBox controlsText;				// Shows how to use the mouse to edit the map
+UI::TextBox keysText;					// Shows the keys to edit the map
 
 void SceneLevelEditor::Load() {	
 	BuildingManager::Initialize();
 
+	// Upon entering the scene, loads map0 by default
 	selectedMapFilePath = "Assets/JSON_Data/Maps/map0.momomaps";
 	GridManager::Initialize(selectedMapFilePath);
 
+	// Initialize the current map selected text
 	currentMapText = UI::TextBox({ -AEGfxGetWinMaxX() + 25.0f, AEGfxGetWinMaxY() - 60.0f }, "Current Map: Archipelago", UI::LEFT_JUSTIFY, AEGfxGetWinMaxX() * 2.0f, 50.0f, COLOR_BLACK);
 }
 
@@ -145,6 +158,7 @@ void SceneLevelEditor::Unload() {
 ///////////////////////////////////////////////////////////////////////////
 // Terrain editting
 
+// If the tile hovered is water, spawns a land tile
 void CreateLand() {
 	Vec2<int> mousePos = InputManager::GetMousePos();
 	if (GridManager::isCellSafe(GridManager::ScreenPosToIso(mousePos))) {
@@ -154,6 +168,7 @@ void CreateLand() {
 	GridManager::ToggleTileRenderable();
 }
 
+// If the tile hovered is land, spawns a water tile
 void CreateWater() {
 	Vec2<int> mousePos = InputManager::GetMousePos();
 	if (!GridManager::isCellSafe(GridManager::ScreenPosToIso(mousePos))) {
@@ -163,6 +178,7 @@ void CreateWater() {
 	GridManager::ToggleTileRenderable();
 }
 
+// If the tile hovered is land, spawns a nature tile
 void CreateNature() {
 	Vec2<int> mousePos = InputManager::GetMousePos();
 	if (!GridManager::isCellSafe(GridManager::ScreenPosToIso(mousePos))) {
@@ -175,6 +191,7 @@ void CreateNature() {
 ///////////////////////////////////////////////////////////////////////////
 // Map loading
 
+// Loads a new map by clearing the current one loaded by GridManager, and initializing again
 void LoadSelectedMap() {
 	GridManager::Free();
 	GridManager::Initialize(selectedMapFilePath);

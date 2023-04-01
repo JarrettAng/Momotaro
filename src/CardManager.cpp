@@ -6,10 +6,19 @@
 \par Software Engineering Project
 \date:          30-01-2023
 \brief
-
+This source file implements the CardManager header file. It defines the InfoBox
+class used to show more info for each building as well.
 
 The functions include:
--
+- InfoBox class definition
+- Initialize
+Draws the cards for the player to play with at the same of the game scene
+- PrepareUIRenderBatch
+Sends data to UIManager to render the cards
+- DrawCard
+Draws a draw into the player's hand of a given type, level, size
+- DrawRandomCard
+Draws a random draw into the player's hand
 **************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////
@@ -25,7 +34,9 @@ The functions include:
 #include <ColorTable.h>
 #include <iostream>
 ///////////////////////////////////////////////////////////////////////////
-// Card info box related functions
+// Card info box related functions, CardManager functions further down
+///////////////////////////////////////////////////////////////////////////
+
 namespace CardManager {
 	// Default constructor for info box
 	InfoBox::InfoBox() {
@@ -124,6 +135,8 @@ namespace CardManager {
 }
 ///////////////////////////////////////////////////////////////////////////
 // Card Manager related functions
+///////////////////////////////////////////////////////////////////////////
+
 namespace CardManager {
 	EventSystem::Event<const BuildingData*> onNewCardSelected;	// Event that gets called when player selects/deselects a card
 	EventSystem::Event<Vec2<int>> onCardPlaced;					// Event that gets called when player plays a card
@@ -285,6 +298,7 @@ namespace CardManager {
 	///////////////////////////////////////////////////////////////////////
 	// Player hand & cards functions
 
+	// Get all the cards currently in the player's hand
 	std::vector<Card> const& GetCurrentHand() {
 		return hand;
 	}
@@ -301,16 +315,19 @@ namespace CardManager {
 		DrawRandomCard(BuildingEnum::L2);
 	}
 
+	// Cheat hotkey function, spawns a random level 1 card
 	void GiveRandL1Card() {
 		if (!Debug::IsDebugModeOn()) return;
 		DrawRandomCard(BuildingEnum::L1);
 	}
 
+	// Cheat hotkey function, spawns a random level 2 card
 	void GiveRandL2Card() {
 		if (!Debug::IsDebugModeOn()) return;
 		DrawRandomCard(BuildingEnum::L2);
 	}
 
+	// Cheat hotkey function, spawns a random level 3 card
 	void GiveRandL3Card() {
 		if (!Debug::IsDebugModeOn()) return;
 		DrawRandomCard(BuildingEnum::L3);
@@ -472,9 +489,7 @@ namespace CardManager {
 		GridManager::onMergeBuildings.Unsubscribe(GiveCardOnMerge);
 	}
 
-
-	//HELPER FUNCTIONS 
-
+	// Sets whether the CardManager should check for click input on the cards
 	void ToggleClickable(bool clickable) {
 		isClickable = clickable;
 	}
@@ -484,6 +499,7 @@ namespace CardManager {
 		CardManager::onHandEmpty.Unsubscribe(ToggleClickableOff);
 	}
 
+	// Give the x-pos of the hand background (For aligning with highscore)
 	float GetCardTemplateXPos(){
 		return handBackground.pos.x;
 	}

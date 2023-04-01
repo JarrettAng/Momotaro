@@ -130,5 +130,5 @@ public:
 	BuildingData bData;						// Actual building data loaded onto the card
 
 	Vec4<float> color;
-	Vec4<float> borderColor;
+	Vec4<float> borderColor;				// Color of the card's border (For showing card is selected)
 };

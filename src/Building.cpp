@@ -6,10 +6,15 @@
 \par Software Engineering Project
 \date:          30-01-2023
 \brief
-
+This source file implements the Building class defined in the header file.
 
 The functions include:
--
+- 3 constructors
+- LevelUp
+Updates the building level and updates its texture
+- GetSynergyArea
+Gets the synergy of the surrounding cells and stores it inside the building
+- Operator << and == overloads
 **************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////
@@ -19,12 +24,16 @@ The functions include:
 #include <DebugManager.h>
 ///////////////////////////////////////////////////////////////////////////
 // Constructors
+
+// Default constructor
 Building::Building() : data{} { }		// Empty by design
 
+// Single argument constructor
 Building::Building(BuildingData _data) {
 	data = _data;
 }
 
+// Non-default constructor
 Building::Building(
 	BuildingEnum::TYPE		  _type, 
 	Vec2<int>				  _size, 
@@ -54,6 +63,8 @@ Building::Building(
 }
 
 ///////////////////////////////////////////////////////////////////////////
+// Member functions
+
 // Updates the building level and updates its texture
 void Building::LevelUp() {
 	switch (data.level) {
@@ -112,7 +123,7 @@ void Building::GetSynergyArea() {
 
 ///////////////////////////////////////////////////////////////////
 // Non-member operator overloads
-// 
+
 // << overload (Prints all data members of the building to os)
 std::ostream &operator<<(std::ostream &os, BuildingData const &_data) {
 	os << "Building type : "		<< _data.type <<'\n';

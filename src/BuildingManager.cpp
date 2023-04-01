@@ -6,10 +6,20 @@
 \par Software Engineering Project
 \date:          30-01-2023
 \brief
-
+This source file implements the BuildingManager header file, it handles the
+loading of buildings from the file and passing of building data
 
 The functions include:
--
+- Initialize
+Loads all the building data from File IO at the start of the level
+- GetBuildingData
+Gets all the information of a specific building (type, size, and level)
+- GetRandomBuildingData
+Gets any random building (except nature)
+- GetRandomNatureBuilding
+Returns a random building of nature type (Rocks, pond, etc)
+- GetBuildingDataVector
+Get the vector containing every building type
 **************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////
@@ -83,7 +93,7 @@ namespace BuildingManager {
 		return buildingsData[0];
 	}
 
-	// Get any random building
+	// Gets any random building (except for nature)
 	BuildingData GetRandomBuildingData() {
 		// Get a random size (for now 1x1), type, and level
 		BuildingEnum::TYPE  randType  = (BuildingEnum::TYPE)((rand() % (BuildingEnum::TYPE_LENGTH - 2)) + 1);	// -2 to exclude the TYPE_LENGTH and TYPE_NONE types
@@ -100,7 +110,8 @@ namespace BuildingManager {
 		return buildingsData[0];
 	}
 
-	Building GetRandomNatureBuilding(){		
+	// Returns a random building of nature type (Rocks, pond, etc)
+	Building GetRandomNatureBuilding() {		
 		Building _randNature{
 			BuildingData{
 				BuildingEnum::NATURE,
@@ -115,8 +126,8 @@ namespace BuildingManager {
 		return _randNature;
 	}
 
-    std::vector<BuildingData> GetBuildingDataVector()
-    {
+	// Get the vector containing every building type
+    std::vector<BuildingData> GetBuildingDataVector() {
         return buildingsData;
     }
 }

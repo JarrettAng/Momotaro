@@ -1,15 +1,18 @@
 /*!************************************************************************
 \file:          SceneTutorial.cpp
-\author:
-\par DP email:
+\author:		Jarrett Ang
+\par DP email:	a.jiaweijarrett@digipen.edu
 \par Course:    CSD1171B
 \par Software Engineering Project
 \date:          09-03-2023
 \brief
-
+This source file implements the SceneTutorial header file, it handles the
+setting up of the UI texts and tutorial flow.
 
 The functions include:
--
+- Standard base functions from scene
+- AdvanceTutorial
+// Calls the function to load the UI for the next part of the tutorial
 **************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////
@@ -32,6 +35,7 @@ The functions include:
 // Forward Declarations
 void InitializePos();
 
+// Each function sets what text and features to enable for the different parts of the tutorial
 void AdvanceTutorial();
 void ShowTutPart1_Goal();
 void ShowTutPart1_Score();
@@ -65,20 +69,20 @@ void UpdatePopupText(std::string const& text, bool showClickToCont = true);
 // Variables
 RenderSystem::Transform momoPeachPos;	// Rendering data for Momo the peach
 RenderSystem::Transform popupPos;		// Rendering data for the pop-up background
-UI::TextBox				popupText;
+UI::TextBox				popupText;		// The text to show in the pop-up text box
 UI::TextBox				clickToContinueText;
 
-Vec2<int> screenCenter;
-std::string lastPopupMsg;
+std::string lastPopupMsg;				// Cached the last message in the pop-up text
 
 // Flags to hide/show different UI
 bool showHand;
 bool showScore;
 
-int finalTestScore;
+int finalTestScore;			// The number of times the score threshold is reached for final part of the tutorial
 
-void (*nextTut_FuncPtr)();
+void (*nextTut_FuncPtr)();	// Which part of the tutorial to load next
 
+// Loads the tutorial map upon loading this scene
 void SceneTutorial::Load() {
 	GridManager::Initialize("Assets/JSON_Data/Maps/tutorial.momomaps");
 	BuildingManager::Initialize();
@@ -98,11 +102,13 @@ void SceneTutorial::Initialize() {
 	CardManager::DrawCard(BuildingEnum::RESIDENTIAL, BuildingEnum::L1);
 	CardManager::ToggleClickable(false);
 
+	// Hide the hand and score at the start
 	showHand = false;
 	showScore = false;
 
 	finalTestScore = 1;
 
+	// Subscribe to input event to advance tutorial or skip to the second part 
 	InputManager::SubscribeToKey(AEVK_M, InputManager::TRIGGERED, ShowTutPart2_Tiles);
 	InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, AdvanceTutorial);
 
@@ -144,6 +150,8 @@ void SceneTutorial::Free() {
 
 	InputManager::UnsubscribeKey(AEVK_M, InputManager::TRIGGERED, ShowTutPart2_Tiles);
 	InputManager::UnsubscribeKey(AEVK_LBUTTON, InputManager::TRIGGERED, AdvanceTutorial);
+
+	// Unsubscribe from the events just in case
 	GridManager::onMergeBuildings.Unsubscribe(ShowTutPart1_Merging);
 	ScoreManager::onLevelChange.Unsubscribe(ShowTutPart1_Score3);
 	CardManager::onCardPlacedVoid.Unsubscribe(ShowTutPart1_Buildings4);
@@ -167,8 +175,10 @@ void TutLoadMap2() {
 
 ///////////////////////////////////////////////////////////////////////////
 // Tutorial Sequence
+///////////////////////////////////////////////////////////////////////////
 
 void InitializePos() {
+	// The first msg to display in the tutorial
 	lastPopupMsg = "Hello welcome to MomoTown! My name is Joe..... Sike! it's Momo, let me teach you the basics.";
 
 	// Keep Momo the peach size 25% of the screen height
@@ -181,6 +191,7 @@ void InitializePos() {
 	nextTut_FuncPtr = ShowTutPart1_Goal;
 }
 
+// Calls the function to load the UI for the next part of the tutorial
 void AdvanceTutorial() {
 	if (!nextTut_FuncPtr) return;
 
@@ -427,6 +438,7 @@ void UpdatePopupSize(float pos_x, float pos_y, float size_x, float size_y) {
 	UpdatePopupText(lastPopupMsg);
 }
 
+// Sets the position and message of the pop-up text
 void UpdatePopupText(std::string const& text, bool showClickToCont) {
 	lastPopupMsg = text;
 

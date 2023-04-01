@@ -6,10 +6,14 @@
 \par Software Engineering Project
 \date:          30-01-2023
 \brief
-
+This source file implements the SceneManager header file, it handles the 
+loading and swapping of "scenes" in the game.
 
 The functions include:
--
+- Initialize
+Starts the game loop and loads the scene given in the parameter
+- LoadScene
+Changes the current scene to the one given in the parameter
 **************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////

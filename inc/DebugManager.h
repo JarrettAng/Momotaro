@@ -31,7 +31,7 @@ Used to print error msgs to cerr (Only when debug mode is on)
 namespace Debug {
 	void Initialize();		// Sets up the debug text and debug mode to false
 	void EnableControls();	// Enables debug mode to be turned on/off using the ; and ' keys
-	void Free();
+	void Free();			// Unsubscribes from the input events
 
 	void SetDebugMode(bool turnOn);	// Toggles the status of debug mode
 	void ToggleDebugModeOn();

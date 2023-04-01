@@ -1,15 +1,17 @@
 /*!************************************************************************
 \file:          SceneLevelSelect.cpp
-\author:
-\par DP email:
+\author:		Jarrett Ang
+\par DP email:	a.jiaweijarrett@digipen.edu
 \par Course:    CSD1171B
 \par Software Engineering Project
 \date:          29-03-2023
 \brief
-
+This source file implements the SceneLevelSelect header file, it handles 
+the level select scene in the game.
 
 The functions include:
--
+- Standard base functions from scene
+- LevelPreview class declaration
 **************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////
@@ -68,8 +70,8 @@ const Vec2<float> LVL_SELECT_BACK_POINTER_OFFSET = { 80.0f, -10.0f };
 
 ///////////////////////////////////////////////////////////////////////////
 // Button pointer variables
-bool lvlSelectIsTransitioning = false;
-bool lvlSelectIsBlinking = false;					// Use to toggle opacity of pointer to mimic blinking.
+bool lvlSelectIsTransitioning = false;	// Flag for delaying the scene transition
+bool lvlSelectIsBlinking = false;		// Use to toggle opacity of pointer to mimic blinking.
 
 float lvlSelectCurrBlinkInterval = 0;
 float lvlSelectCurrTransitionTime = 0;
@@ -90,7 +92,8 @@ LevelPreview::LevelPreview(float x_pos, float y_pos, float x_size, float y_size,
 	int mapX = GridManager::gridX, mapY = GridManager::gridY;
 	int minX = 0, minY = 0, maxX = 0, maxY = 0;
 
-	// Set the bounds of the map
+	// Set the bounds of the map, don't render the full map
+	// The bounds should nicely wrap around the edge of the island(s)
 	for (int index = 0; index < mapX * mapY; ++index) { // Min Y
 		if (mapData[index].isRenderable) {
 			minY = index / mapX;
@@ -133,7 +136,7 @@ LevelPreview::LevelPreview(float x_pos, float y_pos, float x_size, float y_size,
 		if (maxX) break;
 	}
 
-	// Read the mapdata within the smaller bounds
+	// Read the mapdata within the smaller bounds set above
 	for (int index_y = minY; index_y < maxY; ++index_y) {
 		for (int index_x = minX; index_x < maxX; ++index_x) {
 			if (!mapData[index_x + index_y * mapX].isRenderable) {
@@ -151,6 +154,7 @@ LevelPreview::LevelPreview(float x_pos, float y_pos, float x_size, float y_size,
 		}
 	}
 
+	// Once done, free the memory allocated
 	delete[] mapData;
 
 	mapSizeX = maxX - minX;
@@ -164,9 +168,11 @@ LevelPreview::LevelPreview(float x_pos, float y_pos, float x_size, float y_size,
 	// Debug size: std::to_string(minX) + " " + std::to_string(maxX) + " " + std::to_string(minY) + " " + std::to_string(maxY)
 }
 
+// Renders the name of the map and each cell in the grid preview
 void LevelPreview::Render() {
 	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, transform.pos.x + transform.size.x * 0.025f, transform.pos.y - transform.size.y * 0.05f, transform.size.x * 0.95f, transform.size.y * 0.9f, COLOR_PREVIEW_WATER, 2);
 
+	// Depending on the cell type, draw a different color
 	float x, y;
 	for (int index = 0; index < map.size(); ++index) {
 		if (map[index]) {
@@ -194,7 +200,7 @@ void LevelPreview::Render() {
 // Scene Functions
 
 void SceneLevelSelect::Load() {
-
+	// Empty by design
 }
 
 void SceneLevelSelect::Initialize() {
@@ -237,12 +243,13 @@ void SceneLevelSelect::Free() {
 }
 
 void SceneLevelSelect::Unload() {
-	
+	// Empty by design
 }
 
 ///////////////////////////////////////////////////////////////////////////
 // UI Functions
 
+// Sets the positions of the buttons for the 6 maps in the game
 void LvlSelectInitializeUI() {
 	// BACK BUTTON
 	lvlSelectBackBtn.render.rect.graphics.tex = TextureManager::BACK_BTN;

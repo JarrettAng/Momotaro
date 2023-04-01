@@ -6,10 +6,11 @@
 \par Software Engineering Project
 \date:          30-01-2023
 \brief
+This source file implements the UIManager header file, it defines the Textbox 
+class and other UI related objects in the future.
 
-
-The functions include:
--
+This file include:
+- Textbox class definition
 **************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////
@@ -123,10 +124,13 @@ namespace UI {
 
 	///////////////////////////////////////////////////////////////////////
 	// Member functions
+
+	// Returns the position of the text box (Top left corner)
 	const RenderSystem::Transform& TextBox::GetPos() const {
 		return transform;
 	}
 
+	// Draws the text box (All the lines in the text box)
 	void TextBox::Render() {
 		for (size_t index = 0; index < texts.size(); ++index) {
 			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, texts[index].pos.x, texts[index].pos.y,

@@ -101,7 +101,7 @@ namespace CardManager {
  	void DrawRandomCard(BuildingEnum::TYPE type);   // Draws a random card of this type
 	void DrawRandomCard();							// Draws a completely random card
 
-	void ToggleClickable(bool clickable);   // Sets whether the CardManager should check for click input on the cards
+	void  ToggleClickable(bool clickable);  // Sets whether the CardManager should check for click input on the cards
 	float GetCardTemplateXPos();			// Give the x-pos of the hand background (For aligning with highscore)
-	void Free();							// At the end of the level free and unsubscribe from everything
+	void  Free();							// At the end of the level free and unsubscribe from everything
 }

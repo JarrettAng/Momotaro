@@ -6,10 +6,22 @@
 \par Software Engineering Project
 \date:          30-01-2023
 \brief
-
+This source file defines stub functions for the base scene class that 
+all scenes in the game will inherit from
 
 The functions include:
--
+- Load
+Called once at after scene swaps
+- Initialize
+Called after scene swaps or scene restarts
+- Update
+Called at the start of every frame
+- Draw
+Called at the end of every frame
+- Free
+Called before scene swaps or scene restarts
+- Unload
+Called before scene swaps
 **************************************************************************/
 
 #include <Scene.h>
