@@ -1,8 +1,8 @@
 /*!************************************************************************
-\file EventSystem.h
-\author Ang Jiawei Jarrett
-\par DP email: a.jiaweijarrett@digipen.edu
-\par Course: CSD1171B
+\file			EventSystem.h
+\author			Jarrett Ang
+\par DP email:	a.jiaweijarrett@digipen.edu
+\par Course:	CSD1171B
 \par Software Engineering Project
 \date 12/01/2023
 \brief
