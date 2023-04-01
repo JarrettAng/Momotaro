@@ -88,7 +88,7 @@ namespace GridManager {
 		//////////////////////////////////////////////////////////////////////
 		//					SUBSCRIBE EVENTS 								//
 		//////////////////////////////////////////////////////////////////////
-		
+		//(DEBUG MODE EVENTS!)
 		InputManager::SubscribeToKey(AEVK_C, InputManager::TRIGGERED, ClearGrid);
 		InputManager::SubscribeToKey(AEVK_1, InputManager::TRIGGERED, SpawnResidential);
 		InputManager::SubscribeToKey(AEVK_2, InputManager::TRIGGERED, SpawnCommerical);
@@ -99,6 +99,7 @@ namespace GridManager {
 		//InputManager::SubscribeToKey(AEVK_S, InputManager::TRIGGERED, TestSave);
 		//InputManager::SubscribeToKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
 		//InputManager::SubscribeToKey(AEVK_T, InputManager::TRIGGERED, ToggleTileRenderable);
+		//(IN GAME EVENTS!)
 		CardManager::onNewCardSelected.Subscribe(GetBuildingCard);
 		CardManager::onCardPlaced.Subscribe(SpawnBuilding);
 	}
@@ -171,7 +172,7 @@ namespace GridManager {
 	void SpawnBigResidential() {
 		//1x2
 		if (PauseManager::IsPaused()) return;
-		ClearGrid();
+		// ClearGrid();
 		Vec2<int> mousePos = InputManager::GetMousePos();
 		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		int index = GetIndex(SelectedCell.x, SelectedCell.y);
@@ -457,7 +458,7 @@ namespace GridManager {
 		previousIndex = currentIndex;
 	}
 	///////////////////////////////////////////////////////////////////////////
-	//Clears the grid
+	//Clears the grid (DEBUG MODE FUNCTION!)
 	///////////////////////////////////////////////////////////////////////////
 	void ClearGrid() {
 		if (PauseManager::IsPaused() || !Debug::IsDebugModeOn()) return;
@@ -467,6 +468,24 @@ namespace GridManager {
 				int index = GetIndex(x, y);
 				grid[index].ID = NONE;
 				grid[index]._building = Building{};
+			}
+		}
+	}
+	///////////////////////////////////////////////////////////////////////////
+	//Resets the grid by removing all player placed buildings
+	///////////////////////////////////////////////////////////////////////////
+	void ResetGrid(){
+		for (int y{ 0 }; y < gridY; ++y) {
+			for (int x{ 0 }; x < gridX; ++x) {
+				int index = GetIndex(x, y);
+				switch(grid[index]._building.data.type){
+					case BuildingEnum::NATURE: break;
+					case BuildingEnum::NONE: break;
+					default:
+						grid[index].ID = NONE;
+						grid[index]._building = Building{};
+					break;
+				}
 			}
 		}
 	}

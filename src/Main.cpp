@@ -18,6 +18,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_ LPWSTR    lpCmdLine,
 	_In_ int       nCmdShow)
 {
+	SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
@@ -36,7 +37,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AESysSetWindowTitle("Momo Town");								// Changing the window title
 	AESysReset();													// Reset the system modules
 	AEFrameRateControllerInit(60);
-	AESysToggleFullScreen(true);
+	// AESysToggleFullScreen(true);
 
 	// Manager Initialization
 	FontManager::Initialize();

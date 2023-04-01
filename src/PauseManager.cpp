@@ -13,6 +13,7 @@ This source file handles the pause state of the game.
 #include <FileIOManager.h>
 #include <SceneGameLevel.h>
 #include <CardManager.h>
+#include <ScoreManager.h>
 namespace PauseManager {
 	/*!***********************************************************************
 	* Const variables.
@@ -304,6 +305,11 @@ namespace PauseManager {
 		Restart game level.
 	*************************************************************************/
 	void RestartLevel() {
+		ScoreManager::SetLevel(0);
+		ScoreManager::SetScore(0);
+		GridManager::ResetGrid();
+		CardManager::Free();
+		CardManager::Initialize();
 		SceneManager::LoadScene(SceneManager::RESTART);
 	}
 

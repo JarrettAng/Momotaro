@@ -131,7 +131,9 @@ namespace FileIOManager {
 		
 		mapFile << "Width " << GridManager::gridX << '\n';
 		mapFile << "Height " << GridManager::gridY << '\n';
-		mapFile << "Score " << ScoreManager::GetHighScore() << '\n';
+		mapFile << "Score " << ScoreManager::GetHighScore() << ",";
+		mapFile << ScoreManager::GetCurrScore() << ",";
+		mapFile << ScoreManager::GetLevel() << '\n';
 		mapFile << "Joe" << '\n';
 		for (int y{ 0 }; y < GridManager::gridY; ++y) {
 			for (int x{ 0 }; x < GridManager::gridX; ++x) {
@@ -204,8 +206,10 @@ namespace FileIOManager {
 			return;
 		}
 		for(Card _card : _hand){
-			outputFile << (int)(_card.bData.type) <<",";
-			outputFile << (int)(_card.bData.level) << '\n';
+			for(int i{}; i< _card.count; ++i){
+				outputFile << (int)(_card.bData.type) <<",";
+				outputFile << (int)(_card.bData.level) << '\n';
+			}
 		}
 		outputFile.close();
 	}
@@ -229,6 +233,7 @@ namespace FileIOManager {
 			int xIndex = 0;	//Since each line has a spacing, we only want to count the xIndex when we get a number
 			//First we loop through each line and grab the numbers
 			for (int i{ 0 }; i < static_cast<int>(buffer.length()); ++i) {
+				int _level = i+2;
 				if (isdigit(buffer[i]))
 				{
 					//The first 2 lines will be the width and the height
@@ -240,8 +245,17 @@ namespace FileIOManager {
 							newMap = { new GM::cell[GM::gridX * GM::gridY]{} };
 						}
 					}
-					if(lineCount == 2) ScoreManager::SetHighScore(std::stoi(&buffer[i]));
-					
+					if(lineCount == 2) {
+						ScoreManager::SetHighScore(std::stoi(&buffer[i]));
+						if(std::stoi(&buffer[i]) == 0){
+							i+=2;
+						} else i += (int)(log10f(std::stoi(&buffer[i]))+2);
+						ScoreManager::SetScore(std::stoi(&buffer[i]));
+						if(std::stoi(&buffer[i]) == 0){
+							i+=2;
+						} else i += (int)(log10f(std::stoi(&buffer[i]))+2);
+						ScoreManager::SetLevel(std::stoi(&buffer[i]));
+					}
 					//Once the line count exceeds 3, meaning we already have the width&height, we can start to add to array
 					if (lineCount > 3) {
 						//If the value in the mapdata is NOT 1, it shall be treated as a 0 (which means it's renderable)

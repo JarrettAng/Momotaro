@@ -179,6 +179,8 @@ namespace GridManager {
 	 */
 	void ClearGrid();
 
+	void ResetGrid();
+
 
     void GetBuildingCard(const BuildingData *_data);
 	bool IsBuildingValid(const BuildingData* _data, int _x, int _y);

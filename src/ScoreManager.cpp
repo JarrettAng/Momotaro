@@ -52,7 +52,7 @@ namespace ScoreManager {
 	std::string synergy;
 	std::string highscore;
 
-	RenderSystem::Transform background;
+	// RenderSystem::Transform background;
 	
 	int potentialScoreGain;
 	int lastHighScore{};
@@ -80,12 +80,37 @@ namespace ScoreManager {
 
 	/*!***********************************************************************
 	\brief
+		Get player's current level.	
+	\return
+		Level.
+	*************************************************************************/
+	int GetLevel() {
+		return currLevel.level;
+	}
+	int GetCurrScore(){
+		return score;
+	}
+	/*!***********************************************************************
+	\brief
 		Set player's highscore.
 	\param _score
 		Score.
 	*************************************************************************/
 	void SetHighScore(int _score){
 		lastHighScore = max(_score,lastHighScore);
+	}
+	/*!***********************************************************************
+	\brief
+		Set player's level.
+	\param _score
+		Level.
+	*************************************************************************/
+	void SetLevel(int _level){
+		currLevel.level = _level;
+	}
+
+	void SetScore(int _currScore){
+		score = _currScore;
 	}
 
 	/*!***********************************************************************
@@ -174,12 +199,12 @@ namespace ScoreManager {
 		if(showHighScore){
 			// Get highscore.
 			highscore = "HIGHSCORE : " + std::to_string(GetHighScore());
-			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.95f, -0.65f, FontManager::GetFont(FontManager::SHIN_GO),40,highscore,1,COLOR_BLACK);
+			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.95f, -0.85f, FontManager::GetFont(FontManager::SHIN_GO),40,highscore,1,COLOR_BLACK);
 			
-			// Draw background.
-			background.size.x = (float)(highscore.size()*40.f);
-			background.size.y = 50.f;
-			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, -AEGfxGetWinMaxX(), -AEGfxGetWinMaxY()*0.56f, background.size.x, background.size.y, TextureManager::BLANK_PROMPT);
+			// // Draw background.
+			// background.size.x = (float)(highscore.size()*40.f);
+			// background.size.y = 50.f;
+			// RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, -AEGfxGetWinMaxX(), -AEGfxGetWinMaxY()*0.56f, background.size.x, background.size.y, TextureManager::BLANK_PROMPT);
 		}
 	}
 

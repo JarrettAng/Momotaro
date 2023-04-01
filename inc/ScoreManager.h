@@ -45,12 +45,16 @@ namespace ScoreManager {
 		Get player's highscore.	
 	*************************************************************************/
 	int GetHighScore();
+	int GetLevel();
+	int GetCurrScore();
 
 	/*!***********************************************************************
 	\brief
 		Set player's highscore.
 	*************************************************************************/
 	void SetHighScore(int _score);
+	void SetLevel(int _level);
+	void SetScore(int _currScore);
 
 	/*!***********************************************************************
 	\brief
