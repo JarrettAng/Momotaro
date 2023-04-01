@@ -1,29 +1,52 @@
 /*!************************************************************************
-\file:          SceneMainMenu.h
-\author:
-\par DP email:
-\par Course:    CSD1171B
+\file SceneMainMenu.h
+\author Tan Jun Rong
+\par DP email: t.junrong@digipen.edu
+\par Course: CSD1171B
 \par Software Engineering Project
-\date:          30-01-2023
+\date 18-01-2023
 \brief
-
-
-The functions include:
--
+This header file contians prototype functions and declarations for SceneMainMenu.cpp.
 **************************************************************************/
-
 #pragma once
 
 #include <Scene.h>
 
 class SceneMainMenu : public Scene {
 public:
+	/*!***********************************************************************
+	\brief
+		Load SceneMainMenu.
+	*************************************************************************/
 	void Load();
+
+	/*!***********************************************************************
+	\brief
+		Initialize SceneMainMenu.
+	*************************************************************************/
 	void Initialize();
 
+	/*!***********************************************************************
+	\brief
+		Update SceneMainMenu.
+	*************************************************************************/
 	void Update();
+
+	/*!***********************************************************************
+	\brief
+		Draw SceneMainMenu.
+	*************************************************************************/
 	void Draw();
 
+	/*!***********************************************************************
+	\brief
+		Free SceneMainMenu.
+	*************************************************************************/
 	void Free();
+
+	/*!***********************************************************************
+	\brief
+		Unload SceneMainMenu.
+	*************************************************************************/
 	void Unload();
 };

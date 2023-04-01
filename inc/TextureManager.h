@@ -1,15 +1,12 @@
 /*!************************************************************************
-\file:          TextureManager.h
-\author:
-\par DP email:
-\par Course:    CSD1171B
+\file TextureManager.h
+\author Tan Jun Rong
+\par DP email: t.junrong@digipen.edu
+\par Course: CSD1171B
 \par Software Engineering Project
-\date:          30-01-2023
+\date 18-01-2023
 \brief
-
-
-The functions include:
--
+This header file contians prototype functions and declarations for TextureManager.cpp.
 **************************************************************************/
 
 #pragma once
@@ -18,6 +15,10 @@ The functions include:
 #include <iostream>
 #include <vector>
 
+/*!***********************************************************************
+\brief
+	Type of textures in the game.
+*************************************************************************/
 namespace TextureManager {
 	enum TEX_TYPE {
 		NONE = 0,
@@ -69,17 +70,20 @@ namespace TextureManager {
 	};
 	TEX_TYPE operator++(TEX_TYPE&, int);
 
-
+	/*!***********************************************************************
+	\brief
+		Texture sheet object that also contains animation information.
+	*************************************************************************/
 	struct TextureSheet {
-		TEX_TYPE type;
-		AEGfxTexture* tex;
+		TEX_TYPE type;				// Type of texture.
+		AEGfxTexture* tex;			// Texture.
 
-		int	rows;
-		int cols;
+		int	rows;					// Number of rows in tex sheet.
+		int cols;					// Number of columns in tex sheet.
 
 		// Animation.
 		float frameDelay;			// Time between each frame.
-		float animDelay = 0;			// Time between animation loop. 0 = No delay between animation loop.
+		float animDelay = 0;		// Time between animation loop. 0 = No delay between animation loop.
 
 		float currFrameDelay = 0;
 		float currAnimeDelay = 0;
@@ -90,17 +94,54 @@ namespace TextureManager {
 		float currTexHeight = 0;	// Current height offset
 	};
 
+	/*!***********************************************************************
+	\brief
+		Mesh object to be use for rendering.
+	*************************************************************************/
 	struct Mesh {
 		TEX_TYPE tex;
 		AEGfxVertexList* mesh;
 	};
 
+	/*!***********************************************************************
+	\brief
+		Initialize TextureManager.
+	*************************************************************************/
 	void Initialize();
+
+	/*!***********************************************************************
+	\brief
+		Update TextureManager.
+	*************************************************************************/
 	void Update();
+
+	/*!***********************************************************************
+	\brief
+		Unload TextureManager.
+	*************************************************************************/
 	void Unload();
+
+	/*!***********************************************************************
+	\brief
+		Get texture width offset.
+	*************************************************************************/
 	float GetTexWidth(const TEX_TYPE& type);
+
+	/*!***********************************************************************
+	\brief
+		Get texture height offset.
+	*************************************************************************/
 	float GetTexHeight(const TEX_TYPE& type);
+
+	/*!***********************************************************************
+	\brief
+		Get mesh from texture type.
+	*************************************************************************/
 	AEGfxVertexList* GetMesh(const TEX_TYPE& type);
+
+	/*!***********************************************************************
+	\brief
+		Get texture from texture type.
+	*************************************************************************/
 	AEGfxTexture* GetTexture(const TEX_TYPE& type);
 }
-

@@ -1,3 +1,13 @@
+/*!************************************************************************
+\file ScoreManager.h
+\author Tan Jun Rong
+\par DP email: t.junrong@digipen.edu
+\par Course: CSD1171B
+\par Software Engineering Project
+\date 18-01-2023
+\brief
+This header file contians prototype functions and declarations for ScoreManager.cpp.
+**************************************************************************/
 #pragma once
 #include <EventSystem.h>
 #include <AEEngine.h>
@@ -6,14 +16,57 @@
 #include <iostream>
 
 namespace ScoreManager {
+	/*!***********************************************************************
+	* Events.
+	*************************************************************************/
 	extern EventSystem::Event<void> onScoreUpdate;
 	extern EventSystem::Event<void> onLevelChange;
-	void UpdatePotentialScoreGain(int);
-	void Initialize(float _exp_mod = 0.3f, float _exp_increase_mod = 1.8f);
-	void Free();
+
+	/*!***********************************************************************
+	\brief
+		Initialize ScoreManager.
+	*************************************************************************/
+	void Initialize();
+
+	/*!***********************************************************************
+	\brief
+		Draw ScoreManager.
+	*************************************************************************/
 	void Draw();
+
+	/*!***********************************************************************
+	\brief
+		Free ScoreManager.
+	*************************************************************************/
+	void Free();
+
+	/*!***********************************************************************
+	\brief
+		Get player's highscore.	
+	*************************************************************************/
 	int GetHighScore();
+
+	/*!***********************************************************************
+	\brief
+		Set player's highscore.
+	*************************************************************************/
 	void SetHighScore(int _score);
+
+	/*!***********************************************************************
+	\brief
+		Add score.
+	*************************************************************************/
 	void AddScore(int modifier);
-	void ToggleShowHighScore(bool _bool);
+
+	/*!***********************************************************************
+	\brief
+		Toggle ShowHighScore state.
+	*************************************************************************/
+	void ToggleShowHighScore(bool state);
+
+	/*!***********************************************************************
+	\brief
+		Update potential score text.
+	*************************************************************************/
+	void UpdatePotentialScoreGain(int);
 }

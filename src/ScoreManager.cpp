@@ -102,12 +102,8 @@ namespace ScoreManager {
 	/*!***********************************************************************
 	\brief
 		Initialize ScoreManager.
-	\param _exp_mod
-		Exp modifier.
-	\param _exp_increase_mod
-		Exp increase modifier.
 	*************************************************************************/
-	void Initialize(float _exp_mod, float _exp_increase_mod) {
+	void Initialize() {
 		IntializeLevels();
 		//Load highscore from file here 
 		score = potentialScoreGain = 0;
@@ -141,11 +137,11 @@ namespace ScoreManager {
 	/*!***********************************************************************
 	\brief
 		Toggle ShowHighScore state.
-	\param _bool
+	\param state
 		True / false.
 	*************************************************************************/
-	void ToggleShowHighScore(bool _bool){
-		showHighScore = _bool;
+	void ToggleShowHighScore(bool state){
+		showHighScore = state;
 	}
 
 	/*!***********************************************************************

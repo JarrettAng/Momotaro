@@ -30,4 +30,3 @@ public:
 
 void MapToLoad(std::string const& mapFilePath);
 std::string const& GetCurrentMapName();
-void GameOver();

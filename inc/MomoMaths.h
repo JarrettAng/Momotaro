@@ -6,14 +6,17 @@
 \par Software Engineering Project
 \date 18-01-2023
 \brief
-This header file declares
-
+This header file contains functionalities to perform mathematical operations.
 **************************************************************************/
 
 #pragma once
 #include <iostream>
 #include <AEEngine.h>
 
+/*!***********************************************************************
+\brief
+	Vector 2
+*************************************************************************/
 template<class T>
 struct Vec2 {
 	T x;
@@ -24,6 +27,10 @@ struct Vec2 {
 	Vec2& operator*=(T  rhs);
 };
 
+/*!***********************************************************************
+\brief
+	Vector 3
+*************************************************************************/
 template<class T>
 struct Vec3 {
 	T x;
@@ -37,6 +44,10 @@ struct Vec3 {
 	Vec3& operator*=(T  rhs);
 };
 
+/*!***********************************************************************
+\brief
+	Vector 4
+*************************************************************************/
 template<class T>
 struct Vec4
 {
@@ -117,7 +128,7 @@ Vec3<T>& Vec3<T>::operator+=(Vec2<T> const& rhs)	//vec3+=vec2
 }
 
 template <class T>
-Vec3<T>& Vec3<T>::operator+=(Vec3<T> const& rhs) //vec3+=vec3
+Vec3<T>& Vec3<T>::operator+=(Vec3<T> const& rhs) 	//vec3+=vec3
 {
 	x += rhs.x;
 	y += rhs.y;
@@ -126,14 +137,14 @@ Vec3<T>& Vec3<T>::operator+=(Vec3<T> const& rhs) //vec3+=vec3
 }
 
 template <class T>
-Vec4<T>& Vec4<T>::operator+=(Vec2<T> const& rhs) //vec4+=vec2
+Vec4<T>& Vec4<T>::operator+=(Vec2<T> const& rhs) 	//vec4+=vec2
 {
 	x += rhs.x;
 	y += rhs.y;
 	return *this;
 }
 template <class T>
-Vec4<T>& Vec4<T>::operator+=(Vec3<T> const& rhs) //vec4+=vec3
+Vec4<T>& Vec4<T>::operator+=(Vec3<T> const& rhs) 	//vec4+=vec3
 {
 	x += rhs.x;
 	y += rhs.y;
@@ -141,7 +152,7 @@ Vec4<T>& Vec4<T>::operator+=(Vec3<T> const& rhs) //vec4+=vec3
 	return *this;
 }
 template <class T>
-Vec4<T>& Vec4<T>::operator+=(Vec4<T> const& rhs) //vec4+=vec4
+Vec4<T>& Vec4<T>::operator+=(Vec4<T> const& rhs) 	//vec4+=vec4
 {
 	w += rhs.w;
 	x += rhs.x;
@@ -217,28 +228,28 @@ Vec2<T>& Vec2<T>::operator-=(Vec2<T>const& rhs) {	//vec2-=vec2
 }
 
 template <class T>
-Vec3<T>& Vec3<T>::operator-=(Vec2<T> const& rhs) // vec3-=vec2
+Vec3<T>& Vec3<T>::operator-=(Vec2<T> const& rhs) 	// vec3-=vec2
 {
 	x -= rhs.x;
 	y -= rhs.y;
 	return *this;
 }
 template<class T>
-Vec3<T>& Vec3<T>::operator-=(Vec3<T>const& rhs) { //vec3-=vec3
+Vec3<T>& Vec3<T>::operator-=(Vec3<T>const& rhs) { 	//vec3-=vec3
 	x -= rhs.x;
 	y -= rhs.y;
 	z -= rhs.z;
 	return*this;
 }
 template <class T>
-Vec4<T>& Vec4<T>::operator-=(Vec2<T> const& rhs) //vec4-=vec2
+Vec4<T>& Vec4<T>::operator-=(Vec2<T> const& rhs) 	//vec4-=vec2
 {
 	x -= rhs.x;
 	y -= rhs.y;
 	return *this;
 }
 template <class T>
-Vec4<T>& Vec4<T>::operator-=(Vec3<T> const& rhs) //vec4-=vec3
+Vec4<T>& Vec4<T>::operator-=(Vec3<T> const& rhs) 	//vec4-=vec3
 {
 	x -= rhs.x;
 	y -= rhs.y;
@@ -267,30 +278,14 @@ Vec3<T> operator-(Vec3<T> const& lhs, Vec2<T>const& rhs) {	//vec3-vec2
 	temp -= rhs;
 	return temp;
 }
-// template<class T>
-// Vec3<T> operator-(Vec2<T> const& lhs, Vec3<T>const& rhs){	//vec2-vec3
-// 	Vec3<T> temp;
-// 	temp-=rhs;
-// 	return temp;
-// } 
+
 template<class T>
 Vec3<T> operator-(Vec3<T> const& lhs, Vec3<T>const& rhs) {	//vec3-vec3
 	Vec3<T> temp{ lhs };
 	temp -= rhs;
 	return temp;
 }
-// template<class T>
-// Vec4<T> operator-(Vec2<T> const& lhs, Vec4<T>const& rhs){	//vec2-vec4
-// 	Vec4<T> temp{lhs};
-// 	temp-=rhs;
-// 	return temp;
-// } 
-// template<class T>
-// Vec4<T> operator-(Vec3<T> const& lhs, Vec4<T>const& rhs){	//vec3-vec4
-// 	Vec4<T> temp{lhs};
-// 	temp-=rhs;
-// 	return temp;
-// } 
+
 template<class T>
 Vec4<T> operator-(Vec4<T> const& lhs, Vec2<T>const& rhs) {	//vec4-vec2
 	Vec4<T> temp{ lhs };
@@ -377,13 +372,11 @@ bool operator<(Vec2<T> const& lhs, Vec2<T> const& rhs) {
 /*============================================================================
 * OPERATOR OVER LOADS FOR VECTOR TO OUTPUT STREAM
 */
-// template<class T>
-// std::ostream& operator<<(std::ostream& os, Vec2<T> const&);
-// template<class T>
-// std::ostream& operator<<(std::ostream& os, Vec3<T> const&);
-// template<class T>
-// std::ostream& operator<<(std::ostream& os, Vec4<T> const&);
 
+/*!***********************************************************************
+\brief
+	Vec2 to output stream.
+*************************************************************************/
 template <class T>
 inline std::ostream& operator<<(std::ostream& os, Vec2<T> const& rhs)
 {
@@ -391,6 +384,10 @@ inline std::ostream& operator<<(std::ostream& os, Vec2<T> const& rhs)
 	return os << "(" << rhs.x << "," << rhs.y << ")";
 }
 
+/*!***********************************************************************
+\brief
+	Vec3 to output stream.
+*************************************************************************/
 template <class T>
 inline std::ostream& operator<<(std::ostream& os, Vec3<T> const& rhs)
 {
@@ -398,6 +395,10 @@ inline std::ostream& operator<<(std::ostream& os, Vec3<T> const& rhs)
 	return os << "(" << rhs.x << "," << rhs.y << "," << rhs.z << ")";
 }
 
+/*!***********************************************************************
+\brief
+	Vec4 to output stream.
+*************************************************************************/
 template <class T>
 inline std::ostream& operator<<(std::ostream& os, Vec4<T> const& rhs)
 {
@@ -405,6 +406,34 @@ inline std::ostream& operator<<(std::ostream& os, Vec4<T> const& rhs)
 	return os << "(" << rhs.x << "," << rhs.y << "," << rhs.z << "," << rhs.w << ")";
 }
 
+/*!***********************************************************************
+\brief
+	Get X word posiiton by screen percentage.
+\return
+	X pos.
+*************************************************************************/
+inline float GetWorldXByPercentage(float percent) {
+	return AEGfxGetWinMinX() * ((50 - percent) / 50.0f);
+}
+
+
+/*!***********************************************************************
+\brief
+	Get Y word posiiton by screen percentage.
+\return
+	Y pos.
+*************************************************************************/
+inline float GetWorldYByPercentage(float percent) {
+	return AEGfxGetWinMinY() * ((50 - percent) / 50.0f);
+}
+
+/*!***********************************************************************
+\brief
+	Check of a vec2 point is within a area.
+	Pivot: Top left.
+\return
+	True / false.
+*************************************************************************/
 template <typename T>
 inline bool IsPointWithinRect(Vec2<T> point, Vec2<T> pos, Vec2<T> size) {
 	if (point.x < pos.x || point.x > pos.x + size.x ||
@@ -412,20 +441,13 @@ inline bool IsPointWithinRect(Vec2<T> point, Vec2<T> pos, Vec2<T> size) {
 	return true;
 }
 
-// How many percentage from the left.
-// Left side of world pos is negative.
-// Right side of world pos is positive.
-inline float GetWorldXByPercentage(float percent) {
-	return AEGfxGetWinMinX() * ((50 - percent) / 50.0f);
-}
-
-// How many percent from the left
-// Top side of world pos is positive.
-// Bottom side of world pos is negative.
-inline float GetWorldYByPercentage(float percent) {
-	return AEGfxGetWinMinY() * ((50 - percent) / 50.0f);
-}
-
+/*!***********************************************************************
+\brief
+	Check of a vec2 point is within a area.
+	Pivot: Middle.
+\return
+	True / false.
+*************************************************************************/
 inline bool MouseInsideButton(Vec2<int> mousePos, Vec2<float> btnPos, Vec2<float> btnSize) {
 	// LEFT / RIGHT BOUNDS
 	if ((mousePos.x > btnPos.x &&

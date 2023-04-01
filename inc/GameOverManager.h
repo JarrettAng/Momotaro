@@ -6,8 +6,7 @@
 \par Software Engineering Project
 \date 29-02-2023
 \brief
-This source file declares
-
+This header file contians prototype functions and declarations for GameOverManager.cpp.
 **************************************************************************/
 #pragma once
 
@@ -21,9 +20,33 @@ This source file declares
 #include <AudioManager.h>
 
 namespace GameOverManager {
+	/*!***********************************************************************
+	\brief
+		Initialize the GameOverManager.
+	*************************************************************************/
 	void Initialize();
+
+	/*!***********************************************************************
+	\brief
+		Update the GameOverManager.
+	*************************************************************************/
 	void Update();
+
+	/*!***********************************************************************
+	\brief
+		Draw the GameOverManager.
+	*************************************************************************/
 	void Draw();
+
+	/*!***********************************************************************
+	\brief
+		Free the GameOverManager.
+	*************************************************************************/
 	void Free();
+
+	/*!***********************************************************************
+	\brief
+		Check if it is game over.
+	*************************************************************************/
 	bool IsGameOver();
 }

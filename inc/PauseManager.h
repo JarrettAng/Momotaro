@@ -1,17 +1,13 @@
 /*!************************************************************************
-\file:          PauseManager.h
-\author:
-\par DP email:
-\par Course:    CSD1171B
+\file PauseManager.h
+\author Tan Jun Rong
+\par DP email: t.junrong@digipen.edu
+\par Course: CSD1171B
 \par Software Engineering Project
-\date:          30-01-2023
+\date 29-02-2023
 \brief
-
-
-The functions include:
--
+This header file contians prototype functions and declarations for PauseManager.cpp.
 **************************************************************************/
-
 #pragma once
 
 #include <EventSystem.h>
@@ -24,11 +20,45 @@ The functions include:
 #include <CardManager.h>
 
 namespace PauseManager {
-	bool IsPaused();
+	/*!***********************************************************************
+	\brief
+		Initialize PauseManager.
+	*************************************************************************/
 	void Initialize();
+
+	/*!***********************************************************************
+	\brief
+		Update PauseManager.
+	*************************************************************************/
 	void Update();
+
+	/*!***********************************************************************
+	\brief
+		Draw the PauseManager.
+	*************************************************************************/
 	void Draw();
+
+	/*!***********************************************************************
+	\brief
+		Free PauseManager.
+	*************************************************************************/
 	void Free();
+
+	/*!***********************************************************************
+	\brief
+		Is the game paused?
+	*************************************************************************/
+	bool IsPaused();
+
+	/*!***********************************************************************
+	\brief
+		Toggle pause UI.
+	*************************************************************************/
 	void TogglePause();
-	void ToggleShowRestart(bool _bool);
+
+	/*!***********************************************************************
+	\brief
+		Toggle restart button based on given bool.
+	*************************************************************************/
+	void ToggleShowRestart(bool state);
 }
