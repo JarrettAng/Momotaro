@@ -128,8 +128,6 @@ namespace GridManager {
 		CurrentSynergyArea.clear();
 		CurrentBuildingCells.clear();
 		playableArea--;
-		std::cout <<"Tiles Left: "<< playableArea <<'\n';
-		//!TODO CHANGE THIS TO FIT BIGGER SIZES!!
 		if (playableArea < 1) {
 			onBoardFull.Invoke();
 		}
@@ -460,7 +458,7 @@ namespace GridManager {
 	///////////////////////////////////////////////////////////////////////////
 	void ClearGrid() {
 		if (PauseManager::IsPaused() || !Debug::IsDebugModeOn()) return;
-
+		playableArea = 0;
 		for (int y{ 0 }; y < gridY; ++y) {
 			for (int x{ 0 }; x < gridX; ++x) {
 				int index = GetIndex(x, y);
