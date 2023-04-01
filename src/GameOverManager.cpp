@@ -15,6 +15,7 @@ namespace GameOverManager {
 	* Const variables.
 	*************************************************************************/
 	const Vec2<float> POINTER_OFFSET = { 80.0f, 10.0f };
+	const float multiplier{1.f};
 
 	// Game over state of the game.
 	static bool GAME_OVER = false;
@@ -106,7 +107,7 @@ namespace GameOverManager {
 		Enable game over.
 	*************************************************************************/
     void GameOver() {
-		AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_GAMEOVER);
+		if(!GAME_OVER) AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_GAMEOVER);
 		GAME_OVER = true;
 	}
 
@@ -122,8 +123,8 @@ namespace GameOverManager {
 		gameOverDisplay.rect.transform.pos.x = GetWorldXByPercentage(13.0f);
 		gameOverDisplay.rect.transform.pos.y = GetWorldYByPercentage(90.0f);
 
-		gameOverDisplay.rect.transform.size.x = 1200.0f;
-		gameOverDisplay.rect.transform.size.y = 690.0f;
+		gameOverDisplay.rect.transform.size.x = 1200.0f*multiplier;
+		gameOverDisplay.rect.transform.size.y = 690.0f*multiplier;
 
 		// RETRY BUTTON.
 		retryBtn.render.rect.graphics.tex = TextureManager::RETRY_BTN;
@@ -133,8 +134,8 @@ namespace GameOverManager {
 		retryBtn.render.rect.transform.pos.x = GetWorldXByPercentage(30.0f);
 		retryBtn.render.rect.transform.pos.y = GetWorldYByPercentage(37.0f);
 
-		retryBtn.render.rect.transform.size.x = 230.0f;
-		retryBtn.render.rect.transform.size.y = 100.0f;
+		retryBtn.render.rect.transform.size.x = 230.0f*multiplier;
+		retryBtn.render.rect.transform.size.y = 100.0f*multiplier;
 		retryBtn.render.rect.transform.cachedSize = retryBtn.render.rect.transform.size;
 
 		buttons.push_back(retryBtn);
@@ -147,8 +148,8 @@ namespace GameOverManager {
 		quitBtn.render.rect.transform.pos.x = GetWorldXByPercentage(60.0f);
 		quitBtn.render.rect.transform.pos.y = GetWorldYByPercentage(37.0f);
 
-		quitBtn.render.rect.transform.size.x = 170.0f;
-		quitBtn.render.rect.transform.size.y = 100.0f;
+		quitBtn.render.rect.transform.size.x = 170.0f*multiplier;
+		quitBtn.render.rect.transform.size.y = 100.0f*multiplier;
 		quitBtn.render.rect.transform.cachedSize = quitBtn.render.rect.transform.size;
 
 		buttons.push_back(quitBtn);

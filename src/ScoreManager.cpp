@@ -16,6 +16,8 @@ This source file kep track of the current synergy (score) of the game.
 #include <GridManager.h>
 #include <AudioManager.h>
 #include <DebugManager.h>
+#include <UIManager.h>
+#include <CardManager.h>
 
 namespace ScoreManager {
 	/*!***********************************************************************
@@ -51,12 +53,14 @@ namespace ScoreManager {
 
 	std::string synergy;
 	std::string highscore;
+	UI::TextBox HighScoreTextBox;
 
-	// RenderSystem::Transform background;
+
+	RenderSystem::Transform background;
 	
 	int potentialScoreGain;
 	int lastHighScore{};
-
+	const float highScoreFontSize{24.f};
 	bool showHighScore;
 
 	/*!***********************************************************************
@@ -197,14 +201,27 @@ namespace ScoreManager {
 
 		// Draw highscore text.
 		if(showHighScore){
-			// Get highscore.
 			highscore = "HIGHSCORE : " + std::to_string(GetHighScore());
-			RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.95f, -0.85f, FontManager::GetFont(FontManager::SHIN_GO),40,highscore,1,COLOR_BLACK);
+			// RenderSystem::AddTextToBatch(RenderSystem::UI_BATCH, -0.5f, 0.85f, FontManager::GetFont(FontManager::SHIN_GO),40,highscore,1,COLOR_BLACK);
+			HighScoreTextBox = UI::TextBox{
+				Vec2<float>{
+					CardManager::GetCardTemplateXPos()+highScoreFontSize,AEGfxGetWinMaxY()*-0.54f	
+					//AEGfxGetWinMaxX()*-0.55f,AEGfxGetWinMaxY()*-0.525f	
+				},
+				highscore,
+				UI::LEFT_JUSTIFY,
+				640,
+				highScoreFontSize,
+				COLOR_BLACK
+			};
+			HighScoreTextBox.Render();
+			// Get highscore.
 			
-			// // Draw background.
-			// background.size.x = (float)(highscore.size()*40.f);
-			// background.size.y = 50.f;
-			// RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, -AEGfxGetWinMaxX(), -AEGfxGetWinMaxY()*0.56f, background.size.x, background.size.y, TextureManager::BLANK_PROMPT);
+			// Draw background.
+			background.size.x = (float)(highscore.size()*highScoreFontSize);
+			background.size.y = highScoreFontSize + 5.f;
+			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, CardManager::GetCardTemplateXPos(), -AEGfxGetWinMaxY()*0.485f, background.size.x, background.size.y, TextureManager::BLANK_PROMPT);
+			// RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, -AEGfxGetWinMaxX()*0.59f, -AEGfxGetWinMaxY()*0.472f, background.size.x, background.size.y, TextureManager::BLANK_PROMPT);
 		}
 	}
 

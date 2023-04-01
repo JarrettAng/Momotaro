@@ -229,11 +229,11 @@ namespace FileIOManager {
 
 		int lineCount{};
 		int maxID{};
+		bool scoreSet{ false };
 		while (std::getline(inputFile, buffer)) {
 			int xIndex = 0;	//Since each line has a spacing, we only want to count the xIndex when we get a number
 			//First we loop through each line and grab the numbers
 			for (int i{ 0 }; i < static_cast<int>(buffer.length()); ++i) {
-				int _level = i+2;
 				if (isdigit(buffer[i]))
 				{
 					//The first 2 lines will be the width and the height
@@ -245,16 +245,17 @@ namespace FileIOManager {
 							newMap = { new GM::cell[GM::gridX * GM::gridY]{} };
 						}
 					}
-					if(lineCount == 2) {
+					if(lineCount == 2 &&!scoreSet) {
 						ScoreManager::SetHighScore(std::stoi(&buffer[i]));
 						if(std::stoi(&buffer[i]) == 0){
 							i+=2;
-						} else i += (int)(log10f(std::stoi(&buffer[i]))+2);
+						} else i += (int)(log10f(std::stoi(&buffer[i])))+2;
 						ScoreManager::SetScore(std::stoi(&buffer[i]));
 						if(std::stoi(&buffer[i]) == 0){
 							i+=2;
-						} else i += (int)(log10f(std::stoi(&buffer[i]))+2);
+						} else i += (int)(log10f(std::stoi(&buffer[i])))+2;
 						ScoreManager::SetLevel(std::stoi(&buffer[i]));
+						scoreSet = true;
 					}
 					//Once the line count exceeds 3, meaning we already have the width&height, we can start to add to array
 					if (lineCount > 3) {

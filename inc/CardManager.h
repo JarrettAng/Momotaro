@@ -101,6 +101,6 @@ namespace CardManager {
 	void DrawRandomCard();
 
 	void ToggleClickable(bool clickable);
-
+	float GetCardTemplateXPos();
 	void Free(); // At the end of the level free and unsubscribe from everything
 }

@@ -214,7 +214,7 @@ namespace CardManager {
 		spawnMergeBuilding = false;
 		isClickable = true;
 	}
-
+	
 	// Every frame check if the info box should show
 	void Update() {
 		// If mouse hovers over any card long enough, show its information
@@ -472,6 +472,9 @@ namespace CardManager {
 		GridManager::onMergeBuildings.Unsubscribe(GiveCardOnMerge);
 	}
 
+
+	//HELPER FUNCTIONS 
+
 	void ToggleClickable(bool clickable) {
 		isClickable = clickable;
 	}
@@ -479,5 +482,9 @@ namespace CardManager {
 	void ToggleClickableOff() {
 		isClickable = false;
 		CardManager::onHandEmpty.Unsubscribe(ToggleClickableOff);
+	}
+
+	float GetCardTemplateXPos(){
+		return handBackground.pos.x;
 	}
 }
