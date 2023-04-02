@@ -27,9 +27,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	srand(11);
 
 	//Memory leak checker (for debug mode)
-#if defined(DEBUG) | defined(_DEBUG)
+	#if defined(DEBUG) | defined(_DEBUG)
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-#endif
+	#endif
 	//_crtBreakAlloc = 6359;
 
 	// Engine Initialization

@@ -173,7 +173,6 @@ void LevelPreview::Render() {
 	RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, transform.pos.x + transform.size.x * 0.025f, transform.pos.y - transform.size.y * 0.05f, transform.size.x * 0.95f, transform.size.y * 0.9f, COLOR_PREVIEW_WATER, 2);
 
 	// Depending on the cell type, draw a different color
-	float x, y;
 	for (int index = 0; index < map.size(); ++index) {
 		if (map[index]) {
 			switch (map[index]) {

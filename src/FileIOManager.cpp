@@ -269,11 +269,11 @@ namespace FileIOManager {
 						//ScoreManager::SetHighScore(std::stoi(&buffer[i]));
 						if(std::stoi(&buffer[i]) <= 0){
 							i+=2;
-						} else i += (int)(log10f(std::stoi(&buffer[i])))+2;
+						} else i += (int)(log10f((float)std::stoi(&buffer[i])))+2;
 						ScoreManager::SetScore(std::stoi(&buffer[i]));
 						if(std::stoi(&buffer[i]) <= 0){
 							i+=2;
-						} else i += (int)(log10f(std::stoi(&buffer[i])))+2;
+						} else i += (int)(log10f((float)std::stoi(&buffer[i])))+2;
 						ScoreManager::SetLevel(std::stoi(&buffer[i]));
 						scoreSet = true;
 					}
@@ -287,7 +287,7 @@ namespace FileIOManager {
 								maxID = max(std::stoi(&buffer[i])-1,maxID);
 								newMap[GM::GetIndex(xIndex, lineCount - 4)].ID = (std::stoi(&buffer[i])-1);
 								//Then we need to move the index by however many multiples of 10 the ID is
-								i+=(int)(log10f(std::stoi(&buffer[i])));
+								i+=(int)(log10f((float)std::stoi(&buffer[i])));
 								//After getting to the end of the number, we should hit the ','
 								if(buffer[i+=1] == ','){
 									//Then we store the type and level
