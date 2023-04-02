@@ -10,6 +10,7 @@ This source file handles the game over state of the game.
 **************************************************************************/
 #include <GameOverManager.h>
 #include <FileIOManager.h>
+#include <PauseManager.h>
 namespace GameOverManager {
 	/*!***********************************************************************
 	* Const variables.
@@ -25,10 +26,12 @@ namespace GameOverManager {
 	*************************************************************************/
 	RenderSystem::Interactable retryBtn;
 	RenderSystem::Interactable quitBtn;
-	
+	RenderSystem::Interactable showHideBtn;
+
 	RenderSystem::Renderable gameOverDisplay;
 
 	std::vector<RenderSystem::Interactable> buttons;
+	bool showGameOver{true};
 
 	/*!***********************************************************************
 	* Forward Declarations.
@@ -40,6 +43,7 @@ namespace GameOverManager {
 	void HandleBtnClick();
 	void DrawGameOverUI();
 	void InitializeGameOverUI();
+	void ToggleShowGameOverUI();
 
 	/*!***********************************************************************
 	\brief
@@ -50,7 +54,7 @@ namespace GameOverManager {
 		InitializeGameOverUI();
 
 		GAME_OVER = false;
-
+		showGameOver = true;
 		// Subscribe to events to trigger game over.
 		GridManager::onBoardFull.Subscribe(GameOver);
 		CardManager::onHandEmpty.Subscribe(GameOver);
@@ -108,6 +112,8 @@ namespace GameOverManager {
 	*************************************************************************/
     void GameOver() {
 		if(!GAME_OVER) AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_GAMEOVER);
+		PauseManager::ToggleShowPause(false);
+		PauseManager::ToggleShowRestart(false);
 		FileIOManager::SaveHighScoreToFile();
 		GAME_OVER = true;
 	}
@@ -154,6 +160,22 @@ namespace GameOverManager {
 		quitBtn.render.rect.transform.cachedSize = quitBtn.render.rect.transform.size;
 
 		buttons.push_back(quitBtn);
+
+		//SHOW/HIDE BUTTON
+		showHideBtn.render.rect.graphics.tex = TextureManager::SHOWHIDE_BTN;
+		showHideBtn.render.layer = 12;
+		showHideBtn.func = ToggleShowGameOverUI;
+
+		showHideBtn.render.rect.transform.pos.x = GetWorldXByPercentage(70.0f);
+		showHideBtn.render.rect.transform.pos.y = GetWorldYByPercentage(97.0f);
+
+		showHideBtn.render.rect.transform.size.x = 285.0f*multiplier;
+		showHideBtn.render.rect.transform.size.y = 75.0f*multiplier;
+		// showHideBtn.render.rect.transform.size.x = 190.0f*multiplier;
+		// showHideBtn.render.rect.transform.size.y = 50.0f*multiplier;
+		showHideBtn.render.rect.transform.cachedSize = showHideBtn.render.rect.transform.size;
+
+		buttons.push_back(showHideBtn);
 	}
 
 	/*!***********************************************************************
@@ -219,20 +241,30 @@ namespace GameOverManager {
 		}
 	}
 
+	void ToggleShowGameOverUI(){
+		showGameOver = !showGameOver;
+		for (RenderSystem::Interactable& i : buttons) {
+			if(i.render.rect.graphics.tex == TextureManager::QUIT_BTN || i.render.rect.graphics.tex == TextureManager::RETRY_BTN){
+				i.isActive = showGameOver;
+				i.isClickable = showGameOver;
+			}
+		}
+	}
 	/*!***********************************************************************
 	\brief
 		Draw game over UI.
 	*************************************************************************/
 	void DrawGameOverUI() {
 		// Draw game over background.
-		RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, gameOverDisplay.rect.transform.pos.x, gameOverDisplay.rect.transform.pos.y, gameOverDisplay.rect.transform.size.x, gameOverDisplay.rect.transform.size.y, gameOverDisplay.rect.graphics.tex, gameOverDisplay.layer);
-
-		// Draw buttons.
-		for (RenderSystem::Interactable const& i : buttons) {
-			if (i.isActive) {
-				RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, i.render.rect.transform.pos.x, i.render.rect.transform.pos.y, i.render.rect.transform.size.x, i.render.rect.transform.size.y, i.render.rect.graphics.tex, i.render.layer);
-			}
+		if(showGameOver){
+			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, gameOverDisplay.rect.transform.pos.x, gameOverDisplay.rect.transform.pos.y, gameOverDisplay.rect.transform.size.x, gameOverDisplay.rect.transform.size.y, gameOverDisplay.rect.graphics.tex, gameOverDisplay.layer);
 		}
+			// Draw buttons.
+			for (RenderSystem::Interactable const& i : buttons) {
+				if (i.isActive) {
+					RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, i.render.rect.transform.pos.x, i.render.rect.transform.pos.y, i.render.rect.transform.size.x, i.render.rect.transform.size.y, i.render.rect.graphics.tex, i.render.layer);
+				}
+			}
 	}
 
 	/*!***********************************************************************

@@ -61,4 +61,11 @@ namespace PauseManager {
 		Toggle restart button based on given bool.
 	*************************************************************************/
 	void ToggleShowRestart(bool state);
+
+	/*!***********************************************************************
+	\brief
+		Toggle pause button based on given bool.
+	*************************************************************************/
+    void ToggleShowPause(bool state);
+
 }

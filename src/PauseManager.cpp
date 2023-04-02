@@ -52,8 +52,8 @@ namespace PauseManager {
 	void ToggleRestartConfirm();
 	void RestartLevel();
 	void HandlePauseUIClick();
-	void LoadMainMenu();
-	void HandleBtnHover();
+    void LoadMainMenu();
+    void HandleBtnHover();
 	bool IsPaused() { return isPaused || showRestartConfirm; }
 	
 	/*!***********************************************************************
@@ -279,6 +279,20 @@ namespace PauseManager {
 	void ToggleShowRestart(bool state){
 		for (RenderSystem::Interactable& i : buttons) {
 			if(i.render.rect.graphics.tex == TextureManager::RESTART_BUTTON){
+				i.isActive = state;
+				i.isClickable = state;
+			}
+		}
+	}
+	/*!***********************************************************************
+	\brief
+		Toggle pause button based on given bool.
+	\param state
+		True / false.
+	*************************************************************************/
+	void ToggleShowPause(bool state){
+		for (RenderSystem::Interactable& i : buttons) {
+			if(i.render.rect.graphics.tex == TextureManager::PAUSE_BUTTON){
 				i.isActive = state;
 				i.isClickable = state;
 			}

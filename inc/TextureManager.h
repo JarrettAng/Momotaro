@@ -66,6 +66,7 @@ namespace TextureManager {
 		CLOUD_BG,
 		SKY_BG,
 		RETRY_BTN,
+		SHOWHIDE_BTN,
 		GAMEOVER_BG
 	};
 	TEX_TYPE operator++(TEX_TYPE&, int);
