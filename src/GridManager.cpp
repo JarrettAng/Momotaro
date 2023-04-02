@@ -58,6 +58,7 @@ namespace GridManager {
 	BuildingEnum::ORIENTATION TestOrientation{ BuildingEnum::RIGHT };
 	std::vector<BuildingData> _testBuildingVector;
 	void TestSave();
+	void InstantWin();
 	///////////////////////////////////////////////////////////////////////////
 	//INITIALISE GRID 								
 	///////////////////////////////////////////////////////////////////////////
@@ -93,6 +94,7 @@ namespace GridManager {
 		InputManager::SubscribeToKey(AEVK_1, InputManager::TRIGGERED, SpawnResidential);
 		InputManager::SubscribeToKey(AEVK_2, InputManager::TRIGGERED, SpawnCommerical);
 		InputManager::SubscribeToKey(AEVK_3, InputManager::TRIGGERED, SpawnIndustrial);
+		InputManager::SubscribeToKey(AEVK_W, InputManager::TRIGGERED, InstantWin);
 		// InputManager::SubscribeToKey(AEVK_Q, InputManager::TRIGGERED, SpawnBigResidential);
 		// InputManager::SubscribeToKey(AEVK_W, InputManager::TRIGGERED, SpawnBigResidential3x1);
 		// InputManager::SubscribeToKey(AEVK_E, InputManager::TRIGGERED, SpawnBigResidential);
@@ -106,6 +108,9 @@ namespace GridManager {
 	void TestSave(){
 		//std::cout << "gsdjhgfksdjg "<< buildingID << '\n';
 		FileIOManager::SaveGridToFile("Assets/JSON_Data/Maps/lastSaved2.momomaps");
+	}
+	void InstantWin(){
+		onBoardFull.Invoke();
 	}
 	///////////////////////////////////////////////////////////////////////////
 	//Spawns buildings at mouse position
@@ -773,8 +778,8 @@ namespace GridManager {
 		InputManager::UnsubscribeKey(AEVK_1, InputManager::TRIGGERED, SpawnResidential);
 		InputManager::UnsubscribeKey(AEVK_2, InputManager::TRIGGERED, SpawnCommerical);
 		InputManager::UnsubscribeKey(AEVK_3, InputManager::TRIGGERED, SpawnIndustrial);
+		InputManager::UnsubscribeKey(AEVK_W, InputManager::TRIGGERED, InstantWin);
 		// InputManager::UnsubscribeKey(AEVK_Q, InputManager::TRIGGERED, SpawnBigResidential);
-		// InputManager::UnsubscribeKey(AEVK_W, InputManager::TRIGGERED, SpawnBigResidential3x1);
 		// InputManager::UnsubscribeKey(AEVK_E, InputManager::TRIGGERED, SpawnBigResidential);
 		//InputManager::UnsubscribeKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
 		CardManager::onNewCardSelected.Unsubscribe(GetBuildingCard);

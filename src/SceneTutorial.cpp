@@ -179,7 +179,7 @@ void TutLoadMap2() {
 
 void InitializePos() {
 	// The first msg to display in the tutorial
-	lastPopupMsg = "Hello welcome to MomoTown! My name is Joe..... Sike! it's Momo, let me teach you the basics.";
+	lastPopupMsg = "Hello and welcome to MomoTown! My name is Joe.";
 
 	// Keep Momo the peach size 25% of the screen height
 	momoPeachPos.size.x = momoPeachPos.size.y = AEGfxGetWinMaxY() * 0.25f;
@@ -202,7 +202,7 @@ void ShowTutPart1_Goal() {
 	showHand = true;
 
 	UpdatePopupSize(0.0f, -AEGfxGetWinMaxY() * 0.2f, AEGfxGetWinMaxX(), AEGfxGetWinMaxY() * 0.4f);
-	UpdatePopupText("The goal of this game is simple. You have a hand of cards (look below). Use these cards to build buildings and get the highest SCORE possible!!");
+	UpdatePopupText(".... Sike! it's Momo! The goal of this game is simple. You have a hand of cards (look below). Use these cards to build buildings and get the highest SCORE possible!!");
 
 	// What to show next
 	nextTut_FuncPtr = ShowTutPart1_Score;

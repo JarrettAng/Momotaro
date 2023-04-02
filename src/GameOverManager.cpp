@@ -241,6 +241,10 @@ namespace GameOverManager {
 		}
 	}
 
+		/*!***********************************************************************
+	\brief
+		Toggles showing of the gameover UI 
+	*************************************************************************/
 	void ToggleShowGameOverUI(){
 		showGameOver = !showGameOver;
 		for (RenderSystem::Interactable& i : buttons) {
@@ -259,12 +263,12 @@ namespace GameOverManager {
 		if(showGameOver){
 			RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, gameOverDisplay.rect.transform.pos.x, gameOverDisplay.rect.transform.pos.y, gameOverDisplay.rect.transform.size.x, gameOverDisplay.rect.transform.size.y, gameOverDisplay.rect.graphics.tex, gameOverDisplay.layer);
 		}
-			// Draw buttons.
-			for (RenderSystem::Interactable const& i : buttons) {
-				if (i.isActive) {
-					RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, i.render.rect.transform.pos.x, i.render.rect.transform.pos.y, i.render.rect.transform.size.x, i.render.rect.transform.size.y, i.render.rect.graphics.tex, i.render.layer);
-				}
+		// Draw buttons.
+		for (RenderSystem::Interactable const& i : buttons) {
+			if (i.isActive) {
+				RenderSystem::AddRectToBatch(RenderSystem::UI_BATCH, i.render.rect.transform.pos.x, i.render.rect.transform.pos.y, i.render.rect.transform.size.x, i.render.rect.transform.size.y, i.render.rect.graphics.tex, i.render.layer);
 			}
+		}
 	}
 
 	/*!***********************************************************************
