@@ -55,13 +55,12 @@ void SceneSplashscreen::Load() {
 *************************************************************************/
 void SceneSplashscreen::Initialize() {
 	// Subscribe to key events.
-	InputManager::SubscribeToKey(AEVK_LBUTTON, InputManager::TRIGGERED, BypassIntro);
 	InputManager::SubscribeToKey(AEVK_ESCAPE, InputManager::TRIGGERED, BypassIntro);
 	InputManager::SubscribeToKey(AEVK_SPACE, InputManager::TRIGGERED, BypassIntro);
 
 	// Initialize skip text.
 	skipText = UI::TextBox({ -AEGfxGetWinMaxX() * 0.5f, -AEGfxGetWinMaxY() + 10.0f }, 
-							 "Press Esc, Space, or Click to skip.", UI::CENTER_JUSTIFY, AEGfxGetWinMaxX(), 20.0f, COLOR_WHITE);
+							 "Press Esc or Space to skip.", UI::CENTER_JUSTIFY, AEGfxGetWinMaxX(), 20.0f, COLOR_WHITE);
 }
 
 /*!***********************************************************************
@@ -101,7 +100,6 @@ void SceneSplashscreen::Draw() {
 *************************************************************************/
 void SceneSplashscreen::Free() {
 	// Unsubscribe to key events.
-	InputManager::UnsubscribeKey(AEVK_LBUTTON, InputManager::TRIGGERED, BypassIntro);
 	InputManager::UnsubscribeKey(AEVK_ESCAPE, InputManager::TRIGGERED, BypassIntro);
 	InputManager::UnsubscribeKey(AEVK_SPACE, InputManager::TRIGGERED, BypassIntro);
 }
