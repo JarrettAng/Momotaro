@@ -2,15 +2,26 @@
 \file:          GridManager.cpp
 \author:		Amadeus Chia
 \par DP email:	amadeusjinhan.chia@digipen.edu
-\par Course:    CSD1171B
+\par Course:    CSD1451B
 \par Software Engineering Project
 \date:          30-01-2023
 \brief
 This source file implements functions that manage the game grid.
-This includes the merge logic and the placement of buildings
 
-The functions include:
--
+The important functions to take note are :
+- CheckCellNeighbor 
+Function that handles merging (recurses to handle multiple merges in 1 frame)
+
+- PrepareRenderBatch
+Draws all the items in the grid
+
+- SpawnBuilding
+Handles the spawning of buildings on mouseclick
+
+Check header file for more detailed explanations for functions
+
+All content � 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
 #include <InputManager.h>
@@ -57,7 +68,6 @@ namespace GridManager {
 	int playableArea{ 0 };
 	BuildingEnum::ORIENTATION TestOrientation{ BuildingEnum::RIGHT };
 	std::vector<BuildingData> _testBuildingVector;
-	void TestSave();
 	void InstantWin();
 	///////////////////////////////////////////////////////////////////////////
 	//INITIALISE GRID 								
@@ -76,13 +86,6 @@ namespace GridManager {
 				grid[index].pos = ScreenPos;
 
 				if (grid[index].isRenderable&&grid[index]._building.data.type == BuildingEnum::NONE) playableArea++;
-
-				// //basically we want the grid to be from -2 to 2, but since there's a 10 unit offset, we add 10
-				// if (((x >= (mapPos + gridX / 2)) && (x <= (mapPos + gridX / 2 + mapSize))) && (y >= (mapPos + gridY / 2) && y <= (mapPos + gridY / 2 + mapSize))) {
-				// 	grid[index].isRenderable = true;
-				// 	playableArea++;
-				// }
-				// grid[index].ID = 0;
 			}
 		}
 		AudioManager::PlayBGM(AudioManager::ClipName::BGM_GAME);
@@ -95,34 +98,30 @@ namespace GridManager {
 		InputManager::SubscribeToKey(AEVK_2, InputManager::TRIGGERED, SpawnCommerical);
 		InputManager::SubscribeToKey(AEVK_3, InputManager::TRIGGERED, SpawnIndustrial);
 		InputManager::SubscribeToKey(AEVK_W, InputManager::TRIGGERED, InstantWin);
-		// InputManager::SubscribeToKey(AEVK_Q, InputManager::TRIGGERED, SpawnBigResidential);
-		// InputManager::SubscribeToKey(AEVK_W, InputManager::TRIGGERED, SpawnBigResidential3x1);
-		// InputManager::SubscribeToKey(AEVK_E, InputManager::TRIGGERED, SpawnBigResidential);
-		//InputManager::SubscribeToKey(AEVK_S, InputManager::TRIGGERED, TestSave);
-		//InputManager::SubscribeToKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
-		//InputManager::SubscribeToKey(AEVK_T, InputManager::TRIGGERED, ToggleTileRenderable);
 		//(IN GAME EVENTS!)
 		CardManager::onNewCardSelected.Subscribe(GetBuildingCard);
 		CardManager::onCardPlaced.Subscribe(SpawnBuilding);
 	}
-	void TestSave(){
-		//std::cout << "gsdjhgfksdjg "<< buildingID << '\n';
-		FileIOManager::SaveGridToFile("Assets/JSON_Data/Maps/lastSaved2.momomaps");
-	}
+
+	///////////////////////////////////////////////////////////////////////////
+	//Causes an instant win (DEBUG MODE)
+	///////////////////////////////////////////////////////////////////////////
 	void InstantWin(){
-		onBoardFull.Invoke();
+		if(Debug::IsDebugModeOn()) onBoardFull.Invoke();
 	}
 	///////////////////////////////////////////////////////////////////////////
 	//Spawns buildings at mouse position
 	///////////////////////////////////////////////////////////////////////////
 	void SpawnBuilding(Vec2<int>mousePos) {
 		if(PauseManager::IsPaused()) return;
+		//First we convert the mouse pos to isometric grid pos, then we check if the cell is placeable
 		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
 		if (!isCellSafe(SelectedCell)) {
 			std::string debugLog("Debug ");
 			Debug::Print(debugLog + __FILE__ + "ln" + std::to_string(__LINE__) + ": Invalid position!\n");
 			return;
 		}
+		//If the cell is placeable, we play the sounds and do the necessary things
 		AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_GAINPOINT);
 		int index = GetIndex(SelectedCell);
 		grid[index].ID = ++buildingID;
@@ -137,6 +136,10 @@ namespace GridManager {
 			onBoardFull.Invoke();
 		}
 	}
+
+	///////////////////////////////////////////////////////////////////////////
+	//Draws a tile over the cursor for the editor
+	///////////////////////////////////////////////////////////////////////////	
 	void DrawSelectedTile(Vec2<int> mousePos){
 		Vec2<int> SelectedCell{ScreenPosToIso(mousePos.x,mousePos.y)};
 		if(!isWithinGrid(SelectedCell)){
@@ -153,18 +156,11 @@ namespace GridManager {
 					);
 	}
 
-	const cell* GetGrid() {
-		return grid;
-	}
-
-
-
 	///////////////////////////////////////////////////////////////////////////
 	//Checks if the selected cell is safe to place a building on
 	///////////////////////////////////////////////////////////////////////////
 	bool isCellSafe(Vec2<int> selectedCell) {
 		if (!isWithinGrid(selectedCell)) return false;
-		// if ((((selectedCell.x) < 0) || ((selectedCell.x) > gridX)) || ((selectedCell.y) < 0 || (selectedCell.y) > gridY)) return false;
 		//If the tile is not even renderable, we cannot place
 		if (!grid[GetIndex(selectedCell.x, selectedCell.y)].isRenderable) return false;
 		//If there already is a building on that tile, we cannot place.
@@ -185,36 +181,12 @@ namespace GridManager {
 		}
 	}
 
+	///////////////////////////////////////////////////////////////////////////
+	//Debug functions related to spawning (in editor)
+	///////////////////////////////////////////////////////////////////////////
 #pragma region DEBUG_SPAWN_FUNCTIONS
 
-	void SpawnBigResidential() {
-		//1x2
-		if (PauseManager::IsPaused()) return;
-		// ClearGrid();
-		Vec2<int> mousePos = InputManager::GetMousePos();
-		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
-		int index = GetIndex(SelectedCell.x, SelectedCell.y);
-		if (!isCellSafe(SelectedCell)) return;
-		ChangeOrientation();
-		// SetGridIndex(TestOrientation, BigResidentialLvl1.data, SelectedCell.x, SelectedCell.y);
-		grid[index]._building.GetSynergyArea();
-		for (Vec2<int> cell : grid[index]._building.synergyAreaCells) {
-			grid[GetIndex(cell)].isRenderable = false;
-		}
-	}
-	void SpawnBigResidential3x1() {
-		//1x2
-		if (PauseManager::IsPaused()) return;
-		// ClearGrid();
-		Vec2<int> mousePos = InputManager::GetMousePos();
-		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
-		//int index = GetIndex(SelectedCell.x, SelectedCell.y);
-		if (!isCellSafe(SelectedCell)) return;
-		// ChangeOrientation();
-		// SetGridIndex(TestOrientation, BigResidential3x1Lvl1.data, SelectedCell.x, SelectedCell.y);
-
-	}
-
+	//Spawns a residential building
 	void SpawnResidential() {
 		if (PauseManager::IsPaused() || !Debug::IsDebugModeOn()) return;
 		Vec2<int> mousePos = InputManager::GetMousePos();
@@ -229,13 +201,11 @@ namespace GridManager {
 		grid[index].ID = ++buildingID;
 		grid[index]._building = _residential;
 		grid[index]._building.buildingCells.push_back(SelectedCell);
-		// grid[index]._building.GetSynergyArea();
-		// for (Vec2<int> cell : grid[index]._building.synergyAreaCells) {
-		// 	// grid[GetIndex(cell)].isRenderable = false;
-		// }
+	
 		CheckCellNeighbor(grid, SelectedCell);
 	}
 
+	//Spawns a commercial building
 	void SpawnCommerical() {
 		if (PauseManager::IsPaused() || !Debug::IsDebugModeOn()) return;
 		Vec2<int> mousePos = InputManager::GetMousePos();
@@ -253,6 +223,8 @@ namespace GridManager {
 		grid[index]._building.buildingCells.push_back(SelectedCell);
 		CheckCellNeighbor(grid, SelectedCell);
 	}
+
+	//Spawns an industrial building
 	void SpawnIndustrial() {
 		if (PauseManager::IsPaused() || !Debug::IsDebugModeOn()) return;
 		Vec2<int> mousePos = InputManager::GetMousePos();
@@ -270,6 +242,8 @@ namespace GridManager {
 		grid[index]._building.buildingCells.push_back(SelectedCell);
 		CheckCellNeighbor(grid, SelectedCell);
 	}
+
+	//Spawns a nature tile
 	void SpawnNature() {
 		if (PauseManager::IsPaused()) return;
 		Vec2<int> mousePos = InputManager::GetMousePos();
@@ -280,6 +254,7 @@ namespace GridManager {
 		grid[index]._building = BuildingManager::GetRandomNatureBuilding();
 	}
 
+	//Gets a random nature cell (used in the level editor and level loading)
 	cell NatureCell() {
 		return cell{
 			Vec2<int>{1,1},
@@ -289,6 +264,7 @@ namespace GridManager {
 		};
 	}
 
+	//Toggles a renderable tile on or off (used in editor)
 	void ToggleTileRenderable() {
 		Vec2<int> mousePos = InputManager::GetMousePos();
 		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
@@ -307,7 +283,6 @@ namespace GridManager {
 	//Gets building from cardmanager event
 	///////////////////////////////////////////////////////////////////////////
 	void GetBuildingCard(const BuildingData* _data) {
-		// if (_data != nullptr)
 		selectedBuilding = _data;		//we're caching it 
 	}
 
@@ -329,25 +304,21 @@ namespace GridManager {
 				{
 				case BuildingEnum::RIGHT:
 					if (!isCellSafe(Vec2<int>{_x + x, y + _y})) {
-						//std::cout << "Debug " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
 						return false;
 					}
 					break;
 				case BuildingEnum::TOP:
 					if (!isCellSafe(Vec2<int>{_x + x, _y - y})) {
-						//std::cout << "Debug " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
 						return false;
 					}
 					break;
 				case BuildingEnum::LEFT:
 					if (!isCellSafe(Vec2<int>{_x - x, _y - y})) {
-						//std::cout << "Debug " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
 						return false;
 					}
 					break;
 				case BuildingEnum::DOWN:
 					if (!isCellSafe(Vec2<int>{_x - x, y + _y})) {
-						//std::cout << "Debug " << __FILE__ << "ln" << __LINE__ << ": Invalid position!\n";
 						return false;
 					}
 					break;
@@ -365,30 +336,26 @@ namespace GridManager {
 		Vec2<int> _SelectedCell{ 0,0 };
 		std::vector<Vec2<int>> AllCells;
 		if (!IsBuildingValid(_data, _x, _y)) assert("");
-		//std::cout << "Cell Pos : " << _x << ", " << _y << '\n';
-		// grid[index].ID = ++buildingID;
 		for (int y{ 0 }; y < _size.y; ++y) {
 			for (int x{ 0 }; x < _size.x; ++x) {
 				int otherIndex{ 0 };
+				//This accounts for orientation for bigger buildings
+				//*Note: sadly bigger buildings were cut out but this works!
 				switch (_data->orientation)
 				{
 				case BuildingEnum::RIGHT:
-					// std::cout<<"RIGHT\n";
 					otherIndex = GetIndex(_x + x, y + _y);
 					_SelectedCell = { _x + x,_y + y };
 					break;
 				case BuildingEnum::TOP:
-					// std::cout<<"TOP\n";
 					otherIndex = GetIndex(_x + x, _y - y);
 					_SelectedCell = { _x + x,_y - y };
 					break;
 				case BuildingEnum::LEFT:
-					// std::cout<<"LEFT\n";
 					otherIndex = GetIndex(_x - x, _y - y);
 					_SelectedCell = { _x - x,_y - y };
 					break;
 				case BuildingEnum::DOWN:
-					// std::cout << "DOWN\n";
 					otherIndex = GetIndex(_x - x, y + _y);
 					_SelectedCell = { _x - x,y + _y };
 					break;
@@ -406,12 +373,8 @@ namespace GridManager {
 	{
 		//If for some reason the building cells are empty, we need to throw an error
 		if (CurrentBuildingCells.empty()) {
-			//std::cerr << "Error " << __FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n";
-			//AE_ASSERT(CurrentBuildingCells.size());
 			assert(CurrentBuildingCells.size());
-			//assert("Error " << __FILE__ << "ln" << __LINE__ << " : NO BUILDING CELLS TO GET AREA!\n");
 		}
-		// return std::vector<Vec2<int>>{};
 		//First we get all the building cells
 		std::vector<Vec2<int>> tempVec;
 		//Then for every building cell, we get the diagonal AND adjacent cells.
@@ -451,24 +414,20 @@ namespace GridManager {
 			if (selectedBuilding != nullptr) {
 				if (IsBuildingValid(selectedBuilding, SelectedCell.x, SelectedCell.y)) {
 					CurrentBuildingCells = GetBuildingCells(selectedBuilding, SelectedCell.x, SelectedCell.y);
-					CurrentSynergyArea = GetSynergyArea(CurrentBuildingCells);
-
-#if DEBUG_TEXT
-					RenderSystem::AddTextToBatch(
-						RenderSystem::GAME_PIECES_BATCH,
-						((float)InputManager::GetMousePos().x / AEGetWindowWidth() * 2) - 1,
-						(((float)InputManager::GetMousePos().y / AEGetWindowHeight() * 2) - 1) * -1,
-						FontManager::GetFont(FontManager::ROBOTO),
-						20,
-						std::to_string(InputManager::GetMousePosDelta().x) + " , " + std::to_string(InputManager::GetMousePosDelta().y),
-						99,
-						COLOR_BLACK
-					);
-#endif
-
+					CurrentSynergyArea = GetSynergyArea(CurrentBuildingCells);					
+					if(Debug::IsDebugModeOn()){
+						RenderSystem::AddTextToBatch(
+							RenderSystem::GAME_PIECES_BATCH,
+							((float)InputManager::GetMousePos().x / AEGetWindowWidth() * 2) - 1,
+							(((float)InputManager::GetMousePos().y / AEGetWindowHeight() * 2) - 1) * -1,
+							FontManager::GetFont(FontManager::ROBOTO),
+							20,
+							std::to_string(InputManager::GetMousePosDelta().x) + " , " + std::to_string(InputManager::GetMousePosDelta().y),
+							99,
+							COLOR_BLACK
+						);
+					}
 				}
-
-
 			}
 		}
 		previousIndex = currentIndex;
@@ -550,8 +509,9 @@ namespace GridManager {
 				}
 			}
 		}
+
+		//If we have a building selected from a card, draw it at the mouse pos 
 		if (selectedBuilding != nullptr) {
-			//If we have a building selected from a card, draw it at the mouse pos 
 			//If the building is bigger than 1x1, draw all of them
 			if (!CurrentBuildingCells.empty()) {
 				for (Vec2<int> cell : CurrentBuildingCells) {
@@ -744,14 +704,11 @@ namespace GridManager {
 				}
 			}
 		}
-		// std::cout << "match count is " << matchCount << '\n';
 		if (matchCount == 3 && _grid[gridIndex]._building.data.level < BuildingEnum::L3) {
 
 			for (int i{ 0 }; i < matchCount; ++i) {
-				// std::cout << "MATCH!\n" << "Match ID's : " << matchedCells[i] << '\n';
 				int index = GetIndexFromID(matchedCells[i]);
 				if (grid[index].ID == _grid[gridIndex].ID) {
-					// std::cout << "CONTINUED!\n";
 					for (Vec2<int>cell : _grid[gridIndex]._building.buildingCells) {
 						_grid[GetIndex(cell)]._building.LevelUp();
 					}
@@ -761,7 +718,6 @@ namespace GridManager {
 				if (_grid[index]._building.data.size != Vec2<int>{1, 1}) {
 					std::vector<Vec2<int>> tempCells{ _grid[index]._building.buildingCells };
 					for (Vec2<int> cell : tempCells) {
-						// std::cout << "Building Cells to destroy : " << cell <<", ID : " << matchedCells[i] <<'\n';
 						_grid[GetIndex(cell.x, cell.y)].ID = 0;
 						_grid[GetIndex(cell.x, cell.y)]._building = Building{};
 					}
@@ -773,7 +729,6 @@ namespace GridManager {
 			}
 			playableArea+=2;
 			 AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_MERGE1);
-			// if(_grid[gridIndex]._building.data.level == BuildingEnum::L3) AudioManager::PlayAudioClip(AudioManager::ClipName::SFX_MERGE2);
 			onMergeBuildings.Invoke();
 			//then we recurse and check again till no matches
 			CheckCellNeighbor(_grid, cellIndex);
@@ -795,9 +750,6 @@ namespace GridManager {
 		InputManager::UnsubscribeKey(AEVK_2, InputManager::TRIGGERED, SpawnCommerical);
 		InputManager::UnsubscribeKey(AEVK_3, InputManager::TRIGGERED, SpawnIndustrial);
 		InputManager::UnsubscribeKey(AEVK_W, InputManager::TRIGGERED, InstantWin);
-		// InputManager::UnsubscribeKey(AEVK_Q, InputManager::TRIGGERED, SpawnBigResidential);
-		// InputManager::UnsubscribeKey(AEVK_E, InputManager::TRIGGERED, SpawnBigResidential);
-		//InputManager::UnsubscribeKey(AEVK_N, InputManager::TRIGGERED, SpawnNature);
 		CardManager::onNewCardSelected.Unsubscribe(GetBuildingCard);
 		CardManager::onCardPlaced.Unsubscribe(SpawnBuilding);
 
@@ -807,30 +759,45 @@ namespace GridManager {
 	///////////////////////////////////////////////////////////////////////////
 	//GRID HELPER FUNCTIONS
 	///////////////////////////////////////////////////////////////////////////
+
+	//Accessor for the grid (used to save in fileio)
+	const cell* GetGrid() {
+		return grid;
+	}
+
+	//Setter for building IDs (used in fileio)
 	void SetBuildingID(int _id){
 		buildingID = _id;
 	}
+
+	//Helper function to convert 2 ints into grid index
 	int GetIndex(int x, int y)
 	{
 		return x + gridX * y;
 	}
+
+	//Overloaded helper function to convert Vec2<int> to grid index
 	int GetIndex(Vec2<int> cell) {
 		return cell.x + gridX * cell.y;
 	}
+
+	//Checks if a tile with the specified ID exists in the grid
 	bool HasID(int* array, int count, int ID) {
 		if (count < 0) return false;
-		//std::cout << "Checking for ID: " << ID << '\n';
 		for (int i{ 0 }; i < count; ++i) {
 			if (*(array + i) == ID) {
-				//std::cout << "Has ID: " << *(array + i) << " == " << ID << '\n';
 				return true;
 			}
 		}
 		return false;
 	}
+
+	//Gets the building type from the cell specified
 	BuildingEnum::TYPE GetTypeFromIndex(Vec2<int> cell) {
 		return grid[GetIndex(cell)]._building.data.type;
 	}
+
+	//Returns the index of the building from the ID given
 	int GetIndexFromID(int ID) {
 		for (int i{ 0 }; i < (gridX * gridY); ++i) {
 			if (grid[i].ID == ID) return i;
@@ -841,10 +808,12 @@ namespace GridManager {
 		return 0;
 	}
 
+	//Function to calculate the area of a triangle using 3 points (used for isometric corner checking)
 	float area(int x1, int y1, int x2, int y2, int x3, int y3) {
 		return static_cast<float>(abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0f));
 	}
 
+	//Checks if the mouse is within the area of the triangle specified
 	bool isInside(int _mouseX, int _mouseY, int x1, int y1, int x2, int y2, int x3, int y3) {
 		float A = area(x1, y1, x2, y2, x3, y3);
 		float B = area(_mouseX, _mouseY, x2, y2, x3, y3);
@@ -853,6 +822,7 @@ namespace GridManager {
 		return (A == (B + C + D));
 	}
 
+	//Converts 2 ints into vec2<int> of the screen
 	Vec2<int> ToScreen(int x, int y) {
 		int originX = AEGetWindowWidth() / 2 / tileWidth;
 		int originY = AEGetWindowHeight() / 2 / tileHeight;
@@ -862,15 +832,20 @@ namespace GridManager {
 		};
 	}
 
+	//Converts the grid index to screen position
 	Vec2<int> WorldIndexToScreenPos(int x, int y) {
 		return Vec2<int>{   //we need to keep the tile height and width a float here!
 			static_cast<int>((x - y)* (tileWidth / 2.f)),
 			static_cast<int>((x + y) * -(tileHeight / 2.f) + (tileHeight/2.f))		//offset for the correct pos because of the height diff
 		};
 	}
+
+	//Overloaded helper function to convert screen pos in the form of Vec2<int> to Vec2<int>
 	Vec2<int> ScreenPosToIso(Vec2<int> cellPos) {
 		return ScreenPosToIso(cellPos.x, cellPos.y);
 	}
+
+	//Helper function to convert the screen pos to vec2<int> cell index  
 	Vec2<int> ScreenPosToIso(int xPos, int yPos) {
 		//MOUSE INPUTS (Tile width = 100, tile height = 50)
 		int cellX = xPos / tileWidth;
@@ -897,6 +872,8 @@ namespace GridManager {
 		if (isInside(xOffset, yOffset, tileWidth / 2, tileHeight, tileWidth, tileHeight, tileWidth, tileHeight / 2))SelectedCell.x++;
 		return SelectedCell;
 	}
+
+	//Function that directly converts mousePosition to non-isometric grid index
 	Vec2<int> MouseToCell(int mouseX, int mouseY) {
 		return Vec2<int>{
 			mouseX / tileWidth,
@@ -904,6 +881,7 @@ namespace GridManager {
 		};
 	}
 
+	//Function that calculates mouse offset into grid cell
 	Vec2<int> MouseCellOffset(int mouseX, int mouseY)
 	{
 		return Vec2<int>{
@@ -912,4 +890,34 @@ namespace GridManager {
 		};
 	}
 
+
+	///////////////////////////////////////////////////////////////////////////
+	//DEPRECATED/SCRAPPED BUT WORKING FEATURES
+	///////////////////////////////////////////////////////////////////////////
+	#pragma region Deprecated Code
+	//F in the chat for my bigger buildings
+	void SpawnBigResidential() {
+		//1x2
+		if (PauseManager::IsPaused()) return;
+		Vec2<int> mousePos = InputManager::GetMousePos();
+		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
+		int index = GetIndex(SelectedCell.x, SelectedCell.y);
+		if (!isCellSafe(SelectedCell)) return;
+		ChangeOrientation();
+		grid[index]._building.GetSynergyArea();
+		for (Vec2<int> cell : grid[index]._building.synergyAreaCells) {
+			grid[GetIndex(cell)].isRenderable = false;
+		}
+	}
+	void SpawnBigResidential3x1() {
+		//1x2
+		if (PauseManager::IsPaused()) return;
+		// ClearGrid();
+		Vec2<int> mousePos = InputManager::GetMousePos();
+		Vec2<int> SelectedCell{ ScreenPosToIso(mousePos.x,mousePos.y) };
+		//int index = GetIndex(SelectedCell.x, SelectedCell.y);
+		if (!isCellSafe(SelectedCell)) return;
+
+	}
+	#pragma endregion
 }

@@ -58,7 +58,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AESysSetWindowTitle("Momo Town");								// Changing the window title
 	AESysReset();													// Reset the system modules
 	AEFrameRateControllerInit(60);
-	// AESysToggleFullScreen(true);
+	 AESysToggleFullScreen(true);
 
 	// Manager Initialization
 	FontManager::Initialize();

@@ -94,6 +94,9 @@ namespace FileIOManager {
      * @param buildingData vector of building data to save from
      */
     void SaveBuildingDataToFile(std::vector<BuildingData>& buildingData);
+
+    ///////////////////////////////////////////////////////////////////////////
+    //!DEPRECATED CODE! DO NOT USE!
 	void ReadBuildingsData(std::vector<BuildingData>& buildingsData);
 }
 

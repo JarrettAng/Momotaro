@@ -7,7 +7,6 @@
 \date:          24-03-2023
 \brief
 This source file handles everything FileIO related. 
-
 **************************************************************************/
 ///////////////////////////////////////////////////////////////////////////
 #include <iostream>
@@ -28,18 +27,15 @@ namespace FileIOManager {
 	void SaveBuildingDataToFile(std::vector<BuildingData>& buildingData) {
 		if (buildingData.empty()) {
 			Debug::Print("No buildings to save from!\n");
-			assert(0);
 			return;
 		}
 		std::ofstream buildingFile("Assets/JSON_Data/buildings2.momodata");
 		if (!buildingFile.is_open()) {
 			Debug::Print("Unable to write to file!\n");
-			assert(0);
 		}
-		// buildingFile << "Building Count " << BuildingManager::GetBuildingDataVector().size() <<'\n';
 		buildingFile << '\n';
 		for (BuildingData _data : buildingData) {
-			// for(BuildingData _data : BuildingManager::GetBuildingDataVector()){
+
 			buildingFile << "type " << (int)(_data.type) << '\n';
 			buildingFile << "size " << _data.size.x << ' ' << _data.size.y << '\n';
 			buildingFile << "level " << (int)(_data.level) << '\n';
@@ -56,12 +52,11 @@ namespace FileIOManager {
 		buildingFile.close();
 	}
 	///////////////////////////////////////////////////////////////////////////
-	//
+	// Loads building data from file to the building data vector
 	void LoadBuildingDataFromFile(std::vector<BuildingData>& buildingsData) {
 		std::ifstream buildingFile("Assets/JSON_Data/buildings.momodata");
 		if (!buildingFile.is_open()) {
 			Debug::Print("Unable to open Assets/JSON_Data/buildings.momodata!\n");
-			assert(0);
 		}
 		std::string buffer{};
 		int lineCount{ 0 };
@@ -144,9 +139,6 @@ namespace FileIOManager {
 						mapFile << "," << (int)(_temp->_building.data.type);	//[0,4]
 						mapFile << "," << (int)(_temp->_building.data.level);	//[0,2]
 					}
-					// if((GM::GetGrid()+GM::GetIndex(Vec2<int>{x,y}))->_building.data.type != BuildingEnum::NATURE){
-					// 	mapFile << 1;
-					// } else mapFile << 2;
 				} else mapFile << 0;	//if not, the tile is probably not renderable anyway
 				if (x < GridManager::gridX - 1) mapFile << ' ';
 			}
@@ -154,7 +146,8 @@ namespace FileIOManager {
 		}
 		mapFile.close();
 	}
-
+	///////////////////////////////////////////////////////////////////////////
+	//Helper function to convert old map saves into the new map saves
 	void ConvertMapFile(){
 		std::ifstream inputFile("Assets/JSON_Data/Maps/tutorial2.momomaps");
 		std::ofstream outputFile("Assets/JSON_Data/Maps/tutorial_2.momomaps");
@@ -172,9 +165,10 @@ namespace FileIOManager {
 		}
 		inputFile.close();
 		outputFile.close();
-		// std::ofstream outputFile(fileName);
 	}
 
+	///////////////////////////////////////////////////////////////////////////
+	// Loads high score from file
 	void LoadHighScoreFromFile(){
 		std::fstream inputFile("Assets/JSON_Data/Maps/HighScore.momohand");
 		if(!inputFile.is_open()){
@@ -185,6 +179,9 @@ namespace FileIOManager {
 		ScoreManager::SetHighScore(_highscore);
 		inputFile.close();
 	}
+
+	///////////////////////////////////////////////////////////////////////////
+	// Saves high score to file
 	void SaveHighScoreToFile(){
 		std::ofstream outputFile("Assets/JSON_Data/Maps/HighScore.momohand");
 		if(!outputFile.is_open()){
@@ -194,6 +191,8 @@ namespace FileIOManager {
 		outputFile.close();
 	}
 
+	///////////////////////////////////////////////////////////////////////////
+	//Directly loads the last played hand into the cardmanager
 	std::vector<BuildingData> LoadHandFromFile(){
 		std::fstream inputFile("Assets/JSON_Data/Maps/Save.momohand");
 		std::vector<BuildingData> _temp;
@@ -213,6 +212,9 @@ namespace FileIOManager {
 		if(_temp.empty()) return _temp;
 		return _temp;
 	}
+
+	///////////////////////////////////////////////////////////////////////////
+	//Saves the current hand to file
 	void SaveHandToFile(std::vector<Card> const& _hand){
 		std:: ofstream outputFile("Assets/JSON_Data/Maps/Save.momohand");
 		if(!outputFile.is_open()){
@@ -240,7 +242,6 @@ namespace FileIOManager {
 		std::fstream inputFile(fileName);
 		if (!inputFile.is_open()) {
 			Debug::Print("Unable to read" + fileName + "\n");
-			// assert(0);
 		}
 		std::string buffer; 		//where each line of text will be stored
 		GM::gridX = GM::gridY = 0;
@@ -311,7 +312,6 @@ namespace FileIOManager {
 							}
 							//assuming right now we only have nature tiles and not probabilistic. 
 							//gotta do some switch case here in future!
-							//TODO Future implementation for rando stuff
 						}
 						xIndex++;
 				}
@@ -323,6 +323,8 @@ namespace FileIOManager {
 		return newMap;
 	}
 
+	///////////////////////////////////////////////////////////////////////////
+	// Loads audioclips from file to the audioclip array for the audio manager
     void LoadAudioClipsFromFile(std::array<AM::AudioClip, AM::ClipName::MAX_COUNT> &audioData)
     {
 		//Note: to load the sounds, just put in the name of the enum and the volume for it
