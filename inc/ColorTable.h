@@ -1,13 +1,17 @@
 /*!************************************************************************
 \file:          ColorTable.h
-\author:
-\par DP email:
+\author:		Amadeus Chia
+\par DP email:	amadeusjinhan.chia@digipen.edu
 \par Course:    CSD1171B
 \par Software Engineering Project
 \date:          30-01-2023
 \brief
+This header file contains the color codes for all elements in the game.
 
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
+
 #pragma once
 
 /*!***********************************************************************

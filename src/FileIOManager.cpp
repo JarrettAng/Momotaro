@@ -7,7 +7,11 @@
 \date:          24-03-2023
 \brief
 This source file handles everything FileIO related. 
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
+
 ///////////////////////////////////////////////////////////////////////////
 #include <iostream>
 #include <fstream>
@@ -22,7 +26,7 @@ namespace FileIOManager {
 	namespace GM = GridManager;
 	namespace AM = AudioManager;
 	namespace CM = CardManager;
-	///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Helper function to save the current building data to file
 	void SaveBuildingDataToFile(std::vector<BuildingData>& buildingData) {
 		if (buildingData.empty()) {
@@ -51,7 +55,7 @@ namespace FileIOManager {
 		}
 		buildingFile.close();
 	}
-	///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	// Loads building data from file to the building data vector
 	void LoadBuildingDataFromFile(std::vector<BuildingData>& buildingsData) {
 		std::ifstream buildingFile("Assets/JSON_Data/buildings.momodata");
@@ -113,7 +117,7 @@ namespace FileIOManager {
 		}
 		buildingFile.close();
 	}
-	///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Saves the map to a custom file (used by gridmanager)
 	void SaveGridToFile(std::string filePath) {
 		std::ofstream mapFile(filePath);
@@ -146,7 +150,7 @@ namespace FileIOManager {
 		}
 		mapFile.close();
 	}
-	///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Helper function to convert old map saves into the new map saves
 	void ConvertMapFile(){
 		std::ifstream inputFile("Assets/JSON_Data/Maps/tutorial2.momomaps");
@@ -167,7 +171,7 @@ namespace FileIOManager {
 		outputFile.close();
 	}
 
-	///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	// Loads high score from file
 	void LoadHighScoreFromFile(){
 		std::fstream inputFile("Assets/JSON_Data/Maps/HighScore.momohand");
@@ -180,7 +184,7 @@ namespace FileIOManager {
 		inputFile.close();
 	}
 
-	///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	// Saves high score to file
 	void SaveHighScoreToFile(){
 		std::ofstream outputFile("Assets/JSON_Data/Maps/HighScore.momohand");
@@ -191,7 +195,7 @@ namespace FileIOManager {
 		outputFile.close();
 	}
 
-	///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Directly loads the last played hand into the cardmanager
 	std::vector<BuildingData> LoadHandFromFile(){
 		std::fstream inputFile("Assets/JSON_Data/Maps/Save.momohand");
@@ -213,7 +217,7 @@ namespace FileIOManager {
 		return _temp;
 	}
 
-	///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Saves the current hand to file
 	void SaveHandToFile(std::vector<Card> const& _hand){
 		std:: ofstream outputFile("Assets/JSON_Data/Maps/Save.momohand");
@@ -233,7 +237,7 @@ namespace FileIOManager {
 		}
 		outputFile.close();
 	}
-	///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Loads a map from the specified filename (used in gridmanager)
 	GM::cell* LoadGridFromFile(std::string fileName)
 	{
@@ -323,7 +327,7 @@ namespace FileIOManager {
 		return newMap;
 	}
 
-	///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	// Loads audioclips from file to the audioclip array for the audio manager
     void LoadAudioClipsFromFile(std::array<AM::AudioClip, AM::ClipName::MAX_COUNT> &audioData)
     {
@@ -365,7 +369,7 @@ namespace FileIOManager {
 
 
 	#pragma region DEPRECATED
-    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
     //!DEPRECATED CODE! DO NOT USE!
     void ReadBuildingsData(std::vector<BuildingData>& buildingsData) {
 		std::ifstream dataFile{ "Assets/JSON_Data/buildingsData.json" };
