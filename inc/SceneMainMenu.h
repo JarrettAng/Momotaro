@@ -11,8 +11,8 @@ This header file contains prototype functions and declarations for SceneMainMenu
 All content © 2023 DigiPen Institute of Technology Singapore.
 All rights reserved.
 **************************************************************************/
-#pragma once
 
+#pragma once
 ///////////////////////////////////////////////////////////////////////////
 #include <Scene.h>
 ///////////////////////////////////////////////////////////////////////////

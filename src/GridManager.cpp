@@ -584,10 +584,11 @@ namespace GridManager {
 					pointText.Render();
 					//Draw synergy texture
 					RenderSystem::AddRectToBatch(
-						RenderSystem::GAME_PIECES_BATCH,
+						RenderSystem::UI_BATCH,
 						static_cast<float>(grid[GetIndex(cell)].pos.x), static_cast<float>(grid[GetIndex(cell)].pos.y),
 						tileWidth, tileWidth,
-						TextureManager::SYNERGY
+						TextureManager::SYNERGY,
+						-1
 					);
 				}
 

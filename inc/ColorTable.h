@@ -37,7 +37,7 @@
 #define COLOR_BOX_N {0.4f, 0.9f, 0.35f}
 #define COLOR_BOX_POSITIVE {0.16f, 0.96f, 0.46f}
 #define COLOR_BOX_NEUTRAL {1.0f, 1.0f, 1.0f}
-#define COLOR_BOX_NEGATIVE {0.94f,0.11f, 0.33f}
+#define COLOR_BOX_NEGATIVE {1.0f,0.41f, 0.23f}
 
 /*!***********************************************************************
 * BASIC COLOR
