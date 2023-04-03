@@ -158,6 +158,7 @@ void SceneTutorial::Free() {
 	GridManager::onMergeBuildings.Unsubscribe(ShowTutPart1_Merging);
 	ScoreManager::onLevelChange.Unsubscribe(ShowTutPart1_Score3);
 	CardManager::onCardPlacedVoid.Unsubscribe(ShowTutPart1_Buildings4);
+	ScoreManager::onLevelChange.Unsubscribe(FinalTestUpdate);
 }
 
 void SceneTutorial::Unload() {

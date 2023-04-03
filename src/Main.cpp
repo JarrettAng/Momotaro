@@ -45,7 +45,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	///////////////////////////////////////////////////////////////////////
 	// Random Seed Initialization
-	srand(11);
+	//srand(11);
 
 	//Memory leak checker (for debug mode)
 	#if defined(DEBUG) | defined(_DEBUG)
