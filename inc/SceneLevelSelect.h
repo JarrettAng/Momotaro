@@ -11,6 +11,9 @@ This header file handles the level select scene in the game.
 The functions include:
 - Standard base functions from scene
 - LevelPreview class declaration
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
 #pragma once

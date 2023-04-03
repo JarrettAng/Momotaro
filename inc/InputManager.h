@@ -6,15 +6,19 @@
 \par Software Engineering Project
 \date 15-02-2023
 \brief
-This header file contians prototype functions and declarations for InputManager.cpp.
+This header file contains prototype functions and declarations for InputManager.cpp.
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
 #pragma once
-
+///////////////////////////////////////////////////////////////////////////
 #include <MomoMaths.h>
 #include <EventSystem.h>
 #include <AEEngine.h>
 #include <deque>
+///////////////////////////////////////////////////////////////////////////
 
 namespace InputManager {
 

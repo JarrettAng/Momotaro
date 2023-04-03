@@ -9,6 +9,9 @@
 This header file contains the data of all possible buildings in the game,
 information like type, size, and level. It also holds the implementation of the
 building class.
+
+All content © 2023 DigiPen Institute of Technology Singapore. 
+All rights reserved.
 **************************************************************************/
 
 #pragma once

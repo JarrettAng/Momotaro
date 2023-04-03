@@ -13,6 +13,9 @@ The functions include:
 Sets which map to load for the main gameplay (Used by LevelSelect)
 - GetCurrentMapName
 Gets which map is currently loaded
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
 #pragma once

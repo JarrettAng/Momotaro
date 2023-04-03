@@ -11,6 +11,9 @@ class and other UI related objects in the future.
 
 This file include:
 - Textbox class definition
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////

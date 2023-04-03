@@ -1,15 +1,19 @@
 /*!************************************************************************
-\file GameOverManager.h
-\author Tan Jun Rong
-\par DP email: t.junrong@digipen.edu
-\par Course: CSD1171B
+\file			GameOverManager.h
+\author			Tan Jun Rong
+\par DP email:	t.junrong@digipen.edu
+\par Course:	CSD1171B
 \par Software Engineering Project
-\date 29-02-2023
+\date			29-02-2023
 \brief
-This header file contians prototype functions and declarations for GameOverManager.cpp.
-**************************************************************************/
-#pragma once
+This header file contains prototype functions and declarations for GameOverManager.cpp.
 
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
+**************************************************************************/
+
+#pragma once
+///////////////////////////////////////////////////////////////////////////
 #include <InputManager.h>
 #include <SceneManager.h>
 #include <TextureManager.h>
@@ -18,6 +22,7 @@ This header file contians prototype functions and declarations for GameOverManag
 #include <GridManager.h>
 #include <CardManager.h>
 #include <AudioManager.h>
+///////////////////////////////////////////////////////////////////////////
 
 namespace GameOverManager {
 	/*!***********************************************************************

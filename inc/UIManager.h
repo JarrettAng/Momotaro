@@ -11,6 +11,9 @@ the future.
 
 The header include:
 - Textbox class declaration
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
 #pragma once

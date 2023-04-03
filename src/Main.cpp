@@ -1,3 +1,23 @@
+/*!************************************************************************
+\file:          Main.cpp
+\author:		Amadeus Chia
+\par DP email:	amadeusjinhan.chia@digipen.edu
+\par Course:    CSD1171B
+\par Software Engineering Project
+\date:          12-01-2023
+\brief
+This source file handles the start of the program execution by loading the
+first state in the SceneManager, afterwards SceneManager handles the game
+loop until the Quit state is called.
+
+The functions include:
+- wWinMain
+The entry point of the program
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
+**************************************************************************/
+
 ///////////////////////////////////////////////////////////////////////////
 #include <cstdlib>
 #include <memory>
@@ -13,6 +33,7 @@
 #include <DebugManager.h>
 ///////////////////////////////////////////////////////////////////////////
 
+// The entry point of the program
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
 	_In_ LPWSTR    lpCmdLine,

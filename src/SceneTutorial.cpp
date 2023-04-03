@@ -12,7 +12,10 @@ setting up of the UI texts and tutorial flow.
 The functions include:
 - Standard base functions from scene
 - AdvanceTutorial
-// Calls the function to load the UI for the next part of the tutorial
+Calls the function to load the UI for the next part of the tutorial
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////

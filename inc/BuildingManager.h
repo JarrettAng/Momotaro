@@ -18,6 +18,9 @@ Resets the data read on game scene exit
 Returns the building information of the given type, size, level
 - GetRandomBuildingData
 Returns a random building information, can be controlled by parameters
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
 #pragma once

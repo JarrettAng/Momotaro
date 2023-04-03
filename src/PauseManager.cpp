@@ -1,19 +1,25 @@
 /*!************************************************************************
-\file PauseManager.cpp
-\author Tan Jun Rong
-\par DP email: t.junrong@digipen.edu
-\par Course: CSD1171B
+\file			PauseManager.cpp
+\author			Tan Jun Rong
+\par DP email:	t.junrong@digipen.edu
+\par Course:	CSD1171B
 \par Software Engineering Project
-\date 22-03-2023
+\date			22-03-2023
 \brief
 This source file handles the pause state of the game.
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
+///////////////////////////////////////////////////////////////////////////
 #include <PauseManager.h>
 #include <FileIOManager.h>
 #include <SceneGameLevel.h>
 #include <CardManager.h>
 #include <ScoreManager.h>
+///////////////////////////////////////////////////////////////////////////
+
 namespace PauseManager {
 	/*!***********************************************************************
 	* Const variables.

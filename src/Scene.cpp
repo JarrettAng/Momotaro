@@ -22,9 +22,14 @@ Called at the end of every frame
 Called before scene swaps or scene restarts
 - Unload
 Called before scene swaps
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
+///////////////////////////////////////////////////////////////////////////
 #include <Scene.h>
+///////////////////////////////////////////////////////////////////////////
 
 // Empty by design \/
 

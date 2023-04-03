@@ -15,6 +15,9 @@ Updates the building level and updates its texture
 - GetSynergyArea
 Gets the synergy of the surrounding cells and stores it inside the building
 - Operator << and == overloads
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////

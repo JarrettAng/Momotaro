@@ -13,6 +13,9 @@ The functions include:
 Starts the game loop and loads the scene given in the parameter
 - LoadScene
 Changes the current scene to the one given in the parameter
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
 #pragma once

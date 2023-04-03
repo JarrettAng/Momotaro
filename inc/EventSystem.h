@@ -4,7 +4,7 @@
 \par DP email:	a.jiaweijarrett@digipen.edu
 \par Course:	CSD1171B
 \par Software Engineering Project
-\date 12/01/2023
+\date			12-01-2023
 \brief
 This header file declares a generic event system that allows functions with
 no parameters/ 1 parameter of any type.  
@@ -26,6 +26,9 @@ void addScore() {
     ...
     onScoreUpdate.Invoke(score);
 }
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
 #pragma once

@@ -18,6 +18,9 @@ Sends data to UIManager to render the cards
 Draws a draw into the player's hand of a given type, level, size
 - DrawRandomCard
 Draws a random draw into the player's hand
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
 #pragma once

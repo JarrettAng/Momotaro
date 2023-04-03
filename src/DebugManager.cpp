@@ -22,6 +22,9 @@ Returns the current status of debug mode
 Used to print a message to cout (Only when debug mode is on)
 - PrintError
 Used to print error msgs to cerr (Only when debug mode is on)
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////

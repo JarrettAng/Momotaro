@@ -21,6 +21,9 @@ If the tile hovered is water, spawns a land tile
 If the tile hovered is land, spawns a water tile
 - CreateNature
 If the tile hovered is land, spawns a nature tile
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////

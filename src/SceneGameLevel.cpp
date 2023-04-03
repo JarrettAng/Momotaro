@@ -14,8 +14,12 @@ The functions include:
 Sets which map to load for the main gameplay (Used by LevelSelect)
 - GetCurrentMapName
 Gets which map is currently loaded
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
+///////////////////////////////////////////////////////////////////////////
 #include <AEEngine.h>
 #include <RenderSystem.h>
 
@@ -34,6 +38,7 @@ Gets which map is currently loaded
 #include <AudioManager.h>
 #include <GameOverManager.h>
 #include <FileIOManager.h>
+///////////////////////////////////////////////////////////////////////////
 
 // Which file to load the map from, by default it is map0
 std::string mapToLoad = "Assets/JSON_Data/Maps/map0.momomaps";

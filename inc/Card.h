@@ -15,6 +15,9 @@ The functions include:
 Constructor to create a card, needs information of the building it will represent
 - UpdateComponentPositions
 Updates the rendering positions of the card elements, usually when the hand size updates
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
 #pragma once
@@ -25,6 +28,7 @@ Updates the rendering positions of the card elements, usually when the hand size
 
 #include <ColorTable.h>
 ///////////////////////////////////////////////////////////////////////////
+
 // Used by the UI elements to maintain relative position (E.g. Header text should be at the top 10% of the card's height)
 // The main purpose of this function is for more readability below
 inline float GetPercentageOf(float length, float percent) { return length * percent; }

@@ -10,6 +10,9 @@ This header file handles the tutorial scene for the game.
 
 The functions include:
 - Standard base functions from scene
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
 #pragma once

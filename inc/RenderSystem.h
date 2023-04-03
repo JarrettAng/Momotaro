@@ -1,15 +1,19 @@
 /*!************************************************************************
-\file RenderSystem.h
-\author Tan Jun Rong
-\par DP email: t.junrong@digipen.edu
-\par Course: CSD1171B
+\file			RenderSystem.h
+\author			Tan Jun Rong
+\par DP email:	t.junrong@digipen.edu
+\par Course:	CSD1171B
 \par Software Engineering Project
-\date 18-01-2023
+\date			18-01-2023
 \brief
-This header file contians prototype functions and declarations for RenderSystem.cpp.
+This header file contains prototype functions and declarations for RenderSystem.cpp.
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
 #pragma once
+///////////////////////////////////////////////////////////////////////////
 #include <list>
 #include <vector>
 #include <AEEngine.h>
@@ -19,6 +23,7 @@ This header file contians prototype functions and declarations for RenderSystem.
 #include <iostream>
 #include <algorithm>
 #include <FontManager.h>
+///////////////////////////////////////////////////////////////////////////
 
 namespace RenderSystem {
 	/*!***********************************************************************

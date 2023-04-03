@@ -1,17 +1,23 @@
 /*!************************************************************************
-\file FontManager.h
-\author Tan Jun Rong
-\par DP email: t.junrong@digipen.edu
-\par Course: CSD1171B
+\file			FontManager.h
+\author			Tan Jun Rong
+\par DP email:	t.junrong@digipen.edu
+\par Course:	CSD1171B
 \par Software Engineering Project
-\date 29-02-2023
+\date			29-02-2023
 \brief
-This header file contians prototype functions and declarations for FontManager.cpp.
+This header file contains prototype functions and declarations for FontManager.cpp.
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
+
 #pragma once
+///////////////////////////////////////////////////////////////////////////
 #include <AEEngine.h>
 #include <vector>
 #include <iostream>
+///////////////////////////////////////////////////////////////////////////
 
 namespace FontManager {
 	const float DEFAULT_FONT_SIZE = 100.0;	// Base font size to reference to when scaling down font size.

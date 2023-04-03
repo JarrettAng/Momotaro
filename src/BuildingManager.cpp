@@ -20,6 +20,9 @@ Gets any random building (except nature)
 Returns a random building of nature type (Rocks, pond, etc)
 - GetBuildingDataVector
 Get the vector containing every building type
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////

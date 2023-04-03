@@ -1,17 +1,22 @@
 /*!************************************************************************
-\file InputManager.cpp
-\author Tan Jun Rong
-\par DP email: t.junrong@digipen.edu
-\par Course: CSD1171B
+\file			InputManager.cpp
+\author			Tan Jun Rong
+\par DP email:	t.junrong@digipen.edu
+\par Course:	CSD1171B
 \par Software Engineering Project
-\date 15-02-2023
+\date			15-02-2023
 \brief
 This source file handles the input of the player.
+
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
 **************************************************************************/
 
+///////////////////////////////////////////////////////////////////////////
 #include <InputManager.h>
 #include <AudioManager.h>
 #include <DebugManager.h>
+///////////////////////////////////////////////////////////////////////////
 
 namespace InputManager {
 	/*!***********************************************************************

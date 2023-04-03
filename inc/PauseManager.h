@@ -1,15 +1,19 @@
 /*!************************************************************************
-\file PauseManager.h
-\author Tan Jun Rong
-\par DP email: t.junrong@digipen.edu
-\par Course: CSD1171B
+\file			PauseManager.h
+\author			Tan Jun Rong
+\par DP email:	t.junrong@digipen.edu
+\par Course:	CSD1171B
 \par Software Engineering Project
-\date 29-02-2023
+\date			29-02-2023
 \brief
 This header file contians prototype functions and declarations for PauseManager.cpp.
-**************************************************************************/
-#pragma once
 
+All content © 2023 DigiPen Institute of Technology Singapore.
+All rights reserved.
+**************************************************************************/
+
+#pragma once
+///////////////////////////////////////////////////////////////////////////
 #include <EventSystem.h>
 #include <InputManager.h>
 #include <SceneManager.h>
@@ -18,6 +22,7 @@ This header file contians prototype functions and declarations for PauseManager.
 #include <MomoMaths.h>
 #include <GridManager.h>
 #include <CardManager.h>
+///////////////////////////////////////////////////////////////////////////
 
 namespace PauseManager {
 	/*!***********************************************************************
