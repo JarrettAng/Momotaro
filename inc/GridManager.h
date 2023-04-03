@@ -190,5 +190,6 @@ namespace GridManager {
 	void SetBuildingID(int _id);
 
     void ChangeOrientation();
+	void DrawSelectedTile(Vec2<int> mousePos);
 	// iso::cell& GetNeighbor(iso::cell* &grid,iso::vec2i indexToCheck, iso::vec2i startingIndex);
 }

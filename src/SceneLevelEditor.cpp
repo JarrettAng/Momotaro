@@ -22,7 +22,7 @@ If the tile hovered is land, spawns a water tile
 - CreateNature
 If the tile hovered is land, spawns a nature tile
 
-All content © 2023 DigiPen Institute of Technology Singapore.
+All content ï¿½ 2023 DigiPen Institute of Technology Singapore.
 All rights reserved.
 **************************************************************************/
 
@@ -130,7 +130,7 @@ void SceneLevelEditor::Draw() {
 	mapsText.Render();
 	controlsText.Render();
 	keysText.Render();
-
+	GridManager::DrawSelectedTile(InputManager::GetMousePos());
 	GridManager::PrepareTileRenderBatch();
 	PauseManager::Draw();
 

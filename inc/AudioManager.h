@@ -6,23 +6,20 @@
 \par Software Engineering Project
 \date:          24-03-2023
 \brief
-This header file handles everything audio related
-
-The functions include:
-- Initialize
-Reads the building data from the JSON file upon loading into the game scene
-- Clear
-Resets the data read on game scene exit
-- GetBuildingData
-Returns the building information of the given type, size, level
-- GetRandomBuildingData
-Returns a random building information, can be controlled by parameters
+This header file handles everything audio related. 
+To add audio clips, you have to add it's name to the ClipName enum,
+then in the fileio, load it from its filepath.
 **************************************************************************/
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma once
 #include <AEAudio.h>
 #include <array>
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace AudioManager {
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// The names of all the audio clips in the game. Also works as the index in the audio clip array
 	enum ClipName{
 		NONE=0,
 		BGM_MAIN,
@@ -39,33 +36,36 @@ namespace AudioManager {
 		MAX_COUNT
 	};
 
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Sttruct that stores the audio clip data. 
 	struct AudioClip{
 		AEAudio _audioClip;
 		float _volume;
 		AEAudioGroup _group;
 	};
-
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//GLOBAL VALUES
+	extern AEAudioGroup BGM_GROUP;			//group for all BGM
+	extern AEAudioGroup SFX_GROUP;			//group for all SFX
 	//extern float masterVolume;
-	extern AEAudioGroup BGM_GROUP;
-	extern AEAudioGroup SFX_GROUP;
+
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////	
 	//MANAGER FUNCTIONS
 	void Initialize();
 	void Load();
 	void Update();
 	void Unload();
 
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////	
 	//HELPER FUNCTIONS
-	void PlayBGM(ClipName _name);
-	void PlayAudioClip(ClipName _clip);
-	void StopAllSounds(void);
+	void PlayBGM(ClipName _name);			//Plays the selected bgm 
+	void PlayAudioClip(ClipName _clip);		//Plays the selected audio clip 
 	AEAudio GetAudioFromClipName(ClipName _clip);
 	//Possible functions
+	// void StopAllSounds(void);				
 	//ToggleBGM
 	//ToggleMute
 	//ToggleMuteAll
 	//SetMasterVolume(float _volume);
-
-
-
 }

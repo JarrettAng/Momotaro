@@ -137,6 +137,21 @@ namespace GridManager {
 			onBoardFull.Invoke();
 		}
 	}
+	void DrawSelectedTile(Vec2<int> mousePos){
+		Vec2<int> SelectedCell{ScreenPosToIso(mousePos.x,mousePos.y)};
+		if(!isWithinGrid(SelectedCell)){
+			std::string debugLog("Debug ");
+			Debug::Print(debugLog + __FILE__ + "ln" + std::to_string(__LINE__) + ": Invalid position!\n");
+		}
+		int index = GetIndex(SelectedCell);
+		RenderSystem::AddRectToBatch(
+						RenderSystem::UI_BATCH,
+						static_cast<float>(grid[index].pos.x), static_cast<float>(grid[index].pos.y),
+						tileWidth, tileWidth,
+						TextureManager::SYNERGY,
+						-1
+					);
+	}
 
 	const cell* GetGrid() {
 		return grid;

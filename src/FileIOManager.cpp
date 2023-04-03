@@ -1,15 +1,13 @@
 /*!************************************************************************
-\file:          FileIOManager.cpp
-\author:
-\par DP email:
-\par Course:    CSD1171B
+\file:          FileIOMAnager.h
+\author:		Amadeus Chia
+\par DP email:	amadeusjinhan.chia@digipen.edu
+\par Course:    CSD1451B
 \par Software Engineering Project
-\date:          30-01-2023
+\date:          24-03-2023
 \brief
+This source file handles everything FileIO related. 
 
-
-The functions include:
--
 **************************************************************************/
 ///////////////////////////////////////////////////////////////////////////
 #include <iostream>
@@ -363,8 +361,10 @@ namespace FileIOManager {
 			1.0f,AM::SFX_GROUP};
     }
 
+
+	#pragma region DEPRECATED
     ///////////////////////////////////////////////////////////////////////////
-    //*TODO : SERIALISATION FOR BUILDINGS WITH CUSTOM FILETYPES!
+    //!DEPRECATED CODE! DO NOT USE!
     void ReadBuildingsData(std::vector<BuildingData>& buildingsData) {
 		std::ifstream dataFile{ "Assets/JSON_Data/buildingsData.json" };
 		// json data = json::parse(dataFile);
@@ -490,4 +490,5 @@ namespace FileIOManager {
 
 		dataFile.close();
 	}
+	#pragma endregion
 }
